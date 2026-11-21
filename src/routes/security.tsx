@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Radar, Search, Send } from "lucide-react";
-import { useMemo, useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { EmptyState, Mono, PageHeader, RiskMeter, StatTile } from "@/components/common/bits";
 import { NativeSelect } from "@/components/common/native-select";
@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
+import { InvestigationGraph } from "@/components/security/investigation-graph";
 import type { AlertStatus, LookalikeStatus, Severity } from "@/lib/domain/types";
 import { repository, useDemoState } from "@/lib/data/local-store";
 import { useI18n } from "@/lib/i18n/i18n";
@@ -51,6 +52,7 @@ function SecurityPage() {
   const [note, setNote] = useState("");
   const [scanOrg, setScanOrg] = useState(organizations[0]?.id ?? "");
   const [scanning, setScanning] = useState(false);
+  const [tab, setTab] = useState("alerts");
 
   const orgName = (id?: string) => pick(organizations.find((o) => o.id === id)?.name) || tr("Unknown", "غير معروف");
   const filtered = alerts.filter((a) =>
@@ -59,17 +61,6 @@ function SecurityPage() {
   );
   const selected = alerts.find((a) => a.id === search.case) ?? filtered[0];
   const select = (id: string) => navigate({ search: { case: id }, replace: true });
-
-  const indicatorIndex = useMemo(() => {
-    const map = new Map<string, { type: string; value: string; cases: typeof alerts }>();
-    for (const a of alerts) for (const i of a.indicators) {
-      const k = normalizeIndicator(i.value);
-      const e = map.get(k) ?? { type: i.type, value: i.value, cases: [] };
-      e.cases.push(a);
-      map.set(k, e);
-    }
-    return [...map.values()].sort((x, y) => y.cases.length - x.cases.length);
-  }, [alerts]);
 
   const open = alerts.filter((a) => a.status !== "confirmed" && a.status !== "false_positive");
   const avgRisk = open.length ? Math.round(open.reduce((s, a) => s + a.riskScore, 0) / open.length) : 0;
@@ -110,8 +101,8 @@ function SecurityPage() {
       </PageHeader>
 
       <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <Tabs defaultValue="alerts" dir={dir}>
-          <TabsList>
+        <Tabs value={tab} onValueChange={setTab} dir={dir}>
+          <TabsList className="h-auto flex-wrap">
             <TabsTrigger value="alerts">{tr("Alerts & cases", "التنبيهات والقضايا")}</TabsTrigger>
             <TabsTrigger value="lookalikes">{tr("Lookalike domains", "النطاقات المشابهة")}</TabsTrigger>
             <TabsTrigger value="indicators">{tr("Linked indicators", "المؤشرات المترابطة")}</TabsTrigger>
@@ -283,34 +274,7 @@ function SecurityPage() {
           </TabsContent>
 
           <TabsContent value="indicators" className="mt-5">
-            <div className="overflow-x-auto rounded-xl border bg-card shadow-card">
-              <table className="w-full text-sm">
-                <thead className="bg-muted text-xs text-muted-foreground">
-                  <tr>
-                    <th className="p-3 text-start">{tr("Indicator", "المؤشر")}</th>
-                    <th className="p-3 text-start">{tr("Type", "النوع")}</th>
-                    <th className="p-3 text-start">{tr("Linked cases", "القضايا المرتبطة")}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {indicatorIndex.map((i) => (
-                    <tr key={i.value} className="border-t">
-                      <td className="p-3"><Mono className="break-all">{i.value}</Mono></td>
-                      <td className="p-3">{pick(indicatorLabel[i.type as keyof typeof indicatorLabel])}</td>
-                      <td className="p-3">
-                        <div className="flex flex-wrap gap-1.5">
-                          {i.cases.map((c) => (
-                            <button key={c.id} type="button" onClick={() => select(c.id)} className={cn("rounded px-2 py-0.5 text-xs font-medium hover:underline", i.cases.length > 1 ? "bg-info-soft text-info" : "bg-muted")}>
-                              {c.caseId}
-                            </button>
-                          ))}
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <InvestigationGraph alerts={alerts} initialCaseId={selected?.id} onOpenCase={(id) => { select(id); setTab("alerts"); }} />
           </TabsContent>
         </Tabs>
       </section>

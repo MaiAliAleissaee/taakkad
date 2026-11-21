@@ -23,6 +23,7 @@ export default defineConfig({
         "class-variance-authority",
         "clsx",
         "lucide-react",
+        "react-zoom-pan-pinch",
         "sonner",
         "tailwind-merge",
       ],

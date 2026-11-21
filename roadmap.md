@@ -1,5 +1,7 @@
 # TRUST ZERO AI roadmap
 
+- [x] Interactive bilingual investigation graph, shared indicators, case details and human-review leads; verified existing dashboard flows.
+
 - [x] Fix Organizations page script loading and date hydration errors; verify navigation and registration.
 
 - [ ] Design system (navy / white / emerald), bilingual EN/AR with RTL

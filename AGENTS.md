@@ -31,3 +31,5 @@ use the editor.
 
 - Use the shared deterministic date formatter for rendered dates so server and browser ICU versions cannot cause hydration mismatches.
 - Pre-optimize dependencies used by lazy portal pages in Vite so first navigation does not invalidate loaded module URLs.
+- Derive investigation graphs from the current demo repository with type-aware, deduplicated indicator matches; relationships are human-review leads, never offender attribution.
+- Use react-zoom-pan-pinch for the investigation surface so wheel, touch and cursor anchoring share maintained interaction logic.

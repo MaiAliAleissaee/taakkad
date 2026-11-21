@@ -225,3 +225,16 @@
 @utility animate-pulse-ring {
   animation: pulse-ring 1.8s ease-out infinite;
 }
+
+.investigation-surface {
+  background-color: var(--muted);
+  background-image: radial-gradient(var(--border) 1px, transparent 1px);
+  background-size: 20px 20px;
+  touch-action: none;
+}
+.investigation-transform { width: 100% !important; height: 100% !important; }
+.investigation-content { cursor: grab; }
+.investigation-content:active { cursor: grabbing; }
+.investigation-edge { fill: none; stroke: var(--info); stroke-width: 1.5; opacity: 0.35; }
+.investigation-edge-shared { stroke: var(--unverified); stroke-width: 2.5; stroke-dasharray: 6 4; opacity: 0.85; }
+.investigation-edge-selected { stroke: var(--verified); stroke-width: 3; opacity: 1; }

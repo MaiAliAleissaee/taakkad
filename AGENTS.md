@@ -40,4 +40,5 @@ use the editor.
 - Keep convenience input recognition and registry-result wording in the presentation layer; they must not alter detection assessments or infer cryptographic message authentication.
 - Resolve locale through the shared preference helper and inherit direction in reusable dialogs and notifications to keep navigation, reloads and portal overlays consistent.
 - Translate fixed fictional notes and analyst labels at display time without rewriting stored records; visitor-authored free text retains its original language and uses automatic text direction.
-- Guided registration validates each step through the existing registration validator and submits the unchanged pending-registration workflow only after final review.
+- Registration uses the original single-form controls and the existing registration validator; submissions remain pending until independently reviewed.
+- Restore presentation from the pre-redesign checkpoint without changing repository, channel policy, detection or investigation services so browser records and earlier workflows survive.

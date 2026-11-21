@@ -28,7 +28,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>(DEFAULT_LANGUAGE);
 
   useEffect(() => {
-    try { setLangState(resolveLanguage(localStorage.getItem(KEY))); } catch { /* retain Arabic default */ }
+    try { setLangState(resolveLanguage(localStorage.getItem(KEY))); } catch { /* retain original default */ }
   }, []);
 
   useEffect(() => {

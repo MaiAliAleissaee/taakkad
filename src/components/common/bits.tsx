@@ -26,13 +26,14 @@ export function PageHeader({
   eyebrow, title, description, actions, children,
 }: { eyebrow: string; title: string; description: string; actions?: ReactNode; children?: ReactNode }) {
   return (
-    <section className="border-b bg-card text-foreground">
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <section className="relative overflow-hidden bg-hero text-navy-foreground">
+      <div className="grid-lines pointer-events-none absolute inset-0" aria-hidden />
+      <div className="relative mx-auto max-w-7xl px-4 pb-10 pt-10 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div className="max-w-3xl">
-            <p className="text-sm font-medium text-primary">{eyebrow}</p>
-            <h1 className="mt-2 text-3xl font-semibold leading-relaxed sm:text-4xl">{title}</h1>
-            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">{description}</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald">{eyebrow}</p>
+            <h1 className="mt-3 text-3xl font-semibold sm:text-4xl">{title}</h1>
+            <p className="mt-3 text-sm leading-relaxed text-navy-muted sm:text-base">{description}</p>
           </div>
           {actions ? <div className="flex flex-wrap gap-2">{actions}</div> : null}
         </div>
@@ -44,16 +45,16 @@ export function PageHeader({
 
 export function StatTile({ label, value, hint, tone = "default" }: { label: string; value: ReactNode; hint?: string; tone?: "default" | "emerald" | "warning" | "danger" }) {
   const toneClass = {
-    default: "text-foreground",
+    default: "text-navy-foreground",
     emerald: "text-emerald",
-    warning: "text-unverified",
-    danger: "text-suspicious",
+    warning: "text-sev-medium",
+    danger: "text-sev-high",
   }[tone];
   return (
-    <div className="border-s-2 border-border px-4 py-2">
-      <p className="text-sm text-muted-foreground">{label}</p>
-      <p className={cn("mt-1 text-2xl font-semibold tabular-nums", toneClass)}>{value}</p>
-      {hint ? <p className="mt-1 text-xs text-muted-foreground">{hint}</p> : null}
+    <div className="rounded-xl border border-navy-border bg-navy-elevated/50 p-4 backdrop-blur">
+      <p className="text-xs text-navy-muted">{label}</p>
+      <p className={cn("mt-1 font-display text-2xl font-semibold", toneClass)}>{value}</p>
+      {hint ? <p className="mt-1 text-xs text-navy-muted">{hint}</p> : null}
     </div>
   );
 }

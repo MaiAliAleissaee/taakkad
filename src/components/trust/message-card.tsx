@@ -15,7 +15,7 @@ const accent = { verified: "before:bg-verified", unverified: "before:bg-unverifi
 
 export function MessageCard({ message, assessment }: { message: SampleMessage; assessment: Assessment }) {
   const { tr, pick, date } = useI18n();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(assessment.state === "suspicious");
   return (
     <article className={cn("relative overflow-hidden rounded-2xl border bg-card p-5 shadow-card before:absolute before:inset-y-0 before:start-0 before:w-1", accent[assessment.state])}>
       <div className="flex flex-wrap items-start justify-between gap-3">
@@ -26,7 +26,7 @@ export function MessageCard({ message, assessment }: { message: SampleMessage; a
             <span aria-hidden>·</span>
             <time dateTime={message.receivedAt}>{date(message.receivedAt, true)}</time>
           </div>
-          <p className="mt-1 break-all text-sm font-semibold"><Mono>{message.sender}</Mono></p>
+          <p className="mt-1 text-sm font-semibold"><Mono>{message.sender}</Mono></p>
         </div>
         <TrustBadge state={assessment.state} />
       </div>
@@ -40,7 +40,6 @@ export function MessageCard({ message, assessment }: { message: SampleMessage; a
         </p>
       ) : null}
 
-      <p className="mt-3 text-xs text-muted-foreground">{assessment.state === "verified" ? tr("Channel registry match only · message not authenticated", "مطابقة سجل القناة فقط · الرسالة غير موثّقة") : pick(trustStateHelp[assessment.state])}</p>
       <div className="mt-4 flex flex-wrap items-center gap-2">
         <Button variant="ghost" size="sm" onClick={() => setOpen((v) => !v)} aria-expanded={open}>
           <ChevronDown className={cn("transition-transform", open && "rotate-180")} />
@@ -55,7 +54,7 @@ export function MessageCard({ message, assessment }: { message: SampleMessage; a
       </div>
 
       {open ? (
-        <div className="mt-3 space-y-3 border-t pt-4">
+        <div className="mt-3 space-y-3 rounded-xl border bg-background p-4">
           <p className="text-xs text-muted-foreground">{pick(trustStateHelp[assessment.state])}</p>
           <ReasonList reasons={assessment.reasons} />
           <div>

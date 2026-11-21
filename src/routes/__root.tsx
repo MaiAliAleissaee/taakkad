@@ -80,7 +80,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="ar" dir="rtl">
+    <html lang="en" dir="ltr">
       <head>
         <HeadContent />
       </head>
@@ -104,7 +104,7 @@ function RootComponent() {
       <I18nProvider>
         <div className="flex min-h-screen flex-col">
           <SiteHeader />
-          <main id="main-content" tabIndex={-1} className="min-w-0 flex-1">
+          <main id="main-content" tabIndex={-1} className="flex-1">
             {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
             <Outlet />
           </main>

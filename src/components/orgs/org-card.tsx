@@ -1,7 +1,6 @@
 import { BadgeCheck, Ban, CheckCircle2, Circle, Fingerprint, RotateCcw, ShieldCheck, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Disclosure } from "@/components/common/disclosure";
 import { ChannelIcon, Mono } from "@/components/common/bits";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
@@ -119,7 +118,8 @@ export function OrgCard({ org, actor, onManage }: { org: Organization; actor: De
             {org.domains.map((d) => <span key={d} className="rounded-md bg-muted px-2 py-0.5"><Mono>{d}</Mono></span>)}
           </div>
         </div>
-        <Disclosure title={tr(`Registered channels (${org.channels.length})`, `القنوات المسجّلة (${org.channels.length})`)}>
+        <div>
+          <p className="text-xs text-muted-foreground">{tr("Registered channels", "القنوات المسجّلة")}</p>
           <ul className="mt-1 space-y-1">
             {org.channels.map((c) => (
               <li key={c.id} className="flex items-center gap-2" title={pick(channelLabel[c.type])}>
@@ -129,12 +129,12 @@ export function OrgCard({ org, actor, onManage }: { org: Organization; actor: De
               </li>
             ))}
           </ul>
-        </Disclosure>
-        <Disclosure title={tr("Demo signing key", "مفتاح التوقيع التجريبي")}><div className="flex items-center gap-2 rounded-lg bg-muted px-3 py-2 text-xs text-muted-foreground">
+        </div>
+        <div className="flex items-center gap-2 rounded-lg bg-muted px-3 py-2 text-xs text-muted-foreground">
           <Fingerprint className="size-4 shrink-0" />
-          <span className="min-w-0 break-all"><Mono>{org.keyFingerprint}</Mono></span>
+          <span className="min-w-0 truncate"><Mono>{org.keyFingerprint}</Mono></span>
           <span className="ms-auto shrink-0">{tr("demo key", "مفتاح تجريبي")}</span>
-        </div></Disclosure>
+        </div>
         <p className="text-xs text-muted-foreground">
           {tr("Registered", "سُجّلت")} {date(org.registeredAt)}
           {org.verifiedAt && org.status === "verified" ? ` · ${tr("Verified", "وُثّقت")} ${date(org.verifiedAt)}` : ""}

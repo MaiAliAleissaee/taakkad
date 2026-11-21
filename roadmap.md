@@ -1,5 +1,7 @@
 # TRUST ZERO AI roadmap
 
+- [x] Fix Organizations page script loading and date hydration errors; verify navigation and registration.
+
 - [ ] Design system (navy / white / emerald), bilingual EN/AR with RTL
 - [ ] Organization Portal: register, verify (simulated), suspend, delete, filters
 - [ ] Public Trust Portal: message feed with Verified / Unverified / Suspicious + explanations, message checker, report to security

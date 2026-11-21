@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import type { Bi } from "@/lib/domain/types";
+import { formatDisplayDate } from "./date";
 
 export type Lang = "en" | "ar";
 const KEY = "trustzero.lang";
@@ -46,8 +47,6 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<I18nValue>(() => {
     const locale = lang === "ar" ? "ar-AE-u-nu-latn" : "en-GB";
-    const dateFmt = new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeZone: "Asia/Dubai" });
-    const dateTimeFmt = new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Dubai" });
     return {
       lang,
       dir: lang === "ar" ? "rtl" : "ltr",
@@ -55,7 +54,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
       tr: (en, ar) => (lang === "ar" ? ar : en),
       pick: (b) => (b ? b[lang] : ""),
       fmt: (b, params) => interpolate(b[lang], params),
-      date: (iso, withTime = false) => (withTime ? dateTimeFmt : dateFmt).format(new Date(iso)),
+      date: (iso, withTime = false) => formatDisplayDate(iso, lang, withTime),
       num: (n) => new Intl.NumberFormat(locale).format(n),
     };
   }, [lang, setLang]);

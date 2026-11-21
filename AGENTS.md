@@ -28,3 +28,6 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+- Use the shared deterministic date formatter for rendered dates so server and browser ICU versions cannot cause hydration mismatches.
+- Pre-optimize dependencies used by lazy portal pages in Vite so first navigation does not invalidate loaded module URLs.

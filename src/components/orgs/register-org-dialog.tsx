@@ -13,7 +13,7 @@ import { channelLabel, orgTypeLabel } from "@/lib/i18n/labels";
 import { parseDomains, toChannels, validateRegistration, type RegistrationError } from "@/lib/services/registration";
 import { demoSignatureService } from "@/lib/services/signatures";
 
-const CHANNEL_TYPES: ChannelType[] = ["email", "sms", "phone", "website", "social"];
+const CHANNEL_TYPES: ChannelType[] = ["email", "sms", "phone", "website", "social", "other"];
 const ORG_TYPES: OrgType[] = ["government", "bank", "business"];
 
 export function RegisterOrgDialog({ trigger }: { trigger: React.ReactNode }) {
@@ -145,7 +145,7 @@ export function RegisterOrgDialog({ trigger }: { trigger: React.ReactNode }) {
                       aria-label={tr("Channel value", "قيمة القناة")}
                       value={c.value}
                       onChange={(e) => setChannels((list) => list.map((x, j) => (j === i ? { ...x, value: e.target.value } : x)))}
-                      placeholder={{ email: "alerts@coralbay.example", sms: "CORALBAY", phone: "+971 4 000 0400", website: "www.coralbay.example", social: "@CoralBay" }[c.type]}
+                      placeholder={{ email: "alerts@coralbay.example", sms: "CORALBAY", phone: "+971 4 000 0400", website: "www.coralbay.example", social: "@CoralBay", other: "coralbay-app.example" }[c.type]}
                     />
                     <Button type="button" variant="ghost" size="icon" aria-label={tr("Remove channel", "إزالة القناة")} onClick={() => setChannels((list) => list.filter((_, j) => j !== i))}>
                       <Trash2 />

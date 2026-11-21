@@ -7,12 +7,33 @@ export type Bi = { en: string; ar: string };
 
 export type OrgType = "government" | "bank" | "business";
 export type OrgStatus = "verified" | "pending" | "suspended";
-export type ChannelType = "email" | "sms" | "phone" | "website" | "social";
+export type ChannelType = "email" | "sms" | "phone" | "website" | "social" | "other";
+export type ChannelStatus = "pending" | "verified" | "rejected" | "inactive" | "revoked";
+/** Explicit demo persona, never an authenticated production identity. Not persisted. */
+export type DemoActor = { role: "viewer" | "org_admin" | "verifier"; orgId?: string };
+export type ChannelAction = "add" | "edit" | "submit" | "approve" | "reject" | "deactivate" | "revoke" | "remove";
+export interface ChannelAuditEvent {
+  id: string;
+  orgId: string;
+  channelId: string;
+  action: ChannelAction | "seed" | "organization_verified" | "organization_suspended" | "organization_removed";
+  actor: string;
+  at: string;
+  type: ChannelType;
+  value: string;
+  previousValue?: string;
+  status: ChannelStatus;
+  note: string;
+}
 
 export interface Channel {
   id: string;
   type: ChannelType;
   value: string;
+  status?: ChannelStatus;
+  addedAt?: string;
+  submittedAt?: string;
+  reviewedAt?: string;
 }
 
 export interface Organization {
@@ -108,4 +129,5 @@ export interface DemoState {
   messages: SampleMessage[];
   alerts: ImpersonationAlert[];
   lookalikes: LookalikeDomain[];
+  channelAudit?: ChannelAuditEvent[];
 }

@@ -9,7 +9,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import type { Organization } from "@/lib/domain/types";
+import type { DemoActor, Organization } from "@/lib/domain/types";
 import { repository } from "@/lib/data/local-store";
 import { useI18n } from "@/lib/i18n/i18n";
 import { channelLabel, orgStatusLabel, orgTypeLabel } from "@/lib/i18n/labels";
@@ -18,8 +18,9 @@ import { demoSignatureService } from "@/lib/services/signatures";
 
 const statusVariant = { verified: "verified", pending: "unverified", suspended: "suspicious" } as const;
 
-function VerifyDialog({ org }: { org: Organization }) {
-  const { tr } = useI18n();
+function VerifyDialog({ org, actor }: { org: Organization; actor: DemoActor }) {
+  const { tr, dir } = useI18n();
+  const [open, setOpen] = useState(false);
   const [tokens, setTokens] = useState<Record<string, string>>({});
   const [checked, setChecked] = useState<Record<string, boolean>>({});
 
@@ -41,15 +42,15 @@ function VerifyDialog({ org }: { org: Organization }) {
   const channelsOk = channelChecks.every((x) => x.ok);
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="sm"><BadgeCheck />{tr("Run verification", "بدء التوثيق")}</Button>
+        <Button size="sm"><BadgeCheck />{tr("Run verification (simulated)", "بدء التوثيق (محاكاة)")}</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent dir={dir} className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>{tr("Verification checks", "فحوصات التوثيق")}</DialogTitle>
           <DialogDescription>
-            {tr("Simulated: no DNS lookup is performed. In production, each domain would publish this token as a DNS TXT record.", "محاكاة: لا يتم إجراء أي استعلام DNS. في التشغيل الفعلي، تنشر كل جهة هذا الرمز كسجل TXT.")}
+            {tr("Independent verifier simulation only: no identity or DNS lookup is performed. Production requires independent organization identity and domain-ownership checks. This approval does not approve any channels.", "محاكاة مراجع مستقل فقط: لا يتم التحقق من الهوية أو DNS. يتطلب التشغيل الفعلي تحققاً مستقلاً من هوية الجهة وملكية النطاق. هذا الاعتماد لا يعتمد أي قناة.")}
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4">
@@ -83,7 +84,8 @@ function VerifyDialog({ org }: { org: Organization }) {
           <Button
             disabled={!allDomainsConfirmed || !channelsOk}
             onClick={() => {
-              repository.setOrganizationStatus(org.id, "verified");
+              repository.setOrganizationStatus(org.id, "verified", actor);
+              setOpen(false);
               toast.success(tr("Organization verified (simulated)", "تم توثيق الجهة (محاكاة)"));
             }}
           >
@@ -95,7 +97,7 @@ function VerifyDialog({ org }: { org: Organization }) {
   );
 }
 
-export function OrgCard({ org }: { org: Organization }) {
+export function OrgCard({ org, actor, onManage }: { org: Organization; actor: DemoActor; onManage: () => void }) {
   const { tr, pick, date, lang } = useI18n();
   const other = lang === "ar" ? org.name.en : org.name.ar;
   return (
@@ -117,12 +119,13 @@ export function OrgCard({ org }: { org: Organization }) {
           </div>
         </div>
         <div>
-          <p className="text-xs text-muted-foreground">{tr("Approved channels", "القنوات المعتمدة")}</p>
+          <p className="text-xs text-muted-foreground">{tr("Registered channels", "القنوات المسجّلة")}</p>
           <ul className="mt-1 space-y-1">
             {org.channels.map((c) => (
               <li key={c.id} className="flex items-center gap-2" title={pick(channelLabel[c.type])}>
                 <ChannelIcon type={c.type} className="text-accent-foreground" />
                 <Mono className="truncate">{c.value}</Mono>
+                {c.status !== "verified" && <span className="ms-auto shrink-0 text-xs text-muted-foreground">{tr("Not active", "غير نشطة")}</span>}
               </li>
             ))}
           </ul>
@@ -139,18 +142,19 @@ export function OrgCard({ org }: { org: Organization }) {
       </div>
 
       <div className="mt-auto flex flex-wrap gap-2 border-t pt-4">
-        {org.status === "pending" ? <VerifyDialog org={org} /> : null}
-        {org.status === "verified" ? (
-          <Button size="sm" variant="outline" onClick={() => { repository.setOrganizationStatus(org.id, "suspended"); toast(tr("Verification suspended", "تم إيقاف التوثيق")); }}>
+        <Button size="sm" variant="outline" onClick={onManage}>{tr("Channels", "القنوات")}</Button>
+        {actor.role === "verifier" && org.status === "pending" ? <VerifyDialog org={org} actor={actor} /> : null}
+        {actor.role === "verifier" && org.status === "verified" ? (
+          <Button size="sm" variant="outline" onClick={() => { repository.setOrganizationStatus(org.id, "suspended", actor); toast(tr("Verification suspended", "تم إيقاف التوثيق")); }}>
             <Ban />{tr("Suspend", "إيقاف")}
           </Button>
         ) : null}
-        {org.status === "suspended" ? (
-          <Button size="sm" variant="outline" onClick={() => { repository.setOrganizationStatus(org.id, "verified"); toast.success(tr("Verification reinstated", "تمت إعادة التوثيق")); }}>
+        {actor.role === "verifier" && org.status === "suspended" ? (
+          <Button size="sm" variant="outline" onClick={() => { repository.setOrganizationStatus(org.id, "verified", actor); toast.success(tr("Verification reinstated (simulated)", "تمت إعادة التوثيق (محاكاة)")); }}>
             <RotateCcw />{tr("Reinstate", "إعادة التفعيل")}
           </Button>
         ) : null}
-        <AlertDialog>
+        {actor.role === "verifier" && <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button size="sm" variant="ghost" className="ms-auto text-muted-foreground"><Trash2 />{tr("Remove", "حذف")}</Button>
           </AlertDialogTrigger>
@@ -163,10 +167,10 @@ export function OrgCard({ org }: { org: Organization }) {
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>{tr("Cancel", "إلغاء")}</AlertDialogCancel>
-              <AlertDialogAction onClick={() => { repository.deleteOrganization(org.id); toast(tr("Organization removed", "تم حذف الجهة")); }}>{tr("Remove", "حذف")}</AlertDialogAction>
+              <AlertDialogAction onClick={() => { repository.deleteOrganization(org.id, actor); toast(tr("Organization removed", "تم حذف الجهة")); }}>{tr("Remove", "حذف")}</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
-        </AlertDialog>
+        </AlertDialog>}
       </div>
     </article>
   );

@@ -27,7 +27,8 @@ export function MessageChecker() {
   const { organizations } = useDemoState();
   const blocklist = useBlocklist();
   const [input, setInput] = useState<MessageInput>({ channel: "sms", sender: "", url: "", body: "", claimedOrgId: undefined });
-  const [result, setResult] = useState<{ input: MessageInput; assessment: Assessment } | null>(null);
+  const [checkedInput, setCheckedInput] = useState<MessageInput | null>(null);
+  const result = checkedInput ? { input: checkedInput, assessment: assessMessage(checkedInput, { organizations, blocklist }) } : null;
   const [error, setError] = useState(false);
 
   const run = (value: MessageInput) => {
@@ -36,7 +37,7 @@ export function MessageChecker() {
       return;
     }
     setError(false);
-    setResult({ input: value, assessment: assessMessage(value, { organizations, blocklist }) });
+    setCheckedInput(value);
   };
 
   const onSubmit = (e: FormEvent) => {
@@ -63,7 +64,7 @@ export function MessageChecker() {
           <div className="space-y-1.5">
             <Label htmlFor="chk-channel">{tr("Received via", "وصلت عبر")}</Label>
             <NativeSelect id="chk-channel" value={input.channel} onChange={(e) => setInput({ ...input, channel: e.target.value as ChannelType })}>
-              {(["sms", "email", "phone", "social", "website"] as const).map((c) => <option key={c} value={c}>{pick(channelLabel[c])}</option>)}
+              {(["sms", "email", "phone", "social", "website", "other"] as const).map((c) => <option key={c} value={c}>{pick(channelLabel[c])}</option>)}
             </NativeSelect>
           </div>
           <div className="space-y-1.5">

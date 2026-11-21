@@ -1,5 +1,6 @@
 import type { DemoState, ImpersonationAlert, LookalikeDomain, LookalikeStatus, Organization, SampleMessage } from "@/lib/domain/types";
 import { detectLookalike } from "@/lib/services/lookalike";
+import { upgradeChannelRegistry } from "@/lib/services/channels";
 
 /** Bump when the seed shape changes so stale browser data is replaced. */
 export const SEED_VERSION = 1;
@@ -431,5 +432,5 @@ const lookalikes: LookalikeDomain[] = [
 ];
 
 export function createSeedState(): DemoState {
-  return structuredClone({ version: SEED_VERSION, organizations, messages, alerts, lookalikes });
+  return upgradeChannelRegistry(structuredClone({ version: SEED_VERSION, organizations, messages, alerts, lookalikes }));
 }

@@ -33,3 +33,7 @@ use the editor.
 - Pre-optimize dependencies used by lazy portal pages in Vite so first navigation does not invalidate loaded module URLs.
 - Derive investigation graphs from the current demo repository with type-aware, deduplicated indicator matches; relationships are human-review leads, never offender attribution.
 - Use react-zoom-pan-pinch for the investigation surface so wheel, touch and cursor anchoring share maintained interaction logic.
+- Keep demo personas transient and label their permissions as simulations, never authentication; production authorization must be enforced by an authenticated server with roles separate from organization/profile records.
+- Route channel changes through the shared transition policy and retain local audit history after removal; pending, edited, rejected, inactive and revoked channels cannot yield positive registry matches.
+- Migrate legacy browser records in place instead of resetting the seed version so existing cases, investigation leads and judge edits survive registry upgrades.
+- Match email senders and website hosts against explicit active approved channels, not implicit domain-wide approval, so revocation cannot be bypassed by organization domains.

@@ -22,6 +22,7 @@ export const channelLabel: Record<ChannelType, Bi> = {
   phone: { en: "Phone", ar: "هاتف" },
   website: { en: "Website", ar: "موقع إلكتروني" },
   social: { en: "Social account", ar: "حساب تواصل اجتماعي" },
+  other: { en: "Other digital channel", ar: "قناة رقمية أخرى" },
 };
 
 export const trustStateLabel: Record<TrustState, Bi> = {
@@ -32,8 +33,8 @@ export const trustStateLabel: Record<TrustState, Bi> = {
 
 export const trustStateHelp: Record<TrustState, Bi> = {
   verified: {
-    en: "Sent through a channel registered by an organization that completed verification.",
-    ar: "أُرسل عبر قناة مسجّلة لجهة أكملت التوثيق.",
+    en: "Matches a currently active, approved channel of a verified fictional organization. Registry match only, not proof of sender identity.",
+    ar: "يطابق قناة نشطة ومعتمدة لجهة خيالية موثّقة. مطابقة للسجل فقط وليست إثباتاً لهوية المرسل.",
   },
   unverified: {
     en: "We could not confirm the sender. This is not proof of fraud — check with the organization directly.",
@@ -100,6 +101,7 @@ export const techniqueLabel: Record<LookalikeTechnique, Bi> = {
 };
 
 export const reasonTemplate: Record<ReasonCode, Bi> = {
+  channel_not_active: { en: "A record for {value} exists under {org}, but this channel is not currently approved and active. It cannot produce a Verified registry match.", ar: "يوجد سجل لـ{value} لدى {org}، لكن هذه القناة ليست معتمدة ونشطة حالياً. لا يمكنها إنتاج مطابقة موثّقة في السجل." },
   sender_registered: { en: "{value} is a registered {channel} of {org}.", ar: "{value} هو {channel} مسجّل لدى {org}." },
   domain_registered: { en: "Link domain {domain} is registered to {org}.", ar: "نطاق الرابط {domain} مسجّل باسم {org}." },
   org_verified: { en: "{org} has completed verification.", ar: "أكملت {org} عملية التوثيق." },

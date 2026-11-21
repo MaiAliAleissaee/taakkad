@@ -1,6 +1,7 @@
 import type {
-  AlertStatus, DemoState, ImpersonationAlert, LookalikeDomain, LookalikeStatus, Organization, OrgStatus,
+  AlertStatus, DemoActor, DemoState, ImpersonationAlert, LookalikeDomain, LookalikeStatus, Organization, OrgStatus,
 } from "@/lib/domain/types";
+import type { ChannelCommand } from "@/lib/services/channels";
 
 /**
  * Data access contract. The prototype implements it with browser storage
@@ -9,8 +10,9 @@ import type {
 export interface TrustRepository {
   getState(): DemoState;
   addOrganization(org: Organization): void;
-  setOrganizationStatus(id: string, status: OrgStatus): void;
-  deleteOrganization(id: string): void;
+  setOrganizationStatus(id: string, status: OrgStatus, actor: DemoActor): void;
+  deleteOrganization(id: string, actor: DemoActor): void;
+  channelCommand(actor: DemoActor, command: ChannelCommand): void;
   addAlert(alert: Omit<ImpersonationAlert, "id" | "caseId">): ImpersonationAlert;
   updateAlert(id: string, patch: Partial<Pick<ImpersonationAlert, "status" | "assignee">>): void;
   addAlertNote(id: string, author: string, text: string): void;

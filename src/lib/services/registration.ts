@@ -67,5 +67,5 @@ export function validateRegistration(input: RegistrationInput, existing: Organiz
 }
 
 export function toChannels(channels: RegistrationInput["channels"], idFor: () => string): Channel[] {
-  return channels.map((c) => ({ id: idFor(), type: c.type, value: c.value.trim() }));
+  return channels.map((c) => ({ id: idFor(), type: c.type, value: c.value.trim(), status: "pending" }));
 }

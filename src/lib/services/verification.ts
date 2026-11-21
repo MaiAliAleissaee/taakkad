@@ -2,10 +2,12 @@ import type { ChannelType, Organization, TrustState } from "@/lib/domain/types";
 import { heuristicAnalyzer, type ContentAnalyzer } from "./content-analysis";
 import { type BlockedIndicator, normalizeIndicator } from "./blocklist";
 import { detectLookalike, detectLookalikeHandle, hostFromUrl, isSameOrSubdomain, normalizeHost } from "./lookalike";
+import { activeChannel, channelKey } from "./channels";
 
 export type ReasonCode =
   | "sender_registered"
   | "domain_registered"
+  | "channel_not_active"
   | "org_verified"
   | "org_pending"
   | "org_suspended"
@@ -64,17 +66,13 @@ function senderDomainOf(channel: ChannelType, sender: string): string | undefine
 }
 
 export function findSenderOrg(orgs: Organization[], channel: ChannelType, sender: string) {
-  const domain = senderDomainOf(channel, sender);
-  if (domain) {
-    return orgs.find((o) => o.domains.some((d) => isSameOrSubdomain(domain, d)));
-  }
-  const value = cleanHandle(sender);
-  return orgs.find((o) => o.channels.some((c) => c.type === channel && cleanHandle(c.value) === value));
+  const value = channelKey(channel, sender);
+  return orgs.find((o) => o.channels.some((c) => activeChannel(c) && c.type === channel && channelKey(c.type, c.value) === value));
 }
 
 export function findDomainOrg(orgs: Organization[], host: string | undefined) {
   if (!host) return undefined;
-  return orgs.find((o) => o.domains.some((d) => isSameOrSubdomain(host, d)));
+  return orgs.find((o) => o.channels.some((c) => activeChannel(c) && c.type === "website" && channelKey(c.type, c.value) === normalizeHost(host)));
 }
 
 /**
@@ -109,7 +107,7 @@ export function assessMessage(input: MessageInput, ctx: VerificationContext): As
 
   // 2. Lookalike domains (sender domain and link domain)
   const checkDomain = (host: string | undefined) => {
-    if (!host || findDomainOrg(orgs, host)) return;
+    if (!host || findDomainOrg(orgs, host) || orgs.some((o) => o.domains.some((d) => isSameOrSubdomain(host, d)) || o.channels.some((c) => c.type === "website" && channelKey(c.type, c.value) === host))) return;
     for (const org of orgs) {
       for (const d of org.domains) {
         const m = detectLookalike(host, d);
@@ -132,7 +130,7 @@ export function assessMessage(input: MessageInput, ctx: VerificationContext): As
   if (!senderOrg && (input.channel === "sms" || input.channel === "social")) {
     outer: for (const org of orgs) {
       for (const c of org.channels) {
-        if (c.type !== input.channel) continue;
+        if (c.type !== input.channel || !activeChannel(c) || channelKey(c.type, c.value) === channelKey(input.channel, input.sender)) continue;
         const sim = detectLookalikeHandle(input.sender, c.value);
         if (sim !== null) {
           reasons.push({
@@ -199,6 +197,9 @@ export function assessMessage(input: MessageInput, ctx: VerificationContext): As
       { code: "link_registered_sender_unknown", tone: "warning", params: { domain: urlHost, org: nameOf(urlOrg), value: input.sender } },
     ]);
   }
+
+  const inactiveOrg = orgs.find((o) => o.channels.some((c) => c.type === input.channel && !activeChannel(c) && channelKey(c.type, c.value) === channelKey(input.channel, input.sender)));
+  if (inactiveOrg) return unverified([{ code: "channel_not_active", tone: "warning", params: { value: input.sender, org: inactiveOrg.id } }]);
 
   return unverified([{ code: "no_match", tone: "neutral", params: {} }]);
 }

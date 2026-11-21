@@ -2,6 +2,7 @@ import { useSyncExternalStore } from "react";
 import type { DemoState } from "@/lib/domain/types";
 import type { TrustRepository } from "./repository";
 import { createSeedState, SEED_VERSION } from "./seed";
+import { applyChannelCommand, applyOrganizationReview, upgradeChannelRegistry } from "@/lib/services/channels";
 
 const STORAGE_KEY = "trustzero.demo.v1";
 const serverSnapshot = createSeedState();
@@ -24,7 +25,7 @@ function readStored(): DemoState | null {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as DemoState;
-    return parsed?.version === SEED_VERSION ? parsed : null;
+    return parsed?.version === SEED_VERSION ? upgradeChannelRegistry(parsed) : null;
   } catch {
     return null;
   }
@@ -62,15 +63,17 @@ function nextCaseId(s: DemoState) {
 
 export const repository: TrustRepository = {
   getState: () => state,
-  addOrganization: (org) => update((s) => ({ ...s, organizations: [org, ...s.organizations] })),
-  setOrganizationStatus: (id, status) =>
-    update((s) => ({
+  addOrganization: (org) => update((s) => {
+    const channels = org.channels.map((c) => ({ id: c.id, type: c.type, value: c.value, status: "pending" as const, addedAt: org.registeredAt }));
+    return {
       ...s,
-      organizations: s.organizations.map((o) =>
-        o.id === id ? { ...o, status, verifiedAt: status === "verified" ? new Date().toISOString() : o.verifiedAt } : o,
-      ),
-    })),
-  deleteOrganization: (id) => update((s) => ({ ...s, organizations: s.organizations.filter((o) => o.id !== id) })),
+      organizations: [{ ...org, status: "pending", verifiedAt: undefined, channels }, ...s.organizations],
+      channelAudit: [...(s.channelAudit ?? []), ...channels.map((c) => ({ id: uid("audit"), orgId: org.id, channelId: c.id, action: "add" as const, actor: "registration_request", at: org.registeredAt, type: c.type, value: c.value, status: c.status, note: "Pending fictional registration; not approved." }))],
+    };
+  }),
+  setOrganizationStatus: (id, status, actor) => update((s) => applyOrganizationReview(s, actor, id, status, new Date().toISOString(), uid("audit"))),
+  deleteOrganization: (id, actor) => update((s) => applyOrganizationReview(s, actor, id, "remove", new Date().toISOString(), uid("audit"))),
+  channelCommand: (actor, command) => update((s) => applyChannelCommand(s, actor, command, new Date().toISOString(), uid("audit"))),
   addAlert: (input) => {
     const alert = { ...input, id: uid("al"), caseId: nextCaseId(state) };
     update((s) => ({ ...s, alerts: [alert, ...s.alerts] }));

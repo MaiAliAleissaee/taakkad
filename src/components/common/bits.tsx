@@ -14,6 +14,7 @@ export const channelIcon: Record<ChannelType, LucideIcon> = {
   phone: Phone,
   website: Globe,
   social: AtSign,
+  other: Globe,
 };
 
 export function ChannelIcon({ type, className }: { type: ChannelType; className?: string }) {

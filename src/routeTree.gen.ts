@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as OrganizationsRouteImport } from './routes/organizations'
+import { Route as SecurityRouteImport } from './routes/security'
 import { Route as TrustRouteImport } from './routes/trust'
 
 const IndexRoute = IndexRouteImport.update({
@@ -23,6 +24,11 @@ const OrganizationsRoute = OrganizationsRouteImport.update({
   path: '/organizations',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SecurityRoute = SecurityRouteImport.update({
+  id: '/security',
+  path: '/security',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TrustRoute = TrustRouteImport.update({
   id: '/trust',
   path: '/trust',
@@ -32,30 +38,34 @@ const TrustRoute = TrustRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/organizations': typeof OrganizationsRoute
+  '/security': typeof SecurityRoute
   '/trust': typeof TrustRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/organizations': typeof OrganizationsRoute
+  '/security': typeof SecurityRoute
   '/trust': typeof TrustRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/organizations': typeof OrganizationsRoute
+  '/security': typeof SecurityRoute
   '/trust': typeof TrustRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/organizations' | '/trust'
+  fullPaths: '/' | '/organizations' | '/security' | '/trust'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/organizations' | '/trust'
-  id: '__root__' | '/' | '/organizations' | '/trust'
+  to: '/' | '/organizations' | '/security' | '/trust'
+  id: '__root__' | '/' | '/organizations' | '/security' | '/trust'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   OrganizationsRoute: typeof OrganizationsRoute
+  SecurityRoute: typeof SecurityRoute
   TrustRoute: typeof TrustRoute
 }
 
@@ -75,6 +85,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrganizationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/security': {
+      id: '/security'
+      path: '/security'
+      fullPath: '/security'
+      preLoaderRoute: typeof SecurityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/trust': {
       id: '/trust'
       path: '/trust'
@@ -88,6 +105,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   OrganizationsRoute: OrganizationsRoute,
+  SecurityRoute: SecurityRoute,
   TrustRoute: TrustRoute,
 }
 export const routeTree = rootRouteImport

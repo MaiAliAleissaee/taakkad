@@ -4,11 +4,11 @@ import { cn } from "@/lib/utils";
 
 export const NativeSelect = React.forwardRef<HTMLSelectElement, React.SelectHTMLAttributes<HTMLSelectElement>>(
   ({ className, children, ...props }, ref) => (
-    <div className="relative">
+    <div className="relative min-w-0">
       <select
         ref={ref}
         className={cn(
-          "h-9 w-full appearance-none rounded-md border border-input bg-card pe-9 ps-3 text-sm shadow-sm cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50",
+          "h-11 w-full min-w-0 appearance-none rounded-md border border-input bg-card pe-9 ps-3 text-sm cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50",
           className,
         )}
         {...props}

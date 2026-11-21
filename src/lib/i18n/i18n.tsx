@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import type { Bi } from "@/lib/domain/types";
 import { formatDisplayDate } from "./date";
+import { DEFAULT_LANGUAGE, resolveLanguage } from "./preferences";
 
 export type Lang = "en" | "ar";
 const KEY = "trustzero.lang";
@@ -24,11 +25,10 @@ interface I18nValue {
 const I18nContext = createContext<I18nValue | null>(null);
 
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>("en");
+  const [lang, setLangState] = useState<Lang>(DEFAULT_LANGUAGE);
 
   useEffect(() => {
-    const stored = localStorage.getItem(KEY);
-    if (stored === "ar" || stored === "en") setLangState(stored);
+    try { setLangState(resolveLanguage(localStorage.getItem(KEY))); } catch { /* retain Arabic default */ }
   }, []);
 
   useEffect(() => {

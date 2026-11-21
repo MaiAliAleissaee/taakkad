@@ -26,15 +26,15 @@ export const channelLabel: Record<ChannelType, Bi> = {
 };
 
 export const trustStateLabel: Record<TrustState, Bi> = {
-  verified: { en: "Verified", ar: "موثّق" },
+  verified: { en: "Registered channel", ar: "قناة مسجّلة" },
   unverified: { en: "Unverified", ar: "غير موثّق" },
   suspicious: { en: "Suspicious", ar: "مشبوه" },
 };
 
 export const trustStateHelp: Record<TrustState, Bi> = {
   verified: {
-    en: "Matches a currently active, approved channel of a verified fictional organization. Registry match only, not proof of sender identity.",
-    ar: "يطابق قناة نشطة ومعتمدة لجهة خيالية موثّقة. مطابقة للسجل فقط وليست إثباتاً لهوية المرسل.",
+    en: "This channel matches an active approved registry entry. This does not authenticate the individual message or its sender.",
+    ar: "تطابق هذه القناة سجلاً معتمداً ونشطاً. هذا لا يثبت أصالة الرسالة الفردية أو هوية مرسلها.",
   },
   unverified: {
     en: "We could not confirm the sender. This is not proof of fraud — check with the organization directly.",
@@ -104,7 +104,7 @@ export const reasonTemplate: Record<ReasonCode, Bi> = {
   channel_not_active: { en: "A record for {value} exists under {org}, but this channel is not currently approved and active. It cannot produce a Verified registry match.", ar: "يوجد سجل لـ{value} لدى {org}، لكن هذه القناة ليست معتمدة ونشطة حالياً. لا يمكنها إنتاج مطابقة موثّقة في السجل." },
   sender_registered: { en: "{value} is a registered {channel} of {org}.", ar: "{value} هو {channel} مسجّل لدى {org}." },
   domain_registered: { en: "Link domain {domain} is registered to {org}.", ar: "نطاق الرابط {domain} مسجّل باسم {org}." },
-  org_verified: { en: "{org} has completed verification.", ar: "أكملت {org} عملية التوثيق." },
+  org_verified: { en: "{org} completed simulated organization review. Individual message identity remains unauthenticated.", ar: "أكملت {org} مراجعة الجهة الافتراضية. تبقى هوية الرسالة الفردية دون توثيق." },
   org_pending: { en: "{org} is registered, but verification is still pending.", ar: "{org} مسجّلة، لكن التوثيق ما زال قيد المراجعة." },
   org_suspended: { en: "{org}'s verification is currently suspended.", ar: "توثيق {org} موقوف حالياً." },
   no_match: {

@@ -28,7 +28,7 @@ function AutoFit({ viewport, height }: { viewport: RefObject<HTMLDivElement | nu
 }
 
 export function InvestigationGraph({ alerts, initialCaseId, onOpenCase }: { alerts: ImpersonationAlert[]; initialCaseId?: string | undefined; onOpenCase: (id: string) => void }) {
-  const { tr, pick, date, num } = useI18n();
+  const { tr, pick, date, num, lang } = useI18n();
   const graph = useMemo(() => buildInvestigation(alerts), [alerts]);
   const [scope, setScope] = useState(initialCaseId ?? alerts[0]?.id ?? "all");
   const [selection, setSelection] = useState(initialCaseId ?? alerts[0]?.id ?? "");
@@ -39,6 +39,8 @@ export function InvestigationGraph({ alerts, initialCaseId, onOpenCase }: { aler
   const visibleCases = alerts.filter((c) => relatedIds.has(c.id));
   const visibleIndicators = graph.indicators.filter((i) => i.cases.some((c) => relatedIds.has(c.id)));
   const height = Math.max(520, visibleIndicators.length * 82 + 70, visibleCases.length * 105 + 70);
+  const caseX = lang === "ar" ? 535 : 30;
+  const indicatorX = lang === "ar" ? 30 : 430;
   const caseY = (index: number) => 65 + index * ((height - 170) / Math.max(visibleCases.length - 1, 1));
   const indicatorY = (index: number) => 55 + index * 82;
   const selectedIndicator = graph.indicators.find((i) => i.id === selection);
@@ -73,13 +75,13 @@ export function InvestigationGraph({ alerts, initialCaseId, onOpenCase }: { aler
           <div className="flex flex-wrap items-center justify-between gap-2 border-b px-3 py-2 text-xs">
             <div className="flex flex-wrap items-center gap-3"><span className="flex items-center gap-1.5"><span className="size-2 rounded-sm bg-primary" />{num(visibleCases.length)} {tr("cases", "قضايا")}</span><span className="flex items-center gap-1.5"><span className="size-2 rounded-full bg-info" />{num(visibleIndicators.length)} {tr("indicators", "مؤشرات")}</span><span className="flex items-center gap-1.5 text-unverified"><Link2 className="size-3.5" />{tr("Shared indicator", "مؤشر مشترك")}</span></div>
           </div>
-          <TransformWrapper key={scope} minScale={0.15} maxScale={2.5} limitToBounds={false} wheel={{ step: 0.06 }} panning={{ excluded: ["button"] }} doubleClick={{ disabled: true }}>
+          <TransformWrapper key={`${scope}:${lang}`} minScale={0.15} maxScale={2.5} limitToBounds={false} wheel={{ step: 0.06 }} panning={{ excluded: ["button"] }} doubleClick={{ disabled: true }}>
             {({ zoomIn, zoomOut, centerView }) => (
               <div ref={viewport} className="investigation-surface relative h-[520px] sm:h-[560px]" dir="ltr">
                 <AutoFit viewport={viewport} height={height} />
                 <div className="absolute end-3 top-3 z-10 flex gap-1 rounded-md border bg-card p-1 shadow-card">
-                  <Button variant="ghost" size="icon" aria-label={tr("Zoom in", "تكبير")} title={tr("Zoom in", "تكبير")} onClick={() => zoomIn()}><ZoomIn /></Button>
-                  <Button variant="ghost" size="icon" aria-label={tr("Zoom out", "تصغير")} title={tr("Zoom out", "تصغير")} onClick={() => zoomOut()}><Minus /></Button>
+                  <Button variant="ghost" size="icon" aria-label={tr("Zoom in", "تكبير")} title={tr("Zoom in", "تكبير")} onClick={() => zoomIn(0.5, 0)}><ZoomIn /></Button>
+                  <Button variant="ghost" size="icon" aria-label={tr("Zoom out", "تصغير")} title={tr("Zoom out", "تصغير")} onClick={() => zoomOut(0.5, 0)}><Minus /></Button>
                   <Button variant="ghost" size="icon" aria-label={tr("Fit graph", "ملاءمة الشبكة")} title={tr("Fit graph", "ملاءمة الشبكة")} onClick={() => fit(centerView)}><Maximize /></Button>
                 </div>
                 <TransformComponent wrapperClass="investigation-transform" contentClass="investigation-content">
@@ -88,11 +90,11 @@ export function InvestigationGraph({ alerts, initialCaseId, onOpenCase }: { aler
                       {visibleIndicators.flatMap((i, index) => i.cases.filter((c) => relatedIds.has(c.id)).map((c) => {
                         const cy = caseY(visibleCases.findIndex((v) => v.id === c.id)) + 37;
                         const iy = indicatorY(index) + 31;
-                        return <path key={`${c.id}-${i.id}`} d={`M 265 ${cy} C 345 ${cy}, 350 ${iy}, 430 ${iy}`} className={cn("investigation-edge", i.cases.length > 1 && "investigation-edge-shared", (selection === i.id || selection === c.id) && "investigation-edge-selected")} />;
+                        return <path key={`${c.id}-${i.id}`} d={lang === "ar" ? `M 535 ${cy} C 455 ${cy}, 450 ${iy}, 370 ${iy}` : `M 265 ${cy} C 345 ${cy}, 350 ${iy}, 430 ${iy}`} className={cn("investigation-edge", i.cases.length > 1 && "investigation-edge-shared", (selection === i.id || selection === c.id) && "investigation-edge-selected")} />;
                       }))}
                     </svg>
-                    {visibleCases.map((c, index) => <Button key={c.id} variant="outline" aria-label={`${tr("Case", "قضية")} ${c.caseId}`} aria-pressed={selection === c.id} onClick={() => setSelection(c.id)} className={cn("absolute h-[74px] w-[235px] justify-start gap-3 whitespace-normal border-primary/30 bg-card px-3 text-start shadow-card", selection === c.id && "border-emerald ring-2 ring-emerald")} style={{ left: 30, top: caseY(index) }}><span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground"><ShieldAlert /></span><span className="min-w-0"><span className="block font-mono text-sm">{c.caseId}</span><span className="mt-1 block text-xs text-muted-foreground" dir={tr("ltr", "rtl")}>{pick(alertStatusLabel[c.status])}</span></span></Button>)}
-                    {visibleIndicators.map((i, index) => { const Icon = icons[i.type]; return <Button key={i.id} variant="outline" aria-label={`${pick(indicatorLabel[i.type])}: ${i.value}`} aria-pressed={selection === i.id} onClick={() => setSelection(i.id)} className={cn("absolute h-[62px] w-[340px] justify-start gap-3 whitespace-normal bg-card px-3 text-start shadow-card", i.cases.length > 1 ? "border-unverified bg-unverified-soft" : "border-info/30", selection === i.id && "ring-2 ring-emerald")} style={{ left: 430, top: indicatorY(index) }}><Icon className={i.cases.length > 1 ? "text-unverified" : "text-info"} /><span className="min-w-0 flex-1"><span className="block break-all font-mono text-xs leading-snug">{i.value}</span><span className="mt-1 block text-[11px] text-muted-foreground" dir={tr("ltr", "rtl")}>{pick(indicatorLabel[i.type])}</span></span>{i.cases.length > 1 ? <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-unverified text-primary-foreground">{num(i.cases.length)}</span> : null}</Button>; })}
+                    {visibleCases.map((c, index) => <Button key={c.id} variant="outline" aria-label={`${tr("Case", "قضية")} ${c.caseId}`} aria-pressed={selection === c.id} onClick={() => setSelection(c.id)} className={cn("absolute h-[74px] w-[235px] justify-start gap-3 whitespace-normal border-primary/30 bg-card px-3 text-start shadow-card", selection === c.id && "border-emerald ring-2 ring-emerald")} style={{ left: caseX, top: caseY(index) }}><span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground"><ShieldAlert /></span><span className="min-w-0"><span className="block font-mono text-sm">{c.caseId}</span><span className="mt-1 block text-xs text-muted-foreground" dir={tr("ltr", "rtl")}>{pick(alertStatusLabel[c.status])}</span></span></Button>)}
+                    {visibleIndicators.map((i, index) => { const Icon = icons[i.type]; return <Button key={i.id} variant="outline" aria-label={`${pick(indicatorLabel[i.type])}: ${i.value}`} aria-pressed={selection === i.id} onClick={() => setSelection(i.id)} className={cn("absolute h-[62px] w-[340px] justify-start gap-3 whitespace-normal bg-card px-3 text-start shadow-card", i.cases.length > 1 ? "border-unverified bg-unverified-soft" : "border-info/30", selection === i.id && "ring-2 ring-emerald")} style={{ left: indicatorX, top: indicatorY(index) }}><Icon className={i.cases.length > 1 ? "text-unverified" : "text-info"} /><span className="min-w-0 flex-1"><span className="block break-all font-mono text-xs leading-snug">{i.value}</span><span className="mt-1 block text-[11px] text-muted-foreground" dir={tr("ltr", "rtl")}>{pick(indicatorLabel[i.type])}</span></span>{i.cases.length > 1 ? <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-unverified text-primary-foreground">{num(i.cases.length)}</span> : null}</Button>; })}
                     {visibleCases.length === 0 ? <p className="p-10 text-muted-foreground">{tr("No cases available", "لا توجد قضايا")}</p> : null}
                   </div>
                 </TransformComponent>

@@ -2,6 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Radar, Search, Send } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
+import { Disclosure } from "@/components/common/disclosure";
+import { analystName, demoText, registrarName } from "@/lib/i18n/demo-content";
 import { EmptyState, Mono, PageHeader, RiskMeter, StatTile } from "@/components/common/bits";
 import { NativeSelect } from "@/components/common/native-select";
 import { Badge } from "@/components/ui/badge";
@@ -42,7 +44,7 @@ const LK_STATUSES: LookalikeStatus[] = ["monitoring", "flagged", "takedown_reque
 const ANALYSTS = ["Analyst 07", "Analyst 12", "Analyst 21"];
 
 function SecurityPage() {
-  const { tr, pick, num, date, dir } = useI18n();
+  const { tr, pick, num, date, dir, lang } = useI18n();
   const { alerts, organizations, lookalikes } = useDemoState();
   const search = Route.useSearch();
   const navigate = Route.useNavigate();
@@ -88,7 +90,7 @@ function SecurityPage() {
   return (
     <>
       <PageHeader
-        eyebrow={tr("Section 03 · Police Security Dashboard (simulated)", "القسم 03 · لوحة أمن الشرطة (محاكاة)")}
+        eyebrow={tr("Professional services · Security Dashboard", "خدمات المختصين · لوحة الأمن")}
         title={tr("Impersonation case review", "مراجعة قضايا الانتحال")}
         description={tr("Simulated alerts and fictional evidence for demonstration. No real police systems are connected and no live internet monitoring takes place.", "تنبيهات افتراضية وأدلة خيالية للعرض. لا يوجد ربط بأنظمة شرطة فعلية ولا مراقبة حيّة للإنترنت.")}
       >
@@ -109,7 +111,7 @@ function SecurityPage() {
           </TabsList>
 
           <TabsContent value="alerts" className="mt-5">
-            <div className="grid gap-3 rounded-xl border bg-card p-3 shadow-card md:grid-cols-[1fr_12rem_12rem]">
+            <div className="grid gap-3 border-b pb-5 md:grid-cols-[1fr_12rem_12rem]">
               <div className="relative">
                 <Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                 <Input className="ps-9" value={q} onChange={(e) => setQ(e.target.value)} placeholder={tr("Search case, title or indicator", "ابحث بالقضية أو العنوان أو المؤشر")} aria-label={tr("Search", "بحث")} />
@@ -129,7 +131,7 @@ function SecurityPage() {
                 {filtered.length === 0 ? <EmptyState title={tr("No alerts match", "لا توجد تنبيهات مطابقة")} /> : null}
                 {filtered.map((a) => (
                   <li key={a.id}>
-                    <button type="button" onClick={() => select(a.id)} className={cn("w-full rounded-xl border bg-card p-4 text-start shadow-card transition hover:border-emerald/50", selected?.id === a.id && "border-emerald ring-1 ring-emerald")}>
+                    <Button variant="outline" type="button" aria-pressed={selected?.id === a.id} onClick={() => select(a.id)} className={cn("block h-auto w-full whitespace-normal rounded-lg border bg-card p-4 text-start shadow-none transition hover:border-primary", selected?.id === a.id && "border-emerald ring-1 ring-emerald")}>
                       <div className="flex items-center justify-between gap-2">
                         <Mono className="text-xs font-semibold text-muted-foreground">{a.caseId}</Mono>
                         <Badge variant={a.severity}>{pick(severityLabel[a.severity])}</Badge>
@@ -140,7 +142,7 @@ function SecurityPage() {
                         <span>{date(a.detectedAt)}</span>
                       </div>
                       <RiskMeter score={a.riskScore} className="mt-2" />
-                    </button>
+                    </Button>
                   </li>
                 ))}
               </ul>
@@ -155,31 +157,33 @@ function SecurityPage() {
                         <Badge variant="muted">{pick(sourceLabel[selected.source])}</Badge>
                       </div>
                       <h2 className="mt-2 text-xl font-semibold">{pick(selected.title)}</h2>
-                      <p className="mt-1 text-sm text-muted-foreground">{pick(selected.summary)}</p>
-                      <p className="mt-2 text-sm">{tr("Target", "الجهة المستهدفة")}: <span className="font-medium">{orgName(selected.targetOrgId)}</span></p>
+
                     </div>
                     <div className="w-40"><p className="mb-1 text-xs text-muted-foreground">{tr("Risk score", "درجة الخطورة")}</p><RiskMeter score={selected.riskScore} /></div>
                   </div>
 
+                  <Disclosure title={tr("Case summary", "ملخص القضية")}>
+                    <p className="text-sm leading-relaxed text-muted-foreground">{pick(selected.summary)}</p><p className="mt-2 text-sm">{tr("Target", "الجهة المستهدفة")}: <span className="font-medium">{orgName(selected.targetOrgId)}</span></p>
+                  </Disclosure>
                   <div className="grid gap-3 sm:grid-cols-2">
                     <label className="space-y-1 text-sm">
                       <span className="text-xs text-muted-foreground">{tr("Case review status", "حالة مراجعة القضية")}</span>
-                      <NativeSelect value={selected.status} onChange={(e) => { repository.updateAlert(selected.id, { status: e.target.value as AlertStatus }); toast.success(tr("Status updated", "تم تحديث الحالة")); }}>
+                      <NativeSelect aria-label={tr("Case review status", "حالة مراجعة القضية")} value={selected.status} onChange={(e) => { repository.updateAlert(selected.id, { status: e.target.value as AlertStatus }); toast.success(tr("Status updated", "تم تحديث الحالة")); }}>
                         {STATUSES.map((s) => <option key={s} value={s}>{pick(alertStatusLabel[s])}</option>)}
                       </NativeSelect>
                     </label>
                     <label className="space-y-1 text-sm">
                       <span className="text-xs text-muted-foreground">{tr("Assigned analyst", "المحلل المكلّف")}</span>
-                      <NativeSelect value={selected.assignee ?? ""} onChange={(e) => repository.updateAlert(selected.id, { assignee: e.target.value || undefined })}>
+                      <NativeSelect aria-label={tr("Assigned analyst", "المحلل المكلّف")} value={selected.assignee ?? ""} onChange={(e) => repository.updateAlert(selected.id, { assignee: e.target.value || undefined })}>
                         <option value="">{tr("Unassigned", "غير مكلّف")}</option>
-                        {ANALYSTS.map((n) => <option key={n} value={n}>{n}</option>)}
+                        {ANALYSTS.map((n) => <option key={n} value={n}>{analystName(n, lang)}</option>)}
                       </NativeSelect>
                     </label>
                   </div>
                   <p className="text-xs text-muted-foreground">{tr("Escalated and confirmed cases mark their indicators as suspicious in the Public Trust Portal.", "القضايا المُصعّدة والمؤكدة تجعل مؤشراتها مشبوهة في بوابة الثقة العامة.")}</p>
 
-                  <div>
-                    <h3 className="text-sm font-semibold">{tr("Indicators", "المؤشرات")}</h3>
+                  <Disclosure title={tr("Indicators & human-review leads", "المؤشرات وخيوط المراجعة البشرية")}>
+                    <p className="text-xs text-muted-foreground">{tr("Shared indicators are investigation leads only, not proof of a shared offender.", "المؤشرات المشتركة خيوط تحقيق فقط، ولا تثبت وجود مرتكب واحد.")}</p>
                     <ul className="mt-2 space-y-1.5">
                       {selected.indicators.map((i) => {
                         const linked = alerts.filter((a) => a.id !== selected.id && a.indicators.some((x) => normalizeIndicator(x.value) === normalizeIndicator(i.value)));
@@ -188,51 +192,46 @@ function SecurityPage() {
                             <Badge variant="outline">{pick(indicatorLabel[i.type])}</Badge>
                             <Mono className="break-all">{i.value}</Mono>
                             {linked.map((l) => (
-                              <button key={l.id} type="button" onClick={() => select(l.id)} className="ms-auto rounded bg-info-soft px-2 py-0.5 text-xs font-medium text-info hover:underline">
+                              <Button key={l.id} variant="link" size="sm" type="button" onClick={() => select(l.id)} className="ms-auto h-auto px-2 py-1 text-xs text-info">
                                 {tr("Linked", "مرتبط")} {l.caseId}
-                              </button>
+                              </Button>
                             ))}
                           </li>
                         );
                       })}
                     </ul>
-                  </div>
+                  </Disclosure>
 
-                  <div>
-                    <h3 className="text-sm font-semibold">{tr("Evidence (fictional)", "الأدلة (خيالية)")}</h3>
+                  <Disclosure title={tr("Evidence (fictional)", "الأدلة (خيالية)")} open>
                     <ul className="mt-2 space-y-2">
                       {selected.evidence.map((ev) => (
-                        <li key={ev.id} className="rounded-lg border p-3 text-sm">
-                          <div className="flex justify-between text-xs text-muted-foreground"><span className="font-medium">{pick(evidenceLabel[ev.kind])}</span><span>{date(ev.capturedAt, true)}</span></div>
-                          <p className="mt-1">{pick(ev.description)}</p>
-                        </li>
+                        <li key={ev.id} className="border-b py-3 text-sm"><details><summary className="text-sm font-medium">{pick(evidenceLabel[ev.kind])}<span className="ms-3 text-xs font-normal text-muted-foreground">{date(ev.capturedAt, true)}</span></summary><p className="mt-3 leading-relaxed text-muted-foreground">{pick(ev.description)}</p></details></li>
                       ))}
                     </ul>
-                  </div>
+                  </Disclosure>
 
-                  <div>
-                    <h3 className="text-sm font-semibold">{tr("Analyst notes", "ملاحظات المحلل")}</h3>
+                  <Disclosure title={tr("Analyst notes", "ملاحظات المحلل")} open>
                     <ul className="mt-2 space-y-2">
                       {selected.notes.length === 0 ? <li className="text-sm text-muted-foreground">{tr("No notes yet.", "لا توجد ملاحظات بعد.")}</li> : null}
                       {selected.notes.map((n) => (
                         <li key={n.id} className="rounded-lg bg-muted p-3 text-sm">
-                          <p className="text-xs text-muted-foreground">{n.author} · {date(n.at, true)}</p>
-                          <p className="mt-1">{n.text}</p>
+                          <p className="text-xs text-muted-foreground">{analystName(n.author, lang)} · {date(n.at, true)}</p>
+                          <p className="mt-1" dir="auto">{demoText(n.text, lang)}</p>
                         </li>
                       ))}
                     </ul>
                     <form onSubmit={addNote} className="mt-3 flex flex-col gap-2 sm:flex-row">
-                      <Textarea rows={2} value={note} onChange={(e) => setNote(e.target.value)} placeholder={tr("Add a review note…", "أضف ملاحظة مراجعة…")} aria-label={tr("Note", "ملاحظة")} />
+                      <Textarea dir="auto" rows={2} value={note} onChange={(e) => setNote(e.target.value)} placeholder={tr("Add a review note…", "أضف ملاحظة مراجعة…")} aria-label={tr("Note", "ملاحظة")} />
                       <Button type="submit" disabled={!note.trim()}><Send className="rtl:rotate-180" />{tr("Add", "إضافة")}</Button>
                     </form>
-                  </div>
+                  </Disclosure>
                 </article>
               ) : null}
             </div>
           </TabsContent>
 
           <TabsContent value="lookalikes" className="mt-5 space-y-4">
-            <div className="flex flex-col gap-3 rounded-xl border bg-card p-4 shadow-card md:flex-row md:items-end">
+            <div className="flex flex-col gap-3 border-b pb-5 md:flex-row md:items-end">
               <label className="flex-1 space-y-1 text-sm">
                 <span className="text-xs text-muted-foreground">{tr("Run a simulated lookalike scan for", "تشغيل فحص افتراضي للنطاقات المشابهة لـ")}</span>
                 <NativeSelect value={scanOrg} onChange={(e) => setScanOrg(e.target.value)}>
@@ -260,7 +259,7 @@ function SecurityPage() {
                       <td className="p-3"><Mono>{l.targetDomain}</Mono><p className="text-xs text-muted-foreground">{orgName(l.targetOrgId)}</p></td>
                       <td className="p-3">{pick(techniqueLabel[l.technique])}</td>
                       <td className="p-3 font-mono">{l.similarity}%</td>
-                      <td className="p-3 text-xs">{date(l.firstSeen)}<p className="text-muted-foreground">{l.registrar}</p></td>
+                      <td className="p-3 text-xs">{date(l.firstSeen)}<p className="text-muted-foreground">{registrarName(l.registrar, lang)}</p></td>
                       <td className="p-3 min-w-44">
                         <NativeSelect aria-label={tr("Status", "الحالة")} value={l.status} onChange={(e) => repository.setLookalikeStatus(l.id, e.target.value as LookalikeStatus)}>
                           {LK_STATUSES.map((s) => <option key={s} value={s}>{pick(lookalikeStatusLabel[s])}</option>)}

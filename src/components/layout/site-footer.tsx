@@ -13,11 +13,11 @@ import { Logo } from "./site-header";
 export function SiteFooter() {
   const { tr } = useI18n();
   return (
-    <footer className="mt-16 bg-navy-deep text-navy-foreground">
+    <footer className="mt-12 border-t bg-card text-foreground">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr] lg:px-8">
         <div className="space-y-3">
           <Logo compact />
-          <p className="max-w-md text-sm leading-relaxed text-navy-muted">
+          <p className="max-w-md text-sm leading-relaxed text-muted-foreground">
             {tr(
               "TRUST ZERO AI is a hackathon prototype. It holds no real-world certification, does not monitor the internet in real time, and is not endorsed by any government entity.",
               "TRUST ZERO AI نموذج أولي لهاكاثون. لا يحمل أي شهادة فعلية، ولا يراقب الإنترنت في الوقت الفعلي، وليس معتمداً من أي جهة حكومية.",
@@ -26,18 +26,18 @@ export function SiteFooter() {
         </div>
         <div>
           <p className="text-xs font-semibold uppercase tracking-widest text-emerald">{tr("Portals", "البوابات")}</p>
-          <ul className="mt-3 space-y-2 text-sm text-navy-muted">
-            <li><Link to="/organizations" className="hover:text-navy-foreground">{tr("Organization Portal", "بوابة الجهات")}</Link></li>
-            <li><Link to="/trust" className="hover:text-navy-foreground">{tr("Public Trust Portal", "بوابة الثقة العامة")}</Link></li>
-            <li><Link to="/security" className="hover:text-navy-foreground">{tr("Security Dashboard", "لوحة الأمن")}</Link></li>
+          <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
+            <li><Link to="/organizations" className="hover:text-primary">{tr("Organization Portal", "بوابة الجهات")}</Link></li>
+            <li><Link to="/trust" className="hover:text-primary">{tr("Public Trust Portal", "بوابة الثقة العامة")}</Link></li>
+            <li><Link to="/security" className="hover:text-primary">{tr("Security Dashboard", "لوحة الأمن")}</Link></li>
           </ul>
         </div>
         <div className="space-y-3">
           <p className="text-xs font-semibold uppercase tracking-widest text-emerald">{tr("Demo data", "البيانات التجريبية")}</p>
-          <p className="text-sm text-navy-muted">{tr("Your changes are saved in this browser only.", "تُحفظ تغييراتك في هذا المتصفح فقط.")}</p>
+          <p className="text-sm text-muted-foreground">{tr("Your changes are saved in this browser only.", "تُحفظ تغييراتك في هذا المتصفح فقط.")}</p>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant="onNavy" size="sm"><RotateCcw />{tr("Reset demo data", "إعادة ضبط البيانات")}</Button>
+              <Button variant="outline" size="sm"><RotateCcw />{tr("Reset demo data", "إعادة ضبط البيانات")}</Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
@@ -56,8 +56,8 @@ export function SiteFooter() {
           </AlertDialog>
         </div>
       </div>
-      <div className="border-t border-navy-border">
-        <p className="mx-auto max-w-7xl px-4 py-4 text-xs text-navy-muted sm:px-6 lg:px-8">
+      <div className="border-t">
+        <p className="mx-auto max-w-7xl px-4 py-4 text-xs text-muted-foreground sm:px-6 lg:px-8">
           {tr("© 2026 TRUST ZERO AI · UAE cybersecurity hackathon prototype · Fictional demo data", "© 2026 TRUST ZERO AI · نموذج أولي لهاكاثون الأمن السيبراني في الإمارات · بيانات تجريبية خيالية")}
         </p>
       </div>

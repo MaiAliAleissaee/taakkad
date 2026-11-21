@@ -1,6 +1,8 @@
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, ArrowRight, ArrowLeft } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
+import { StepProgress } from "@/components/common/step-progress";
+import { Mono } from "@/components/common/bits";
 import { NativeSelect } from "@/components/common/native-select";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -20,6 +22,7 @@ export function RegisterOrgDialog({ trigger }: { trigger: React.ReactNode }) {
   const { tr, pick } = useI18n();
   const { organizations } = useDemoState();
   const [open, setOpen] = useState(false);
+  const [step, setStep] = useState(0);
   const [nameEn, setNameEn] = useState("");
   const [nameAr, setNameAr] = useState("");
   const [type, setType] = useState<OrgType>("business");
@@ -30,7 +33,7 @@ export function RegisterOrgDialog({ trigger }: { trigger: React.ReactNode }) {
   const [submitting, setSubmitting] = useState(false);
 
   const reset = () => {
-    setNameEn(""); setNameAr(""); setType("business"); setDomainsRaw(""); setContactEmail("");
+    setStep(0); setNameEn(""); setNameAr(""); setType("business"); setDomainsRaw(""); setContactEmail("");
     setChannels([{ type: "email", value: "" }]); setErrors([]);
   };
 
@@ -39,7 +42,7 @@ export function RegisterOrgDialog({ trigger }: { trigger: React.ReactNode }) {
   const errorText = (e: RegistrationError): string => {
     switch (e.code) {
       case "required":
-        return e.field === "channels" ? tr("Add at least one approved channel.", "أضف قناة معتمدة واحدة على الأقل.")
+        return e.field === "channels" ? tr("Add at least one requested channel.", "أضف قناة مطلوبة واحدة على الأقل.")
           : e.field === "domains" ? tr("Add at least one official domain.", "أضف نطاقاً رسمياً واحداً على الأقل.")
           : tr("This field is required.", "هذا الحقل مطلوب.");
       case "invalid":
@@ -58,13 +61,21 @@ export function RegisterOrgDialog({ trigger }: { trigger: React.ReactNode }) {
   const fieldErrors = (field: RegistrationError["field"]) => errors.filter((e) => e.field === field && !("index" in e));
   const channelError = (index: number) => errors.find((e) => "index" in e && e.index === index);
 
+  const advance = () => {
+    const found = validateRegistration({ nameEn, nameAr, type, domains: parseDomains(domainsRaw), contactEmail, channels }, organizations);
+    const relevant = found.filter(e => step === 0 ? ["nameEn", "nameAr", "contactEmail"].includes(e.field) : ["domains", "channels"].includes(e.field));
+    setErrors(relevant);
+    if (!relevant.length) setStep(s => Math.min(s + 1, 2));
+  };
+
   const onSubmit = async (ev: FormEvent) => {
     ev.preventDefault();
+    if (step < 2) { advance(); return; }
     const domains = parseDomains(domainsRaw);
     const input = { nameEn, nameAr, type, domains, contactEmail, channels };
     const found = validateRegistration(input, organizations);
     setErrors(found);
-    if (found.length) return;
+    if (found.length) { setStep(found.some(e => ["nameEn", "nameAr", "contactEmail"].includes(e.field)) ? 0 : 1); return; }
     setSubmitting(true);
     const keyFingerprint = await demoSignatureService.fingerprint(`${nameEn}|${domains.join(",")}|${Date.now()}`);
     repository.addOrganization({
@@ -97,8 +108,10 @@ export function RegisterOrgDialog({ trigger }: { trigger: React.ReactNode }) {
             {tr("New registrations start as pending until verification checks are completed. Use fictional details only.", "تبدأ التسجيلات الجديدة بحالة «قيد المراجعة» حتى اكتمال التحقق. استخدم بيانات خيالية فقط.")}
           </DialogDescription>
         </DialogHeader>
+        <StepProgress current={step} steps={[tr("Organization", "الجهة"), tr("Domains & channels", "النطاقات والقنوات"), tr("Review", "المراجعة")]} />
         <form onSubmit={onSubmit} className="space-y-5" noValidate>
-          <div className="grid gap-4 sm:grid-cols-2">
+          {errors.length > 0 && <p role="alert" className="text-sm text-destructive">{tr("Please check the highlighted fields.", "يُرجى مراجعة الحقول الموضحة أدناه.")}</p>}
+          {step === 0 && <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
               <Label htmlFor="nameEn">{tr("Name (English)", "الاسم (بالإنجليزية)")}</Label>
               <Input id="nameEn" dir="ltr" value={nameEn} onChange={(e) => setNameEn(e.target.value)} placeholder="Coral Bay Credit Union" />
@@ -120,7 +133,8 @@ export function RegisterOrgDialog({ trigger }: { trigger: React.ReactNode }) {
               <Input id="contactEmail" dir="ltr" type="email" value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="security@coralbay.example" />
               <FieldError list={fieldErrors("contactEmail")} />
             </div>
-          </div>
+          </div>}
+          {step === 1 && <>
           <div className="space-y-1.5">
             <Label htmlFor="domains">{tr("Official domains", "النطاقات الرسمية")}</Label>
             <Input id="domains" dir="ltr" className="font-mono" value={domainsRaw} onChange={(e) => setDomainsRaw(e.target.value)} placeholder="coralbay.example, app.coralbay.example" />
@@ -128,13 +142,13 @@ export function RegisterOrgDialog({ trigger }: { trigger: React.ReactNode }) {
             <FieldError list={fieldErrors("domains")} />
           </div>
           <fieldset className="space-y-2">
-            <legend className="text-sm font-medium">{tr("Approved communication channels", "قنوات التواصل المعتمدة")}</legend>
+            <legend className="text-sm font-medium">{tr("Requested communication channels", "قنوات التواصل المطلوبة")}</legend>
             {channels.map((c, i) => {
               const err = channelError(i);
               return (
                 <div key={i} className="space-y-1">
-                  <div className="flex gap-2">
-                    <div className="w-44 shrink-0">
+                  <div className="grid grid-cols-[1fr_auto] gap-2 sm:grid-cols-[10rem_1fr_auto]">
+                    <div className="col-span-2 min-w-0 sm:col-span-1">
                       <NativeSelect aria-label={tr("Channel type", "نوع القناة")} value={c.type} onChange={(e) => setChannels((list) => list.map((x, j) => (j === i ? { ...x, type: e.target.value as ChannelType } : x)))}>
                         {CHANNEL_TYPES.map((t) => <option key={t} value={t}>{pick(channelLabel[t])}</option>)}
                       </NativeSelect>
@@ -160,9 +174,17 @@ export function RegisterOrgDialog({ trigger }: { trigger: React.ReactNode }) {
             </Button>
             <FieldError list={fieldErrors("channels")} />
           </fieldset>
+          </>}
+          {step === 2 && <div className="space-y-4">
+            <h3 className="text-lg font-semibold">{tr("Review your request", "راجع طلبك")}</h3>
+            <dl className="space-y-3 text-sm"><div><dt className="text-muted-foreground">{tr("Organization", "الجهة")}</dt><dd className="mt-1 font-medium">{nameAr} · {nameEn}</dd></div><div><dt className="text-muted-foreground">{tr("Contact email", "بريد التواصل")}</dt><dd><Mono>{contactEmail}</Mono></dd></div><div><dt className="text-muted-foreground">{tr("Domains", "النطاقات")}</dt><dd className="break-all"><Mono>{domainsRaw}</Mono></dd></div></dl>
+            <ul className="space-y-2">{channels.map((c, i) => <li key={i} className="flex flex-wrap justify-between gap-2 border-b pb-2 text-sm"><span>{pick(channelLabel[c.type])}</span><Mono className="break-all">{c.value}</Mono></li>)}</ul>
+            <p className="border-s-2 border-unverified bg-unverified-soft p-3 text-sm text-unverified">{tr("Submitting does not certify your organization or its channels. Both require independent simulated review.", "الإرسال لا يوثّق جهتك أو قنواتها. كلاهما يتطلب مراجعة مستقلة افتراضية.")}</p>
+          </div>}
           <DialogFooter className="gap-2">
             <Button type="button" variant="outline" onClick={() => setOpen(false)}>{tr("Cancel", "إلغاء")}</Button>
-            <Button type="submit" disabled={submitting}>{tr("Submit registration", "إرسال التسجيل")}</Button>
+            {step > 0 && <Button type="button" variant="outline" onClick={() => { setErrors([]); setStep(s => s - 1); }}><ArrowLeft className="rtl:rotate-180" />{tr("Back", "السابق")}</Button>}
+            {step < 2 ? <Button key="continue" type="button" onClick={advance}>{tr("Continue", "متابعة")}<ArrowRight className="rtl:rotate-180" /></Button> : <Button key="submit" type="submit" disabled={submitting}>{submitting ? tr("Submitting…", "جارٍ الإرسال…") : tr("Submit registration", "إرسال التسجيل")}</Button>}
           </DialogFooter>
         </form>
       </DialogContent>

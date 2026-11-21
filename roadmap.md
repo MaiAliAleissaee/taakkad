@@ -1,5 +1,11 @@
 # TRUST ZERO AI roadmap
 
+- [ ] Arabic-first shared design, bilingual navigation, dialogs and accessibility.
+- [ ] Overview and Public Trust Portal: simple automatic input recognition and registry-only result language.
+- [ ] Organization Portal: guided registration, searchable channels and clear approval progress.
+- [ ] Security Dashboard: scannable cases, expandable evidence and complete bilingual demo text.
+- [ ] Verify all four pages in Arabic/English on desktop/mobile and preserve all workflow/data tests.
+
 - [x] Official channel management: scoped simulated roles, pending/review workflow, history and audit, live public checks, bilingual confirmations and end-to-end tests.
 
 - [x] Interactive bilingual investigation graph, shared indicators, case details and human-review leads; verified existing dashboard flows.

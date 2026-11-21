@@ -1,6 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useHydrated } from "@tanstack/react-router";
 import { Plus, Search } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { EmptyState, PageHeader, StatTile } from "@/components/common/bits";
 import { NativeSelect } from "@/components/common/native-select";
 import { OrgCard } from "@/components/orgs/org-card";
@@ -36,8 +36,7 @@ function OrganizationsPage() {
   const [role, setRole] = useState<DemoActor["role"]>("viewer");
   const [adminOrgId, setAdminOrgId] = useState("org-falcon");
   const [selectedOrgId, setSelectedOrgId] = useState("org-falcon");
-  const [ready, setReady] = useState(false);
-  useEffect(() => { setReady(true); }, []);
+  const ready = useHydrated();
   const actor: DemoActor = role === "org_admin" ? { role, orgId: adminOrgId } : { role };
   const selectedOrg = organizations.find((o) => o.id === selectedOrgId) ?? organizations[0];
 
@@ -55,8 +54,8 @@ function OrganizationsPage() {
   return (
     <>
       <PageHeader
-        eyebrow={tr("Section 01 · Organization Portal", "القسم 01 · بوابة الجهات")}
-        title={tr("Register official identities", "سجّل الهويات الرسمية")}
+        eyebrow={tr("Professional services · Organization Portal", "خدمات المختصين · بوابة الجهات")}
+        title={tr("Organization services", "خدمات الجهات")}
         description={tr(
           "Fictional agencies, banks and businesses register their identities. Channels require separate independent simulated approval before they can produce a Verified registry match.",
           "تسجّل الجهات والبنوك والشركات الخيالية هوياتها. تتطلب القنوات اعتماداً مستقلاً افتراضياً منفصلاً قبل إنتاج مطابقة موثّقة في السجل.",
@@ -101,7 +100,7 @@ function OrganizationsPage() {
           </div>
           {selectedOrg && <ChannelManager key={`${selectedOrg.id}:${role}:${adminOrgId}`} org={selectedOrg} actor={actor} />}
         </div>
-        <div className="flex flex-col gap-3 rounded-xl border bg-card p-3 shadow-card md:flex-row md:items-center">
+        <div className="flex flex-col gap-3 border-b pb-5 md:flex-row md:items-center">
           <div className="relative flex-1">
             <Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input value={q} onChange={(e) => setQ(e.target.value)} className="ps-9" placeholder={tr("Search name, domain or channel", "ابحث بالاسم أو النطاق أو القناة")} aria-label={tr("Search", "بحث")} />

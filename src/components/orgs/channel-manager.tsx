@@ -1,4 +1,4 @@
-import { Check, History, Pencil, Plus, Send, ShieldCheck, Trash2, X, Ban } from "lucide-react";
+import { Check, History, Pencil, Plus, Send, ShieldCheck, Trash2, X, Ban, Search } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { Mono } from "@/components/common/bits";
@@ -15,6 +15,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Bi, Channel, ChannelAction, ChannelStatus, ChannelType, DemoActor, Organization } from "@/lib/domain/types";
 import { repository, uid, useDemoState } from "@/lib/data/local-store";
 import { useI18n } from "@/lib/i18n/i18n";
+import { demoText } from "@/lib/i18n/demo-content";
 import { channelLabel } from "@/lib/i18n/labels";
 import { canManageChannels, CHANNEL_TYPES, ChannelWorkflowError, type ChannelCommand, type ChannelError } from "@/lib/services/channels";
 
@@ -46,8 +47,11 @@ const errors: Record<ChannelError, Bi> = {
 };
 
 export function ChannelManager({ org, actor }: { org: Organization; actor: DemoActor }) {
-  const { tr, pick, date, dir } = useI18n();
+  const { tr, pick, date, dir, lang } = useI18n();
   const { channelAudit = [] } = useDemoState();
+  const [query, setQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<ChannelStatus | "all">("all");
+  const filteredChannels = org.channels.filter(c => (statusFilter === "all" || c.status === statusFilter) && (!query.trim() || c.value.toLowerCase().includes(query.trim().toLowerCase()) || pick(channelLabel[c.type]).toLowerCase().includes(query.trim().toLowerCase())));
   const [tab, setTab] = useState("channels");
   const [historyId, setHistoryId] = useState<string | null>(null);
   const [editing, setEditing] = useState<Channel | "new" | null>(null);
@@ -95,11 +99,16 @@ export function ChannelManager({ org, actor }: { org: Organization; actor: DemoA
       <Tabs value={tab} onValueChange={(next) => { setTab(next); if (next === "history") setHistoryId(null); }} dir={dir}>
         <TabsList><TabsTrigger value="channels">{tr("Registered channels", "القنوات المسجّلة")}</TabsTrigger><TabsTrigger value="history">{tr("Verification history & audit", "سجل التوثيق والتدقيق")}</TabsTrigger></TabsList>
         <TabsContent value="channels" className="mt-4">
+          <div className="mb-4 grid gap-3 sm:grid-cols-[1fr_14rem]">
+            <div className="relative"><Search className="absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" /><Input className="ps-9" value={query} onChange={e => setQuery(e.target.value)} placeholder={tr("Search channels", "ابحث عن قناة")} aria-label={tr("Search channels", "بحث القنوات")} /></div>
+            <NativeSelect aria-label={tr("Channel status filter", "تصفية حالة القناة")} value={statusFilter} onChange={e => setStatusFilter(e.target.value as ChannelStatus | "all")}><option value="all">{tr("All channel statuses", "كل حالات القنوات")}</option>{(["pending", "verified", "inactive", "revoked", "rejected"] as const).map(status => <option key={status} value={status}>{pick(statuses[status])}</option>)}</NativeSelect>
+          </div>
+          <p className="mb-3 text-xs text-muted-foreground">{tr("Request → administrator submission → independent review → active channel", "طلب ← إرسال مسؤول الجهة ← مراجعة مستقلة ← قناة نشطة")}</p>
           <Table className="min-w-[780px]">
             <TableHeader><TableRow>
               {[tr("Channel type", "نوع القناة"), tr("Value", "القيمة"), tr("Verification status", "حالة التوثيق"), tr("Date added", "تاريخ الإضافة"), tr("Actions", "الإجراءات")].map((label) => <TableHead className="text-start" key={label}>{label}</TableHead>)}
             </TableRow></TableHeader>
-            <TableBody>{org.channels.map((c) => <TableRow key={c.id}>
+            <TableBody>{filteredChannels.map((c) => <TableRow key={c.id}>
               <TableCell className="whitespace-nowrap">{pick(channelLabel[c.type])}</TableCell>
               <TableCell className="max-w-64 break-all"><Mono>{c.value}</Mono></TableCell>
               <TableCell><Badge variant={c.status === "verified" ? "verified" : c.status === "pending" ? "unverified" : "secondary"}>{pick(statuses[c.status ?? "pending"])}</Badge>
@@ -120,7 +129,7 @@ export function ChannelManager({ org, actor }: { org: Organization; actor: DemoA
               </div></TableCell>
             </TableRow>)}</TableBody>
           </Table>
-          {!org.channels.length && <p className="py-8 text-sm text-muted-foreground">{tr("No registered channels.", "لا توجد قنوات مسجّلة.")}</p>}
+          {!filteredChannels.length && <p className="py-8 text-sm text-muted-foreground">{tr("No channels match your search.", "لا توجد قنوات مطابقة لبحثك.")}</p>}
         </TabsContent>
         <TabsContent value="history" className="mt-4">
           {historyId && <Button variant="outline" size="sm" className="mb-3" onClick={() => setHistoryId(null)}>{tr("All organization events", "جميع أحداث الجهة")}</Button>}
@@ -131,7 +140,7 @@ export function ChannelManager({ org, actor }: { org: Organization; actor: DemoA
               <TableCell className="whitespace-nowrap text-xs">{date(e.at, true)}</TableCell>
               <TableCell className="max-w-64"><p className="font-medium">{pick(actions[e.action])}</p><p className="break-all"><Mono>{e.value}</Mono></p>{e.previousValue && <p className="break-all text-xs text-muted-foreground">{tr("Previous:", "السابق:")} <Mono>{e.previousValue}</Mono></p>}<p className="text-xs text-muted-foreground">{pick(channelLabel[e.type])} · {pick(statuses[e.status])}</p></TableCell>
               <TableCell className="text-xs">{e.actor.startsWith("org_admin") ? tr("Organization administrator (simulated)", "مسؤول الجهة (افتراضي)") : e.actor === "demo_seed" ? tr("Demo seed", "بيانات تجريبية") : e.actor === "registration_request" ? tr("Public registration request", "طلب تسجيل عام") : tr("Independent verifier (simulated)", "مراجع مستقل (افتراضي)")}</TableCell>
-              <TableCell className="max-w-72 break-words text-xs">{e.action === "seed" ? tr("Fictional sample; no external verification.", "عيّنة خيالية؛ لا يوجد توثيق خارجي.") : e.action.startsWith("organization_") ? tr("Simulated independent organization review. Channel approval is separate.", "مراجعة مستقلة افتراضية للجهة. اعتماد القنوات منفصل.") : e.note || "—"}</TableCell>
+              <TableCell className="max-w-72 break-words text-xs">{e.action === "seed" ? tr("Fictional sample; no external verification.", "عيّنة خيالية؛ لا يوجد توثيق خارجي.") : e.action.startsWith("organization_") ? tr("Simulated independent organization review. Channel approval is separate.", "مراجعة مستقلة افتراضية للجهة. اعتماد القنوات منفصل.") : demoText(e.note, lang) || "—"}</TableCell>
             </TableRow>)}</TableBody>
           </Table></div>
           {!events.length && <p className="py-6 text-sm text-muted-foreground">{tr("No recorded events.", "لا توجد أحداث مسجّلة.")}</p>}
@@ -154,7 +163,7 @@ export function ChannelManager({ org, actor }: { org: Organization; actor: DemoA
           <DialogHeader><DialogTitle>{review?.action === "approve" ? tr("Independent channel approval (simulated)", "اعتماد مستقل للقناة (محاكاة)") : tr("Reject channel request", "رفض طلب القناة")}</DialogTitle><DialogDescription>{tr("No telecom, DNS, bank or government checks are performed. Record a fictional evidence review, not a real-world certification.", "لا تُجرى فحوصات اتصالات أو DNS أو بنوك أو جهات حكومية. سجّل مراجعة أدلة خيالية، وليس اعتماداً فعلياً.")}</DialogDescription></DialogHeader>
           <Mono className="break-all">{review?.channel.value}</Mono>
           <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); if (review && execute({ action: review.action, orgId: org.id, channelId: review.channel.id, note })) setReview(null); }}>
-            <Label htmlFor="review-note">{tr("Simulated evidence / decision note", "ملاحظة الدليل / القرار الافتراضي")}</Label><Textarea id="review-note" required value={note} onChange={(e) => setNote(e.target.value)} maxLength={1000} />
+            <Label htmlFor="review-note">{tr("Simulated evidence / decision note", "ملاحظة الدليل / القرار الافتراضي")}</Label><Textarea id="review-note" dir="auto" required value={note} onChange={(e) => setNote(e.target.value)} maxLength={1000} />
             {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
             <DialogFooter><Button type="button" variant="outline" onClick={() => setReview(null)}>{tr("Cancel", "إلغاء")}</Button><Button type="submit" disabled={!note.trim()}><ShieldCheck />{review?.action === "approve" ? tr("Approve (simulated)", "اعتماد (محاكاة)") : tr("Reject request", "رفض الطلب")}</Button></DialogFooter>
           </form>

@@ -37,3 +37,7 @@ use the editor.
 - Route channel changes through the shared transition policy and retain local audit history after removal; pending, edited, rejected, inactive and revoked channels cannot yield positive registry matches.
 - Migrate legacy browser records in place instead of resetting the seed version so existing cases, investigation leads and judge edits survive registry upgrades.
 - Match email senders and website hosts against explicit active approved channels, not implicit domain-wide approval, so revocation cannot be bypassed by organization domains.
+- Keep convenience input recognition and registry-result wording in the presentation layer; they must not alter detection assessments or infer cryptographic message authentication.
+- Resolve locale through the shared preference helper and inherit direction in reusable dialogs and notifications to keep navigation, reloads and portal overlays consistent.
+- Translate fixed fictional notes and analyst labels at display time without rewriting stored records; visitor-authored free text retains its original language and uses automatic text direction.
+- Guided registration validates each step through the existing registration validator and submits the unchanged pending-registration workflow only after final review.

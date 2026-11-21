@@ -14,31 +14,24 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { Toaster } from "@/components/ui/sonner";
 import { hydrateDemoStore } from "@/lib/data/local-store";
-import { I18nProvider } from "@/lib/i18n/i18n";
+import { I18nProvider, useI18n } from "@/lib/i18n/i18n";
+import { Button } from "@/components/ui/button";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
-        <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Go home
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
+  return <I18nProvider><ServiceError notFound /></I18nProvider>;
+}
+
+function ServiceError({ notFound = false, retry }: { notFound?: boolean; retry?: () => void }) {
+  const { tr, lang, setLang } = useI18n();
+  return <div className="grid min-h-screen place-items-center px-4"><div className="max-w-md text-center">
+    <Button variant="outline" onClick={() => setLang(lang === "ar" ? "en" : "ar")}>AR / EN</Button>
+    <h1 className="mt-6 text-2xl font-semibold">{notFound ? tr("Page not found", "الصفحة غير موجودة") : tr("This page could not load", "تعذّر تحميل الصفحة")}</h1>
+    <p className="mt-3 text-muted-foreground">{notFound ? tr("This address is unavailable. Return to services.", "هذا العنوان غير متاح. عُد إلى الخدمات.") : tr("Please try again or return to services.", "يُرجى المحاولة مجدداً أو العودة إلى الخدمات.")}</p>
+    <div className="mt-5 flex flex-wrap justify-center gap-3">{retry && <Button onClick={retry}>{tr("Try again", "حاول مجدداً")}</Button>}<Button asChild variant="outline"><Link to="/">{tr("Return to services", "العودة إلى الخدمات")}</Link></Button></div>
+  </div></div>;
 }
 
 function ErrorComponent({ error, reset }: ErrorComponentProps) {
@@ -48,35 +41,7 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
 
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
-        </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
-        </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
-          <button
-            onClick={() => {
-              router.invalidate();
-              reset();
-            }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Try again
-          </button>
-          <a
-            href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
-          >
-            Go home
-          </a>
-        </div>
-      </div>
-    </div>
-  );
+  return <I18nProvider><ServiceError retry={() => { router.invalidate(); reset(); }} /></I18nProvider>;
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
@@ -115,7 +80,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" dir="ltr">
+    <html lang="ar" dir="rtl">
       <head>
         <HeadContent />
       </head>
@@ -139,7 +104,7 @@ function RootComponent() {
       <I18nProvider>
         <div className="flex min-h-screen flex-col">
           <SiteHeader />
-          <main className="flex-1">
+          <main id="main-content" tabIndex={-1} className="min-w-0 flex-1">
             {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
             <Outlet />
           </main>

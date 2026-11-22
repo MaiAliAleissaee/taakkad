@@ -48,5 +48,6 @@
 - [x] HAM123 moved back to the owner's real account (per owner request); demo account keeps both roles but no staff ID; outstanding setup links revoked.
 - [x] Officers land on organization review after login, with one-click switching to/from the Security Dashboard in the same session; verified with the demo account.
 - [x] Real reset email to trail.ham@outlook.com accepted by Cloud Auth on 22 Nov 2026 07:44 UTC.
-- [ ] Owner opens the reset email, saves a password, then signs in with HAM123 — waits on the owner; then verify on the real account.
+- [x] Owner approved: HAM123 moved to the fictional demo account; single-use 24h setup link issued.
+- [ ] Owner sets the HAM123 password via the link and signs in — waits on the owner; then verify.
 - [x] Owner chose to keep the fictional demo account for now (email-only, no staff ID); delete after the hackathon on request.

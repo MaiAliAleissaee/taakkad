@@ -1,8 +1,10 @@
 import { z } from "zod";
+import { aiIndicatorSchema } from "@/lib/services/ai-schema";
 const bi = z.object({ en: z.string(), ar: z.string() });
 export const messageSchema = z.object({
   channel: z.enum(["email", "sms", "phone", "website", "social", "other"]),
   sender: z.string().max(500), url: z.string().max(2000).optional(), body: z.string().max(10000), claimedOrgId: z.string().max(200).optional(),
+  aiIndicators: z.array(aiIndicatorSchema).max(20).optional(),
 });
 export const snapshotSchema = z.object({
   alerts: z.array(z.object({

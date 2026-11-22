@@ -4,6 +4,7 @@ import { NativeSelect } from "@/components/common/native-select";
 import { RiskMeter } from "@/components/common/bits";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
@@ -17,19 +18,33 @@ import { preparePrivateCheck, privateCheckCandidates, type PublicCheckChannel } 
 import { ReasonList } from "./reason-list";
 import { ReportButton } from "./report-button";
 import { TrustBadge } from "./trust-badge";
+import { useServerFn } from "@tanstack/react-start";
+import { analyzePrivateMessage } from "@/lib/services/ai-analysis.functions";
+import { correlatePrivateIndicators } from "@/lib/services/ai-correlation.functions";
+import type { correlateIndicators } from "@/lib/services/ai-correlation";
+import type { AiOutcome } from "@/lib/services/ai-schema";
+import { minimizeAiInput } from "@/lib/services/ai-privacy";
+import { overallRisk } from "@/lib/services/hybrid-analysis";
+import { useStaffSession } from "@/lib/security/session";
+import { AiFindings } from "./ai-findings";
 
 export function MessageChecker() {
   const { tr, pick } = useI18n();
+  const staff = useStaffSession();
+  const analyze = useServerFn(analyzePrivateMessage);
+  const correlate = useServerFn(correlatePrivateIndicators);
+  const [useAi, setUseAi] = useState(false);
   const { organizations } = useDemoState();
   const emptyInput = { channel: "sms" as PublicCheckChannel, sender: "", url: "", body: "", claimedOrgId: undefined as string | undefined };
   const [input, setInput] = useState(emptyInput);
-  const [checked, setChecked] = useState<{ input: MessageInput; blocklist: BlockedIndicator[] } | null>(null);
+  const [checked, setChecked] = useState<{ input: MessageInput; blocklist: BlockedIndicator[]; ai: AiOutcome | null; flaggedValues: string[]; flagsAvailable: boolean; leads: ReturnType<typeof correlateIndicators> } | null>(null);
   const result = checked ? { input: checked.input, assessment: assessMessage(checked.input, { organizations, blocklist: checked.blocklist }) } : null;
   const [error, setError] = useState<"empty" | "unavailable" | null>(null);
   const [busy, setBusy] = useState(false);
   const workspace = usePublicWorkspace();
   const request = useRef(0);
   useEffect(() => () => { request.current += 1; }, []);
+  useEffect(() => { request.current += 1; setChecked(null); setBusy(false); }, [staff.user?.id]);
 
   const run = async () => {
     const value = preparePrivateCheck(input);
@@ -44,7 +59,25 @@ export function MessageChecker() {
       const flags = candidates.length ? await supabase.rpc("flagged_message_values", { candidate_values: candidates, ...(workspace ? { workspace_user: workspace } : {}) }) : { data: [], error: null };
       if (id !== request.current) return;
       if (flags.error) throw new Error("Unavailable");
-      setChecked({ input: value, blocklist: (flags.data ?? []).map(item => ({ type: "domain", value: item, caseId: "restricted" })) });
+      let ai: AiOutcome | null = null;
+      let flaggedValues: string[] = [];
+      let flagsAvailable = true;
+      let leads: ReturnType<typeof correlateIndicators> = [];
+      if (useAi) {
+        try { ai = await analyze({ data: minimizeAiInput(value) }); }
+        catch { ai = { status: "unavailable", reason: "service" }; }
+        if (id !== request.current) return;
+        if (ai.status === "performed" && ai.findings.indicators.length > 0) {
+          const extractedFlags = await supabase.rpc("flagged_ai_indicator_values", { candidate_indicators: ai.findings.indicators, ...(workspace ? { workspace_user: workspace } : {}) });
+          flagsAvailable = !extractedFlags.error;
+          flaggedValues = extractedFlags.data ?? [];
+          if (staff.securityAccess) {
+            try { leads = await correlate({ data: ai.findings.indicators }); } catch { /* Restricted data remains unavailable, never inferred. */ }
+          }
+        }
+      }
+      if (id !== request.current) return;
+      setChecked({ input: value, blocklist: (flags.data ?? []).map(item => ({ type: "domain", value: item, caseId: "restricted" })), ai, flaggedValues, flagsAvailable, leads });
     } catch { if (id === request.current) setError("unavailable"); }
     finally { if (id === request.current) setBusy(false); }
   };
@@ -59,7 +92,7 @@ export function MessageChecker() {
       <form onSubmit={onSubmit} className="space-y-4 rounded-2xl border bg-card p-5 shadow-card" noValidate>
         <div>
           <h2 className="text-lg font-semibold">{tr("Check a message or link", "افحص رسالة أو رابطاً")}</h2>
-          <p className="mt-1 text-sm text-muted-foreground">{tr("Your message stays in this visit unless you choose to report it. Only sender and link values are sent for safety matching; links are never opened.", "تبقى رسالتك ضمن هذه الزيارة ما لم تختر الإبلاغ عنها. تُرسل قيم المرسل والرابط فقط لمطابقة مؤشرات الخطر؛ ولا تُفتح الروابط.")}</p>
+          <p className="mt-1 text-sm text-muted-foreground">{tr("Your result stays in this visit. Sender and link values are matched for safety; links are never opened. Optional AI analysis sends redacted content to the AI service. Reporting separately shares content with authorized staff.", "تبقى نتيجتك ضمن هذه الزيارة. تُطابق قيم المرسل والرابط أمنياً ولا تُفتح الروابط. يرسل التحليل الاختياري بالذكاء الاصطناعي محتوى منقّحاً إلى خدمة الذكاء الاصطناعي. يشارك الإبلاغ المحتوى بشكل منفصل مع الموظفين المصرّح لهم.")}</p>
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-1.5">
@@ -88,6 +121,10 @@ export function MessageChecker() {
           <Label htmlFor="chk-body">{tr("Message text (optional)", "نص الرسالة (اختياري)")}</Label>
           <Textarea id="chk-body" dir="auto" maxLength={10000} rows={3} value={input.body} onChange={(e) => setInput({ ...input, body: e.target.value })} />
         </div>
+        <div className="space-y-2">
+          <div className="flex items-start gap-2"><Checkbox id="chk-ai" checked={useAi} disabled={busy} onCheckedChange={value => setUseAi(value === true)} /><Label htmlFor="chk-ai" className="leading-relaxed">{tr("Include real AI analysis of redacted content", "تضمين تحليل فعلي بالذكاء الاصطناعي للمحتوى المنقّح")}</Label></div>
+          <p className="text-xs text-muted-foreground">{tr("Remove passwords, OTPs, identity numbers and unnecessary personal details before submitting. Automatic redaction is a safeguard, not a guarantee.", "أزل كلمات المرور ورموز التحقق وأرقام الهوية والبيانات الشخصية غير الضرورية قبل الإرسال. التنقيح الآلي إجراء وقائي وليس ضماناً.")}</p>
+        </div>
         {error ? <p role="alert" className="text-sm text-destructive">{error === "empty" ? tr("Enter message text, a sender or a link to check.", "أدخل نص رسالة أو مرسلاً أو رابطاً للفحص.") : tr("The safety check is unavailable. Please try again; no result has been confirmed.", "فحص الأمان غير متاح. حاول مجدداً؛ لم تُؤكد أي نتيجة.")}</p> : null}
         <Button type="submit" disabled={busy} className="w-full"><ScanSearch />{busy ? tr("Checking…", "جارٍ الفحص…") : tr("Check now", "افحص الآن")}</Button>
       </form>
@@ -100,8 +137,13 @@ export function MessageChecker() {
               <Button type="button" size="icon" variant="ghost" title={tr("Clear private check", "مسح الفحص الخاص")} aria-label={tr("Clear private check", "مسح الفحص الخاص")} onClick={() => { request.current += 1; setChecked(null); setInput(emptyInput); setError(null); setBusy(false); }}><X /></Button>
             </div>
             <p className="text-sm text-muted-foreground">{pick(trustStateHelp[result.assessment.state])}</p>
-            <ReasonList reasons={result.assessment.reasons} />
+            <h3 className="text-sm font-semibold">{tr("Registry facts and deterministic checks", "حقائق السجل والفحوص القائمة على القواعد")}</h3>
+            <ReasonList reasons={result.assessment.reasons.filter(reason => !reason.code.startsWith("content_"))} />
+            {result.assessment.reasons.some(reason => reason.code.startsWith("content_")) && <><h3 className="text-sm font-semibold">{tr("Heuristic warning signs", "علامات تحذير استدلالية")}</h3><ReasonList reasons={result.assessment.reasons.filter(reason => reason.code.startsWith("content_"))} /></>}
             <p className="text-sm font-medium">{tr("A registered channel does not guarantee the authenticity of this individual message.", "تسجيل القناة لا يضمن أصالة هذه الرسالة الفردية.")}</p>
+            <AiFindings outcome={checked?.ai ?? null} risk={overallRisk(result.assessment, checked?.ai ?? null, !!checked?.flaggedValues.length)} flaggedValues={checked?.flaggedValues ?? []} />
+            {checked && !checked.flagsAvailable && <p role="status" className="text-sm text-muted-foreground">{tr("Extracted-indicator database matching was unavailable; no match has been confirmed.", "تعذّرت مطابقة المؤشرات المستخرجة في قاعدة البيانات؛ لم تُؤكّد أي مطابقة.")}</p>}
+            {staff.securityAccess && checked && checked.leads.length > 0 && <section className="space-y-2 border-t pt-3"><h3 className="text-sm font-semibold">{tr("Restricted investigation leads — human review required", "خيوط تحقيق مقيّدة — تتطلب مراجعة بشرية")}</h3>{checked.leads.map(lead => <p key={`${lead.type}:${lead.value}`} className="break-all text-sm" dir="auto">{lead.value}: {lead.cases.map(item => item.caseId).join(", ")}</p>)}<p className="text-xs text-muted-foreground">{tr("Exact shared indicators only; no common offender is inferred.", "مؤشرات مشتركة متطابقة فقط؛ لا يُستنتج مرتكب مشترك.")}</p></section>}
             <div className="space-y-2 text-sm">
               <h3 className="font-semibold">{tr("Recommended safety actions", "إجراءات الأمان الموصى بها")}</h3>
               <ul className="list-disc space-y-1 ps-5 text-muted-foreground">
@@ -111,10 +153,10 @@ export function MessageChecker() {
               </ul>
             </div>
             <div>
-              <p className="mb-1 text-xs text-muted-foreground">{tr("Risk score (prototype heuristic)", "درجة الخطورة (تقدير تجريبي)")}</p>
+              <p className="mb-1 text-xs text-muted-foreground">{tr("Rule-based risk score (not a probability)", "درجة الخطورة القائمة على القواعد (ليست احتمالاً)")}</p>
               <RiskMeter score={result.assessment.riskScore} />
             </div>
-            {result.assessment.state !== "verified" && <div className="space-y-2"><p className="text-xs text-muted-foreground">{tr("Reporting shares this message with authorized security staff for review, not with other visitors.", "الإبلاغ يشارك هذه الرسالة مع موظفي الأمن المصرّح لهم للمراجعة، وليس مع الزوار الآخرين.")}</p><ReportButton key={JSON.stringify(result.input)} input={result.input} assessment={result.assessment} /></div>}
+            {(result.assessment.state !== "verified" || (checked?.ai?.status === "performed" && checked.ai.findings.risk !== "low") || !!checked?.flaggedValues.length) && <div className="space-y-2"><p className="text-xs text-muted-foreground">{tr("Reporting shares this message and extracted indicators with authorized security staff for review, not with other visitors. It does not confirm or automatically escalate a criminal case.", "الإبلاغ يشارك هذه الرسالة والمؤشرات المستخرجة مع موظفي الأمن المصرّح لهم للمراجعة، وليس مع الزوار الآخرين. ولا يؤكد قضية جنائية أو يصعّدها تلقائياً.")}</p><ReportButton key={JSON.stringify(result.input)} input={result.input} assessment={result.assessment} aiIndicators={checked?.ai?.status === "performed" ? checked.ai.findings.indicators : undefined} allowVerifiedReport={!!checked?.flaggedValues.length || (checked?.ai?.status === "performed" && checked.ai.findings.risk !== "low")} /></div>}
           </div>
         ) : (
           <div className="grid h-full min-h-64 place-items-center rounded-2xl border border-dashed bg-card/60 p-8 text-center">

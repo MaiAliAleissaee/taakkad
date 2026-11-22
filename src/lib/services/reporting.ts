@@ -2,8 +2,11 @@ import type { ImpersonationAlert, Indicator, Severity } from "@/lib/domain/types
 import { normalizeIndicator } from "./blocklist";
 import { hostFromUrl } from "./lookalike";
 import type { Assessment, MessageInput } from "./verification";
+import type { AiFindings } from "./ai-schema";
+import { groundedIndicators } from "./ai-privacy";
+import { indicatorKey } from "./investigation";
 
-export function indicatorsFor(input: MessageInput): Indicator[] {
+export function indicatorsFor(input: MessageInput & { aiIndicators?: AiFindings["indicators"] | undefined }): Indicator[] {
   const out: Indicator[] = [];
   const s = input.sender.trim();
   if (s) {
@@ -14,6 +17,11 @@ export function indicatorsFor(input: MessageInput): Indicator[] {
   const host = hostFromUrl(input.url);
   if (host && !out.some((i) => i.value === host)) out.push({ type: "domain", value: host });
   if (input.url?.trim()) out.push({ type: "url", value: input.url.trim() });
+  const keys = new Set(out.map(item => indicatorKey(item.type, item.value)));
+  for (const indicator of groundedIndicators(input.aiIndicators ?? [], input)) {
+    const key = indicatorKey(indicator.type, indicator.value);
+    if (!keys.has(key)) { out.push(indicator); keys.add(key); }
+  }
   return out;
 }
 

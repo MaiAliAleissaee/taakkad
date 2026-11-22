@@ -14,6 +14,27 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_usage_budgets: {
+        Row: {
+          bucket: string
+          hits: number
+          recent: string[]
+          usage_day: string
+        }
+        Insert: {
+          bucket: string
+          hits?: number
+          recent?: string[]
+          usage_day: string
+        }
+        Update: {
+          bucket?: string
+          hits?: number
+          recent?: string[]
+          usage_day?: string
+        }
+        Relationships: []
+      }
       organization_application_grants: {
         Row: {
           application_id: string
@@ -392,6 +413,10 @@ export type Database = {
         Returns: string
       }
       ensure_security_workspace: { Args: never; Returns: undefined }
+      flagged_ai_indicator_values: {
+        Args: { candidate_indicators: Json; workspace_user?: string }
+        Returns: string[]
+      }
       flagged_message_values: {
         Args: { candidate_values: string[]; workspace_user?: string }
         Returns: string[]
@@ -424,6 +449,14 @@ export type Database = {
           window_seconds: number
         }
         Returns: boolean
+      }
+      reserve_trust_ai_usage: {
+        Args: { visitor_hash: string }
+        Returns: boolean
+      }
+      submit_ai_security_report: {
+        Args: { report_input: Json; workspace_user?: string }
+        Returns: undefined
       }
       submit_security_report: {
         Args: { report_input: Json; workspace_user?: string }

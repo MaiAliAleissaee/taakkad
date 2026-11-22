@@ -1,0 +1,39 @@
+# TRUST ZERO AI — hybrid AI implementation and validation
+
+## Actual inference
+
+- **Provider/model:** OpenAI `openai/gpt-6.1-sol`, through the managed Lovable AI Gateway Responses surface. Workspace discovery returned `workspace_models: included`; the selected surface has zero-provider-retention status in that catalog.
+- **Public server function:** `analyzePrivateMessage` in `src/lib/services/ai-analysis.functions.ts`.
+- **Actual model call:** `inferFraud` in `src/lib/services/ai-analysis.server.ts` calls SDK `generateResponse`, with strict JSON output, no tools or browsing, and a 2,400-output-token cap. The generated SDK contract is retained in source. There is no simulated success path.
+- Six real server-side inference examples succeeded: Arabic bank impersonation **High**; English delivery scam **High**; fake government payment **High**; deceptive shopping offer **High**; benign library message **Low**; a message containing fictional shared IP `203.0.113.45` **High**, with that IP extracted.
+- Additional live Public Trust Portal calls succeeded, including a registered `FALCONBANK` sender with suspicious content and real Arabic/mobile rendering. Registry status stayed Verified Channel while overall semantic risk was High.
+
+## Preserved behavior and privacy
+
+- The deterministic engine `verification.ts`, original colors, navigation, typography, Organization Portal, public alerts, Security Dashboard page, and investigation graph source are unchanged. No accounts or test users were created, and no roles were granted or altered.
+- AI is explicitly optional. The existing form remains, with AI findings integrated into its existing result area. Registry facts, deterministic/keyword warnings, and AI interpretations have separate labels. AI does not establish authenticity or criminal conduct; risk categories are not calibrated probabilities.
+- Client-side minimization is repeated on the server: credential-labelled values, common OTP/financial/identity-number patterns, labelled personal data, URL credentials, query strings and fragments are redacted. Attachments and identity documents are not accepted by the inference endpoint. Automatic redaction is not guaranteed to identify every secret or person, so the form asks visitors to remove unnecessary sensitive details.
+- Private messages/results remain component-local. Inference does not save them. A random HttpOnly, same-site visitor cookie contains only a usage identifier; only its hash is stored with private counters. Only an explicit report stores submitted content and extracted indicators in restricted report records.
+- No credential, inference prompt, raw secret, or case identifier was found in the inspected frontend inference traffic/modules. Example password and OTP values were removed before transmission to the analysis server function.
+
+## Indicator correlation and human oversight
+
+- Model indicators must be exact, type-valid, bounded matches in supplied redacted text. Invented indicators and embedded host suffixes are rejected; results are deduplicated using existing investigation keys.
+- `flagged_ai_indicator_values` returns only submitted values matching the same indicator type and normalized value in actual escalated/confirmed case records. Public checks of `203.0.113.45` returned a general safety-match explanation, never TZ-1042/TZ-1043 or case evidence.
+- `correlatePrivateIndicators` uses existing server authentication and security-role authorization, reads only the caller's restricted workspace, and reuses the existing investigation index. Case identifiers/statuses appear only to authorized staff, and every relationship remains a human-review lead.
+- Unit tests correlated the original shared IP with existing fictional TZ-1042 and TZ-1043. A live explicit public report saved exactly the extracted IP; that temporary test report was verified and removed without changing existing records. The existing report-ingestion path includes grounded extracted indicators in its ordinary graph data; AI alone never automatically submits, confirms, or escalates a case, and existing heuristic case-scoring rules remain unchanged.
+
+## Limits and tests
+
+- Owner-approved limits: **five requests per anonymous browser visitor in a rolling ten-minute window**, **200 reservations per UTC day globally**. A service-only atomic database function reserves usage before inference, with a shared lock preventing concurrent overspend. Failed calls consume their reservation; usage-service failure stops inference but retains the heuristic fallback.
+- Limits are attached to an anonymous browser identifier, not authenticated identity. Clearing/replacing cookies can reset the per-visitor bucket; the independent global daily ceiling remains the hard request-count backstop. This is the approved custom implementation, not a standard Cloud rate-limiting service.
+- **99 regression/unit tests pass**, including existing verification, organization approvals, roles, alerts, and investigation tests. Transactional database tests passed for request 5/6, rolling expiry, daily request 200/201, service-only privileges, and correct/wrong indicator-type matches. Their counter changes were rolled back.
+- Live checks passed for real inference, registered-sender suspicious content, shared-IP public matching, explicit restricted reporting, separate-page isolation, reload clearing, secret redaction, anonymous private-workspace denial, anonymous correlation denial, and denial of public usage reservation.
+- Live usage-limit and simulated transport-outage checks both retained clearly labelled rule-based results; no inference replay was added. Arabic RTL and AI rendering were verified with no runtime errors. An existing approximately 5px Arabic mobile header overflow remains unchanged; it originates in the pre-existing navigation, not the AI result area.
+- Latest observed application build: **OK**.
+
+## Remaining limitations and costs
+
+- There is no currently authorized security-staff account/session available for a positive signed-in correlation/report-to-graph walkthrough. Creating accounts or changing roles was expressly prohibited. Server denial, RLS privileges, existing matching logic and report storage were tested; positive staff end-to-end rendering remains unverified.
+- Model explanations can be wrong, and grounded extraction can miss or reject relevant indicators. No URL browsing, cryptographic message authentication, continuous domain monitoring, or calibrated fraud prediction was added.
+- Requests consume existing workspace AI credits. Discovery listed approximately **0.008 credits per 1,000 uncached input tokens** and **0.04 credits per 1,000 output tokens** at the normal short-context tier. Actual cost depends on tokens and current workspace pricing; 200 requests is a request ceiling, not a currency budget. No external provider key or new subscription was required.

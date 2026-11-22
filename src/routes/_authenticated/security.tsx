@@ -25,6 +25,7 @@ import type { SecuritySnapshot, commandSchema } from "@/lib/security/schema";
 import type { z } from "zod";
 import { StaffSignOut } from "@/components/security/staff-sign-out";
 import { BrowserArchive } from "@/components/security/browser-archive";
+import { AccessDeniedDialog } from "@/components/security/access-denied-dialog";
 import { AlertManager } from "@/components/security/alert-manager";
 import { useI18n } from "@/lib/i18n/i18n";
 import {
@@ -37,9 +38,11 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/_authenticated/security")({
   beforeLoad: async ({ context }) => {
     const roles = await supabase.from("user_roles").select("role").eq("user_id", context.staffUserId);
-    if (roles.error || !canAccessSecurity((roles.data ?? []).map(r => r.role))) throw redirect({ to: "/auth", replace: true });
+    if (roles.error) throw redirect({ to: "/auth", replace: true });
+    const roleList = (roles.data ?? []).map(r => r.role as string);
+    return { securityDenied: !canAccessSecurity(roleList), roleList };
   },
-  loader: ({ context }) => context.queryClient.ensureQueryData(securityQuery(context.staffUserId)),
+  loader: ({ context }) => context.securityDenied ? null : context.queryClient.ensureQueryData(securityQuery(context.staffUserId)),
   validateSearch: (s: Record<string, unknown>): { case?: string } =>
     typeof s["case"] === "string" ? { case: s["case"] } : {},
   head: () => ({
@@ -52,8 +55,14 @@ export const Route = createFileRoute("/_authenticated/security")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: SecurityDataGate,
+  component: SecurityRouteGate,
 });
+
+function SecurityRouteGate() {
+  const { securityDenied, roleList } = Route.useRouteContext();
+  if (securityDenied) return <AccessDeniedDialog area="security" roles={roleList} />;
+  return <SecurityDataGate />;
+}
 
 const STATUSES: AlertStatus[] = ["new", "investigating", "escalated", "confirmed", "false_positive"];
 const SEVERITIES: Severity[] = ["critical", "high", "medium", "low"];

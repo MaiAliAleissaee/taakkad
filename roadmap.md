@@ -1,5 +1,11 @@
 # Final hackathon polish roadmap
 
+## Organization demo simplification
+- [x] Six-field bilingual registration, automatic channels and unique five-digit status reference.
+- [x] Status-only tracking; approved custom limiter (20/address/hour, shared 1000/hour), no edit capability or private data returned.
+- [x] Confirmed officer decisions, private audit and separate simulated registry; preserve legacy records/workflows.
+- [x] Public privacy, registration, tracking, decisions, registry and bilingual/mobile checks passed; 142 regression tests passed. Three clearly named fictional validation submissions retained; no existing records deleted.
+
 - [x] Simplify Security Dashboard into Reports, Fraud Connections, Public Security Alerts and Analytics; preserve all workflows.
 - [x] Add immutable year-specific display numbering without changing internal IDs or existing records; rolled-back integration tests passed.
 - [x] Group duplicate domains; explain similarity, simulated enforcement and documentation IPs accurately.
@@ -10,7 +16,7 @@
 - [x] Write README, demo guide, architecture, test report and presentation outline.
 - [x] Check desktop/mobile and regression tests: 134 passed, no browser exceptions or horizontal page overflow in final public checks; source prepared for commit.
 - [ ] Owner-only password sign-in of HAM123 and HAM1234 — passwords remain private; preview sessions cannot verify this.
-- [ ] Applicant inbox delivery and email-code tracking completion — requires a recipient's code; do not bypass verification.
+- [ ] Legacy applicant inbox delivery and email-code completion — still unverified for preserved legacy capabilities; new demo tracking does not use email or secrets.
 - [ ] Live independent public-alert approval/publication — requires a separately authorized Supervisor; do not grant Supervisor to either demo staff account.
 
 Existing usernames, passwords, institutional roles, private records and the original visual identity must remain unchanged. No publication or new external service is authorized by this task.

@@ -4,9 +4,10 @@ import { useMemo, useState } from "react";
 import { EmptyState, PageHeader } from "@/components/common/bits";
 import { NativeSelect } from "@/components/common/native-select";
 import { OrgCard } from "@/components/orgs/org-card";
-import { RegisterOrgDialog } from "@/components/orgs/register-org-dialog";
+import { DemoRegistrationDialog } from "@/components/orgs/demo-registration";
+import { DemoRegistry, demoRegistryQuery } from "@/components/orgs/demo-registry";
 import { ApplicationTracker } from "@/components/orgs/application-tracker";
-import type { ApplicationReceipt } from "@/lib/organizations/schema";
+import type { DemoReceipt } from "@/lib/organizations/demo-schema";
 import { OrganizationAccess } from "@/components/orgs/organization-access";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,12 +17,13 @@ import { useI18n } from "@/lib/i18n/i18n";
 import { orgStatusLabel, orgTypeLabel } from "@/lib/i18n/labels";
 
 export const Route = createFileRoute("/organizations")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(demoRegistryQuery),
   head: () => ({
     meta: [
       { title: "Organization Portal — Taakkad" },
-      { name: "description", content: "Register fictional agencies, banks and businesses with their official domains and approved channels, and track verification status." },
+      { name: "description", content: "Submit six fictional organization details, track general application status and browse simulated demo approvals." },
       { property: "og:title", content: "Organization Portal — Taakkad" },
-      { property: "og:description", content: "Register official domains and approved communication channels in the Taakkad prototype." },
+      { property: "og:description", content: "Fictional organization registration, status-only tracking and simulated approvals in Taakkad." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -36,7 +38,7 @@ function OrganizationsPage() {
   const [q, setQ] = useState("");
   const [type, setType] = useState<OrgType | "all">("all");
   const [status, setStatus] = useState<OrgStatus | "all">("all");
-  const [receipt, setReceipt] = useState<ApplicationReceipt | null>(null);
+  const [receipt, setReceipt] = useState<DemoReceipt | null>(null);
 
   const filtered = useMemo(() => {
     const term = q.trim().toLowerCase();
@@ -54,15 +56,16 @@ function OrganizationsPage() {
         eyebrow={tr("Organization Portal", "بوابة الجهات")}
         title={tr("Register official identities", "سجّل الهويات الرسمية")}
         description={tr(
-          "Fictional agencies, banks and businesses register their identities. Organizations and channels require separate independent review before appearing as verified.",
-          "تسجّل الجهات والبنوك والشركات الخيالية هوياتها. تتطلب الجهات والقنوات مراجعة مستقلة منفصلة قبل ظهورها كموثّقة.",
+          "Register a fictional organization for demo review. Approvals and submitted channels are simulated, not ownership verification.",
+          "سجّل جهة خيالية للمراجعة التجريبية. الاعتمادات والقنوات المقدّمة تجريبية ولا تعني التحقق من الملكية.",
         )}
-        actions={<RegisterOrgDialog onSubmitted={value => { setReceipt(value); setTimeout(() => document.getElementById("application-tracking")?.scrollIntoView({ behavior: "smooth" }), 100); }} trigger={<Button variant="emerald"><Plus />{tr("Add Organization", "إضافة جهة")}</Button>} />}
+        actions={<DemoRegistrationDialog onSubmitted={value => { setReceipt(value); setTimeout(() => document.getElementById("application-tracking")?.scrollIntoView({ behavior: "smooth" }), 100); }} trigger={<Button variant="emerald"><Plus />{tr("Add Organization", "إضافة جهة")}</Button>} />}
       />
 
       <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <OrganizationAccess />
         <ApplicationTracker receipt={receipt} />
+        <DemoRegistry />
         <h2 className="mb-5 text-2xl font-semibold">{tr("Verified organization registry", "سجل الجهات الموثّقة")}</h2>
         <div className="flex flex-col gap-3 rounded-xl border bg-card p-3 shadow-card md:flex-row md:items-center">
           <div className="relative flex-1">

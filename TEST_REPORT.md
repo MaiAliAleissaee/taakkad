@@ -1,5 +1,17 @@
 # Final polish test report
 
+## Organization demo simplification — 22 November 2026
+- **PASS:** 142 automated tests across 17 files; current harness build OK.
+- **PASS:** Arabic and English registration has exactly six fields; three live fictional submissions received distinct random five-digit numbers, pending status and five pending channels with the website host extracted automatically.
+- **PASS:** Status-only tracking read back Pending Review, Under Review, Approved (Simulated), Rejected and Corrections Required. No private notes, documents, edit button, OTP or secret is exposed by this new flow.
+- **PASS:** Authenticated HAM123 officer session opened real submitted records, recorded review start and approved/rejected/requested corrections. Approval and rejection confirmation dialogs were exercised; private notes and decision audit read back. This used an approved minted session, NOT username/password verification.
+- **PASS:** Approved fictional submission appeared in the separate simulated registry; rejected/correction submissions did not. Its internal organization/channel statuses remain pending, and no genuinely trusted public projection was created.
+- **PASS:** Signed-out direct application reads returned no rows; tracking mappings, direct database review and protected review server calls were denied. Signed-out staff pages redirected to login; Officer -> Security access was denied.
+- **PASS:** Existing custom tracking limiter blocked repeated requests by the 21st request. Limit is 20/address/hour with an additional shared 1000/hour ceiling. This is custom protection, not a standard platform limiter; five-digit numbers are not secrets and disclose general status only.
+- **PASS:** Mobile Arabic form at 390×844 showed all six fields without page overflow. Arabic officer summary, status and English confirmation/registry were inspected. Browser checks reported no page exceptions.
+- **Preserved:** Existing application records, legacy capability logic, trusted registry/check semantics, AI, Security Dashboard, staff credentials/role separation and colors. Three clearly named fictional validation submissions were retained rather than deleting any records.
+- **NOT VERIFIED:** Owner password sign-in, simultaneous multi-connection registration load and production publication. No AI inference was consumed. Initial browser scripts encountered selector/stale-preview assertions; corrected reruns passed the same checks.
+
 **Date:** 22 November 2026. **Scope:** existing preview and Cloud; no owner passwords, usernames or roles changed. This is hackathon validation, not production certification.
 
 ## PASS

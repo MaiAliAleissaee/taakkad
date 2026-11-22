@@ -40,15 +40,16 @@ use the editor.
 - Keep convenience input recognition and registry-result wording in the presentation layer; they must not alter detection assessments or infer cryptographic message authentication.
 - Resolve locale through the shared preference helper and inherit direction in reusable dialogs and notifications to keep navigation, reloads and portal overlays consistent.
 - Translate fixed fictional notes and analyst labels at display time without rewriting stored records; visitor-authored free text retains its original language and uses automatic text direction.
-- Registration uses the original single-form controls and the existing registration validator; submissions remain pending until independently reviewed.
+- Legacy registration retains its validator; demo registration uses a shared six-field schema so browser/server validation agree.
 - Preserve the pre-redesign presentation; security storage may move to Cloud without changing channel policy, detection or investigation semantics.
 - Keep legacy accent token names as semantic palette aliases and primary CTAs on the primary token so controlled palette changes do not require restructuring existing screens.
 - Store restricted security snapshots in role-gated per-user Cloud workspaces; never bundle private case seeds or write cases to browser storage because UI-only gates do not protect data.
 - Archive legacy browser security snapshots transactionally before removing their local copy; preserve organization records, retain newer Cloud review fields, merge missing notes/evidence/indicators and allow owner-scoped archive downloads so no saved work is lost on conflicts.
 - Keep staff roles separate from profiles, with no client role grants; authorize every restricted server operation and enforce matching RLS policies.
 - Public checks return only submitted flagged values, never case IDs, evidence or relationship lists; public reports are write-only until authorized review.
-- Organization applications and attachments live in private Cloud records; officers require live role authorization, while no-signup applicants use reference + hashed tracking secret + standard Cloud email OTP to obtain short-lived application-only capability grants; all writes use atomic service-only commits to preserve original deadlines and audit.
+- Applications and attachments stay private. Legacy capabilities remain intact; demo references return status only, never edit rights. Officer decisions use atomic role-authorized commands with audit.
 - The public organization projection contains only approved identity fields and individually active approved channels; merge projections in memory without overwriting legacy browser records so existing saved data survives.
+- Demo approvals use a separate simulated projection, never trusted channels; this preserves public-check semantics.
 - Keep user-initiated trust checks in component-local memory, outside shared query caches and browser persistence; send only indicator candidates for matching, and share content only through explicit restricted reports so visitors cannot retrieve each other's checks.
 - Keep public security bulletins separate from investigation cases; an atomic role-authorized command maintains private audit and the public published-only projection so draft edits, rejection and withdrawal cannot leak confidential content.
 - Keep semantic fraud inference in server-only Gateway helpers, redact inputs before transmission and again before inference, validate and ground model indicators in supplied text, and keep registry facts distinct from AI interpretations; this prevents model claims from becoming verification facts.

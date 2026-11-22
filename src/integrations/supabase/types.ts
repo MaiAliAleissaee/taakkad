@@ -65,6 +65,8 @@ export type Database = {
         Row: {
           audit: Json
           correction_note: string
+          demo_registration: boolean
+          demo_under_review: boolean
           documents: Json
           id: string
           organization_id: string
@@ -77,6 +79,8 @@ export type Database = {
         Insert: {
           audit?: Json
           correction_note?: string
+          demo_registration?: boolean
+          demo_under_review?: boolean
           documents?: Json
           id?: string
           organization_id: string
@@ -89,6 +93,8 @@ export type Database = {
         Update: {
           audit?: Json
           correction_note?: string
+          demo_registration?: boolean
+          demo_under_review?: boolean
           documents?: Json
           id?: string
           organization_id?: string
@@ -99,6 +105,61 @@ export type Database = {
           submitted_at?: string
         }
         Relationships: []
+      }
+      organization_demo_registry: {
+        Row: {
+          application_id: string
+          approved: boolean
+          channels: Json
+          name: Json
+          simulated: boolean
+        }
+        Insert: {
+          application_id: string
+          approved?: boolean
+          channels: Json
+          name: Json
+          simulated?: boolean
+        }
+        Update: {
+          application_id?: string
+          approved?: boolean
+          channels?: Json
+          name?: Json
+          simulated?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_demo_registry_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: true
+            referencedRelation: "organization_applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organization_demo_tracking: {
+        Row: {
+          application_id: string | null
+          code: string
+        }
+        Insert: {
+          application_id?: string | null
+          code: string
+        }
+        Update: {
+          application_id?: string | null
+          code?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_demo_tracking_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: true
+            referencedRelation: "organization_applications"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       organization_public_registry: {
         Row: {
@@ -469,6 +530,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      allocate_demo_tracking: {
+        Args: { application_uuid: string }
+        Returns: string
+      }
       attempt_application_code: {
         Args: { application_uuid: string }
         Returns: boolean
@@ -538,13 +603,31 @@ export type Database = {
         }
         Returns: boolean
       }
+      read_demo_organization_status: {
+        Args: { tracking_code: string }
+        Returns: string
+      }
       reserve_trust_ai_usage: {
         Args: { visitor_hash: string }
         Returns: boolean
       }
+      review_demo_organization: {
+        Args: {
+          actor_id: string
+          application_uuid: string
+          decision: string
+          decision_note: string
+          expected_revision: number
+        }
+        Returns: undefined
+      }
       submit_ai_security_report: {
         Args: { report_input: Json; workspace_user?: string }
         Returns: undefined
+      }
+      submit_demo_organization: {
+        Args: { application_payload: Json }
+        Returns: string
       }
       submit_security_report: {
         Args: { report_input: Json; workspace_user?: string }

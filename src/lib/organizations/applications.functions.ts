@@ -11,7 +11,11 @@ export const readOrganizationApplications = createServerFn({ method: "POST" }).m
   if (!identity.officer) throw new Error("Verification officer required");
   const result = await context.supabase.from("organization_applications").select("*").order("submitted_at", { ascending: false });
   if (result.error) throw new Error("Applications unavailable");
-  return { officer: identity.officer, userId: identity.userId, now: new Date().toISOString(), applications: result.data.map(r => ({ ...r, payload: organizationPayload(r.payload), reference: `TZ-ORG-${r.id.toUpperCase()}` })) };
+  // Tracking codes are private mappings; use the service client only after the live officer check.
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const codes = await supabaseAdmin.from("organization_demo_tracking").select("application_id,code");
+  if (codes.error) throw new Error("Tracking references unavailable");
+  return { officer: identity.officer, userId: identity.userId, now: new Date().toISOString(), applications: result.data.map(r => ({ ...r, payload: organizationPayload(r.payload), reference: codes.data.find(c => c.application_id === r.id)?.code ?? `TZ-ORG-${r.id.toUpperCase()}` })) };
 });
 
 export const saveOrganizationApplication = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth])
@@ -35,6 +39,7 @@ export const reviewOrganizationApplication = createServerFn({ method: "POST" }).
     const identity = await applicationIdentity(context.supabase);
     if (!identity.officer) throw new Error("Verification officer required");
     const row = await getApplication(context.supabase, data.id);
+    if (row.demo_registration) throw new Error("Use simulated demo review");
     if (row.owner_id === identity.userId) throw new Error("Independent officer required");
     const tracking = await context.supabase.rpc("officer_is_application_contact", { application_uuid: row.id });
     if (tracking.error || tracking.data) throw new Error("Independent officer required");
@@ -52,6 +57,7 @@ export const changeOrganizationChannel = createServerFn({ method: "POST" }).midd
     const identity = await applicationIdentity(context.supabase);
     const row = await getApplication(context.supabase, data.id);
     const review = ["approve", "reject", "revoke"].includes(data.command.action);
+    if (row.demo_registration) throw new Error("Demo channels are simulated, not individually verified");
     const tracking = await context.supabase.rpc("officer_is_application_contact", { application_uuid: row.id });
     if (tracking.error || tracking.data) throw new Error("Independent officer required");
     if (review ? !identity.officer || row.owner_id === identity.userId : row.owner_id !== identity.userId) throw new Error("Forbidden");

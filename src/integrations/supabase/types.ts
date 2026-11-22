@@ -168,6 +168,100 @@ export type Database = {
         }
         Relationships: []
       }
+      public_security_alerts: {
+        Row: {
+          content: Json
+          id: string
+          published_at: string
+        }
+        Insert: {
+          content: Json
+          id: string
+          published_at: string
+        }
+        Update: {
+          content?: Json
+          id?: string
+          published_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_security_alerts_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "security_bulletins"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      security_bulletin_audit: {
+        Row: {
+          action: string
+          actor_id: string
+          at: string
+          bulletin_id: string
+          id: string
+          note: string
+        }
+        Insert: {
+          action: string
+          actor_id: string
+          at?: string
+          bulletin_id: string
+          id?: string
+          note: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string
+          at?: string
+          bulletin_id?: string
+          id?: string
+          note?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "security_bulletin_audit_bulletin_id_fkey"
+            columns: ["bulletin_id"]
+            isOneToOne: false
+            referencedRelation: "security_bulletins"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      security_bulletins: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          author_id: string
+          content: Json
+          id: string
+          published_at: string | null
+          revision: number
+          status: string
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          author_id: string
+          content: Json
+          id?: string
+          published_at?: string | null
+          revision?: number
+          status?: string
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          author_id?: string
+          content?: Json
+          id?: string
+          published_at?: string | null
+          revision?: number
+          status?: string
+        }
+        Relationships: []
+      }
       security_migrations: {
         Row: {
           id: string
@@ -307,6 +401,17 @@ export type Database = {
       import_security_snapshot: {
         Args: { migration_id: string; saved_payload: Json }
         Returns: undefined
+      }
+      manage_security_bulletin: {
+        Args: {
+          bulletin_id: string
+          decision_note: string
+          expected_revision: number
+          operation: string
+          privacy_reviewed: boolean
+          public_content: Json
+        }
+        Returns: string
       }
       officer_is_application_contact: {
         Args: { application_uuid: string }

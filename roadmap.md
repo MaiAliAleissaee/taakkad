@@ -1,5 +1,7 @@
 # TRUST ZERO AI roadmap
 
+- [ ] Overview public security alerts: preserve three-card position/style; latest approved published alerts and full public list; remove homepage operational totals; role-authorized draft/review/publish/withdraw workflow with private audit. Validate analyst/supervisor/public access and retain other modules and records.
+
 - [x] Public Trust Portal only: component-local anonymous checks; removed public message feed/examples and operational counts; SMS, WhatsApp, email, websites, phones, social and other inputs; retained active approved-channel checks and explicit restricted reporting. Verified separate-visitor isolation, no raw-body transmission or browser persistence, reload/clear removal, approved and suspicious results, Arabic/mobile and anonymous staff denial; 73 tests pass. Original palette, navigation, registry, cases and graph unchanged.
 - [ ] Staff aggregate statistics live validation — the temporary authorized analyst reached the protected route but its existing workspace service returned “Workspace unavailable”; no Security Dashboard changes made under this portal-only request. Temporary test role/workspace removed. Successful staff statistics display remains unverified.
 

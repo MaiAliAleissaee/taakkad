@@ -78,6 +78,13 @@
       "when": 1795318868495,
       "tag": "0010_restrict_account_bypass_for_application_tracking",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1795320005275,
+      "tag": "0011_public_security_alert_publishing",
+      "breakpoints": true
     }
   ]
 }

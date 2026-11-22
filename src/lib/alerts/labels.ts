@@ -1,0 +1,4 @@
+import type { Bi } from "@/lib/domain/types";
+import type { AlertContent, AlertStatus } from "./schema";
+export const alertCategory: Record<AlertContent["category"], Bi> = { bank: { en: "Fake bank notifications", ar: "إشعارات مصرفية زائفة" }, delivery: { en: "Delivery scams", ar: "احتيال التوصيل" }, traffic: { en: "Fake traffic fines", ar: "مخالفات مرورية زائفة" }, government: { en: "Government impersonation", ar: "انتحال جهات حكومية" }, social: { en: "Social impersonation", ar: "انتحال حسابات التواصل" }, shopping: { en: "Shopping & payment scams", ar: "احتيال التسوق والدفع" } };
+export const bulletinStatus: Record<AlertStatus, Bi> = { draft: { en: "Draft", ar: "مسودة" }, approved: { en: "Approved", ar: "معتمد" }, published: { en: "Published", ar: "منشور" }, rejected: { en: "Rejected", ar: "مرفوض" }, withdrawn: { en: "Withdrawn", ar: "مسحوب" } };

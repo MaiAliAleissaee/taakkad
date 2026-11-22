@@ -42,6 +42,7 @@ use the editor.
 - Translate fixed fictional notes and analyst labels at display time without rewriting stored records; visitor-authored free text retains its original language and uses automatic text direction.
 - Registration uses the original single-form controls and the existing registration validator; submissions remain pending until independently reviewed.
 - Preserve the pre-redesign presentation; security storage may move to Cloud without changing channel policy, detection or investigation semantics.
+- Keep legacy accent token names as semantic palette aliases and primary CTAs on the primary token so controlled palette changes do not require restructuring existing screens.
 - Store restricted security snapshots in role-gated per-user Cloud workspaces; never bundle private case seeds or write cases to browser storage because UI-only gates do not protect data.
 - Archive legacy browser security snapshots transactionally before removing their local copy; preserve organization records, retain newer Cloud review fields, merge missing notes/evidence/indicators and allow owner-scoped archive downloads so no saved work is lost on conflicts.
 - Keep staff roles separate from profiles, with no client role grants; authorize every restricted server operation and enforce matching RLS policies.

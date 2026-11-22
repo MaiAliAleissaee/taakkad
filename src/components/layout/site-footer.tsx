@@ -36,7 +36,7 @@ export function SiteFooter() {
           <ul className="mt-3 space-y-2 text-sm text-navy-muted">
             <li><Link to="/organizations" className="hover:text-navy-foreground">{tr("Organization Portal", "بوابة الجهات")}</Link></li>
             <li><Link to="/trust" className="hover:text-navy-foreground">{tr("Public Trust Portal", "بوابة الثقة العامة")}</Link></li>
-            <li><Link to="/security" className="hover:text-navy-foreground">{tr("Security Dashboard", "لوحة الأمن")}</Link></li>
+            <li><Link to="/security" className="hover:text-navy-foreground">{tr("Security Dashboard", "لوحة التحكم الأمنية")}</Link></li>
           </ul>
         </div>
         <div className="space-y-3">

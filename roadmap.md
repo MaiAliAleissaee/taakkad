@@ -1,6 +1,6 @@
 # TRUST ZERO AI roadmap
 
-- [ ] Minimal palette/heading cleanup only: apply approved six color families, remove section numbering, preserve layout/workflows/data, verify staff access and interactive graph in both languages.
+- [x] Minimal palette/heading cleanup only: approved six color families applied, section numbering removed, layouts/workflows/data preserved; 56 tests and actual staff login, public checks, channel approval/revocation, graph zoom/node inspection and bilingual desktop/mobile checks passed.
 
 - [x] Feature 1 only: bilingual staff login, separate profiles/roles, restricted Cloud case storage, transactional browser migration and archive download, logout and access tests. Original design and workflows preserved; 56 tests and signed-in browser checks passed. No other features implemented.
 - [ ] First Security Supervisor invitation to trail.ham@outlook.com — blocked until the app is published with a live invitation/password-setup destination; no invitation sent and no account created yet.

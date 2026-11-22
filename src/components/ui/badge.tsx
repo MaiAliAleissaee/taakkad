@@ -21,7 +21,7 @@ const badgeVariants = cva(
         muted: "border-border bg-muted text-muted-foreground",
         critical: "border-transparent bg-sev-critical text-primary-foreground",
         high: "border-transparent bg-sev-high text-primary-foreground",
-        medium: "border-transparent bg-sev-medium text-foreground",
+        medium: "border-transparent bg-sev-medium text-primary-foreground",
         low: "border-transparent bg-sev-low text-primary-foreground",
         prototype: "border-emerald/40 bg-emerald/15 text-emerald uppercase tracking-wider",
       },

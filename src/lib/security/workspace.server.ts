@@ -30,7 +30,7 @@ export async function loadWorkspace(client: SupabaseClient<Database>, userId: st
   return { snapshot, revision: row.data.revision, userId };
 }
 export async function saveWorkspace(client: SupabaseClient<Database>, userId: string, snapshot: SecuritySnapshot, revision: number) {
-  const updated = await client.from("security_workspaces").update({ payload: snapshot, revision: revision + 1 }).eq("user_id", userId).eq("revision", revision).select("revision").maybeSingle();
+  const updated = await client.from("security_workspaces").update({ payload: snapshot, revision: revision + 1 }).eq("user_id", userId).eq("revision", revision).select("revision,payload").maybeSingle();
   if (updated.error || !updated.data) throw new Error("Save failed or another tab changed this workspace. Reload before retrying.");
-  return { snapshot, revision: revision + 1, userId };
+  return { snapshot: snapshotSchema.parse(updated.data.payload), revision: updated.data.revision, userId };
 }

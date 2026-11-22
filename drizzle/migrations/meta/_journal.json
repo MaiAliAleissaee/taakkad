@@ -127,6 +127,20 @@
       "when": 1795333003731,
       "tag": "0017_one_time_staff_password_setup_grants",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1795340401549,
+      "tag": "0018_immutable_report_display_numbers",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1795340767521,
+      "tag": "0019_lock_report_number_ledger_grants",
+      "breakpoints": true
     }
   ]
 }

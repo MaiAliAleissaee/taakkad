@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageHeader } from "@/components/common/bits";
 import { MessageChecker } from "@/components/trust/message-checker";
+import { DemoExamples } from "@/components/trust/demo-examples";
 import { useI18n } from "@/lib/i18n/i18n";
 
 export const Route = createFileRoute("/trust")({
@@ -33,6 +34,7 @@ function TrustPage() {
 
       <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <MessageChecker />
+        <DemoExamples />
       </section>
     </>
   );

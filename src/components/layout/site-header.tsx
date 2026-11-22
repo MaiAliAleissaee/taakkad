@@ -15,7 +15,7 @@ export function Logo({ compact = false }: { compact?: boolean }) {
       </span>
       <span className="ltr-isolate font-display text-base font-bold leading-none tracking-tight">
         TRUST <span className="text-emerald">ZERO</span> AI
-        {!compact ? <span className="mt-1 block text-[0.6rem] font-medium tracking-[0.25em] text-navy-muted">IDENTITY · VERIFY · DEFEND</span> : null}
+        {!compact ? <span className="mt-1 hidden text-[0.6rem] font-medium tracking-[0.25em] text-navy-muted sm:block">IDENTITY · VERIFY · DEFEND</span> : null}
       </span>
     </span>
   );

@@ -101,7 +101,7 @@ export function OrgCard({ org, actor, onManage }: { org: Organization; actor: De
   const { tr, pick, date, lang } = useI18n();
   const other = lang === "ar" ? org.name.en : org.name.ar;
   return (
-    <article className="flex flex-col rounded-2xl border bg-card p-5 shadow-card">
+    <article className="flex min-w-0 flex-col rounded-2xl border bg-card p-5 shadow-card">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{pick(orgTypeLabel[org.type])}</p>
@@ -115,7 +115,7 @@ export function OrgCard({ org, actor, onManage }: { org: Organization; actor: De
         <div>
           <p className="text-xs text-muted-foreground">{tr("Official domains", "النطاقات الرسمية")}</p>
           <div className="mt-1 flex flex-wrap gap-1.5">
-            {org.domains.map((d) => <span key={d} className="rounded-md bg-muted px-2 py-0.5"><Mono>{d}</Mono></span>)}
+            {org.domains.map((d) => <span key={d} className="max-w-full break-all rounded-md bg-muted px-2 py-0.5"><Mono>{d}</Mono></span>)}
           </div>
         </div>
         <details>

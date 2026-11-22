@@ -1,7 +1,7 @@
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { useStaffSession } from "@/lib/security/session";
 import { isVerificationOfficer } from "@/lib/organizations/schema";
-import { Radar, Search, Send } from "lucide-react";
+import { Search, Send } from "lucide-react";
 import { useEffect, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { EmptyState, Mono, PageHeader, RiskMeter, StatTile } from "@/components/common/bits";
@@ -11,8 +11,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { InvestigationGraph } from "@/components/security/investigation-graph";
-import type { AlertStatus, LookalikeStatus, Severity } from "@/lib/domain/types";
+import { FraudConnections } from "@/components/security/fraud-connections";
+import { indicatorKey } from "@/lib/services/investigation";
+import { groupDomains, reportLabel } from "@/lib/security/presentation";
+import type { AlertStatus, Severity } from "@/lib/domain/types";
 import { useDemoState } from "@/lib/data/local-store";
 import { supabase } from "@/integrations/supabase/client";
 import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
@@ -29,9 +31,8 @@ import { AccessDeniedDialog } from "@/components/security/access-denied-dialog";
 import { AlertManager } from "@/components/security/alert-manager";
 import { useI18n } from "@/lib/i18n/i18n";
 import {
-  alertStatusLabel, evidenceLabel, indicatorLabel, lookalikeStatusLabel, severityLabel, sourceLabel, techniqueLabel,
+  alertStatusLabel, evidenceLabel, indicatorLabel, severityLabel, sourceLabel,
 } from "@/lib/i18n/labels";
-import { normalizeIndicator } from "@/lib/services/blocklist";
 import { simulatedDomainMonitor } from "@/lib/services/domain-monitoring";
 import { cn } from "@/lib/utils";
 
@@ -66,7 +67,6 @@ function SecurityRouteGate() {
 
 const STATUSES: AlertStatus[] = ["new", "investigating", "escalated", "confirmed", "false_positive"];
 const SEVERITIES: Severity[] = ["critical", "high", "medium", "low"];
-const LK_STATUSES: LookalikeStatus[] = ["monitoring", "flagged", "takedown_requested", "cleared"];
 const ANALYSTS = ["Analyst 07", "Analyst 12", "Analyst 21"];
 
 function SecurityDataGate() {
@@ -119,7 +119,7 @@ function SecurityPage({ snapshot, change, busy }: { snapshot: SecuritySnapshot; 
   const orgName = (id?: string) => pick(organizations.find((o) => o.id === id)?.name) || tr("Unknown", "غير معروف");
   const filtered = alerts.filter((a) =>
     (status === "all" || a.status === status) && (severity === "all" || a.severity === severity) &&
-    (!q.trim() || [a.caseId, a.title.en, a.title.ar, ...a.indicators.map((i) => i.value)].some((v) => v.toLowerCase().includes(q.trim().toLowerCase()))),
+    (!q.trim() || [reportLabel(a), a.caseId, a.title.en, a.title.ar, ...a.indicators.map((i) => i.value)].some((v) => v.toLowerCase().includes(q.trim().toLowerCase()))),
   );
   const selected = alerts.find((a) => a.id === search.case) ?? filtered[0];
   const select = (id: string) => navigate({ search: { case: id }, replace: true });
@@ -155,22 +155,16 @@ function SecurityPage({ snapshot, change, busy }: { snapshot: SecuritySnapshot; 
         title={tr("Security Dashboard", "لوحة التحكم الأمنية")}
         description={tr("Simulated alerts and fictional evidence for demonstration. No real police systems are connected and no live internet monitoring takes place.", "تنبيهات افتراضية وأدلة خيالية للعرض. لا يوجد ربط بأنظمة شرطة فعلية ولا مراقبة حيّة للإنترنت.")}
       >
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-          <StatTile label={tr("Open cases", "قضايا مفتوحة")} value={num(open.length)} />
-          <StatTile label={tr("Critical / high", "حرجة / مرتفعة")} value={num(open.filter((a) => a.severity === "critical" || a.severity === "high").length)} tone="danger" />
-          <StatTile label={tr("Average risk", "متوسط الخطورة")} value={num(avgRisk)} tone="warning" />
-          <StatTile label={tr("Lookalike domains", "نطاقات مشابهة")} value={num(lookalikes.length)} tone="emerald" />
-        </div>
       </PageHeader>
 
       <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3"><p className="text-xs text-muted-foreground">{tr("Hackathon Demo — Not Connected to Abu Dhabi Police Systems", "عرض تجريبي للهاكاثون — غير متصل بأنظمة شرطة أبوظبي")}</p><div className="flex items-center gap-2"><OfficerReviewLink /><BrowserArchive /><StaffSignOut /></div></div>
         <Tabs value={tab} onValueChange={setTab} dir={dir}>
           <TabsList className="h-auto flex-wrap">
-            <TabsTrigger value="alerts">{tr("Alerts & cases", "التنبيهات والقضايا")}</TabsTrigger>
-            <TabsTrigger value="lookalikes">{tr("Lookalike domains", "النطاقات المشابهة")}</TabsTrigger>
-            <TabsTrigger value="indicators">{tr("Linked indicators", "المؤشرات المترابطة")}</TabsTrigger>
-            <TabsTrigger value="publishing">{tr("Public security alerts", "التنبيهات الأمنية العامة")}</TabsTrigger>
+            <TabsTrigger value="alerts">{tr("Reports", "البلاغات")}</TabsTrigger>
+            <TabsTrigger value="connections">{tr("Fraud Connections", "كشف الارتباط")}</TabsTrigger>
+            <TabsTrigger value="publishing">{tr("Public Security Alerts", "التحذيرات الأمنية")}</TabsTrigger>
+            <TabsTrigger value="analytics">{tr("Analytics and Reports", "الإحصائيات والتقارير")}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="alerts" className="mt-5">
@@ -194,9 +188,9 @@ function SecurityPage({ snapshot, change, busy }: { snapshot: SecuritySnapshot; 
                 {filtered.length === 0 ? <EmptyState title={tr("No alerts match", "لا توجد تنبيهات مطابقة")} /> : null}
                 {filtered.map((a) => (
                   <li key={a.id}>
-                    <button type="button" onClick={() => select(a.id)} className={cn("w-full rounded-xl border bg-card p-4 text-start shadow-card transition hover:border-emerald/50", selected?.id === a.id && "border-emerald ring-1 ring-emerald")}>
+                    <Button type="button" variant="outline" onClick={() => select(a.id)} className={cn("h-auto w-full flex-col items-stretch whitespace-normal rounded-lg border bg-card p-4 text-start shadow-card transition hover:border-emerald/50", selected?.id === a.id && "border-emerald ring-1 ring-emerald")}>
                       <div className="flex items-center justify-between gap-2">
-                        <Mono className="text-xs font-semibold text-muted-foreground">{a.caseId}</Mono>
+                        <Mono className="text-xs font-semibold text-muted-foreground">{reportLabel(a)}</Mono>
                         <Badge variant={a.severity}>{pick(severityLabel[a.severity])}</Badge>
                       </div>
                       <p className="mt-2 text-sm font-medium leading-snug">{pick(a.title)}</p>
@@ -204,8 +198,8 @@ function SecurityPage({ snapshot, change, busy }: { snapshot: SecuritySnapshot; 
                         <span>{pick(alertStatusLabel[a.status])}</span>
                         <span>{date(a.detectedAt)}</span>
                       </div>
-                      <RiskMeter score={a.riskScore} className="mt-2" />
-                    </button>
+                      <p className="mt-2 text-xs text-muted-foreground">{pick(sourceLabel[a.source])} · {a.assignee ?? tr("Unassigned", "غير مكلّف")}</p>
+                    </Button>
                   </li>
                 ))}
               </ul>
@@ -215,7 +209,7 @@ function SecurityPage({ snapshot, change, busy }: { snapshot: SecuritySnapshot; 
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
-                        <Mono className="text-sm font-semibold">{selected.caseId}</Mono>
+                        <Mono className="text-sm font-semibold">{reportLabel(selected)}</Mono>
                         <Badge variant={selected.severity}>{pick(severityLabel[selected.severity])}</Badge>
                         <Badge variant="muted">{pick(sourceLabel[selected.source])}</Badge>
                       </div>
@@ -223,7 +217,7 @@ function SecurityPage({ snapshot, change, busy }: { snapshot: SecuritySnapshot; 
                       <p className="mt-1 text-sm text-muted-foreground">{pick(selected.summary)}</p>
                       <p className="mt-2 text-sm">{tr("Target", "الجهة المستهدفة")}: <span className="font-medium">{orgName(selected.targetOrgId)}</span></p>
                     </div>
-                    <div className="w-40"><p className="mb-1 text-xs text-muted-foreground">{tr("Risk score", "درجة الخطورة")}</p><RiskMeter score={selected.riskScore} /></div>
+                    <div className="w-40"><p className="mb-1 text-xs text-muted-foreground">{tr("Risk index · not probability", "مؤشر خطر · ليس احتمالاً")}</p><RiskMeter score={selected.riskScore} /></div>
                   </div>
 
                   <div className="grid gap-3 sm:grid-cols-2">
@@ -243,28 +237,29 @@ function SecurityPage({ snapshot, change, busy }: { snapshot: SecuritySnapshot; 
                   </div>
                   <p className="text-xs text-muted-foreground">{tr("Escalated and confirmed cases mark their indicators as suspicious in the Public Trust Portal.", "القضايا المُصعّدة والمؤكدة تجعل مؤشراتها مشبوهة في بوابة الثقة العامة.")}</p>
 
-                  <div>
-                    <h3 className="text-sm font-semibold">{tr("Indicators", "المؤشرات")}</h3>
+                  <details>
+                    <summary className="cursor-pointer text-sm font-semibold">{tr("Indicators and related reports", "المؤشرات والبلاغات المرتبطة")}</summary>
                     <ul className="mt-2 space-y-1.5">
                       {selected.indicators.map((i) => {
-                        const linked = alerts.filter((a) => a.id !== selected.id && a.indicators.some((x) => normalizeIndicator(x.value) === normalizeIndicator(i.value)));
+                        const linked = alerts.filter((a) => a.id !== selected.id && a.indicators.some((x) => indicatorKey(x.type, x.value) === indicatorKey(i.type, i.value)));
                         return (
                           <li key={i.type + i.value} className="flex flex-wrap items-center gap-2 rounded-lg bg-muted px-3 py-2 text-sm">
                             <Badge variant="outline">{pick(indicatorLabel[i.type])}</Badge>
                             <Mono className="break-all">{i.value}</Mono>
                             {linked.map((l) => (
-                              <button key={l.id} type="button" onClick={() => select(l.id)} className="ms-auto rounded bg-info-soft px-2 py-0.5 text-xs font-medium text-info hover:underline">
-                                {tr("Linked", "مرتبط")} {l.caseId}
-                              </button>
+                              <Button key={l.id} type="button" variant="link" size="sm" onClick={() => select(l.id)} className="ms-auto h-auto whitespace-normal px-2 py-0.5 text-xs">
+                                {tr("Linked", "مرتبط")} {reportLabel(l)}
+                              </Button>
                             ))}
                           </li>
                         );
                       })}
                     </ul>
-                  </div>
+                  </details>
 
-                  <div>
-                    <h3 className="text-sm font-semibold">{tr("Evidence (fictional)", "الأدلة (خيالية)")}</h3>
+                  <details>
+                    <summary className="cursor-pointer text-sm font-semibold">{tr("Evidence and assessment", "الأدلة والتقييم")}</summary>
+                    <p className="mt-2 text-xs text-muted-foreground">{selected.source === "public_report" ? tr("Visitor-submitted evidence is not independently verified. Extracted indicators are leads; the risk score here is rule-based. Full private AI results stay with the submitting visitor.", "الأدلة المقدمة من الزائر غير متحقق منها بشكل مستقل. المؤشرات المستخرجة خيوط تحقيق؛ الدرجة هنا قائمة على القواعد. تبقى نتائج الذكاء الاصطناعي الخاصة الكاملة لدى الزائر.") : tr("Fictional investigation evidence and seeded risk index; not AI findings or calibrated probabilities.", "أدلة تحقيق خيالية ومؤشر خطر معدّ للعرض؛ ليست نتائج ذكاء اصطناعي أو احتمالات معايرة.")}</p>
                     <ul className="mt-2 space-y-2">
                       {selected.evidence.map((ev) => (
                         <li key={ev.id} className="rounded-lg border p-3 text-sm">
@@ -273,7 +268,7 @@ function SecurityPage({ snapshot, change, busy }: { snapshot: SecuritySnapshot; 
                         </li>
                       ))}
                     </ul>
-                  </div>
+                  </details>
 
                   <div>
                     <h3 className="text-sm font-semibold">{tr("Analyst notes", "ملاحظات المحلل")}</h3>
@@ -282,7 +277,7 @@ function SecurityPage({ snapshot, change, busy }: { snapshot: SecuritySnapshot; 
                       {selected.notes.map((n) => (
                         <li key={n.id} className="rounded-lg bg-muted p-3 text-sm">
                           <p className="text-xs text-muted-foreground">{n.author} · {date(n.at, true)}</p>
-                          <p className="mt-1">{n.text}</p>
+                          <p className="mt-1" dir="auto">{n.text}</p>
                         </li>
                       ))}
                     </ul>
@@ -296,50 +291,13 @@ function SecurityPage({ snapshot, change, busy }: { snapshot: SecuritySnapshot; 
             </div>
           </TabsContent>
 
-          <TabsContent value="lookalikes" className="mt-5 space-y-4">
-            <div className="flex flex-col gap-3 rounded-xl border bg-card p-4 shadow-card md:flex-row md:items-end">
-              <label className="flex-1 space-y-1 text-sm">
-                <span className="text-xs text-muted-foreground">{tr("Run a simulated lookalike scan for", "تشغيل فحص افتراضي للنطاقات المشابهة لـ")}</span>
-                <NativeSelect value={scanOrg} onChange={(e) => setScanOrg(e.target.value)}>
-                  {organizations.map((o) => <option key={o.id} value={o.id}>{pick(o.name)}</option>)}
-                </NativeSelect>
-              </label>
-              <Button onClick={runScan} disabled={busy || scanning || !scanOrg}><Radar />{scanning ? tr("Scanning…", "جارٍ الفحص…") : tr("Run simulated scan", "تشغيل الفحص الافتراضي")}</Button>
-            </div>
-            <div className="overflow-x-auto rounded-xl border bg-card shadow-card">
-              <table className="w-full text-sm">
-                <thead className="bg-muted text-xs text-muted-foreground">
-                  <tr>
-                    <th className="p-3 text-start">{tr("Domain", "النطاق")}</th>
-                    <th className="p-3 text-start">{tr("Imitates", "يقلّد")}</th>
-                    <th className="p-3 text-start">{tr("Technique", "الأسلوب")}</th>
-                    <th className="p-3 text-start">{tr("Similarity", "التشابه")}</th>
-                    <th className="p-3 text-start">{tr("First seen", "أول رصد")}</th>
-                    <th className="p-3 text-start">{tr("Status", "الحالة")}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {lookalikes.map((l) => (
-                    <tr key={l.id} className="border-t align-top">
-                      <td className="p-3"><Mono className="font-semibold">{l.domain}</Mono>{l.source === "simulated_scan" ? <Badge variant="info" className="ms-2">{tr("simulated", "افتراضي")}</Badge> : null}</td>
-                      <td className="p-3"><Mono>{l.targetDomain}</Mono><p className="text-xs text-muted-foreground">{orgName(l.targetOrgId)}</p></td>
-                      <td className="p-3">{pick(techniqueLabel[l.technique])}</td>
-                      <td className="p-3 font-mono">{l.similarity}%</td>
-                      <td className="p-3 text-xs">{date(l.firstSeen)}<p className="text-muted-foreground">{l.registrar}</p></td>
-                      <td className="p-3 min-w-44">
-                        <NativeSelect aria-label={tr("Status", "الحالة")} value={l.status} disabled={busy} onChange={(e) => { void change({ action: "lookalike_status", id: l.id, status: e.target.value as LookalikeStatus }).catch(() => {}); }}>
-                          {LK_STATUSES.map((s) => <option key={s} value={s}>{pick(lookalikeStatusLabel[s])}</option>)}
-                        </NativeSelect>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+          <TabsContent value="connections" className="mt-5">
+            <FraudConnections alerts={alerts} lookalikes={lookalikes} organizations={organizations} scanOrg={scanOrg} setScanOrg={setScanOrg} busy={busy} scanning={scanning} onScan={() => { void runScan(); }} onOpenReport={id => { select(id); setTab("alerts"); }} onStatus={(id, nextStatus) => { void change({ action: "lookalike_status", id, status: nextStatus }).catch(() => {}); }} />
           </TabsContent>
-
-          <TabsContent value="indicators" className="mt-5">
-            <InvestigationGraph alerts={alerts} initialCaseId={selected?.id} onOpenCase={(id) => { select(id); setTab("alerts"); }} />
+          <TabsContent value="analytics" className="mt-5 space-y-5">
+            <p className="text-xs text-muted-foreground">{tr("Workspace summary. Seeded investigation statistics are fictional; visitor reports are unverified submissions. Risk indices are not probabilities.", "ملخص مساحة العمل. إحصاءات التحقيق المعدّة خيالية؛ بلاغات الزوار غير متحقق منها. مؤشرات الخطر ليست احتمالات.")}</p>
+            <div className="grid gap-3 sm:grid-cols-3"><StatTile label={tr("Open reports", "بلاغات مفتوحة")} value={num(open.length)} /><StatTile label={tr("Critical / high", "حرجة / مرتفعة")} value={num(open.filter(a => a.severity === "critical" || a.severity === "high").length)} tone="danger" /><StatTile label={tr("Unique similar domains", "نطاقات مشابهة فريدة")} value={num(groupDomains(lookalikes, alerts).length)} tone="emerald" /></div>
+            <details className="border-t pt-4"><summary className="cursor-pointer text-sm font-semibold">{tr("Detailed breakdown", "تفصيل الإحصاءات")}</summary><div className="mt-4 grid gap-3 sm:grid-cols-3"><StatTile label={tr("Average open risk index", "متوسط مؤشر خطر البلاغات المفتوحة")} value={num(avgRisk)} tone="warning" />{STATUSES.map(s => <StatTile key={s} label={pick(alertStatusLabel[s])} value={num(alerts.filter(a => a.status === s).length)} />)}</div></details>
           </TabsContent>
           <TabsContent value="publishing" className="mt-5"><AlertManager /></TabsContent>
         </Tabs>

@@ -6,7 +6,7 @@ import { assessMessage } from "@/lib/services/verification";
 import { buildBlocklist } from "@/lib/services/blocklist";
 
 describe("Language preference", () => {
-  it("restores the original English default for new visitors", () => { expect(resolveLanguage(null)).toBe("en"); });
+  it("defaults new visitors to Arabic for the final bilingual demonstration", () => { expect(resolveLanguage(null)).toBe("ar"); });
   it("retains a saved English selection", () => { expect(resolveLanguage("en")).toBe("en"); });
   it("retains a saved Arabic selection", () => { expect(resolveLanguage("ar")).toBe("ar"); });
 });

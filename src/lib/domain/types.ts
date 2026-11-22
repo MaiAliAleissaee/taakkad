@@ -93,6 +93,8 @@ export type AlertSource = "simulated_detection" | "public_report" | "lookalike_s
 export interface ImpersonationAlert {
   id: string;
   caseId: string;
+  /** Permanent year-specific display number; caseId remains the legacy reference. */
+  reportNumber?: string | undefined;
   title: Bi;
   summary: Bi;
   targetOrgId?: string | undefined;

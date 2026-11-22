@@ -304,6 +304,39 @@ export type Database = {
         }
         Relationships: []
       }
+      security_report_number_counters: {
+        Row: {
+          last_number: number
+          report_year: number
+        }
+        Insert: {
+          last_number?: number
+          report_year: number
+        }
+        Update: {
+          last_number?: number
+          report_year?: number
+        }
+        Relationships: []
+      }
+      security_report_number_ledger: {
+        Row: {
+          report_id: string
+          report_sequence: number
+          report_year: number
+        }
+        Insert: {
+          report_id: string
+          report_sequence: number
+          report_year: number
+        }
+        Update: {
+          report_id?: string
+          report_sequence?: number
+          report_year?: number
+        }
+        Relationships: []
+      }
       security_reports: {
         Row: {
           id: string

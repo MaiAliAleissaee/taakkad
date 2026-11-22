@@ -58,3 +58,4 @@ use the editor.
 - Email-free staff password setup uses service-issued single-use hashed link secrets in the URL fragment, consumed atomically server-side; links never grant roles, so staff onboarding needs no inbox while authorization stays role-based.
 - After staff sign-in, route by role through one shared helper (officers to organization review, analysts to the Security Dashboard) so both sign-in forms agree.
 - Officer review lives in the gated /officer workspace; the public Organization Portal keeps only staff sign-in, tracking and registry, so staff and public experiences stay separate.
+- Allocate report display numbers through a private permanent year ledger in database triggers; preserve internal IDs and return saved payloads so deletion, reordering and concurrent writes never recycle numbers.

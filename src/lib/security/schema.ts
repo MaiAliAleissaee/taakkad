@@ -8,7 +8,7 @@ export const messageSchema = z.object({
 });
 export const snapshotSchema = z.object({
   alerts: z.array(z.object({
-    id: z.string(), caseId: z.string(), title: bi, summary: bi, targetOrgId: z.string().optional(),
+    id: z.string(), caseId: z.string(), reportNumber: z.string().regex(/^\d+\/\d{4}$/).optional(), title: bi, summary: bi, targetOrgId: z.string().optional(),
     severity: z.enum(["critical", "high", "medium", "low"]), riskScore: z.number().min(0).max(100),
     status: z.enum(["new", "investigating", "escalated", "confirmed", "false_positive"]),
     source: z.enum(["simulated_detection", "public_report", "lookalike_scan"]), detectedAt: z.string(), assignee: z.string().optional(),

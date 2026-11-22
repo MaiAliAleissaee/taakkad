@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { passwordSetupSchema, staffIdentifierSchema, staffLoginSchema } from "@/lib/security/staff-login-schema";
+import { directPasswordSetupSchema, passwordSetupSchema, setupTokenSchema, staffIdentifierSchema, staffLoginSchema } from "@/lib/security/staff-login-schema";
 import { canAccessSecurity } from "@/lib/security/access";
 import { isVerificationOfficer } from "@/lib/organizations/schema";
 
@@ -15,4 +15,10 @@ describe("approved staff login rules", () => {
   it("Analyst alone cannot approve organizations", () => expect(isVerificationOfficer(["security_analyst"])).toBe(false));
   it("requires matching privately chosen passwords", () => expect(passwordSetupSchema.safeParse({ password: "long-private-password", confirmation: "different-password" }).success).toBe(false));
   it("rejects setup passwords shorter than twelve characters", () => expect(passwordSetupSchema.safeParse({ password: "12345678901", confirmation: "12345678901" }).success).toBe(false));
+});
+describe("single-use staff setup links", () => {
+  it("accepts a 256-bit link secret", () => expect(setupTokenSchema.safeParse("A".repeat(43)).success).toBe(true));
+  it("rejects short or malformed link secrets", () => expect(setupTokenSchema.safeParse("short-token").success).toBe(false));
+  it("requires twelve-character matching passwords", () => expect(directPasswordSetupSchema.safeParse({ token: "A".repeat(43), password: "12345678901", confirmation: "12345678901" }).success).toBe(false));
+  it("rejects mismatched confirmation", () => expect(directPasswordSetupSchema.safeParse({ token: "A".repeat(43), password: "long-private-password", confirmation: "long-private-passwordX" }).success).toBe(false));
 });

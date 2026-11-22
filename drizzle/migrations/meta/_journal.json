@@ -120,6 +120,13 @@
       "when": 1795330976250,
       "tag": "0016_private_staff_login_identifiers",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1795333003731,
+      "tag": "0017_one_time_staff_password_setup_grants",
+      "breakpoints": true
     }
   ]
 }

@@ -43,3 +43,6 @@
 - [x] Persistence: demo data saved in each visitor's browser (confirmed by user)
 - [x] Extension points: signatures, domain monitoring, AI analysis, repository swap
 - [x] Tests for verification rules
+
+- [x] HAM123 demo staff: separate fictional account (synthetic confirmed address), both Analyst and Officer roles; HAM123 alias moved from the real account, whose roles and email login are unchanged. Single-use private setup link (no email). Verified link setup, reuse rejection, HAM123 login, Security Dashboard, Officer review and logout with a random test password.
+- [ ] Owner sets their chosen HAM123 password with the issued private link — waits on the owner.

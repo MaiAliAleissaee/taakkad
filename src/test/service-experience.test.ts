@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { resolveLanguage } from "@/lib/i18n/preferences";
 import { recognizeChannel, registryPresentation } from "@/lib/services/input-recognition";
-import { createSeedState } from "@/lib/data/seed";
+import { createSeedState } from "./fixtures/security-seed";
 import { assessMessage } from "@/lib/services/verification";
 import { buildBlocklist } from "@/lib/services/blocklist";
 

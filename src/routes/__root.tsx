@@ -16,6 +16,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { hydrateDemoStore } from "@/lib/data/local-store";
 import { I18nProvider, useI18n } from "@/lib/i18n/i18n";
 import { Button } from "@/components/ui/button";
+import { StaffSessionProvider } from "@/lib/security/session";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -102,6 +103,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <I18nProvider>
+        <StaffSessionProvider>
         <div className="flex min-h-screen flex-col">
           <SiteHeader />
           <main id="main-content" tabIndex={-1} className="flex-1">
@@ -111,6 +113,7 @@ function RootComponent() {
           <SiteFooter />
         </div>
         <Toaster position="bottom-center" />
+        </StaffSessionProvider>
       </I18nProvider>
     </QueryClientProvider>
   );

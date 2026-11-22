@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/lib/i18n/i18n";
 import { cn } from "@/lib/utils";
+import { useStaffSession } from "@/lib/security/session";
+import { StaffSignOut } from "@/components/security/staff-sign-out";
 
 export function Logo({ compact = false }: { compact?: boolean }) {
   return (
@@ -22,6 +24,7 @@ export function Logo({ compact = false }: { compact?: boolean }) {
 export function SiteHeader() {
   const { tr, lang, setLang } = useI18n();
   const [open, setOpen] = useState(false);
+  const staff = useStaffSession();
 
   const links = [
     { to: "/" as const, label: tr("Overview", "نظرة عامة"), icon: LayoutDashboard },
@@ -61,6 +64,7 @@ export function SiteHeader() {
           ))}
         </nav>
         <div className="flex items-center gap-2">
+          {staff.ready && staff.user ? <StaffSignOut onNavy /> : null}
           <Button variant="onNavy" size="sm" onClick={toggleLang} aria-label={tr("Switch to Arabic", "التبديل إلى الإنجليزية")}>
             <Languages />
             <span className={lang === "en" ? "font-sans" : "font-display"}>{lang === "en" ? "العربية" : "English"}</span>

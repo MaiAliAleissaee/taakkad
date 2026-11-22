@@ -1,6 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { Radar, Search, Send } from "lucide-react";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { EmptyState, Mono, PageHeader, RiskMeter, StatTile } from "@/components/common/bits";
 import { NativeSelect } from "@/components/common/native-select";
@@ -11,7 +11,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { InvestigationGraph } from "@/components/security/investigation-graph";
 import type { AlertStatus, LookalikeStatus, Severity } from "@/lib/domain/types";
-import { repository, useDemoState } from "@/lib/data/local-store";
+import { useDemoState } from "@/lib/data/local-store";
+import { supabase } from "@/integrations/supabase/client";
+import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { securityQuery } from "@/lib/security/queries";
+import { canAccessSecurity } from "@/lib/security/access";
+import { changeSecurityWorkspace, migrateSecurityWorkspace } from "@/lib/security/workspace.functions";
+import { pendingSecurityMigration, completeSecurityMigration } from "@/lib/security/legacy";
+import type { SecuritySnapshot, commandSchema } from "@/lib/security/schema";
+import type { z } from "zod";
+import { StaffSignOut } from "@/components/security/staff-sign-out";
 import { useI18n } from "@/lib/i18n/i18n";
 import {
   alertStatusLabel, evidenceLabel, indicatorLabel, lookalikeStatusLabel, severityLabel, sourceLabel, techniqueLabel,
@@ -20,7 +30,12 @@ import { normalizeIndicator } from "@/lib/services/blocklist";
 import { simulatedDomainMonitor } from "@/lib/services/domain-monitoring";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/security")({
+export const Route = createFileRoute("/_authenticated/security")({
+  beforeLoad: async ({ context }) => {
+    const roles = await supabase.from("user_roles").select("role").eq("user_id", context.staffUserId);
+    if (roles.error || !canAccessSecurity((roles.data ?? []).map(r => r.role))) throw redirect({ to: "/auth", replace: true });
+  },
+  loader: ({ context }) => context.queryClient.ensureQueryData(securityQuery(context.staffUserId)),
   validateSearch: (s: Record<string, unknown>): { case?: string } =>
     typeof s["case"] === "string" ? { case: s["case"] } : {},
   head: () => ({
@@ -33,7 +48,7 @@ export const Route = createFileRoute("/security")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: SecurityPage,
+  component: SecurityDataGate,
 });
 
 const STATUSES: AlertStatus[] = ["new", "investigating", "escalated", "confirmed", "false_positive"];
@@ -41,9 +56,43 @@ const SEVERITIES: Severity[] = ["critical", "high", "medium", "low"];
 const LK_STATUSES: LookalikeStatus[] = ["monitoring", "flagged", "takedown_requested", "cleared"];
 const ANALYSTS = ["Analyst 07", "Analyst 12", "Analyst 21"];
 
-function SecurityPage() {
+function SecurityDataGate() {
+  const { staffUserId } = Route.useRouteContext();
+  const queryClient = useQueryClient();
+  const { data } = useSuspenseQuery(securityQuery(staffUserId));
+  const migrate = useServerFn(migrateSecurityWorkspace);
+  const change = useServerFn(changeSecurityWorkspace);
+  const { tr } = useI18n();
+  const [migration, setMigration] = useState("loading");
+  const [attempt, setAttempt] = useState(0);
+  useEffect(() => {
+    let alive = true;
+    async function preserve() {
+      try {
+        const pending = pendingSecurityMigration();
+        if (pending) {
+          const saved = await migrate({ data: pending });
+          queryClient.setQueryData(securityQuery(staffUserId).queryKey, saved);
+        }
+        completeSecurityMigration(staffUserId);
+        if (alive) setMigration("ready");
+      } catch { if (alive) setMigration("error"); }
+    }
+    void preserve();
+    return () => { alive = false; };
+  }, [staffUserId, migrate, queryClient, attempt]);
+  const mutation = useMutation({ mutationFn: (command: z.infer<typeof commandSchema>) => change({ data: command }),
+    onSuccess: saved => { queryClient.setQueryData(securityQuery(staffUserId).queryKey, saved); void queryClient.invalidateQueries({ queryKey: ["public-flags"] }); },
+    onError: () => toast.error(tr("The change was not saved. Reload and try again.", "لم يُحفظ التغيير. أعد تحميل الصفحة وحاول مجدداً.")),
+  });
+  if (migration !== "ready") return <section className="mx-auto max-w-7xl px-4 py-8"><p role="status">{migration === "error" ? tr("Browser records could not be migrated. They remain unchanged in this browser.", "تعذّر نقل سجلات المتصفح. تبقى محفوظة دون تغيير في هذا المتصفح.") : tr("Loading your secure workspace…", "جارٍ تحميل مساحة العمل الآمنة…")}</p>{migration === "error" && <Button onClick={() => { setMigration("loading"); setAttempt(v => v + 1); }}>{tr("Try again", "حاول مجدداً")}</Button>}<div className="mt-4"><StaffSignOut /></div></section>;
+  return <SecurityPage snapshot={data.snapshot} change={mutation.mutateAsync} busy={mutation.isPending} />;
+}
+
+function SecurityPage({ snapshot, change, busy }: { snapshot: SecuritySnapshot; change: (command: z.infer<typeof commandSchema>) => Promise<unknown>; busy: boolean }) {
   const { tr, pick, num, date, dir } = useI18n();
-  const { alerts, organizations, lookalikes } = useDemoState();
+  const { organizations } = useDemoState();
+  const { alerts, lookalikes } = snapshot;
   const search = Route.useSearch();
   const navigate = Route.useNavigate();
   const [status, setStatus] = useState<AlertStatus | "all">("all");
@@ -65,10 +114,10 @@ function SecurityPage() {
   const open = alerts.filter((a) => a.status !== "confirmed" && a.status !== "false_positive");
   const avgRisk = open.length ? Math.round(open.reduce((s, a) => s + a.riskScore, 0) / open.length) : 0;
 
-  const addNote = (e: FormEvent) => {
+  const addNote = async (e: FormEvent) => {
     e.preventDefault();
     if (!selected || !note.trim()) return;
-    repository.addAlertNote(selected.id, selected.assignee ?? "Analyst 07", note.trim());
+    try { await change({ action: "note", id: selected.id, text: note.trim() }); } catch { return; }
     setNote("");
     toast.success(tr("Note added", "تمت إضافة الملاحظة"));
   };
@@ -77,9 +126,10 @@ function SecurityPage() {
     const org = organizations.find((o) => o.id === scanOrg);
     if (!org) return;
     setScanning(true);
-    const found = await simulatedDomainMonitor.scan(org, lookalikes.map((l) => l.domain));
-    repository.addLookalikes(found);
-    setScanning(false);
+    let found;
+    try { found = await simulatedDomainMonitor.scan(org, lookalikes.map((l) => l.domain));
+      await change({ action: "scan", items: found });
+    } catch { return; } finally { setScanning(false); }
     toast(tr(`${found.length} simulated candidates added`, `أُضيف ${found.length} نطاق افتراضي`), {
       description: tr("Generated locally — not observed on the internet.", "مولّدة محلياً — لم تُرصد على الإنترنت."),
     });
@@ -101,6 +151,7 @@ function SecurityPage() {
       </PageHeader>
 
       <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-3"><p className="text-xs text-muted-foreground">{tr("Hackathon Demo — Not Connected to Abu Dhabi Police Systems", "عرض تجريبي للهاكاثون — غير متصل بأنظمة شرطة أبوظبي")}</p><StaffSignOut /></div>
         <Tabs value={tab} onValueChange={setTab} dir={dir}>
           <TabsList className="h-auto flex-wrap">
             <TabsTrigger value="alerts">{tr("Alerts & cases", "التنبيهات والقضايا")}</TabsTrigger>
@@ -164,13 +215,13 @@ function SecurityPage() {
                   <div className="grid gap-3 sm:grid-cols-2">
                     <label className="space-y-1 text-sm">
                       <span className="text-xs text-muted-foreground">{tr("Case review status", "حالة مراجعة القضية")}</span>
-                      <NativeSelect value={selected.status} onChange={(e) => { repository.updateAlert(selected.id, { status: e.target.value as AlertStatus }); toast.success(tr("Status updated", "تم تحديث الحالة")); }}>
+                      <NativeSelect value={selected.status} disabled={busy} aria-label={tr("Case review status", "حالة مراجعة القضية")} onChange={async (e) => { try { await change({ action: "status", id: selected.id, status: e.target.value as AlertStatus }); toast.success(tr("Status updated", "تم تحديث الحالة")); } catch { /* mutation shows error */ } }}>
                         {STATUSES.map((s) => <option key={s} value={s}>{pick(alertStatusLabel[s])}</option>)}
                       </NativeSelect>
                     </label>
                     <label className="space-y-1 text-sm">
                       <span className="text-xs text-muted-foreground">{tr("Assigned analyst", "المحلل المكلّف")}</span>
-                      <NativeSelect value={selected.assignee ?? ""} onChange={(e) => repository.updateAlert(selected.id, { assignee: e.target.value || undefined })}>
+                      <NativeSelect value={selected.assignee ?? ""} disabled={busy} aria-label={tr("Assigned analyst", "المحلل المكلّف")} onChange={(e) => { void change({ action: "assign", id: selected.id, assignee: e.target.value }).catch(() => {}); }}>
                         <option value="">{tr("Unassigned", "غير مكلّف")}</option>
                         {ANALYSTS.map((n) => <option key={n} value={n}>{n}</option>)}
                       </NativeSelect>
@@ -223,7 +274,7 @@ function SecurityPage() {
                     </ul>
                     <form onSubmit={addNote} className="mt-3 flex flex-col gap-2 sm:flex-row">
                       <Textarea rows={2} value={note} onChange={(e) => setNote(e.target.value)} placeholder={tr("Add a review note…", "أضف ملاحظة مراجعة…")} aria-label={tr("Note", "ملاحظة")} />
-                      <Button type="submit" disabled={!note.trim()}><Send className="rtl:rotate-180" />{tr("Add", "إضافة")}</Button>
+                      <Button type="submit" disabled={busy || !note.trim()}><Send className="rtl:rotate-180" />{tr("Add", "إضافة")}</Button>
                     </form>
                   </div>
                 </article>
@@ -239,7 +290,7 @@ function SecurityPage() {
                   {organizations.map((o) => <option key={o.id} value={o.id}>{pick(o.name)}</option>)}
                 </NativeSelect>
               </label>
-              <Button onClick={runScan} disabled={scanning || !scanOrg}><Radar />{scanning ? tr("Scanning…", "جارٍ الفحص…") : tr("Run simulated scan", "تشغيل الفحص الافتراضي")}</Button>
+              <Button onClick={runScan} disabled={busy || scanning || !scanOrg}><Radar />{scanning ? tr("Scanning…", "جارٍ الفحص…") : tr("Run simulated scan", "تشغيل الفحص الافتراضي")}</Button>
             </div>
             <div className="overflow-x-auto rounded-xl border bg-card shadow-card">
               <table className="w-full text-sm">
@@ -262,7 +313,7 @@ function SecurityPage() {
                       <td className="p-3 font-mono">{l.similarity}%</td>
                       <td className="p-3 text-xs">{date(l.firstSeen)}<p className="text-muted-foreground">{l.registrar}</p></td>
                       <td className="p-3 min-w-44">
-                        <NativeSelect aria-label={tr("Status", "الحالة")} value={l.status} onChange={(e) => repository.setLookalikeStatus(l.id, e.target.value as LookalikeStatus)}>
+                        <NativeSelect aria-label={tr("Status", "الحالة")} value={l.status} disabled={busy} onChange={(e) => { void change({ action: "lookalike_status", id: l.id, status: e.target.value as LookalikeStatus }).catch(() => {}); }}>
                           {LK_STATUSES.map((s) => <option key={s} value={s}>{pick(lookalikeStatusLabel[s])}</option>)}
                         </NativeSelect>
                       </td>

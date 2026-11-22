@@ -41,4 +41,8 @@ use the editor.
 - Resolve locale through the shared preference helper and inherit direction in reusable dialogs and notifications to keep navigation, reloads and portal overlays consistent.
 - Translate fixed fictional notes and analyst labels at display time without rewriting stored records; visitor-authored free text retains its original language and uses automatic text direction.
 - Registration uses the original single-form controls and the existing registration validator; submissions remain pending until independently reviewed.
-- Restore presentation from the pre-redesign checkpoint without changing repository, channel policy, detection or investigation services so browser records and earlier workflows survive.
+- Preserve the pre-redesign presentation; security storage may move to Cloud without changing channel policy, detection or investigation semantics.
+- Store restricted security snapshots in role-gated per-user Cloud workspaces; never bundle private case seeds or write cases to browser storage because UI-only gates do not protect data.
+- Archive legacy browser security snapshots transactionally before removing their local copy; preserve organization records and retain newer Cloud records on import conflicts.
+- Keep staff roles separate from profiles, with no client role grants; authorize every restricted server operation and enforce matching RLS policies.
+- Public checks return only submitted flagged values, never case IDs, evidence or relationship lists; public reports are write-only until authorized review.

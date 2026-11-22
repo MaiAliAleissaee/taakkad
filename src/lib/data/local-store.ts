@@ -14,7 +14,9 @@ const emit = () => listeners.forEach((l) => l());
 
 function persist() {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    // Keep legacy private records intact until an authorized import has been acknowledged.
+    const old = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...state, alerts: old.alerts ?? [], lookalikes: old.lookalikes ?? [] }));
   } catch {
     /* storage unavailable: keep in memory */
   }
@@ -25,7 +27,7 @@ function readStored(): DemoState | null {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as DemoState;
-    return parsed?.version === SEED_VERSION ? upgradeChannelRegistry(parsed) : null;
+    return parsed?.version === SEED_VERSION ? upgradeChannelRegistry({ ...parsed, alerts: [], lookalikes: [] }) : null;
   } catch {
     return null;
   }
@@ -56,10 +58,7 @@ function update(fn: (s: DemoState) => DemoState) {
 const uid = (prefix: string) =>
   `${prefix}-${globalThis.crypto?.randomUUID?.().slice(0, 8) ?? Math.random().toString(36).slice(2, 10)}`;
 
-function nextCaseId(s: DemoState) {
-  const max = s.alerts.reduce((m, a) => Math.max(m, Number(a.caseId.replace(/\D/g, "")) || 0), 1000);
-  return `TZ-${max + 1}`;
-}
+function restricted(): never { throw new Error("Security records require authenticated server access"); }
 
 export const repository: TrustRepository = {
   getState: () => state,
@@ -74,23 +73,11 @@ export const repository: TrustRepository = {
   setOrganizationStatus: (id, status, actor) => update((s) => applyOrganizationReview(s, actor, id, status, new Date().toISOString(), uid("audit"))),
   deleteOrganization: (id, actor) => update((s) => applyOrganizationReview(s, actor, id, "remove", new Date().toISOString(), uid("audit"))),
   channelCommand: (actor, command) => update((s) => applyChannelCommand(s, actor, command, new Date().toISOString(), uid("audit"))),
-  addAlert: (input) => {
-    const alert = { ...input, id: uid("al"), caseId: nextCaseId(state) };
-    update((s) => ({ ...s, alerts: [alert, ...s.alerts] }));
-    return alert;
-  },
-  updateAlert: (id, patch) =>
-    update((s) => ({ ...s, alerts: s.alerts.map((a) => (a.id === id ? { ...a, ...patch } : a)) })),
-  addAlertNote: (id, author, text) =>
-    update((s) => ({
-      ...s,
-      alerts: s.alerts.map((a) =>
-        a.id === id ? { ...a, notes: [...a.notes, { id: uid("n"), at: new Date().toISOString(), author, text }] } : a,
-      ),
-    })),
-  setLookalikeStatus: (id, status) =>
-    update((s) => ({ ...s, lookalikes: s.lookalikes.map((l) => (l.id === id ? { ...l, status } : l)) })),
-  addLookalikes: (items) => update((s) => ({ ...s, lookalikes: [...items, ...s.lookalikes] })),
+  addAlert: restricted,
+  updateAlert: restricted,
+  addAlertNote: restricted,
+  setLookalikeStatus: restricted,
+  addLookalikes: restricted,
   reset: () => {
     state = createSeedState();
     persist();

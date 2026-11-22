@@ -24,10 +24,9 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { tr, pick, num } = useI18n();
-  const { organizations, alerts, lookalikes } = useDemoState();
+  const { organizations } = useDemoState();
   const assessed = useMessageAssessments();
   const verifiedOrgs = organizations.filter((o) => o.status === "verified").length;
-  const openAlerts = alerts.filter((a) => a.status !== "false_positive" && a.status !== "confirmed").length;
   const preview = (["verified", "unverified", "suspicious"] as const)
     .map((s) => assessed.find((a) => a.assessment.state === s))
     .filter((x) => x !== undefined);
@@ -49,7 +48,7 @@ function Home() {
       to: "/security" as const, icon: Siren,
       title: tr("Police Security Dashboard", "لوحة أمن الشرطة"),
       body: tr("Simulated alerts, lookalike domains, linked indicators, evidence and case review.", "تنبيهات افتراضية ونطاقات مشابهة ومؤشرات مترابطة وأدلة ومراجعة القضايا."),
-      stat: tr(`${num(openAlerts)} open cases · ${num(lookalikes.length)} lookalikes`, `${num(openAlerts)} قضية مفتوحة · ${num(lookalikes.length)} نطاق مشابه`),
+      stat: tr("Authorized personnel only", "للموظفين المصرّح لهم فقط"),
     },
   ];
 

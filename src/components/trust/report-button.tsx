@@ -1,38 +1,38 @@
-import { Link } from "@tanstack/react-router";
-import { Flag, Link2 } from "lucide-react";
+import { Flag } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { repository, useDemoState } from "@/lib/data/local-store";
+import { supabase } from "@/integrations/supabase/client";
+import { usePublicWorkspace } from "@/lib/data/hooks";
 import { useI18n } from "@/lib/i18n/i18n";
-import { buildPublicReport, findLinkedCase } from "@/lib/services/reporting";
+import { messageSchema } from "@/lib/security/schema";
 import type { Assessment, MessageInput } from "@/lib/services/verification";
 
 export function ReportButton({ input, assessment }: { input: MessageInput; assessment: Assessment }) {
   const { tr } = useI18n();
-  const { alerts } = useDemoState();
+  const workspace = usePublicWorkspace();
+  const [busy, setBusy] = useState(false);
+  const [submitted, setSubmitted] = useState<string[]>([]);
+  const key = JSON.stringify(input);
   if (assessment.state === "verified") return null;
-  const linked = findLinkedCase(alerts, input);
-  if (linked) {
-    return (
-      <Button variant="outline" size="sm" asChild>
-        <Link to="/security" search={{ case: linked.id }}>
-          <Link2 />{tr(`Linked to case ${linked.caseId}`, `مرتبط بالقضية ${linked.caseId}`)}
-        </Link>
-      </Button>
-    );
-  }
   return (
     <Button
       variant="danger"
       size="sm"
-      onClick={() => {
-        const alert = repository.addAlert(buildPublicReport(input, assessment));
-        toast.success(tr(`Sent to the security team as case ${alert.caseId}`, `أُرسل إلى فريق الأمن كقضية ${alert.caseId}`), {
-          description: tr("Simulated — no real authority is contacted.", "محاكاة — لا يتم التواصل مع أي جهة فعلية."),
-        });
+      disabled={busy || submitted.includes(key)}
+      onClick={async () => {
+        setBusy(true);
+        try {
+          const validated = messageSchema.parse(input);
+          const report = await supabase.rpc("submit_security_report", { report_input: JSON.parse(JSON.stringify(validated)), ...(workspace ? { workspace_user: workspace } : {}) });
+          if (report.error) throw report.error;
+          setSubmitted(values => [...values, key]);
+          toast.success(tr("Sent to the demo security team", "أُرسل إلى فريق الأمن التجريبي"), { description: tr("No real authority is contacted. Case details are restricted.", "لا يتم التواصل مع أي جهة فعلية. تفاصيل القضايا مقيّدة.") });
+        } catch { toast.error(tr("Report could not be sent. Please try again.", "تعذّر إرسال البلاغ. حاول مجدداً.")); }
+        finally { setBusy(false); }
       }}
     >
-      <Flag />{tr("Report to security team", "إبلاغ فريق الأمن")}
+      <Flag />{submitted.includes(key) ? tr("Report received", "تم استلام البلاغ") : tr("Report to security team", "إبلاغ فريق الأمن")}
     </Button>
   );
 }

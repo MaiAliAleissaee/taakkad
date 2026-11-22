@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createSeedState } from "@/lib/data/seed";
+import { createSeedState } from "./fixtures/security-seed";
 import type { ChannelType, DemoActor, DemoState } from "@/lib/domain/types";
 import { applyChannelCommand, applyOrganizationReview, upgradeChannelRegistry, type ChannelCommand } from "@/lib/services/channels";
 import { assessMessage } from "@/lib/services/verification";

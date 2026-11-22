@@ -9,9 +9,16 @@ import { Button } from "@/components/ui/button";
 import { repository } from "@/lib/data/local-store";
 import { useI18n } from "@/lib/i18n/i18n";
 import { Logo } from "./site-header";
+import { useStaffSession } from "@/lib/security/session";
+import { useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { changeSecurityWorkspace } from "@/lib/security/workspace.functions";
 
 export function SiteFooter() {
   const { tr } = useI18n();
+  const staff = useStaffSession();
+  const queryClient = useQueryClient();
+  const change = useServerFn(changeSecurityWorkspace);
   return (
     <footer className="mt-16 bg-navy-deep text-navy-foreground">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr] lg:px-8">
@@ -34,7 +41,7 @@ export function SiteFooter() {
         </div>
         <div className="space-y-3">
           <p className="text-xs font-semibold uppercase tracking-widest text-emerald">{tr("Demo data", "البيانات التجريبية")}</p>
-          <p className="text-sm text-navy-muted">{tr("Your changes are saved in this browser only.", "تُحفظ تغييراتك في هذا المتصفح فقط.")}</p>
+          <p className="text-sm text-navy-muted">{tr("Organization changes stay in this browser. Security records are saved in your authorized Cloud account.", "تبقى تغييرات الجهات في هذا المتصفح. تُحفظ السجلات الأمنية في حسابك المصرّح له في Cloud.")}</p>
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button variant="onNavy" size="sm"><RotateCcw />{tr("Reset demo data", "إعادة ضبط البيانات")}</Button>
@@ -43,12 +50,21 @@ export function SiteFooter() {
               <AlertDialogHeader>
                 <AlertDialogTitle>{tr("Reset all demo data?", "إعادة ضبط جميع البيانات التجريبية؟")}</AlertDialogTitle>
                 <AlertDialogDescription>
-                  {tr("Organizations, cases and notes you added in this browser will be replaced by the original sample set.", "سيتم استبدال الجهات والقضايا والملاحظات التي أضفتها في هذا المتصفح بالمجموعة الأصلية.")}
+                  {tr("Browser organization data will be reset. When authorized, your Cloud security workspace will also reset. Unmigrated browser cases are retained.", "ستُعاد بيانات الجهات في المتصفح. عند التصريح لك، ستُعاد أيضاً مساحة القضايا في Cloud. تبقى قضايا المتصفح التي لم تُنقل محفوظة.")}
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>{tr("Cancel", "إلغاء")}</AlertDialogCancel>
-                <AlertDialogAction onClick={() => { repository.reset(); toast.success(tr("Demo data reset", "تمت إعادة ضبط البيانات")); }}>
+                <AlertDialogAction onClick={async () => {
+                  try {
+                    if (staff.securityAccess && staff.user) {
+                      const saved = await change({ data: { action: "reset" } });
+                      queryClient.setQueryData(["security-workspace", staff.user.id], saved);
+                      await queryClient.invalidateQueries({ queryKey: ["public-flags"] });
+                    }
+                    repository.reset(); toast.success(tr("Demo data reset", "تمت إعادة ضبط البيانات"));
+                  } catch { toast.error(tr("Reset failed. Your data was not removed.", "تعذّرت إعادة الضبط. لم تُحذف بياناتك.")); }
+                }}>
                   {tr("Reset", "إعادة الضبط")}
                 </AlertDialogAction>
               </AlertDialogFooter>

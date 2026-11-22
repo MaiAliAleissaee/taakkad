@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createSeedState } from "@/lib/data/seed";
+import { createSeedState } from "./fixtures/security-seed";
 import { buildInvestigation } from "@/lib/services/investigation";
 
 describe("Investigation leads", () => {

@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1795314692944,
+      "tag": "0000_restricted_security_access",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1795314735244,
+      "tag": "0001_preserve_original_security_samples",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1795314806102,
+      "tag": "0002_preserve_legacy_security_workspaces",
+      "breakpoints": true
+    }
+  ]
+}

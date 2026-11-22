@@ -116,7 +116,7 @@ export const reasonTemplate: Record<ReasonCode, Bi> = {
   claimed_unregistered: { en: "Claims to be {org}, but {value} is not one of its registered channels.", ar: "يدّعي أنه {org}، لكن {value} ليس من قنواتها المسجّلة." },
   lookalike_domain: { en: "{domain} imitates {target} ({org}) — {technique}, {similarity}% similar.", ar: "{domain} يقلّد {target} ({org}) — {technique}، تشابه {similarity}%." },
   lookalike_sender: { en: "Sender {value} imitates {target}, registered by {org} ({similarity}% similar).", ar: "المرسل {value} يقلّد {target} المسجّل لدى {org} (تشابه {similarity}%)." },
-  blocklisted: { en: "{value} appears in security case {caseId} (escalated or confirmed).", ar: "{value} ظاهر في القضية الأمنية {caseId} (مُصعّدة أو مؤكدة)." },
+  blocklisted: { en: "{value} matches an escalated or confirmed security finding. Case details are restricted to authorized personnel.", ar: "{value} يطابق نتيجة أمنية مُصعّدة أو مؤكدة. تفاصيل القضية مقتصرة على الموظفين المصرّح لهم." },
   content_urgency: { en: "Uses urgent or threatening language (\"{matched}\").", ar: "يستخدم لغة استعجال أو تهديد («{matched}»)." },
   content_credentials: { en: "Asks for passwords, PINs or card details (\"{matched}\").", ar: "يطلب كلمات مرور أو أرقاماً سرية أو بيانات بطاقة («{matched}»)." },
   content_payment: { en: "Requests a payment or fee (\"{matched}\").", ar: "يطلب دفعة أو رسوماً («{matched}»)." },

@@ -25,9 +25,9 @@ const EXAMPLES: Array<{ label: { en: string; ar: string }; input: MessageInput }
 export function MessageChecker() {
   const { tr, pick } = useI18n();
   const { organizations } = useDemoState();
-  const blocklist = useBlocklist();
   const [input, setInput] = useState<MessageInput>({ channel: "sms", sender: "", url: "", body: "", claimedOrgId: undefined });
   const [checkedInput, setCheckedInput] = useState<MessageInput | null>(null);
+  const blocklist = useBlocklist(checkedInput ? [checkedInput] : []);
   const result = checkedInput ? { input: checkedInput, assessment: assessMessage(checkedInput, { organizations, blocklist }) } : null;
   const [error, setError] = useState(false);
 
@@ -50,7 +50,7 @@ export function MessageChecker() {
       <form onSubmit={onSubmit} className="space-y-4 rounded-2xl border bg-card p-5 shadow-card" noValidate>
         <div>
           <h2 className="text-lg font-semibold">{tr("Check a message or link", "افحص رسالة أو رابطاً")}</h2>
-          <p className="mt-1 text-sm text-muted-foreground">{tr("Nothing is sent anywhere and links are never opened. The check runs against the demo registry.", "لا يُرسل أي شيء ولا تُفتح الروابط. يتم الفحص مقابل السجل التجريبي.")}</p>
+          <p className="mt-1 text-sm text-muted-foreground">{tr("Sender and link values are checked securely against the demo registry. Links are never opened.", "تُفحص قيم المرسل والرابط بأمان مقابل السجل التجريبي. لا تُفتح الروابط.")}</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <span className="text-xs text-muted-foreground">{tr("Try an example:", "جرّب مثالاً:")}</span>

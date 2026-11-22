@@ -1,0 +1,176 @@
+import type { ImpersonationAlert, LookalikeDomain, LookalikeStatus } from "@/lib/domain/types";
+import { detectLookalike } from "@/lib/services/lookalike";
+import { createSeedState as publicSeed } from "@/lib/data/seed";
+const alerts: ImpersonationAlert[] = [
+  {
+    id: "al-1042",
+    caseId: "TZ-1042",
+    title: { en: "SMS phishing campaign imitating Falcon National Bank", ar: "حملة تصيّد عبر الرسائل النصية تنتحل بنك الصقر الوطني" },
+    summary: {
+      en: "Lookalike sender ID and cloned login page asking customers to 'verify' suspended accounts.",
+      ar: "معرّف مرسل مشابه وصفحة دخول مستنسخة تطلب من العملاء «التحقق» من حسابات معلّقة.",
+    },
+    targetOrgId: "org-falcon",
+    severity: "critical",
+    riskScore: 92,
+    status: "escalated",
+    source: "simulated_detection",
+    detectedAt: "2026-11-20T21:30:00Z",
+    assignee: "Analyst 07",
+    indicators: [
+      { type: "domain", value: "falconbank-secure-login.example" },
+      { type: "url", value: "https://falconbank-secure-login.example/verify" },
+      { type: "sms_sender", value: "FALC0NBANK" },
+      { type: "ip", value: "203.0.113.45" },
+    ],
+    evidence: [
+      { id: "ev-1", kind: "message", capturedAt: "2026-11-20T21:05:00Z", description: { en: "SMS sample submitted by 37 simulated recipients within 2 hours.", ar: "عيّنة رسالة نصية أبلغ عنها 37 مستلماً افتراضياً خلال ساعتين." } },
+      { id: "ev-2", kind: "whois", capturedAt: "2026-11-20T21:20:00Z", description: { en: "Domain registered 2 days before the campaign via a privacy-protected registrar (simulated record).", ar: "تم تسجيل النطاق قبل يومين من الحملة عبر مسجّل يحجب الهوية (سجل افتراضي)." } },
+      { id: "ev-3", kind: "screenshot", capturedAt: "2026-11-20T21:25:00Z", description: { en: "Login page copies the bank's logo and colours and requests card number and PIN.", ar: "صفحة الدخول تنسخ شعار البنك وألوانه وتطلب رقم البطاقة والرقم السري." } },
+      { id: "ev-4", kind: "dns", capturedAt: "2026-11-20T21:26:00Z", description: { en: "A record resolves to 203.0.113.45, shared with case TZ-1043.", ar: "سجل A يشير إلى 203.0.113.45، وهو مشترك مع القضية TZ-1043." } },
+    ],
+    notes: [{ id: "n-1", at: "2026-11-21T06:00:00Z", author: "Analyst 07", text: "Escalated to bank security liaison (simulated). Awaiting takedown confirmation." }],
+  },
+  {
+    id: "al-1043",
+    caseId: "TZ-1043",
+    title: { en: "Parcel customs-fee scam imitating Saqr Express", ar: "احتيال رسوم جمركية لشحنات ينتحل صقر إكسبريس" },
+    summary: {
+      en: "Emails ask recipients to pay a small fee on a lookalike delivery domain.",
+      ar: "رسائل بريد تطلب دفع رسوم صغيرة عبر نطاق توصيل مشابه.",
+    },
+    targetOrgId: "org-saqr",
+    severity: "high",
+    riskScore: 81,
+    status: "investigating",
+    source: "simulated_detection",
+    detectedAt: "2026-11-20T16:10:00Z",
+    assignee: "Analyst 12",
+    indicators: [
+      { type: "domain", value: "saqrexpress-delivery.example" },
+      { type: "email", value: "support@saqrexpress-delivery.example" },
+      { type: "ip", value: "203.0.113.45" },
+    ],
+    evidence: [
+      { id: "ev-5", kind: "message", capturedAt: "2026-11-20T15:50:00Z", description: { en: "Email requesting 12.50 AED customs fee with payment link.", ar: "بريد يطلب رسوماً جمركية بقيمة 12.50 درهم مع رابط دفع." } },
+      { id: "ev-6", kind: "dns", capturedAt: "2026-11-20T16:05:00Z", description: { en: "Hosted on the same IP as TZ-1042 (simulated).", ar: "مستضاف على عنوان IP نفسه للقضية TZ-1042 (افتراضي)." } },
+    ],
+    notes: [],
+  },
+  {
+    id: "al-1044",
+    caseId: "TZ-1044",
+    title: { en: "Fake traffic-fine payment site", ar: "موقع مزيّف لدفع المخالفات المرورية" },
+    summary: {
+      en: "SMS from a mobile number links to a domain imitating Oasis Traffic Services.",
+      ar: "رسالة من رقم جوال تحتوي رابطاً لنطاق ينتحل خدمات المرور – الواحة.",
+    },
+    targetOrgId: "org-oasis",
+    severity: "high",
+    riskScore: 77,
+    status: "new",
+    source: "simulated_detection",
+    detectedAt: "2026-11-18T18:40:00Z",
+    indicators: [
+      { type: "domain", value: "oasis-traffic-fines.example" },
+      { type: "phone", value: "+971 50 000 0333" },
+      { type: "ip", value: "198.51.100.23" },
+    ],
+    evidence: [
+      { id: "ev-7", kind: "message", capturedAt: "2026-11-18T18:25:00Z", description: { en: "SMS claiming an unpaid 500 AED fine.", ar: "رسالة تدّعي وجود مخالفة غير مدفوعة بقيمة 500 درهم." } },
+    ],
+    notes: [],
+  },
+  {
+    id: "al-1045",
+    caseId: "TZ-1045",
+    title: { en: "ID renewal lure imitating Al Noor Civil Registry", ar: "استدراج لتجديد الهوية ينتحل هيئة النور للسجل المدني" },
+    summary: {
+      en: "Lookalike renewal portal collects personal details and passport scans.",
+      ar: "بوابة تجديد مشابهة تجمع البيانات الشخصية وصور جوازات السفر.",
+    },
+    targetOrgId: "org-alnoor",
+    severity: "medium",
+    riskScore: 64,
+    status: "new",
+    source: "lookalike_scan",
+    detectedAt: "2026-11-19T10:15:00Z",
+    indicators: [
+      { type: "domain", value: "alnoor-gov-renew.example" },
+      { type: "url", value: "https://alnoor-gov-renew.example/id-renewal" },
+      { type: "ip", value: "198.51.100.23" },
+    ],
+    evidence: [
+      { id: "ev-8", kind: "screenshot", capturedAt: "2026-11-19T10:20:00Z", description: { en: "Form requests ID number, date of birth and passport upload.", ar: "نموذج يطلب رقم الهوية وتاريخ الميلاد ورفع صورة الجواز." } },
+    ],
+    notes: [],
+  },
+  {
+    id: "al-1046",
+    caseId: "TZ-1046",
+    title: { en: "Social media 'support' account imitating Falcon National Bank", ar: "حساب «دعم» على وسائل التواصل ينتحل بنك الصقر الوطني" },
+    summary: {
+      en: "Account replies to customer complaints and moves conversations to a phone number.",
+      ar: "حساب يرد على شكاوى العملاء وينقل المحادثات إلى رقم هاتف.",
+    },
+    targetOrgId: "org-falcon",
+    severity: "medium",
+    riskScore: 58,
+    status: "investigating",
+    source: "public_report",
+    detectedAt: "2026-11-17T15:00:00Z",
+    assignee: "Analyst 07",
+    indicators: [
+      { type: "social_handle", value: "@FalconBank_Support" },
+      { type: "phone", value: "+971 4 555 0199" },
+    ],
+    evidence: [
+      { id: "ev-9", kind: "report", capturedAt: "2026-11-17T14:50:00Z", description: { en: "Public report: caller asked for card PIN after social media contact.", ar: "بلاغ عام: طلب المتصل الرقم السري للبطاقة بعد التواصل عبر وسائل التواصل." } },
+    ],
+    notes: [],
+  },
+  {
+    id: "al-1047",
+    caseId: "TZ-1047",
+    title: { en: "Careers domain resembling Dune Digital Payments", ar: "نطاق توظيف يشبه الكثبان للمدفوعات الرقمية" },
+    summary: {
+      en: "Flagged by lookalike scan; later confirmed as legitimately operated by the company's HR vendor (simulated).",
+      ar: "رُصد عبر فحص النطاقات المشابهة، ثم تبيّن أنه يُدار بشكل مشروع من مزوّد الموارد البشرية للشركة (افتراضي).",
+    },
+    targetOrgId: "org-dunepay",
+    severity: "low",
+    riskScore: 22,
+    status: "false_positive",
+    source: "lookalike_scan",
+    detectedAt: "2026-11-12T09:00:00Z",
+    assignee: "Analyst 12",
+    indicators: [{ type: "domain", value: "dunepay-careers.example" }],
+    evidence: [
+      { id: "ev-10", kind: "whois", capturedAt: "2026-11-12T09:30:00Z", description: { en: "Registrant matches the organization's declared HR vendor (simulated).", ar: "المسجِّل يطابق مزوّد الموارد البشرية المعلن للجهة (افتراضي)." } },
+    ],
+    notes: [{ id: "n-2", at: "2026-11-13T08:00:00Z", author: "Analyst 12", text: "Organization confirmed ownership. Closed as false positive." }],
+  },
+];
+
+function lookalike(id: string, domain: string, orgId: string, target: string, firstSeen: string, registrar: string, status: LookalikeStatus): LookalikeDomain {
+  const m = detectLookalike(domain, target);
+  return {
+    id, domain, targetDomain: target, targetOrgId: orgId,
+    technique: m?.technique ?? "typo", similarity: m?.similarity ?? 70,
+    firstSeen, registrar, status, source: "seed",
+  };
+}
+
+const lookalikes: LookalikeDomain[] = [
+  lookalike("lk-1", "falconbank-secure-login.example", "org-falcon", "falconbank.example", "2026-11-18T03:00:00Z", "Demo Registrar Ltd.", "flagged"),
+  lookalike("lk-2", "fa1conbank.example", "org-falcon", "falconbank.example", "2026-11-10T12:00:00Z", "Sandbox Domains Inc.", "takedown_requested"),
+  lookalike("lk-3", "falc0nbank-support.example", "org-falcon", "falconbank.example", "2026-11-19T22:00:00Z", "Example Names LLC", "monitoring"),
+  lookalike("lk-4", "saqrexpress-delivery.example", "org-saqr", "saqrexpress.example", "2026-11-19T08:00:00Z", "Demo Registrar Ltd.", "flagged"),
+  lookalike("lk-5", "oasis-traffic-fines.example", "org-oasis", "oasis-traffic.gov.example", "2026-11-16T05:00:00Z", "Sandbox Domains Inc.", "monitoring"),
+  lookalike("lk-6", "alnoor-gov-renew.example", "org-alnoor", "alnoor.gov.example", "2026-11-18T14:00:00Z", "Example Names LLC", "monitoring"),
+  lookalike("lk-7", "a1noor-gov.example", "org-alnoor", "alnoor.gov.example", "2026-11-20T09:00:00Z", "Demo Registrar Ltd.", "monitoring"),
+  lookalike("lk-8", "dunepay-careers.example", "org-dunepay", "dunepay.example", "2026-11-11T10:00:00Z", "Example Names LLC", "cleared"),
+];
+
+
+export function createSeedState() { return { ...publicSeed(), alerts: structuredClone(alerts), lookalikes: structuredClone(lookalikes) }; }

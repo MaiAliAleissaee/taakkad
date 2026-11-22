@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AlertsRouteImport } from './routes/alerts'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as OrganizationsRouteImport } from './routes/organizations'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as TrustRouteImport } from './routes/trust'
 import { Route as AuthenticatedSecurityRouteImport } from './routes/_authenticated/security'
 
@@ -41,6 +42,11 @@ const OrganizationsRoute = OrganizationsRouteImport.update({
   path: '/organizations',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TrustRoute = TrustRouteImport.update({
   id: '/trust',
   path: '/trust',
@@ -57,6 +63,7 @@ export interface FileRoutesByFullPath {
   '/alerts': typeof AlertsRoute
   '/auth': typeof AuthRoute
   '/organizations': typeof OrganizationsRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/trust': typeof TrustRoute
   '/security': typeof AuthenticatedSecurityRoute
 }
@@ -65,6 +72,7 @@ export interface FileRoutesByTo {
   '/alerts': typeof AlertsRoute
   '/auth': typeof AuthRoute
   '/organizations': typeof OrganizationsRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/trust': typeof TrustRoute
   '/security': typeof AuthenticatedSecurityRoute
 }
@@ -75,15 +83,29 @@ export interface FileRoutesById {
   '/alerts': typeof AlertsRoute
   '/auth': typeof AuthRoute
   '/organizations': typeof OrganizationsRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/trust': typeof TrustRoute
   '/_authenticated/security': typeof AuthenticatedSecurityRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/alerts' | '/auth' | '/organizations' | '/trust' | '/security'
+    | '/'
+    | '/alerts'
+    | '/auth'
+    | '/organizations'
+    | '/reset-password'
+    | '/trust'
+    | '/security'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/alerts' | '/auth' | '/organizations' | '/trust' | '/security'
+  to:
+    | '/'
+    | '/alerts'
+    | '/auth'
+    | '/organizations'
+    | '/reset-password'
+    | '/trust'
+    | '/security'
   id:
     | '__root__'
     | '/'
@@ -91,6 +113,7 @@ export interface FileRouteTypes {
     | '/alerts'
     | '/auth'
     | '/organizations'
+    | '/reset-password'
     | '/trust'
     | '/_authenticated/security'
   fileRoutesById: FileRoutesById
@@ -101,6 +124,7 @@ export interface RootRouteChildren {
   AlertsRoute: typeof AlertsRoute
   AuthRoute: typeof AuthRoute
   OrganizationsRoute: typeof OrganizationsRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   TrustRoute: typeof TrustRoute
 }
 
@@ -141,6 +165,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrganizationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/trust': {
       id: '/trust'
       path: '/trust'
@@ -175,6 +206,7 @@ const rootRouteChildren: RootRouteChildren = {
   AlertsRoute: AlertsRoute,
   AuthRoute: AuthRoute,
   OrganizationsRoute: OrganizationsRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   TrustRoute: TrustRoute,
 }
 export const routeTree = rootRouteImport

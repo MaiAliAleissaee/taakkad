@@ -8,8 +8,8 @@ export const staffRoleLabel: Record<StaffRole, Bi> = {
   public_visitor: { en: "Public Visitor", ar: "زائر عام" },
 };
 export const loginError: Record<string, Bi> = {
-  validation: { en: "Enter a valid email and your password.", ar: "أدخل بريداً إلكترونياً صالحاً وكلمة المرور." },
-  credentials: { en: "Email or password is incorrect, or the account is unavailable.", ar: "البريد أو كلمة المرور غير صحيحة، أو الحساب غير متاح." },
+  validation: { en: "Enter a valid staff ID or email; login also requires your password.", ar: "أدخل معرّف موظف أو بريداً إلكترونياً صالحاً؛ يتطلب الدخول كلمة المرور أيضاً." },
+  credentials: { en: "Staff ID, email or password is incorrect, or the account is unavailable. Try again later if needed.", ar: "معرّف الموظف أو البريد أو كلمة المرور غير صحيحة، أو الحساب غير متاح. حاول لاحقاً عند الحاجة." },
   session: { en: "Could not verify this session. Please try again.", ar: "تعذّر التحقق من الجلسة. حاول مجدداً." },
   access: { en: "Access check unavailable. Please try again.", ar: "التحقق من الصلاحيات غير متاح. حاول مجدداً." },
   forbidden: { en: "Your account is not authorized to access security cases.", ar: "حسابك غير مصرّح له بالوصول إلى القضايا الأمنية." },

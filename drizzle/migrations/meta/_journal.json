@@ -113,6 +113,13 @@
       "when": 1795321948099,
       "tag": "0015_type_aware_ai_indicator_flags",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1795330976250,
+      "tag": "0016_private_staff_login_identifiers",
+      "breakpoints": true
     }
   ]
 }

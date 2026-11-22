@@ -1,5 +1,7 @@
 # TRUST ZERO AI roadmap
 
+- [ ] Approved staff setup: link HAM123 to the existing confirmed account, add only Security Analyst while preserving roles, provide private password recovery/setup, and verify login/dashboard/logout. Password-based verification waits on the owner privately setting a password.
+
 - [x] Real hybrid AI detection: OpenAI GPT-6.1 Sol via managed Gateway; redacted optional inference, private local results, type-aware exact indicator correlation, explicit report enrichment and bilingual explanations. Six real model examples and live public checks succeeded; 99 tests and transactional usage-limit tests pass. Five requests per browser visitor per rolling ten minutes and a shared daily ceiling of 200 are enforced. Original engine/design/roles/records preserved; no new accounts. Technical evidence and limitations: AI_IMPLEMENTATION_REPORT.md.
 - [ ] Positive signed-in AI correlation/report-to-graph walkthrough — no authorized security-staff account/session currently exists; user prohibited creating accounts or changing roles. Public denial, grounded report storage and existing graph matching were verified; temporary validation report removed.
 

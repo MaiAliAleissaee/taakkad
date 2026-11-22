@@ -358,6 +358,29 @@ export type Database = {
         }
         Relationships: []
       }
+      staff_login_identifiers: {
+        Row: {
+          staff_id: string
+          user_id: string
+        }
+        Insert: {
+          staff_id: string
+          user_id: string
+        }
+        Update: {
+          staff_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "staff_login_identifiers_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           id: string

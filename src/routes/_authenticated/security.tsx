@@ -22,6 +22,7 @@ import { pendingSecurityMigration, completeSecurityMigration } from "@/lib/secur
 import type { SecuritySnapshot, commandSchema } from "@/lib/security/schema";
 import type { z } from "zod";
 import { StaffSignOut } from "@/components/security/staff-sign-out";
+import { BrowserArchive } from "@/components/security/browser-archive";
 import { useI18n } from "@/lib/i18n/i18n";
 import {
   alertStatusLabel, evidenceLabel, indicatorLabel, lookalikeStatusLabel, severityLabel, sourceLabel, techniqueLabel,
@@ -151,7 +152,7 @@ function SecurityPage({ snapshot, change, busy }: { snapshot: SecuritySnapshot; 
       </PageHeader>
 
       <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <div className="mb-5 flex flex-wrap items-center justify-between gap-3"><p className="text-xs text-muted-foreground">{tr("Hackathon Demo — Not Connected to Abu Dhabi Police Systems", "عرض تجريبي للهاكاثون — غير متصل بأنظمة شرطة أبوظبي")}</p><StaffSignOut /></div>
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-3"><p className="text-xs text-muted-foreground">{tr("Hackathon Demo — Not Connected to Abu Dhabi Police Systems", "عرض تجريبي للهاكاثون — غير متصل بأنظمة شرطة أبوظبي")}</p><div className="flex items-center gap-2"><BrowserArchive /><StaffSignOut /></div></div>
         <Tabs value={tab} onValueChange={setTab} dir={dir}>
           <TabsList className="h-auto flex-wrap">
             <TabsTrigger value="alerts">{tr("Alerts & cases", "التنبيهات والقضايا")}</TabsTrigger>

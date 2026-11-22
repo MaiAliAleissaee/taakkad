@@ -43,6 +43,6 @@ use the editor.
 - Registration uses the original single-form controls and the existing registration validator; submissions remain pending until independently reviewed.
 - Preserve the pre-redesign presentation; security storage may move to Cloud without changing channel policy, detection or investigation semantics.
 - Store restricted security snapshots in role-gated per-user Cloud workspaces; never bundle private case seeds or write cases to browser storage because UI-only gates do not protect data.
-- Archive legacy browser security snapshots transactionally before removing their local copy; preserve organization records and retain newer Cloud records on import conflicts.
+- Archive legacy browser security snapshots transactionally before removing their local copy; preserve organization records, retain newer Cloud review fields, merge missing notes/evidence/indicators and allow owner-scoped archive downloads so no saved work is lost on conflicts.
 - Keep staff roles separate from profiles, with no client role grants; authorize every restricted server operation and enforce matching RLS policies.
 - Public checks return only submitted flagged values, never case IDs, evidence or relationship lists; public reports are write-only until authorized review.

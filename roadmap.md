@@ -1,6 +1,7 @@
 # TRUST ZERO AI roadmap
 
-- [ ] Feature 1 only: secure bilingual staff login, separate profiles/roles, restricted case storage and migration, logout and access tests. Cloud migration and staff profiles approved; preserve original design and all records; do not implement other features.
+- [x] Feature 1 only: bilingual staff login, separate profiles/roles, restricted Cloud case storage, transactional browser migration and archive download, logout and access tests. Original design and workflows preserved; 56 tests and signed-in browser checks passed. No other features implemented.
+- [ ] First Security Supervisor invitation — awaiting the user's email address in the existing question.
 
 - [x] Restore exact pre-redesign appearance and original controls across all four portals; remove only user-approved redesign conveniences.
 - [x] Verify restored Arabic/English pages on desktop/mobile, registration, channel approval/revocation, public checks, cases, graph and browser persistence; 46 tests pass. Original narrow-screen overflow retained for checkpoint fidelity.

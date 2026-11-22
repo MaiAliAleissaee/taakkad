@@ -64,7 +64,7 @@ export function SiteHeader() {
           ))}
         </nav>
         <div className="flex items-center gap-2">
-          {staff.ready && staff.user ? <StaffSignOut onNavy /> : null}
+          {staff.ready && staff.user ? <div className="hidden lg:block"><StaffSignOut onNavy /></div> : null}
           <Button variant="onNavy" size="sm" onClick={toggleLang} aria-label={tr("Switch to Arabic", "التبديل إلى الإنجليزية")}>
             <Languages />
             <span className={lang === "en" ? "font-sans" : "font-display"}>{lang === "en" ? "العربية" : "English"}</span>
@@ -89,6 +89,7 @@ export function SiteHeader() {
               {l.label}
             </Link>
           ))}
+          {staff.ready && staff.user ? <div className="mt-2"><StaffSignOut onNavy /></div> : null}
         </div>
       </nav>
     </header>

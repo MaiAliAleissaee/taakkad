@@ -10,6 +10,8 @@ import { useI18n } from "@/lib/i18n/i18n";
 import { useStaffSession } from "@/lib/security/session";
 import { StaffSignOut } from "@/components/security/staff-sign-out";
 import { canAccessSecurity } from "@/lib/security/access";
+import { loginError, staffRoleLabel } from "@/lib/security/labels";
+import type { StaffRole } from "@/lib/security/access";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({ meta: [
@@ -21,25 +23,25 @@ export const Route = createFileRoute("/auth")({
   ] }), component: StaffLogin,
 });
 function StaffLogin() {
-  const { tr, dir } = useI18n(); const session = useStaffSession(); const navigate = useNavigate();
+  const { tr, dir, pick } = useI18n(); const session = useStaffSession(); const navigate = useNavigate();
   const [email, setEmail] = useState(""); const [password, setPassword] = useState("");
   const [error, setError] = useState(""); const [busy, setBusy] = useState(false);
   useEffect(() => { if (session.ready && session.securityAccess) void navigate({ to: "/security", replace: true }); }, [session.ready, session.securityAccess, navigate]);
   async function login(e: FormEvent) {
     e.preventDefault(); setError("");
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()) || !password) { setError(tr("Enter a valid email and your password.", "أدخل بريداً إلكترونياً صالحاً وكلمة المرور.")); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()) || !password) { setError("validation"); return; }
     setBusy(true);
     try {
       const result = await supabase.auth.signInWithPassword({ email: email.trim(), password });
       setPassword("");
-      if (result.error) { setError(tr("Email or password is incorrect, or the account is unavailable.", "البريد أو كلمة المرور غير صحيحة، أو الحساب غير متاح.")); return; }
+      if (result.error) { setError("credentials"); return; }
       const checked = await supabase.auth.getUser();
-      if (!checked.data.user) { setError(tr("Could not verify this session. Please try again.", "تعذّر التحقق من الجلسة. حاول مجدداً.")); return; }
+      if (!checked.data.user) { setError("session"); return; }
       const roles = await supabase.from("user_roles").select("role").eq("user_id", checked.data.user.id);
-      if (roles.error) { setError(tr("Access check unavailable. Please try again.", "التحقق من الصلاحيات غير متاح. حاول مجدداً.")); return; }
-      if (!canAccessSecurity(roles.data.map(r => r.role))) { setError(tr("Your account is not authorized to access security cases.", "حسابك غير مصرّح له بالوصول إلى القضايا الأمنية.")); return; }
+      if (roles.error) { setError("access"); return; }
+      if (!canAccessSecurity(roles.data.map(r => r.role))) { setError("forbidden"); return; }
       await navigate({ to: "/security", replace: true });
-    } catch { setError(tr("Unable to sign in. Please try again.", "تعذّر تسجيل الدخول. حاول مجدداً.")); }
+    } catch { setError("unavailable"); }
     finally { setBusy(false); }
   }
   return <div dir={dir}>
@@ -47,11 +49,11 @@ function StaffLogin() {
     <section className="mx-auto max-w-md px-4 py-8 sm:px-6">
       <div className="mb-6 flex items-center gap-3"><LockKeyhole className="size-7 text-emerald" /><h2 className="text-xl font-semibold">{tr("Employee login", "دخول الموظفين")}</h2></div>
       <p className="mb-6 border-s-4 border-emerald bg-accent p-3 text-sm font-medium">{tr("Hackathon Demo — Not Connected to Abu Dhabi Police Systems", "عرض تجريبي للهاكاثون — غير متصل بأنظمة شرطة أبوظبي")}</p>
-      {session.ready && session.user && !session.securityAccess ? <div className="space-y-4"><p role="alert" className="text-destructive">{tr("Your account is not authorized to access security cases.", "حسابك غير مصرّح له بالوصول إلى القضايا الأمنية.")}</p><StaffSignOut /></div> :
+      {session.ready && session.user && !session.securityAccess ? <div className="space-y-4"><p className="text-sm text-muted-foreground">{session.roles.map(role => pick(staffRoleLabel[role as StaffRole])).join(" · ")}</p><p role="alert" className="text-destructive">{pick(loginError['forbidden'])}</p><StaffSignOut /></div> :
         <form onSubmit={login} noValidate className="space-y-5">
           <div className="space-y-2"><Label htmlFor="staff-email">{tr("Email", "البريد الإلكتروني")}</Label><Input id="staff-email" type="email" dir="ltr" autoComplete="username" value={email} onChange={e => setEmail(e.target.value)} disabled={busy} required /></div>
           <div className="space-y-2"><Label htmlFor="staff-password">{tr("Password", "كلمة المرور")}</Label><Input id="staff-password" type="password" dir="ltr" autoComplete="current-password" value={password} onChange={e => setPassword(e.target.value)} disabled={busy} required /></div>
-          {error ? <p role="alert" className="text-sm text-destructive">{error}</p> : null}
+          {error ? <p role="alert" className="text-sm text-destructive">{pick(loginError[error])}</p> : null}
           <Button type="submit" variant="emerald" className="w-full" disabled={busy || !session.ready}><LogIn />{busy ? tr("Logging in…", "جارٍ تسجيل الدخول…") : tr("Login", "تسجيل الدخول")}</Button>
         </form>}
     </section>

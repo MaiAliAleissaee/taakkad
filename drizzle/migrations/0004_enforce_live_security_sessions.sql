@@ -1,0 +1,3 @@
+CREATE OR REPLACE FUNCTION public.has_security_access() RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path=public AS $$ SELECT EXISTS(SELECT 1 FROM public.user_roles r WHERE r.user_id=auth.uid() AND r.role IN ('security_analyst','security_supervisor')) AND EXISTS(SELECT 1 FROM auth.sessions s WHERE s.user_id=auth.uid() AND s.id::text=auth.jwt()->>'session_id'); $$;
+REVOKE ALL ON FUNCTION public.has_security_access() FROM PUBLIC,anon;
+GRANT EXECUTE ON FUNCTION public.has_security_access() TO authenticated,service_role;

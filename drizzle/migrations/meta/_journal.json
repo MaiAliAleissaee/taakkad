@@ -22,6 +22,34 @@
       "when": 1795314806102,
       "tag": "0002_preserve_legacy_security_workspaces",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1795315232645,
+      "tag": "0003_tighten_security_function_grants",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1795315360507,
+      "tag": "0004_enforce_live_security_sessions",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1795315428179,
+      "tag": "0005_validate_public_security_inputs",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1795315574321,
+      "tag": "0006_merge_saved_case_notes_without_loss",
+      "breakpoints": true
     }
   ]
 }

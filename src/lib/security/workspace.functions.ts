@@ -3,6 +3,14 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { commandSchema, snapshotSchema } from "./schema";
 import { z } from "zod";
 
+export const readBrowserArchives = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
+  const { securityIdentity } = await import("./authorization.server");
+  const user = await securityIdentity(context.supabase);
+  const result = await context.supabase.from("security_migrations").select("id,payload,imported_at").eq("user_id", user.id).order("imported_at");
+  if (result.error) throw new Error("Archives unavailable");
+  return result.data;
+});
+
 export const readSecurityWorkspace = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
   const { securityIdentity } = await import("./authorization.server");
   const user = await securityIdentity(context.supabase);

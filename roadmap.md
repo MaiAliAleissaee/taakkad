@@ -1,7 +1,7 @@
 # TRUST ZERO AI roadmap
 
 - [x] Feature 1 only: bilingual staff login, separate profiles/roles, restricted Cloud case storage, transactional browser migration and archive download, logout and access tests. Original design and workflows preserved; 56 tests and signed-in browser checks passed. No other features implemented.
-- [ ] First Security Supervisor invitation — awaiting the user's email address in the existing question.
+- [ ] First Security Supervisor invitation to trail.ham@outlook.com — blocked until the app is published with a live invitation/password-setup destination; no invitation sent and no account created yet.
 
 - [x] Restore exact pre-redesign appearance and original controls across all four portals; remove only user-approved redesign conveniences.
 - [x] Verify restored Arabic/English pages on desktop/mobile, registration, channel approval/revocation, public checks, cases, graph and browser persistence; 46 tests pass. Original narrow-screen overflow retained for checkpoint fidelity.

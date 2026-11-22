@@ -1,48 +1,57 @@
-import { ScanSearch } from "lucide-react";
-import { useState, type FormEvent } from "react";
+import { ScanSearch, X } from "lucide-react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { NativeSelect } from "@/components/common/native-select";
 import { RiskMeter } from "@/components/common/bits";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import type { ChannelType } from "@/lib/domain/types";
-import { useBlocklist } from "@/lib/data/hooks";
+import { supabase } from "@/integrations/supabase/client";
+import type { BlockedIndicator } from "@/lib/services/blocklist";
+import { usePublicWorkspace } from "@/lib/data/hooks";
 import { useDemoState } from "@/lib/data/local-store";
 import { useI18n } from "@/lib/i18n/i18n";
 import { channelLabel, trustStateHelp } from "@/lib/i18n/labels";
-import { assessMessage, type Assessment, type MessageInput } from "@/lib/services/verification";
+import { assessMessage, type MessageInput } from "@/lib/services/verification";
+import { preparePrivateCheck, privateCheckCandidates, type PublicCheckChannel } from "@/lib/services/private-check";
 import { ReasonList } from "./reason-list";
 import { ReportButton } from "./report-button";
 import { TrustBadge } from "./trust-badge";
 
-const EXAMPLES: Array<{ label: { en: string; ar: string }; input: MessageInput }> = [
-  { label: { en: "Lookalike bank link", ar: "رابط بنك مشابه" }, input: { channel: "sms", sender: "FALCONBNK", url: "https://fa1conbank.example/login", body: "Your card is blocked. Log in to unlock.", claimedOrgId: "org-falcon" } },
-  { label: { en: "Official registry email", ar: "بريد رسمي من السجل" }, input: { channel: "email", sender: "notices@alnoor.gov.example", url: "https://services.alnoor.gov.example", body: "Your document is ready for collection." } },
-  { label: { en: "Unknown shop newsletter", ar: "نشرة متجر غير معروف" }, input: { channel: "email", sender: "offers@desertbloom-shop.example", url: "https://desertbloom-shop.example", body: "New arrivals this week." } },
-];
-
 export function MessageChecker() {
   const { tr, pick } = useI18n();
   const { organizations } = useDemoState();
-  const [input, setInput] = useState<MessageInput>({ channel: "sms", sender: "", url: "", body: "", claimedOrgId: undefined });
-  const [checkedInput, setCheckedInput] = useState<MessageInput | null>(null);
-  const blocklist = useBlocklist(checkedInput ? [checkedInput] : []);
-  const result = checkedInput ? { input: checkedInput, assessment: assessMessage(checkedInput, { organizations, blocklist }) } : null;
-  const [error, setError] = useState(false);
+  const emptyInput = { channel: "sms" as PublicCheckChannel, sender: "", url: "", body: "", claimedOrgId: undefined as string | undefined };
+  const [input, setInput] = useState(emptyInput);
+  const [checked, setChecked] = useState<{ input: MessageInput; blocklist: BlockedIndicator[] } | null>(null);
+  const result = checked ? { input: checked.input, assessment: assessMessage(checked.input, { organizations, blocklist: checked.blocklist }) } : null;
+  const [error, setError] = useState<"empty" | "unavailable" | null>(null);
+  const [busy, setBusy] = useState(false);
+  const workspace = usePublicWorkspace();
+  const request = useRef(0);
+  useEffect(() => () => { request.current += 1; }, []);
 
-  const run = (value: MessageInput) => {
-    if (!value.sender.trim() && !value.url?.trim()) {
-      setError(true);
+  const run = async () => {
+    const value = preparePrivateCheck(input);
+    if (!value) {
+      setError("empty");
       return;
     }
-    setError(false);
-    setCheckedInput(value);
+    const id = ++request.current;
+    setError(null); setChecked(null); setBusy(true);
+    try {
+      const candidates = privateCheckCandidates(value);
+      const flags = candidates.length ? await supabase.rpc("flagged_message_values", { candidate_values: candidates, ...(workspace ? { workspace_user: workspace } : {}) }) : { data: [], error: null };
+      if (id !== request.current) return;
+      if (flags.error) throw new Error("Unavailable");
+      setChecked({ input: value, blocklist: (flags.data ?? []).map(item => ({ type: "domain", value: item, caseId: "restricted" })) });
+    } catch { if (id === request.current) setError("unavailable"); }
+    finally { if (id === request.current) setBusy(false); }
   };
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    run(input);
+    void run();
   };
 
   return (
@@ -50,21 +59,13 @@ export function MessageChecker() {
       <form onSubmit={onSubmit} className="space-y-4 rounded-2xl border bg-card p-5 shadow-card" noValidate>
         <div>
           <h2 className="text-lg font-semibold">{tr("Check a message or link", "افحص رسالة أو رابطاً")}</h2>
-          <p className="mt-1 text-sm text-muted-foreground">{tr("Sender and link values are checked securely against the demo registry. Links are never opened.", "تُفحص قيم المرسل والرابط بأمان مقابل السجل التجريبي. لا تُفتح الروابط.")}</p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <span className="text-xs text-muted-foreground">{tr("Try an example:", "جرّب مثالاً:")}</span>
-          {EXAMPLES.map((ex) => (
-            <button key={ex.label.en} type="button" onClick={() => { setInput(ex.input); run(ex.input); }} className="rounded-full border px-2.5 py-0.5 text-xs hover:border-emerald hover:bg-accent">
-              {pick(ex.label)}
-            </button>
-          ))}
+          <p className="mt-1 text-sm text-muted-foreground">{tr("Your message stays in this visit unless you choose to report it. Only sender and link values are sent for safety matching; links are never opened.", "تبقى رسالتك ضمن هذه الزيارة ما لم تختر الإبلاغ عنها. تُرسل قيم المرسل والرابط فقط لمطابقة مؤشرات الخطر؛ ولا تُفتح الروابط.")}</p>
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-1.5">
             <Label htmlFor="chk-channel">{tr("Received via", "وصلت عبر")}</Label>
-            <NativeSelect id="chk-channel" value={input.channel} onChange={(e) => setInput({ ...input, channel: e.target.value as ChannelType })}>
-              {(["sms", "email", "phone", "social", "website", "other"] as const).map((c) => <option key={c} value={c}>{pick(channelLabel[c])}</option>)}
+            <NativeSelect id="chk-channel" value={input.channel} onChange={(e) => setInput({ ...input, channel: e.target.value as PublicCheckChannel })}>
+              {(["sms", "whatsapp", "email", "website", "phone", "social", "other"] as const).map((c) => <option key={c} value={c}>{c === "whatsapp" ? tr("WhatsApp", "واتساب") : c === "sms" ? tr("SMS message", "رسالة نصية") : pick(channelLabel[c])}</option>)}
             </NativeSelect>
           </div>
           <div className="space-y-1.5">
@@ -76,34 +77,44 @@ export function MessageChecker() {
           </div>
         </div>
         <div className="space-y-1.5">
-          <Label htmlFor="chk-sender">{tr("Sender (email, number, sender ID or handle)", "المرسل (بريد أو رقم أو معرّف أو حساب)")}</Label>
-          <Input id="chk-sender" dir="ltr" className="font-mono" value={input.sender} onChange={(e) => setInput({ ...input, sender: e.target.value })} placeholder="FALCONBANK" />
+          <Label htmlFor="chk-sender">{tr("Sender (email, number, sender ID or handle) — optional", "المرسل (بريد أو رقم أو معرّف أو حساب) — اختياري")}</Label>
+          <Input id="chk-sender" maxLength={500} dir="ltr" className="font-mono" value={input.sender} onChange={(e) => setInput({ ...input, sender: e.target.value })} />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="chk-url">{tr("Link in the message (optional)", "الرابط في الرسالة (اختياري)")}</Label>
-          <Input id="chk-url" dir="ltr" className="font-mono" value={input.url ?? ""} onChange={(e) => setInput({ ...input, url: e.target.value })} placeholder="https://…" />
+          <Input id="chk-url" maxLength={2000} dir="ltr" className="font-mono" value={input.url ?? ""} onChange={(e) => setInput({ ...input, url: e.target.value })} placeholder="https://…" />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="chk-body">{tr("Message text (optional)", "نص الرسالة (اختياري)")}</Label>
-          <Textarea id="chk-body" rows={3} value={input.body} onChange={(e) => setInput({ ...input, body: e.target.value })} />
+          <Textarea id="chk-body" dir="auto" maxLength={10000} rows={3} value={input.body} onChange={(e) => setInput({ ...input, body: e.target.value })} />
         </div>
-        {error ? <p className="text-sm text-destructive">{tr("Enter a sender or a link to check.", "أدخل مرسلاً أو رابطاً للفحص.")}</p> : null}
-        <Button type="submit" className="w-full"><ScanSearch />{tr("Check now", "افحص الآن")}</Button>
+        {error ? <p role="alert" className="text-sm text-destructive">{error === "empty" ? tr("Enter message text, a sender or a link to check.", "أدخل نص رسالة أو مرسلاً أو رابطاً للفحص.") : tr("The safety check is unavailable. Please try again; no result has been confirmed.", "فحص الأمان غير متاح. حاول مجدداً؛ لم تُؤكد أي نتيجة.")}</p> : null}
+        <Button type="submit" disabled={busy} className="w-full"><ScanSearch />{busy ? tr("Checking…", "جارٍ الفحص…") : tr("Check now", "افحص الآن")}</Button>
       </form>
 
       <div aria-live="polite">
         {result ? (
-          <div className="space-y-4 rounded-2xl border bg-card p-5 shadow-card">
+          <div className="space-y-4 rounded-2xl border bg-card p-5 shadow-card" role="region" aria-label={tr("Your private result", "نتيجتك الخاصة")}>
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <TrustBadge state={result.assessment.state} size="lg" />
-              <ReportButton input={result.input} assessment={result.assessment} />
+              <TrustBadge state={result.assessment.state} size="lg" label={result.assessment.state === "verified" ? tr("Verified Channel", "قناة موثّقة") : result.assessment.state === "unverified" ? tr("Unverified Channel", "قناة غير موثّقة") : tr("Suspicious Indicators", "مؤشرات مشبوهة")} />
+              <Button type="button" size="icon" variant="ghost" title={tr("Clear private check", "مسح الفحص الخاص")} aria-label={tr("Clear private check", "مسح الفحص الخاص")} onClick={() => { request.current += 1; setChecked(null); setInput(emptyInput); setError(null); setBusy(false); }}><X /></Button>
             </div>
             <p className="text-sm text-muted-foreground">{pick(trustStateHelp[result.assessment.state])}</p>
             <ReasonList reasons={result.assessment.reasons} />
+            <p className="text-sm font-medium">{tr("A registered channel does not guarantee the authenticity of this individual message.", "تسجيل القناة لا يضمن أصالة هذه الرسالة الفردية.")}</p>
+            <div className="space-y-2 text-sm">
+              <h3 className="font-semibold">{tr("Recommended safety actions", "إجراءات الأمان الموصى بها")}</h3>
+              <ul className="list-disc space-y-1 ps-5 text-muted-foreground">
+                <li>{tr("Contact the organization through an independently confirmed official channel.", "تواصل مع الجهة عبر قناة رسمية تم التأكد منها بشكل مستقل.")}</li>
+                <li>{tr("Never share passwords, verification codes or payment details in response to an unexpected message.", "لا تشارك كلمات المرور أو رموز التحقق أو بيانات الدفع استجابةً لرسالة غير متوقعة.")}</li>
+                {result.assessment.state !== "verified" && <li>{tr("Avoid opening the link or making a payment until the sender and request are independently confirmed.", "تجنب فتح الرابط أو إجراء دفع حتى يتم التأكد من المرسل والطلب بشكل مستقل.")}</li>}
+              </ul>
+            </div>
             <div>
               <p className="mb-1 text-xs text-muted-foreground">{tr("Risk score (prototype heuristic)", "درجة الخطورة (تقدير تجريبي)")}</p>
               <RiskMeter score={result.assessment.riskScore} />
             </div>
+            {result.assessment.state !== "verified" && <div className="space-y-2"><p className="text-xs text-muted-foreground">{tr("Reporting shares this message with authorized security staff for review, not with other visitors.", "الإبلاغ يشارك هذه الرسالة مع موظفي الأمن المصرّح لهم للمراجعة، وليس مع الزوار الآخرين.")}</p><ReportButton key={JSON.stringify(result.input)} input={result.input} assessment={result.assessment} /></div>}
           </div>
         ) : (
           <div className="grid h-full min-h-64 place-items-center rounded-2xl border border-dashed bg-card/60 p-8 text-center">

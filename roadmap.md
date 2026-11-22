@@ -1,5 +1,7 @@
 # TRUST ZERO AI roadmap
 
+- [ ] Public Trust Portal only: private anonymous checks; remove public message feed and operational counts; support all requested communication types; retain active approved-channel checks, explicit restricted reporting, and protected staff statistics. Validate session isolation, bilingual/mobile rendering and existing records.
+
 - [x] Refined Organization Portal: officer-only statistics; no-signup anonymous registration; one-time hashed tracking secret and private receipt/status card; reference + secret + standard Cloud email verification; original 24-hour edit enforcement; approved channels within cards. Existing records and other modules unchanged.
 - [x] Verified anonymous submission, invalid-secret denial, non-officer database denial, independent officer organization/channel approvals and public expandable channels, bilingual/mobile portal; 66 regression tests passed.
 - [ ] Successful email-code retrieval and tracked editing end-to-end — the real-inbox test email request was accepted on 22 November 2026; waits on the recipient's received code. Inbox delivery and successful verification remain unconfirmed; no bypass added. Existing deadline tests pass.

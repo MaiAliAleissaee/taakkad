@@ -6,13 +6,13 @@ import { trustStateLabel } from "@/lib/i18n/labels";
 
 const icons = { verified: ShieldCheck, unverified: ShieldQuestion, suspicious: ShieldAlert };
 
-export function TrustBadge({ state, size = "sm" }: { state: TrustState; size?: "sm" | "lg" }) {
+export function TrustBadge({ state, size = "sm", label }: { state: TrustState; size?: "sm" | "lg"; label?: string }) {
   const { pick } = useI18n();
   const Icon = icons[state];
   return (
     <Badge variant={state} className={size === "lg" ? "px-3 py-1 text-sm" : undefined}>
       <Icon className={size === "lg" ? "size-4" : "size-3.5"} aria-hidden />
-      {pick(trustStateLabel[state])}
+      {label ?? pick(trustStateLabel[state])}
     </Badge>
   );
 }

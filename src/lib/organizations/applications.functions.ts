@@ -19,6 +19,7 @@ export const saveOrganizationApplication = createServerFn({ method: "POST" }).mi
   .handler(async ({ context, data }) => {
     const { applicationIdentity, getApplication, organizationPayload, assertOwnerEdit, validateApplication, pendingOrganization, commitApplication } = await import("./applications.server");
     const identity = await applicationIdentity(context.supabase);
+    if (!identity.officer) throw new Error("Use tracking credentials and email verification to edit an application");
     const row = data.id ? await getApplication(context.supabase, data.id) : undefined;
     if (row) assertOwnerEdit(row, identity.userId);
     await validateApplication(data.registration, row?.organization_id);
@@ -35,6 +36,8 @@ export const reviewOrganizationApplication = createServerFn({ method: "POST" }).
     if (!identity.officer) throw new Error("Verification officer required");
     const row = await getApplication(context.supabase, data.id);
     if (row.owner_id === identity.userId) throw new Error("Independent officer required");
+    const tracking = await context.supabase.rpc("officer_is_application_contact", { application_uuid: row.id });
+    if (tracking.error || tracking.data) throw new Error("Independent officer required");
     if (data.decision === "approved" && !data.domainsConfirmed) throw new Error("Domain review required");
     const payload = { ...organizationPayload(row.payload), status: data.decision === "approved" ? "verified" as const : data.decision === "suspended" || data.decision === "removed" ? "suspended" as const : "pending" as const };
     await commitApplication({ userId: identity.userId, id: row.id, operation: "review", revision: data.revision, payload, documents: documentsSchema.parse(row.documents), status: data.decision, note: data.note });
@@ -49,6 +52,8 @@ export const changeOrganizationChannel = createServerFn({ method: "POST" }).midd
     const identity = await applicationIdentity(context.supabase);
     const row = await getApplication(context.supabase, data.id);
     const review = ["approve", "reject", "revoke"].includes(data.command.action);
+    const tracking = await context.supabase.rpc("officer_is_application_contact", { application_uuid: row.id });
+    if (tracking.error || tracking.data) throw new Error("Independent officer required");
     if (review ? !identity.officer || row.owner_id === identity.userId : row.owner_id !== identity.userId) throw new Error("Forbidden");
     if (!review) assertOwnerEdit(row, identity.userId);
     const org = organizationPayload(row.payload);

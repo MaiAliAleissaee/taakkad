@@ -308,6 +308,10 @@ export type Database = {
         Args: { migration_id: string; saved_payload: Json }
         Returns: undefined
       }
+      officer_is_application_contact: {
+        Args: { application_uuid: string }
+        Returns: boolean
+      }
       organization_rate_limit: {
         Args: {
           bucket_key: string

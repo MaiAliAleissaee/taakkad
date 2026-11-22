@@ -1,0 +1,4 @@
+ALTER POLICY application_owner_read ON public.organization_applications USING (public.has_organization_officer_access());
+CREATE FUNCTION public.officer_is_application_contact(application_uuid uuid) RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path=public AS $$ SELECT EXISTS (SELECT 1 FROM public.organization_tracking_credentials WHERE application_id=application_uuid AND lower(email)=lower(auth.jwt()->>'email')) $$;
+REVOKE ALL ON FUNCTION public.officer_is_application_contact(uuid) FROM PUBLIC,anon;
+GRANT EXECUTE ON FUNCTION public.officer_is_application_contact(uuid) TO authenticated,service_role;

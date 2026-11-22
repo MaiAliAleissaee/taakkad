@@ -14,13 +14,13 @@ export function ApplicationTracker({ receipt }: { receipt: ApplicationReceipt | 
   const { tr, date } = useI18n();
   const requestCode = useServerFn(requestApplicationCode); const verifyCode = useServerFn(verifyApplicationCode); const read = useServerFn(readTrackedApplication);
   const [reference, setReference] = useState(""); const [secret, setSecret] = useState(""); const [code, setCode] = useState("");
-  const [sent, setSent] = useState(false); const [showCredentials, setShowCredentials] = useState(true); const [busy, setBusy] = useState(false); const [error, setError] = useState("");
+  const [sent, setSent] = useState(false); const [showCredentials, setShowCredentials] = useState(true); const [busy, setBusy] = useState(false); const [error, setError] = useState<"" | "verification" | "expired" | "access">("");
   const [grant, setGrant] = useState<{ id: string; token: string; expiresAt: string } | null>(null);
   const [application, setApplication] = useState<Awaited<ReturnType<typeof readTrackedApplication>> | null>(null);
   const [now, setNow] = useState(0);
   useEffect(() => { setNow(Date.now()); const timer = setInterval(() => setNow(Date.now()), 1000); return () => clearInterval(timer); }, []);
   useEffect(() => { if (receipt) { setReference(receipt.reference); setSecret(receipt.secret); setShowCredentials(true); setApplication(null); setGrant(null); setSent(false); } }, [receipt]);
-  useEffect(() => { if (grant && now > Date.parse(grant.expiresAt)) { setGrant(null); setApplication(null); setSent(false); setError(tr("Verification expired. Request a new email code.", "انتهت صلاحية التحقق. اطلب رمزاً جديداً عبر البريد.")); } }, [now, grant, tr]);
+  useEffect(() => { if (grant && now > Date.parse(grant.expiresAt)) { setGrant(null); setApplication(null); setSent(false); setError("expired"); } }, [now, grant]);
   const submittedAt = application?.submittedAt ?? receipt?.submittedAt;
   const remaining = submittedAt ? editingRemaining(submittedAt, now) : 0;
   const editable = !!application && (remaining > 0 || application.status === "needs_information");
@@ -29,10 +29,10 @@ export function ApplicationTracker({ receipt }: { receipt: ApplicationReceipt | 
   async function retrieve(e: FormEvent) {
     e.preventDefault(); setBusy(true); setError("");
     try { if (!sent) { await requestCode({ data: { reference, secret } }); setSent(true); } else { const verified = await verifyCode({ data: { reference, secret, code } }); const result = await read({ data: { id: verified.id, token: verified.token } }); setGrant(verified); setApplication(result); setCode(""); setShowCredentials(false); } }
-    catch { setError(tr("Unable to verify. Check the reference, tracking secret and email code; codes may expire or sending may be unavailable.", "تعذّر التحقق. راجع مرجع الطلب وسر التتبع ورمز البريد؛ قد تنتهي صلاحية الرموز أو يتعذر إرسالها.")); }
+    catch { setError("verification"); }
     finally { setBusy(false); }
   }
-  async function reload() { if (!grant) return; setBusy(true); try { setApplication(await read({ data: { id: grant.id, token: grant.token } })); } catch { setApplication(null); setGrant(null); setError(tr("Verify your email again to access this application.", "تحقق من بريدك مجدداً للوصول إلى هذا الطلب.")); } finally { setBusy(false); } }
+  async function reload() { if (!grant) return; setBusy(true); try { setApplication(await read({ data: { id: grant.id, token: grant.token } })); } catch { setApplication(null); setGrant(null); setError("access"); } finally { setBusy(false); } }
   function saveReceipt() {
     if (!receipt) return;
     const text = `TRUST ZERO AI — private application receipt\nReference: ${receipt.reference}\nTracking secret: ${receipt.secret}\nSubmitted: ${receipt.submittedAt}\nKeep this file private. Email verification is also required.\n`;
@@ -58,6 +58,6 @@ export function ApplicationTracker({ receipt }: { receipt: ApplicationReceipt | 
       <Button type="submit" disabled={busy}><LockKeyhole />{sent ? tr("Verify & view application", "التحقق وعرض الطلب") : tr("Send email verification code", "إرسال رمز التحقق عبر البريد")}</Button>
       {sent && <Button type="button" variant="ghost" onClick={() => { setSent(false); setCode(""); }}>{tr("Request another code", "طلب رمز آخر")}</Button>}
     </form> : <Button variant="ghost" onClick={() => { setGrant(null); setApplication(null); setSecret(""); setSent(false); }}><RefreshCw />{tr("Close private application", "إغلاق الطلب الخاص")}</Button>}
-    {error && <p role="alert" className="mt-3 text-sm text-destructive">{error}</p>}
+    {error && <p role="alert" className="mt-3 text-sm text-destructive">{error === "expired" ? tr("Verification expired. Request a new email code.", "انتهت صلاحية التحقق. اطلب رمزاً جديداً عبر البريد.") : error === "access" ? tr("Verify your email again to access this application.", "تحقق من بريدك مجدداً للوصول إلى هذا الطلب.") : tr("Unable to verify. Check the reference, tracking secret and email code; codes may expire or sending may be unavailable.", "تعذّر التحقق. راجع مرجع الطلب وسر التتبع ورمز البريد؛ قد تنتهي صلاحية الرموز أو يتعذر إرسالها.")}</p>}
   </div>;
 }

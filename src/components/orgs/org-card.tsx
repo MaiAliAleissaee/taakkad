@@ -97,7 +97,7 @@ function VerifyDialog({ org, actor }: { org: Organization; actor: DemoActor }) {
   );
 }
 
-export function OrgCard({ org, actor, onManage }: { org: Organization; actor: DemoActor; onManage: () => void }) {
+export function OrgCard({ org, actor, onManage }: { org: Organization; actor: DemoActor; onManage?: () => void }) {
   const { tr, pick, date, lang } = useI18n();
   const other = lang === "ar" ? org.name.en : org.name.ar;
   return (
@@ -118,18 +118,19 @@ export function OrgCard({ org, actor, onManage }: { org: Organization; actor: De
             {org.domains.map((d) => <span key={d} className="rounded-md bg-muted px-2 py-0.5"><Mono>{d}</Mono></span>)}
           </div>
         </div>
-        <div>
-          <p className="text-xs text-muted-foreground">{tr("Registered channels", "القنوات المسجّلة")}</p>
+        <details>
+          <summary className="cursor-pointer text-xs font-medium text-muted-foreground">{tr("Approved active channels", "القنوات النشطة المعتمدة")}</summary>
           <ul className="mt-1 space-y-1">
-            {org.channels.map((c) => (
+            {org.channels.filter(c => c.status === "verified").map((c) => (
               <li key={c.id} className="flex items-center gap-2" title={pick(channelLabel[c.type])}>
                 <ChannelIcon type={c.type} className="text-accent-foreground" />
-                <Mono className="truncate">{c.value}</Mono>
+                <Mono className="min-w-0 break-all">{c.value}</Mono>
                 {c.status !== "verified" && <span className="ms-auto shrink-0 text-xs text-muted-foreground">{tr("Not active", "غير نشطة")}</span>}
               </li>
             ))}
           </ul>
-        </div>
+          <p className="mt-2 text-xs text-muted-foreground">{tr("Registry approval does not authenticate an individual message.", "اعتماد القناة في السجل لا يثبت أصالة رسالة منفردة.")}</p>
+        </details>
         <div className="flex items-center gap-2 rounded-lg bg-muted px-3 py-2 text-xs text-muted-foreground">
           <Fingerprint className="size-4 shrink-0" />
           <span className="min-w-0 truncate"><Mono>{org.keyFingerprint}</Mono></span>
@@ -142,7 +143,7 @@ export function OrgCard({ org, actor, onManage }: { org: Organization; actor: De
       </div>
 
       <div className="mt-auto flex flex-wrap gap-2 border-t pt-4">
-        <Button size="sm" variant="outline" onClick={onManage}>{tr("Channels", "القنوات")}</Button>
+        {onManage && <Button size="sm" variant="outline" onClick={onManage}>{tr("Channels", "القنوات")}</Button>}
         {actor.role === "verifier" && org.status === "pending" ? <VerifyDialog org={org} actor={actor} /> : null}
         {actor.role === "verifier" && org.status === "verified" ? (
           <Button size="sm" variant="outline" onClick={() => { repository.setOrganizationStatus(org.id, "suspended", actor); toast(tr("Verification suspended", "تم إيقاف التوثيق")); }}>

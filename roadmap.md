@@ -1,5 +1,8 @@
 # TRUST ZERO AI roadmap
 
+- [ ] Refine Organization Portal: officer-only statistics; no-account anonymous registration; one-time tracking secret and receipt; reference + secret + email code retrieval; original 24-hour edits; approved channels within cards.
+- [ ] Verify anonymous submission, secret/OTP denial, deadline and independent officer reviews, bilingual public display; complete email sending if sender domain is available.
+
 - [x] Organization Portal only: removed public role switching; same-page officer/applicant login; private owner applications with immutable 24-hour editing deadline, documents and audit; independent authorized review/channel decisions; preserved public registry and legacy browser records. Original fictional samples retained in private review; ownerless legacy records are not publicly claimable.
 - [x] Verified owner/other-applicant/officer/visitor access, backend rejection of forced late edits, same-reference corrections with unchanged deadline, separate organization/channel approvals, revocation, logout, bilingual desktop/mobile portal and regression tests.
 

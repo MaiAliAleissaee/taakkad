@@ -11,3 +11,8 @@ export function canEditApplication(ownerId: string, userId: string, submittedAt:
   return ownerId === userId && (now < Date.parse(submittedAt) + 24 * 60 * 60 * 1000 || status === "needs_information");
 }
 export const isVerificationOfficer = (roles: string[]) => roles.includes("organization_verification_officer");
+
+export const trackingCredentialsSchema = z.object({ reference: z.string().trim().regex(/^TZ-ORG-[0-9a-f-]{36}$/i), secret: z.string().regex(/^[a-f0-9]{64}$/) });
+export const applicationGrantSchema = z.object({ id: z.string().uuid(), token: z.string().regex(/^[a-f0-9]{64}$/) });
+export function editingRemaining(submittedAt: string, now: number): number { return Math.max(0, Date.parse(submittedAt) + 86400000 - now); }
+export type ApplicationReceipt = { id: string; reference: string; secret: string; submittedAt: string; status: "pending" };

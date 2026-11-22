@@ -64,6 +64,13 @@
       "when": 1795318202006,
       "tag": "0008_keep_unapproved_application_details_private",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1795318525962,
+      "tag": "0009_application_tracking_capabilities",
+      "breakpoints": true
     }
   ]
 }

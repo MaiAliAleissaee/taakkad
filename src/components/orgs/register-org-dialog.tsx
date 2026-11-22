@@ -1,4 +1,4 @@
-import { CheckCircle2, Download, Plus, Trash2 } from "lucide-react";
+import { Download, Plus, Trash2 } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { NativeSelect } from "@/components/common/native-select";
@@ -14,8 +14,8 @@ import { parseDomains, validateRegistration, type RegistrationError } from "@/li
 import { useServerFn } from "@tanstack/react-start";
 import { useQueryClient } from "@tanstack/react-query";
 import { saveOrganizationApplication } from "@/lib/organizations/applications.functions";
-import { useStaffSession } from "@/lib/security/session";
-import { documentsSchema, type ApplicationDocument } from "@/lib/organizations/schema";
+import { submitTrackedApplication, editTrackedApplication } from "@/lib/organizations/tracking.functions";
+import { documentsSchema, type ApplicationDocument, type ApplicationReceipt } from "@/lib/organizations/schema";
 
 const CHANNEL_TYPES: ChannelType[] = ["email", "sms", "phone", "website", "social", "other"];
 const ORG_TYPES: OrgType[] = ["government", "bank", "business"];
@@ -28,7 +28,7 @@ export function downloadApplicationDocument(document: ApplicationDocument) {
 }
 export type ApplicationEditor = { id: string; revision: number; payload: Organization; documents: ApplicationDocument[]; reference: string; editable: boolean };
 
-export function RegisterOrgDialog({ trigger, application }: { trigger: React.ReactNode; application?: ApplicationEditor }) {
+export function RegisterOrgDialog({ trigger, application, trackingToken, onSubmitted, onEdited }: { trigger: React.ReactNode; application?: ApplicationEditor; trackingToken?: string; onSubmitted?: (receipt: ApplicationReceipt) => void; onEdited?: () => Promise<void> }) {
   const { tr, pick } = useI18n();
   const { organizations } = useDemoState();
   const [open, setOpen] = useState(false);
@@ -42,9 +42,10 @@ export function RegisterOrgDialog({ trigger, application }: { trigger: React.Rea
   const [submitting, setSubmitting] = useState(false);
   const [documents, setDocuments] = useState<ApplicationDocument[]>(application?.documents ?? []);
   const [saveError, setSaveError] = useState("");
-  const [savedReference, setSavedReference] = useState("");
-  const session = useStaffSession();
+  const [trackingEmail, setTrackingEmail] = useState("");
   const saveApplication = useServerFn(saveOrganizationApplication);
+  const submitTracked = useServerFn(submitTrackedApplication);
+  const editTracked = useServerFn(editTrackedApplication);
   const queryClient = useQueryClient();
 
   const reset = () => {
@@ -80,19 +81,25 @@ export function RegisterOrgDialog({ trigger, application }: { trigger: React.Rea
     ev.preventDefault();
     const domains = parseDomains(domainsRaw);
     const input = { nameEn, nameAr, type, domains, contactEmail, channels };
-    if (!session.user) { setSaveError(tr("Sign in as the applicant before submitting.", "سجّل الدخول بصفتك مقدم الطلب قبل الإرسال.")); return; }
     const found = validateRegistration(input, organizations.filter(o => o.id !== application?.payload.id));
     setErrors(found);
     if (found.length) return;
     setSubmitting(true);
     setSaveError("");
     try {
-      const saved = await saveApplication({ data: { ...(application ? { id: application.id } : {}), revision: application?.revision ?? 0, registration: input, documents: documentsSchema.parse(documents) } });
-      setSavedReference(saved.reference);
+      if (!application) {
+        const receipt = await submitTracked({ data: { registration: input, documents: documentsSchema.parse(documents), trackingEmail } });
+        onSubmitted?.(receipt);
+      } else if (trackingToken) {
+        await editTracked({ data: { id: application.id, token: trackingToken, revision: application.revision, registration: input, documents: documentsSchema.parse(documents) } });
+        await onEdited?.();
+      } else {
+        await saveApplication({ data: { id: application.id, revision: application.revision, registration: input, documents: documentsSchema.parse(documents) } });
+      }
       await queryClient.invalidateQueries({ queryKey: ["organization-applications"] });
       await refreshOrganizationRegistry();
       toast.success(tr("Application saved — pending independent review", "تم حفظ الطلب — بانتظار المراجعة المستقلة"));
-      if (application) setOpen(false); else reset();
+      setOpen(false); if (!application) reset();
     } catch { setSaveError(tr("Unable to save. Check your access, registration details and the original editing deadline, then reload.", "تعذّر الحفظ. تحقق من صلاحياتك وبيانات التسجيل وموعد انتهاء التعديل الأصلي، ثم أعد التحميل.")); }
     finally { setSubmitting(false); }
   };
@@ -101,20 +108,20 @@ export function RegisterOrgDialog({ trigger, application }: { trigger: React.Rea
     list.length ? <div className="space-y-1">{list.map((e, i) => <p key={i} className="text-xs text-destructive">{errorText(e)}</p>)}</div> : null;
 
   return (
-    <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) setErrors([]); if (v && savedReference && !application) { setSavedReference(""); reset(); } }}>
+    <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) setErrors([]); }}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
         <DialogHeader>
-          <DialogTitle>{application ? tr("Track / Edit My Application", "متابعة / تعديل طلبي") : tr("Register an organization", "تسجيل جهة")}</DialogTitle>
+          <DialogTitle>{application ? tr("Edit Application", "تعديل الطلب") : tr("Add Organization", "إضافة جهة")}</DialogTitle>
           <DialogDescription>
             {tr("New registrations start as pending until verification checks are completed. Use fictional details only.", "تبدأ التسجيلات الجديدة بحالة «قيد المراجعة» حتى اكتمال التحقق. استخدم بيانات خيالية فقط.")}
           </DialogDescription>
         </DialogHeader>
-        {savedReference && !application ? <div className="space-y-4"><CheckCircle2 className="size-8 text-verified" /><p>{tr("Application reference", "رقم مرجع الطلب")}</p><p className="break-all font-mono" dir="ltr">{savedReference}</p><Button onClick={() => { setOpen(false); document.getElementById("organization-access")?.scrollIntoView({ behavior: "smooth" }); }}>{tr("Track / Edit My Application", "متابعة / تعديل طلبي")}</Button></div> : <form onSubmit={onSubmit} className="space-y-5" noValidate>
+        <form onSubmit={onSubmit} className="space-y-5" noValidate>
           {application && <p className="break-all font-mono text-xs" dir="ltr">{application.reference}</p>}
-          {!session.user && <p className="text-sm text-muted-foreground">{tr("Applicant authentication is required to save and track your original application.", "يلزم تسجيل الدخول لحفظ طلبك الأصلي ومتابعته.")} <Button type="button" variant="link" onClick={() => { setOpen(false); document.getElementById("organization-access")?.scrollIntoView({ behavior: "smooth" }); }}>{tr("Applicant login", "دخول مقدم الطلب")}</Button></p>}
           {application && !application.editable && <p role="status" className="text-sm text-muted-foreground">{tr("Read only. The original 24-hour editing window has ended. Further corrections require an officer's request.", "للقراءة فقط. انتهت مهلة التعديل الأصلية البالغة 24 ساعة. تتطلب التصحيحات اللاحقة طلباً من الموظف المخوّل.")}</p>}
           <fieldset disabled={submitting || (application !== undefined && !application.editable)} className="space-y-5">
+          {!application && <div className="space-y-1.5"><Label htmlFor="tracking-email">{tr("Email for application verification", "البريد الإلكتروني للتحقق من الطلب")}</Label><Input id="tracking-email" type="email" dir="ltr" autoComplete="email" required value={trackingEmail} onChange={e => setTrackingEmail(e.target.value)} /><p className="text-xs text-muted-foreground">{tr("Use an email you can receive codes at. Organization details and supporting documents must remain fictional.", "استخدم بريداً يمكنك استقبال رموز التحقق عليه. يجب أن تبقى بيانات الجهة والمستندات الداعمة خيالية.")}</p></div>}
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
               <Label htmlFor="nameEn">{tr("Name (English)", "الاسم (بالإنجليزية)")}</Label>
@@ -191,9 +198,9 @@ export function RegisterOrgDialog({ trigger, application }: { trigger: React.Rea
           {saveError && <p role="alert" className="text-sm text-destructive">{saveError}</p>}
           <DialogFooter className="gap-2">
             <Button type="button" variant="outline" onClick={() => setOpen(false)}>{tr("Cancel", "إلغاء")}</Button>
-            <Button type="submit" disabled={submitting || !session.user || (application !== undefined && !application.editable)}>{application ? tr("Save changes to this application", "حفظ التعديلات على هذا الطلب") : tr("Submit registration", "إرسال التسجيل")}</Button>
+            <Button type="submit" disabled={submitting || (application !== undefined && !application.editable)}>{application ? tr("Save changes to this application", "حفظ التعديلات على هذا الطلب") : tr("Submit registration", "إرسال التسجيل")}</Button>
           </DialogFooter>
-        </form>}
+        </form>
       </DialogContent>
     </Dialog>
   );

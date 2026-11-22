@@ -8,6 +8,7 @@ import type { DemoState } from "@/lib/domain/types";
 export const readOrganizationApplications = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
   const { applicationIdentity, organizationPayload } = await import("./applications.server");
   const identity = await applicationIdentity(context.supabase);
+  if (!identity.officer) throw new Error("Verification officer required");
   const result = await context.supabase.from("organization_applications").select("*").order("submitted_at", { ascending: false });
   if (result.error) throw new Error("Applications unavailable");
   return { officer: identity.officer, userId: identity.userId, now: new Date().toISOString(), applications: result.data.map(r => ({ ...r, payload: organizationPayload(r.payload), reference: `TZ-ORG-${r.id.toUpperCase()}` })) };

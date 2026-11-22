@@ -1,7 +1,17 @@
 import { describe, expect, it } from "vitest";
-import { canEditApplication, documentsSchema, isVerificationOfficer } from "@/lib/organizations/schema";
+import { canEditApplication, documentsSchema, editingRemaining, isVerificationOfficer, trackingCredentialsSchema } from "@/lib/organizations/schema";
 const submitted = "2026-11-22T03:00:00.000Z";
 describe("Organization application access rules", () => {
+  it("requires a separate 256-bit tracking secret, never the reference alone", () => {
+    const reference = "TZ-ORG-00000000-0000-4000-8000-000000000001";
+    expect(trackingCredentialsSchema.safeParse({ reference }).success).toBe(false);
+    expect(trackingCredentialsSchema.safeParse({ reference, secret: "a".repeat(64) }).success).toBe(true);
+    expect(trackingCredentialsSchema.safeParse({ reference, secret: "a".repeat(32) }).success).toBe(false);
+  });
+  it("calculates the countdown from the original submission, with zero at 24 hours", () => {
+    expect(editingRemaining(submitted, Date.parse("2026-11-22T04:00:00.000Z"))).toBe(23 * 3600000);
+    expect(editingRemaining(submitted, Date.parse("2026-11-23T03:00:00.000Z"))).toBe(0);
+  });
   it("allows the original owner to edit within 24 hours", () => {
     expect(canEditApplication("owner", "owner", submitted, "pending", Date.parse("2026-11-23T02:59:59.999Z"))).toBe(true);
   });

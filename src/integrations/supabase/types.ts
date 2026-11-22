@@ -14,6 +14,32 @@ export type Database = {
   }
   public: {
     Tables: {
+      organization_application_grants: {
+        Row: {
+          application_id: string
+          expires_at: string
+          token_hash: string
+        }
+        Insert: {
+          application_id: string
+          expires_at: string
+          token_hash: string
+        }
+        Update: {
+          application_id?: string
+          expires_at?: string
+          token_hash?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_application_grants_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "organization_applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       organization_applications: {
         Row: {
           audit: Json
@@ -67,6 +93,59 @@ export type Database = {
           payload?: Json
         }
         Relationships: []
+      }
+      organization_request_limits: {
+        Row: {
+          bucket: string
+          count: number
+          started_at: string
+        }
+        Insert: {
+          bucket: string
+          count?: number
+          started_at?: string
+        }
+        Update: {
+          bucket?: string
+          count?: number
+          started_at?: string
+        }
+        Relationships: []
+      }
+      organization_tracking_credentials: {
+        Row: {
+          application_id: string
+          attempts: number
+          code_requested_at: string | null
+          email: string
+          last_code_at: string | null
+          secret_hash: string
+        }
+        Insert: {
+          application_id: string
+          attempts?: number
+          code_requested_at?: string | null
+          email: string
+          last_code_at?: string | null
+          secret_hash: string
+        }
+        Update: {
+          application_id?: string
+          attempts?: number
+          code_requested_at?: string | null
+          email?: string
+          last_code_at?: string | null
+          secret_hash?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_tracking_credentials_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: true
+            referencedRelation: "organization_applications"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -187,6 +266,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      attempt_application_code: {
+        Args: { application_uuid: string }
+        Returns: boolean
+      }
+      begin_application_code: {
+        Args: { application_uuid: string }
+        Returns: boolean
+      }
       commit_organization_application: {
         Args: {
           actor_id: string
@@ -201,6 +288,15 @@ export type Database = {
         }
         Returns: string
       }
+      create_tracked_application: {
+        Args: {
+          application_documents: Json
+          application_payload: Json
+          tracking_email: string
+          tracking_hash: string
+        }
+        Returns: string
+      }
       ensure_security_workspace: { Args: never; Returns: undefined }
       flagged_message_values: {
         Args: { candidate_values: string[]; workspace_user?: string }
@@ -211,6 +307,14 @@ export type Database = {
       import_security_snapshot: {
         Args: { migration_id: string; saved_payload: Json }
         Returns: undefined
+      }
+      organization_rate_limit: {
+        Args: {
+          bucket_key: string
+          max_requests: number
+          window_seconds: number
+        }
+        Returns: boolean
       }
       submit_security_report: {
         Args: { report_input: Json; workspace_user?: string }

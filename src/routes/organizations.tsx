@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Plus, Search } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
-import { EmptyState, PageHeader, StatTile } from "@/components/common/bits";
+import { useMemo, useState } from "react";
+import { EmptyState, PageHeader } from "@/components/common/bits";
 import { NativeSelect } from "@/components/common/native-select";
 import { OrgCard } from "@/components/orgs/org-card";
 import { RegisterOrgDialog } from "@/components/orgs/register-org-dialog";
-import { ChannelManager } from "@/components/orgs/channel-manager";
+import { ApplicationTracker } from "@/components/orgs/application-tracker";
+import type { ApplicationReceipt } from "@/lib/organizations/schema";
 import { OrganizationAccess } from "@/components/orgs/organization-access";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,16 +30,13 @@ export const Route = createFileRoute("/organizations")({
 });
 
 function OrganizationsPage() {
-  const { tr, pick, num } = useI18n();
+  const { tr, pick } = useI18n();
   const state = useDemoState();
   const organizations = useMemo(() => state.organizations.filter(o => o.status === "verified").map(o => ({ ...o, contactEmail: "", channels: o.channels.filter(c => c.status === "verified") })), [state.organizations]);
   const [q, setQ] = useState("");
   const [type, setType] = useState<OrgType | "all">("all");
   const [status, setStatus] = useState<OrgStatus | "all">("all");
-  const [selectedOrgId, setSelectedOrgId] = useState("org-falcon");
-  const [ready, setReady] = useState(false);
-  useEffect(() => { setReady(true); }, []);
-  const selectedOrg = organizations.find((o) => o.id === selectedOrgId) ?? organizations[0];
+  const [receipt, setReceipt] = useState<ApplicationReceipt | null>(null);
 
   const filtered = useMemo(() => {
     const term = q.trim().toLowerCase();
@@ -49,7 +47,6 @@ function OrganizationsPage() {
     );
   }, [organizations, q, type, status]);
 
-  const count = (s: OrgStatus) => organizations.filter((o) => o.status === s).length;
 
   return (
     <>
@@ -60,33 +57,13 @@ function OrganizationsPage() {
           "Fictional agencies, banks and businesses register their identities. Organizations and channels require separate independent review before appearing as verified.",
           "تسجّل الجهات والبنوك والشركات الخيالية هوياتها. تتطلب الجهات والقنوات مراجعة مستقلة منفصلة قبل ظهورها كموثّقة.",
         )}
-        actions={<RegisterOrgDialog trigger={<Button variant="emerald"><Plus />{tr("Register organization", "تسجيل جهة")}</Button>} />}
-      >
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-          <StatTile label={tr("Registered", "مسجّلة")} value={num(organizations.length)} />
-          <StatTile label={tr("Verified", "موثّقة")} value={num(count("verified"))} tone="emerald" />
-          <StatTile label={tr("Pending review", "قيد المراجعة")} value={num(count("pending"))} tone="warning" />
-          <StatTile label={tr("Suspended", "موقوفة")} value={num(count("suspended"))} tone="danger" />
-        </div>
-      </PageHeader>
+        actions={<RegisterOrgDialog onSubmitted={value => { setReceipt(value); setTimeout(() => document.getElementById("application-tracking")?.scrollIntoView({ behavior: "smooth" }), 100); }} trigger={<Button variant="emerald"><Plus />{tr("Add Organization", "إضافة جهة")}</Button>} />}
+      />
 
       <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <OrganizationAccess />
-        <div id="official-channels" className="mb-8 scroll-mt-24 border-b pb-8">
-          <div className="mb-5 flex flex-col justify-between gap-4 md:flex-row md:items-start">
-            <div className="max-w-xl">
-              <h2 className="text-2xl font-semibold">{tr("Official communication channels", "قنوات التواصل الرسمية")}</h2>
-              <p className="mt-2 text-sm text-muted-foreground">{tr("Fictional hackathon registry. Only independently approved organizations and active approved channels appear here; private applications and documents require authorized access.", "سجل خيالي للهاكاثون. تظهر هنا الجهات المعتمدة بشكل مستقل والقنوات النشطة المعتمدة فقط؛ وتتطلب الطلبات والمستندات الخاصة دخولاً مصرحاً به.")}</p>
-            </div>
-          </div>
-          <div className="mb-5 max-w-md">
-            <label htmlFor="channel-organization" className="mb-2 block text-xs font-medium">{tr("Registry organization", "الجهة في السجل")}</label>
-            <NativeSelect id="channel-organization" disabled={!ready} value={selectedOrg?.id ?? ""} onChange={(e) => setSelectedOrgId(e.target.value)}>
-              {organizations.map((o) => <option key={o.id} value={o.id}>{pick(o.name)}</option>)}
-            </NativeSelect>
-          </div>
-          {selectedOrg && <ChannelManager key={selectedOrg.id} org={selectedOrg} actor={{ role: "viewer" }} auditEvents={[]} />}
-        </div>
+        <ApplicationTracker receipt={receipt} />
+        <h2 className="mb-5 text-2xl font-semibold">{tr("Verified organization registry", "سجل الجهات الموثّقة")}</h2>
         <div className="flex flex-col gap-3 rounded-xl border bg-card p-3 shadow-card md:flex-row md:items-center">
           <div className="relative flex-1">
             <Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -104,10 +81,9 @@ function OrganizationsPage() {
           </div>
         </div>
 
-        <p className="mt-4 text-sm text-muted-foreground">{tr(`${filtered.length} organizations`, `${filtered.length} جهة`)}</p>
         {filtered.length ? (
           <div className="mt-3 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {filtered.map((o) => <OrgCard key={o.id} org={o} actor={{ role: "viewer" }} onManage={() => { setSelectedOrgId(o.id); document.getElementById("official-channels")?.scrollIntoView({ behavior: "smooth" }); }} />)}
+            {filtered.map((o) => <OrgCard key={o.id} org={o} actor={{ role: "viewer" }}  />)}
           </div>
         ) : (
           <div className="mt-3"><EmptyState title={tr("No organizations match these filters", "لا توجد جهات مطابقة")} description={tr("Clear the search or change the filters.", "امسح البحث أو غيّر عوامل التصفية.")} /></div>

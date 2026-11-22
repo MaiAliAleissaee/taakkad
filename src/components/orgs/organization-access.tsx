@@ -17,7 +17,6 @@ import { Badge } from "@/components/ui/badge";
 import { NativeSelect } from "@/components/common/native-select";
 import { ChannelManager } from "./channel-manager";
 import { RegisterOrgDialog, downloadApplicationDocument } from "./register-org-dialog";
-import { StatTile } from "@/components/common/bits";
 
 const statusLabels: Record<ApplicationStatus, Bi> = {
   pending: { en: "Pending review", ar: "قيد المراجعة" }, approved: { en: "Approved", ar: "معتمد" }, rejected: { en: "Rejected", ar: "مرفوض" }, needs_information: { en: "Additional information requested", ar: "مطلوب معلومات إضافية" }, suspended: { en: "Suspended", ar: "موقوف" }, removed: { en: "Removed from registry", ar: "مزال من السجل" },
@@ -86,10 +85,10 @@ export function OrganizationAccess() {
       {data && <div className="space-y-5">
         <h3 className="text-lg font-semibold">{tr("Officer review & approval", "مراجعة واعتماد الموظف المخوّل")}</h3>
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-          <StatTile label={tr("Registered", "مسجّلة")} value={num(data.applications.length)} />
-          <StatTile label={tr("Verified", "موثّقة")} value={num(data.applications.filter(a => a.status === "approved").length)} tone="emerald" />
-          <StatTile label={tr("Pending review", "قيد المراجعة")} value={num(data.applications.filter(a => a.status === "pending" || a.status === "needs_information").length)} tone="warning" />
-          <StatTile label={tr("Suspended", "موقوفة")} value={num(data.applications.filter(a => a.status === "suspended").length)} tone="danger" />
+          <div className="rounded-lg border bg-card p-4"><p className="text-xs text-muted-foreground">{tr("Registered", "مسجّلة")}</p><p className="mt-1 text-2xl font-semibold">{num(data.applications.length)}</p></div>
+          <div className="rounded-lg border bg-card p-4"><p className="text-xs text-muted-foreground">{tr("Verified", "موثّقة")}</p><p className="mt-1 text-2xl font-semibold text-verified">{num(data.applications.filter(a => a.status === "approved").length)}</p></div>
+          <div className="rounded-lg border bg-card p-4"><p className="text-xs text-muted-foreground">{tr("Pending review", "قيد المراجعة")}</p><p className="mt-1 text-2xl font-semibold text-unverified">{num(data.applications.filter(a => a.status === "pending" || a.status === "needs_information").length)}</p></div>
+          <div className="rounded-lg border bg-card p-4"><p className="text-xs text-muted-foreground">{tr("Suspended", "موقوفة")}</p><p className="mt-1 text-2xl font-semibold text-suspicious">{num(data.applications.filter(a => a.status === "suspended").length)}</p></div>
         </div>
         <form className="flex max-w-xl gap-2" onSubmit={e => { e.preventDefault(); const found = data.applications.find(a => a.reference.toLowerCase() === reference.trim().toLowerCase()); if (found) { setSelectedId(found.id); setError(""); } else setError(tr("No application with this reference is available to your account.", "لا يوجد طلب بهذا المرجع متاح لحسابك.")); }}><Input aria-label={tr("Application reference", "مرجع الطلب")} dir="ltr" value={reference} onChange={e => setReference(e.target.value)} placeholder="TZ-ORG-…" /><Button type="submit" variant="outline"><Search />{tr("Track", "متابعة")}</Button></form>
         {data.applications.length > 0 ? <div className="space-y-5">

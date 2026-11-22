@@ -49,4 +49,4 @@
 - [x] Officers land on organization review after login, with one-click switching to/from the Security Dashboard in the same session; verified with the demo account.
 - [x] Real reset email to trail.ham@outlook.com accepted by Cloud Auth on 22 Nov 2026 07:44 UTC.
 - [ ] Owner opens the reset email, saves a password, then signs in with HAM123 — waits on the owner; then verify on the real account.
-- [ ] Decide whether to delete the fictional demo account — waits on the owner.
+- [x] Owner chose to keep the fictional demo account for now (email-only, no staff ID); delete after the hackathon on request.

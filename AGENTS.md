@@ -47,3 +47,5 @@ use the editor.
 - Archive legacy browser security snapshots transactionally before removing their local copy; preserve organization records, retain newer Cloud review fields, merge missing notes/evidence/indicators and allow owner-scoped archive downloads so no saved work is lost on conflicts.
 - Keep staff roles separate from profiles, with no client role grants; authorize every restricted server operation and enforce matching RLS policies.
 - Public checks return only submitted flagged values, never case IDs, evidence or relationship lists; public reports are write-only until authorized review.
+- Organization applications and attachments live in private Cloud records; owner/officer reads use RLS and all changes use authorized server functions plus atomic service-only commits to enforce ownership, independent review, immutable deadlines and audit history.
+- The public organization projection contains only approved identity fields and individually active approved channels; merge projections in memory without overwriting legacy browser records so existing saved data survives.

@@ -14,6 +14,60 @@ export type Database = {
   }
   public: {
     Tables: {
+      organization_applications: {
+        Row: {
+          audit: Json
+          correction_note: string
+          documents: Json
+          id: string
+          organization_id: string
+          owner_id: string
+          payload: Json
+          revision: number
+          status: string
+          submitted_at: string
+        }
+        Insert: {
+          audit?: Json
+          correction_note?: string
+          documents?: Json
+          id?: string
+          organization_id: string
+          owner_id: string
+          payload: Json
+          revision?: number
+          status?: string
+          submitted_at?: string
+        }
+        Update: {
+          audit?: Json
+          correction_note?: string
+          documents?: Json
+          id?: string
+          organization_id?: string
+          owner_id?: string
+          payload?: Json
+          revision?: number
+          status?: string
+          submitted_at?: string
+        }
+        Relationships: []
+      }
+      organization_public_registry: {
+        Row: {
+          organization_id: string
+          payload: Json
+        }
+        Insert: {
+          organization_id: string
+          payload: Json
+        }
+        Update: {
+          organization_id?: string
+          payload?: Json
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -133,11 +187,26 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      commit_organization_application: {
+        Args: {
+          actor_id: string
+          application_id: string
+          decision_note: string
+          event_details: Json
+          expected_revision: number
+          next_documents: Json
+          next_payload: Json
+          next_status: string
+          operation: string
+        }
+        Returns: string
+      }
       ensure_security_workspace: { Args: never; Returns: undefined }
       flagged_message_values: {
         Args: { candidate_values: string[]; workspace_user?: string }
         Returns: string[]
       }
+      has_organization_officer_access: { Args: never; Returns: boolean }
       has_security_access: { Args: never; Returns: boolean }
       import_security_snapshot: {
         Args: { migration_id: string; saved_payload: Json }

@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from "react";
-import type { DemoState } from "@/lib/domain/types";
+import type { DemoState, Organization } from "@/lib/domain/types";
 import type { TrustRepository } from "./repository";
 import { createSeedState, SEED_VERSION } from "./seed";
 import { applyChannelCommand, applyOrganizationReview, upgradeChannelRegistry } from "@/lib/services/channels";
@@ -9,8 +9,23 @@ const serverSnapshot = createSeedState();
 let state: DemoState = createSeedState();
 let hydrated = false;
 const listeners = new Set<() => void>();
+let registry: Organization[] = [];
+let visibleState = state;
 
-const emit = () => listeners.forEach((l) => l());
+const emit = () => {
+  const ids = new Set(registry.map(o => o.id));
+  visibleState = { ...state, organizations: [...registry, ...state.organizations.filter(o => !ids.has(o.id))] };
+  listeners.forEach((l) => l());
+};
+
+/** Safe public projections only; never persist over a visitor's legacy records. */
+export async function refreshOrganizationRegistry() {
+  const { supabase } = await import("@/integrations/supabase/client");
+  const result = await supabase.from("organization_public_registry").select("payload");
+  if (result.error) return;
+  registry = result.data.map(r => r.payload as unknown as Organization);
+  emit();
+}
 
 function persist() {
   try {
@@ -37,6 +52,8 @@ function readStored(): DemoState | null {
 export function hydrateDemoStore() {
   if (hydrated || typeof window === "undefined") return;
   hydrated = true;
+  void refreshOrganizationRegistry();
+  window.addEventListener("focus", () => { void refreshOrganizationRegistry(); });
   const stored = readStored();
   if (stored) {
     state = stored;
@@ -61,7 +78,7 @@ const uid = (prefix: string) =>
 function restricted(): never { throw new Error("Security records require authenticated server access"); }
 
 export const repository: TrustRepository = {
-  getState: () => state,
+  getState: () => visibleState,
   addOrganization: (org) => update((s) => {
     const channels = org.channels.map((c) => ({ id: c.id, type: c.type, value: c.value, status: "pending" as const, addedAt: org.registeredAt }));
     return {
@@ -93,5 +110,5 @@ const subscribe = (l: () => void) => {
 };
 
 export function useDemoState(): DemoState {
-  return useSyncExternalStore(subscribe, () => state, () => serverSnapshot);
+  return useSyncExternalStore(subscribe, () => visibleState, () => serverSnapshot);
 }

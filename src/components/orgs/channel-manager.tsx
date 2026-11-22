@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import type { Bi, Channel, ChannelAction, ChannelStatus, ChannelType, DemoActor, Organization } from "@/lib/domain/types";
+import type { Bi, Channel, ChannelAction, ChannelAuditEvent, ChannelStatus, ChannelType, DemoActor, Organization } from "@/lib/domain/types";
 import { repository, uid, useDemoState } from "@/lib/data/local-store";
 import { useI18n } from "@/lib/i18n/i18n";
 import { channelLabel } from "@/lib/i18n/labels";
@@ -45,7 +45,7 @@ const errors: Record<ChannelError, Bi> = {
   review_note_required: { en: "Add a simulated review decision note.", ar: "أضف ملاحظة لقرار المراجعة الافتراضي." },
 };
 
-export function ChannelManager({ org, actor }: { org: Organization; actor: DemoActor }) {
+export function ChannelManager({ org, actor, onCommand, auditEvents }: { org: Organization; actor: DemoActor; onCommand?: (command: ChannelCommand) => Promise<void>; auditEvents?: ChannelAuditEvent[] }) {
   const { tr, pick, date, dir } = useI18n();
   const { channelAudit = [] } = useDemoState();
   const [tab, setTab] = useState("channels");
@@ -59,11 +59,12 @@ export function ChannelManager({ org, actor }: { org: Organization; actor: DemoA
   const [confirmation, setConfirmation] = useState<{ channel: Channel; action: "remove" | "revoke" | "deactivate" } | null>(null);
   const manage = canManageChannels(actor, org);
   const verifier = actor.role === "verifier";
-  const events = channelAudit.filter((e) => e.orgId === org.id && (!historyId || e.channelId === historyId)).slice().reverse();
+  const events = (auditEvents ?? channelAudit).filter((e) => e.orgId === org.id && (!historyId || e.channelId === historyId)).slice().reverse();
 
-  const execute = (command: ChannelCommand) => {
+  const execute = async (command: ChannelCommand) => {
     try {
-      repository.channelCommand(actor, command);
+      if (!onCommand) throw new ChannelWorkflowError("forbidden");
+      await onCommand(command);
       setError("");
       toast.success(pick(actions[command.action]));
       return true;
@@ -75,9 +76,9 @@ export function ChannelManager({ org, actor }: { org: Organization; actor: DemoA
   const openEditor = (channel: Channel | "new") => {
     setEditing(channel); setError(""); setType(channel === "new" ? "sms" : channel.type); setValue(channel === "new" ? "" : channel.value);
   };
-  const save = (e: FormEvent) => {
+  const save = async (e: FormEvent) => {
     e.preventDefault(); if (!editing) return;
-    if (execute({ action: editing === "new" ? "add" : "edit", orgId: org.id, channelId: editing === "new" ? uid("ch") : editing.id, type, value })) setEditing(null);
+    if (await execute({ action: editing === "new" ? "add" : "edit", orgId: org.id, channelId: editing === "new" ? uid("ch") : editing.id, type, value })) setEditing(null);
   };
   const iconAction = (label: string, icon: React.ReactNode, onClick: () => void) =>
     <Button size="icon" variant="ghost" title={label} aria-label={label} onClick={onClick}>{icon}</Button>;
@@ -91,7 +92,7 @@ export function ChannelManager({ org, actor }: { org: Organization; actor: DemoA
         </div>
         {manage && <Button variant="emerald" onClick={() => openEditor("new")}><Plus />{tr("Add channel", "إضافة قناة")}</Button>}
       </div>
-      {!manage && !verifier && <p className="mb-4 text-sm text-muted-foreground">{tr("Read-only access. Changes require this verified organization's simulated administrator.", "صلاحية قراءة فقط. تتطلب التغييرات مسؤولاً افتراضياً لهذه الجهة الموثّقة.")}</p>}
+      {!manage && !verifier && <p className="mb-4 text-sm text-muted-foreground">{tr("Public registry · read only", "السجل العام · قراءة فقط")}</p>}
       <Tabs value={tab} onValueChange={(next) => { setTab(next); if (next === "history") setHistoryId(null); }} dir={dir}>
         <TabsList><TabsTrigger value="channels">{tr("Registered channels", "القنوات المسجّلة")}</TabsTrigger><TabsTrigger value="history">{tr("Verification history & audit", "سجل التوثيق والتدقيق")}</TabsTrigger></TabsList>
         <TabsContent value="channels" className="mt-4">
@@ -124,7 +125,7 @@ export function ChannelManager({ org, actor }: { org: Organization; actor: DemoA
         </TabsContent>
         <TabsContent value="history" className="mt-4">
           {historyId && <Button variant="outline" size="sm" className="mb-3" onClick={() => setHistoryId(null)}>{tr("All organization events", "جميع أحداث الجهة")}</Button>}
-          <p className="mb-3 text-xs text-muted-foreground">{tr("Browser-local demo history, not a tamper-proof audit. Removed channel records remain in this history.", "سجل تجريبي محلي في المتصفح، وليس سجلاً محمياً من التلاعب. تبقى القنوات المحذوفة في هذا السجل.")}</p>
+          <p className="mb-3 text-xs text-muted-foreground">{auditEvents ? tr("Authenticated changes are recorded with the application. Removed channels remain in its audit history.", "تُسجّل التغييرات المصرّح بها مع الطلب. وتبقى القنوات المحذوفة في سجل التدقيق.") : tr("Fictional registry history", "سجل تجريبي خيالي")}</p>
           <div className="max-h-96 overflow-y-auto"><Table className="min-w-[740px]">
             <TableHeader><TableRow>{[tr("Date", "التاريخ"), tr("Event / channel", "الحدث / القناة"), tr("Actor", "الدور"), tr("Decision / evidence note", "ملاحظة القرار / الدليل")].map((label) => <TableHead className="text-start" key={label}>{label}</TableHead>)}</TableRow></TableHeader>
             <TableBody>{events.map((e) => <TableRow key={e.id}>
@@ -153,7 +154,7 @@ export function ChannelManager({ org, actor }: { org: Organization; actor: DemoA
         <DialogContent dir={dir} className="max-w-[calc(100%-2rem)] sm:max-w-lg">
           <DialogHeader><DialogTitle>{review?.action === "approve" ? tr("Independent channel approval (simulated)", "اعتماد مستقل للقناة (محاكاة)") : tr("Reject channel request", "رفض طلب القناة")}</DialogTitle><DialogDescription>{tr("No telecom, DNS, bank or government checks are performed. Record a fictional evidence review, not a real-world certification.", "لا تُجرى فحوصات اتصالات أو DNS أو بنوك أو جهات حكومية. سجّل مراجعة أدلة خيالية، وليس اعتماداً فعلياً.")}</DialogDescription></DialogHeader>
           <Mono className="break-all">{review?.channel.value}</Mono>
-          <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); if (review && execute({ action: review.action, orgId: org.id, channelId: review.channel.id, note })) setReview(null); }}>
+          <form className="space-y-4" onSubmit={async (e) => { e.preventDefault(); if (review && await execute({ action: review.action, orgId: org.id, channelId: review.channel.id, note })) setReview(null); }}>
             <Label htmlFor="review-note">{tr("Simulated evidence / decision note", "ملاحظة الدليل / القرار الافتراضي")}</Label><Textarea id="review-note" required value={note} onChange={(e) => setNote(e.target.value)} maxLength={1000} />
             {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
             <DialogFooter><Button type="button" variant="outline" onClick={() => setReview(null)}>{tr("Cancel", "إلغاء")}</Button><Button type="submit" disabled={!note.trim()}><ShieldCheck />{review?.action === "approve" ? tr("Approve (simulated)", "اعتماد (محاكاة)") : tr("Reject request", "رفض الطلب")}</Button></DialogFooter>

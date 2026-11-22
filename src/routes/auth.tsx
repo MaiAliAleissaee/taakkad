@@ -39,7 +39,7 @@ function StaffLogin() {
     try { const result = await setupPassword({ data: { identifier: parsed.data, origin: window.location.origin } }); if (result.ok) setSetupSent(true); else setError("unavailable"); }
     catch { setError("unavailable"); } finally { setBusy(false); }
   }
-  useEffect(() => { const home = session.ready ? staffHome(session.roles) : null; if (home) void navigate({ to: home, ...(home === "/organizations" ? { hash: "organization-access" } : {}), replace: true }); }, [session.ready, session.roles, navigate]);
+  useEffect(() => { const home = session.ready ? staffHome(session.roles) : null; if (home) void navigate({ to: home, replace: true }); }, [session.ready, session.roles, navigate]);
   async function login(e: FormEvent) {
     e.preventDefault(); setError("");
     const parsed = staffLoginSchema.safeParse({ identifier: email, password });
@@ -57,7 +57,7 @@ function StaffLogin() {
       if (roles.error) { setError("access"); return; }
       const home = staffHome(roles.data.map(r => r.role));
       if (!home) { setError("forbidden"); return; }
-      await navigate({ to: home, ...(home === "/organizations" ? { hash: "organization-access" } : {}), replace: true });
+      await navigate({ to: home, replace: true });
     } catch { setError("unavailable"); }
     finally { setBusy(false); }
   }

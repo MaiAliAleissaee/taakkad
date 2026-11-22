@@ -17,6 +17,7 @@ import { Route as OrganizationsRouteImport } from './routes/organizations'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as StaffSetupRouteImport } from './routes/staff-setup'
 import { Route as TrustRouteImport } from './routes/trust'
+import { Route as AuthenticatedOfficerRouteImport } from './routes/_authenticated/officer'
 import { Route as AuthenticatedSecurityRouteImport } from './routes/_authenticated/security'
 
 const IndexRoute = IndexRouteImport.update({
@@ -58,6 +59,11 @@ const TrustRoute = TrustRouteImport.update({
   path: '/trust',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedOfficerRoute = AuthenticatedOfficerRouteImport.update({
+  id: '/officer',
+  path: '/officer',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedSecurityRoute = AuthenticatedSecurityRouteImport.update({
   id: '/security',
   path: '/security',
@@ -72,6 +78,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/staff-setup': typeof StaffSetupRoute
   '/trust': typeof TrustRoute
+  '/officer': typeof AuthenticatedOfficerRoute
   '/security': typeof AuthenticatedSecurityRoute
 }
 export interface FileRoutesByTo {
@@ -82,6 +89,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/staff-setup': typeof StaffSetupRoute
   '/trust': typeof TrustRoute
+  '/officer': typeof AuthenticatedOfficerRoute
   '/security': typeof AuthenticatedSecurityRoute
 }
 export interface FileRoutesById {
@@ -94,6 +102,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/staff-setup': typeof StaffSetupRoute
   '/trust': typeof TrustRoute
+  '/_authenticated/officer': typeof AuthenticatedOfficerRoute
   '/_authenticated/security': typeof AuthenticatedSecurityRoute
 }
 export interface FileRouteTypes {
@@ -106,6 +115,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/staff-setup'
     | '/trust'
+    | '/officer'
     | '/security'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -116,6 +126,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/staff-setup'
     | '/trust'
+    | '/officer'
     | '/security'
   id:
     | '__root__'
@@ -127,6 +138,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/staff-setup'
     | '/trust'
+    | '/_authenticated/officer'
     | '/_authenticated/security'
   fileRoutesById: FileRoutesById
 }
@@ -199,6 +211,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TrustRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/officer': {
+      id: '/_authenticated/officer'
+      path: '/officer'
+      fullPath: '/officer'
+      preLoaderRoute: typeof AuthenticatedOfficerRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/security': {
       id: '/_authenticated/security'
       path: '/security'
@@ -210,10 +229,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedOfficerRoute: typeof AuthenticatedOfficerRoute
   AuthenticatedSecurityRoute: typeof AuthenticatedSecurityRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedOfficerRoute: AuthenticatedOfficerRoute,
   AuthenticatedSecurityRoute: AuthenticatedSecurityRoute,
 }
 

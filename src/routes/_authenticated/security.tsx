@@ -342,5 +342,5 @@ function SecurityPage({ snapshot, change, busy }: { snapshot: SecuritySnapshot; 
 function OfficerReviewLink() {
   const { tr } = useI18n(); const session = useStaffSession();
   if (!isVerificationOfficer(session.roles)) return null;
-  return <Button asChild variant="outline" size="sm"><Link to="/organizations" hash="organization-access">{tr("Organization review", "مراجعة الجهات")}</Link></Button>;
+  return <Button asChild variant="outline" size="sm"><Link to="/officer">{tr("Officer Dashboard", "لوحة موظف التحقق")}</Link></Button>;
 }

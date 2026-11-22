@@ -253,7 +253,7 @@
   background-color: var(--security-stat-background);
   border-color: var(--security-stat-border);
 }
-.security-summary-statistics > div > p,
+.security-summary-statistics > div > p:first-child,
 .security-connection-statistics > div > p:first-child {
   color: var(--security-stat-foreground);
 }
@@ -261,12 +261,17 @@
 .security-connection-statistics > div > p:nth-child(2) {
   font-weight: 700;
 }
+.security-summary-statistics > div > p:nth-child(2),
 .security-connection-statistics > div > p:nth-child(2) {
   color: var(--info);
+}
+.security-summary-statistics > div > p.text-sev-high {
+  color: var(--suspicious);
 }
 .security-connection-statistics > div > p.text-sev-medium {
   color: var(--security-stat-warning);
 }
+.security-summary-statistics > div > p.text-emerald,
 .security-connection-statistics > div > p.text-emerald {
   color: var(--security-stat-success);
 }

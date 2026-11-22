@@ -404,12 +404,12 @@ export type Database = {
       }
       manage_security_bulletin: {
         Args: {
-          bulletin_id: string
-          decision_note: string
-          expected_revision: number
-          operation: string
-          privacy_reviewed: boolean
-          public_content: Json
+          bulletin_id?: string
+          decision_note?: string
+          expected_revision?: number
+          operation?: string
+          privacy_reviewed?: boolean
+          public_content?: Json
         }
         Returns: string
       }

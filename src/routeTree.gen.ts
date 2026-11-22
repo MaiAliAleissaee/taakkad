@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AlertsRouteImport } from './routes/alerts'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as OrganizationsRouteImport } from './routes/organizations'
 import { Route as TrustRouteImport } from './routes/trust'
@@ -23,6 +24,11 @@ const IndexRoute = IndexRouteImport.update({
 } as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AlertsRoute = AlertsRouteImport.update({
+  id: '/alerts',
+  path: '/alerts',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -48,6 +54,7 @@ const AuthenticatedSecurityRoute = AuthenticatedSecurityRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/alerts': typeof AlertsRoute
   '/auth': typeof AuthRoute
   '/organizations': typeof OrganizationsRoute
   '/trust': typeof TrustRoute
@@ -55,6 +62,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/alerts': typeof AlertsRoute
   '/auth': typeof AuthRoute
   '/organizations': typeof OrganizationsRoute
   '/trust': typeof TrustRoute
@@ -64,6 +72,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/alerts': typeof AlertsRoute
   '/auth': typeof AuthRoute
   '/organizations': typeof OrganizationsRoute
   '/trust': typeof TrustRoute
@@ -71,13 +80,15 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/organizations' | '/trust' | '/security'
+  fullPaths:
+    '/' | '/alerts' | '/auth' | '/organizations' | '/trust' | '/security'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/organizations' | '/trust' | '/security'
+  to: '/' | '/alerts' | '/auth' | '/organizations' | '/trust' | '/security'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/alerts'
     | '/auth'
     | '/organizations'
     | '/trust'
@@ -87,6 +98,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AlertsRoute: typeof AlertsRoute
   AuthRoute: typeof AuthRoute
   OrganizationsRoute: typeof OrganizationsRoute
   TrustRoute: typeof TrustRoute
@@ -106,6 +118,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/alerts': {
+      id: '/alerts'
+      path: '/alerts'
+      fullPath: '/alerts'
+      preLoaderRoute: typeof AlertsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -153,6 +172,7 @@ const AuthenticatedRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AlertsRoute: AlertsRoute,
   AuthRoute: AuthRoute,
   OrganizationsRoute: OrganizationsRoute,
   TrustRoute: TrustRoute,

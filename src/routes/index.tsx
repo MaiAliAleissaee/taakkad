@@ -1,14 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Building2, Cpu, FileKey2, GitBranch, Radar, ShieldCheck, Siren } from "lucide-react";
-import { ChannelIcon, Mono } from "@/components/common/bits";
 import { TrustBadge } from "@/components/trust/trust-badge";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useMessageAssessments } from "@/lib/data/hooks";
-import { useDemoState } from "@/lib/data/local-store";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { publishedAlertsQuery } from "@/lib/alerts/queries";
+import { PublicAlertCard } from "@/components/security/public-alert-card";
 import { useI18n } from "@/lib/i18n/i18n";
 
 export const Route = createFileRoute("/")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(publishedAlertsQuery),
   head: () => ({
     meta: [
       { title: "TRUST ZERO AI — Identity Verification & Impersonation Detection Prototype" },
@@ -23,26 +24,22 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-  const { tr, pick, num } = useI18n();
-  const { organizations } = useDemoState();
-  const assessed = useMessageAssessments();
-  const verifiedOrgs = organizations.filter((o) => o.status === "verified").length;
-  const preview = (["verified", "unverified", "suspicious"] as const)
-    .map((s) => assessed.find((a) => a.assessment.state === s))
-    .filter((x) => x !== undefined);
+  const { tr } = useI18n();
+  const { data: alerts } = useSuspenseQuery(publishedAlertsQuery);
+  const preview = alerts.slice(0, 3);
 
   const portals = [
     {
       to: "/organizations" as const, icon: Building2,
       title: tr("Organization Portal", "بوابة الجهات"),
       body: tr("Agencies, banks and businesses register official domains and approved channels.", "تسجّل الجهات الحكومية والبنوك والشركات نطاقاتها الرسمية وقنواتها المعتمدة."),
-      stat: tr(`${num(verifiedOrgs)} of ${num(organizations.length)} verified`, `${num(verifiedOrgs)} من ${num(organizations.length)} موثّقة`),
+      stat: tr("Register an organization", "سجّل جهة"),
     },
     {
       to: "/trust" as const, icon: ShieldCheck,
       title: tr("Public Trust Portal", "بوابة الثقة العامة"),
       body: tr("Anyone can check a message or link and see why it is verified, unverified or suspicious.", "يمكن لأي شخص فحص رسالة أو رابط ومعرفة سبب كونه موثّقاً أو غير موثّق أو مشبوهاً."),
-      stat: tr(`${num(assessed.length)} sample messages`, `${num(assessed.length)} رسالة تجريبية`),
+      stat: tr("Check a message privately", "افحص رسالة بشكل خاص"),
     },
     {
       to: "/security" as const, icon: Siren,
@@ -93,26 +90,17 @@ function Home() {
             <div className="relative overflow-hidden rounded-2xl border border-navy-border bg-navy-elevated/60 p-5 shadow-2xl backdrop-blur">
               <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-emerald/20 to-transparent animate-scan" aria-hidden />
               <div className="flex items-center justify-between">
-                <p className="text-xs font-semibold uppercase tracking-widest text-navy-muted">{tr("Message assessment", "تقييم الرسائل")}</p>
+                <h2 className="text-xs font-semibold uppercase tracking-widest text-navy-muted">{tr("Security Alerts", "التنبيهات الأمنية")}</h2>
                 <span className="flex items-center gap-2 text-xs text-emerald">
                   <span className="size-2 rounded-full bg-emerald animate-pulse-ring" />
-                  {tr("Demo engine", "محرك تجريبي")}
+                  {tr("Fictional demo", "عرض خيالي")}
                 </span>
               </div>
               <ul className="mt-4 space-y-3">
-                {preview.map(({ message, assessment }) => (
-                  <li key={message.id} className="rounded-xl border bg-card p-4 text-card-foreground shadow-card">
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex min-w-0 items-center gap-2 text-sm text-muted-foreground">
-                        <ChannelIcon type={message.channel} />
-                        <Mono className="truncate">{message.sender}</Mono>
-                      </div>
-                      <TrustBadge state={assessment.state} />
-                    </div>
-                    <p className="mt-2 line-clamp-2 text-sm">{pick(message.subject) || pick(message.body)}</p>
-                  </li>
-                ))}
+                {preview.map(alert => <li key={alert.id}><PublicAlertCard alert={alert} /></li>)}
               </ul>
+              {!preview.length && <p className="mt-4 text-sm text-navy-muted">{tr("No published alerts", "لا توجد تنبيهات منشورة")}</p>}
+              <Button variant="onNavy" size="sm" asChild className="mt-4"><Link to="/alerts">{tr("View All Alerts", "عرض جميع التنبيهات")}<ArrowRight className="rtl:rotate-180" /></Link></Button>
             </div>
           </div>
         </div>

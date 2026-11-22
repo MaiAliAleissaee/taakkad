@@ -23,6 +23,7 @@ import type { SecuritySnapshot, commandSchema } from "@/lib/security/schema";
 import type { z } from "zod";
 import { StaffSignOut } from "@/components/security/staff-sign-out";
 import { BrowserArchive } from "@/components/security/browser-archive";
+import { AlertManager } from "@/components/security/alert-manager";
 import { useI18n } from "@/lib/i18n/i18n";
 import {
   alertStatusLabel, evidenceLabel, indicatorLabel, lookalikeStatusLabel, severityLabel, sourceLabel, techniqueLabel,
@@ -158,6 +159,7 @@ function SecurityPage({ snapshot, change, busy }: { snapshot: SecuritySnapshot; 
             <TabsTrigger value="alerts">{tr("Alerts & cases", "التنبيهات والقضايا")}</TabsTrigger>
             <TabsTrigger value="lookalikes">{tr("Lookalike domains", "النطاقات المشابهة")}</TabsTrigger>
             <TabsTrigger value="indicators">{tr("Linked indicators", "المؤشرات المترابطة")}</TabsTrigger>
+            <TabsTrigger value="publishing">{tr("Public security alerts", "التنبيهات الأمنية العامة")}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="alerts" className="mt-5">
@@ -328,6 +330,7 @@ function SecurityPage({ snapshot, change, busy }: { snapshot: SecuritySnapshot; 
           <TabsContent value="indicators" className="mt-5">
             <InvestigationGraph alerts={alerts} initialCaseId={selected?.id} onOpenCase={(id) => { select(id); setTab("alerts"); }} />
           </TabsContent>
+          <TabsContent value="publishing" className="mt-5"><AlertManager /></TabsContent>
         </Tabs>
       </section>
     </>

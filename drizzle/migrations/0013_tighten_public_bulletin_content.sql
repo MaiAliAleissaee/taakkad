@@ -1,0 +1,5 @@
+DO $$ DECLARE definition text; BEGIN SELECT pg_get_functiondef('public.manage_security_bulletin(uuid,integer,text,jsonb,text,boolean)'::regprocedure) INTO definition;
+definition:=replace(definition,'IF operation NOT IN', 'IF operation IS NULL OR decision_note IS NULL OR operation NOT IN');
+definition:=replace(definition,'IF public_content IS NULL OR', 'IF public_content IS NULL OR public_content->>''category'' IS NULL OR public_content->>''severity'' IS NULL OR');
+definition:=replace(definition,'IF EXISTS(SELECT 1 FROM jsonb_object_keys(public_content)', 'IF jsonb_typeof(public_content)<>''object'' OR EXISTS(SELECT 1 FROM (VALUES(''title''),(''explanation''),(''safety'')) f(k) WHERE jsonb_typeof(public_content->k) IS DISTINCT FROM ''object'') THEN RAISE EXCEPTION ''Invalid content shape''; END IF; IF EXISTS(SELECT 1 FROM (VALUES(''title''),(''explanation''),(''safety'')) f(k) CROSS JOIN LATERAL jsonb_object_keys(public_content->k) nested WHERE nested NOT IN (''en'',''ar'')) THEN RAISE EXCEPTION ''Private nested fields prohibited''; END IF; IF EXISTS(SELECT 1 FROM jsonb_object_keys(public_content)');
+EXECUTE definition; END $$;

@@ -39,7 +39,10 @@ export const completeStaffPasswordSetup = createServerFn({ method: "POST" }).inp
     const updated = await supabaseAdmin.auth.admin.updateUserById(claimed.data.user_id, { password: data.password });
     if (updated.error) {
       await supabaseAdmin.from("staff_password_setup_grants").update({ used_at: null }).eq("token_hash", hash);
-      return { ok: false as const, reason: "busy" as const };
+      // Log only the Auth error category, never the password or link secret.
+      console.warn("staff password setup rejected", updated.error.status, updated.error.code);
+      const weak = updated.error.code === "weak_password" || updated.error.status === 422;
+      return { ok: false as const, reason: weak ? "weak" as const : "busy" as const };
     }
     await supabaseAdmin.from("staff_password_setup_grants").update({ used_at: now }).eq("user_id", claimed.data.user_id).is("used_at", null);
     return { ok: true as const };

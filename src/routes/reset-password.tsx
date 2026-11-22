@@ -9,6 +9,12 @@ import { PageHeader } from "@/components/common/bits";
 import { useI18n } from "@/lib/i18n/i18n";
 import { passwordSetupSchema } from "@/lib/security/staff-login-schema";
 
+declare global { interface Window { trustZeroRecoveryDigest?: Promise<string>; } }
+
+function tokenDigest(token: string) {
+  return crypto.subtle.digest("SHA-256", new TextEncoder().encode(token)).then(bytes => Array.from(new Uint8Array(bytes), b => b.toString(16).padStart(2, "0")).join(""));
+}
+
 export const Route = createFileRoute("/reset-password")({
   head: () => ({ meta: [
     { title: "Private Staff Password Setup — TRUST ZERO AI" },
@@ -16,7 +22,7 @@ export const Route = createFileRoute("/reset-password")({
     { property: "og:title", content: "Private Staff Password Setup — TRUST ZERO AI" },
     { property: "og:description", content: "Secure password recovery for authorized TRUST ZERO AI hackathon staff." },
     { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" },
-  ] }), component: ResetPassword,
+  ], scripts: [{ children: "(()=>{const p=new URLSearchParams(location.hash.slice(1));const t=p.get('access_token');if(p.get('type')==='recovery'&&t){window.trustZeroRecoveryDigest=crypto.subtle.digest('SHA-256',new TextEncoder().encode(t)).then(b=>Array.from(new Uint8Array(b),v=>v.toString(16).padStart(2,'0')).join(''));}})();" }] }), component: ResetPassword,
 });
 
 function ResetPassword() {
@@ -27,9 +33,15 @@ function ResetPassword() {
   useEffect(() => {
     let alive = true;
     const hash = new URLSearchParams(window.location.hash.slice(1));
-    // A plain signed-in session is not a recovery link. Auth consumes the tokens from the hash.
-    if (hash.get("type") !== "recovery") return;
-    void supabase.auth.getUser().then(result => { if (alive && result.data.user) { setReady(true); window.history.replaceState(null, "", window.location.pathname); } });
+    // Auth clears the callback hash before React mounts; the head captures only its digest, never its tokens.
+    const recoveryDigest = window.trustZeroRecoveryDigest ?? (hash.get("type") === "recovery" && hash.get("access_token") ? tokenDigest(hash.get("access_token") ?? "") : null);
+    if (!recoveryDigest) return;
+    void (async () => {
+      const current = await supabase.auth.getSession();
+      if (!current.data.session || await tokenDigest(current.data.session.access_token) !== await recoveryDigest) return;
+      const checked = await supabase.auth.getUser();
+      if (alive && checked.data.user) { setReady(true); window.history.replaceState(null, "", window.location.pathname); }
+    })();
     return () => { alive = false; };
   }, []);
   async function save(event: FormEvent) {
@@ -46,6 +58,7 @@ function ResetPassword() {
       const signedOut = await supabase.auth.signOut();
       if (signedOut.error) { setError("logout"); return; }
       setDone(true); setReady(false);
+      delete window.trustZeroRecoveryDigest;
     } catch { setError("failed"); } finally { setBusy(false); }
   }
   return <div dir={dir}><PageHeader eyebrow="TRUST ZERO AI" title={tr("Private password setup", "تعيين كلمة المرور بشكل خاص")} description={tr("Authorized staff account", "حساب موظف مصرّح له")} />

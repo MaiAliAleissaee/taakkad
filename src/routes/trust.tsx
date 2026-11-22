@@ -43,7 +43,7 @@ function TrustPage() {
   return (
     <>
       <PageHeader
-        eyebrow={tr("Section 02 · Public Trust Portal", "القسم 02 · بوابة الثقة العامة")}
+        eyebrow={tr("Public Trust Portal", "بوابة الثقة العامة")}
         title={tr("Is this message really from them?", "هل هذه الرسالة منهم حقاً؟")}
         description={tr(
           "Every result comes with its reasons. Unverified means we could not confirm the sender — it does not mean fraud unless there is evidence.",

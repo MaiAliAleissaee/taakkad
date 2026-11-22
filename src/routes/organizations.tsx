@@ -55,7 +55,7 @@ function OrganizationsPage() {
   return (
     <>
       <PageHeader
-        eyebrow={tr("Section 01 · Organization Portal", "القسم 01 · بوابة الجهات")}
+        eyebrow={tr("Organization Portal", "بوابة الجهات")}
         title={tr("Register official identities", "سجّل الهويات الرسمية")}
         description={tr(
           "Fictional agencies, banks and businesses register their identities. Channels require separate independent simulated approval before they can produce a Verified registry match.",

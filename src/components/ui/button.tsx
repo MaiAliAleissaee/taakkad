@@ -16,7 +16,7 @@ const buttonVariants = cva(
         secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        emerald: "bg-emerald text-emerald-foreground shadow-glow hover:brightness-105 font-semibold",
+        emerald: "bg-primary text-primary-foreground shadow-glow hover:brightness-105 font-semibold",
         onNavy: "border border-navy-border bg-navy-elevated/60 text-navy-foreground hover:bg-navy-elevated",
         navyGhost: "text-navy-muted hover:bg-navy-elevated hover:text-navy-foreground",
         danger: "border border-suspicious/30 bg-suspicious-soft text-suspicious hover:bg-suspicious/10",

@@ -139,8 +139,8 @@ function SecurityPage({ snapshot, change, busy }: { snapshot: SecuritySnapshot; 
   return (
     <>
       <PageHeader
-        eyebrow={tr("Section 03 · Police Security Dashboard (simulated)", "القسم 03 · لوحة أمن الشرطة (محاكاة)")}
-        title={tr("Impersonation case review", "مراجعة قضايا الانتحال")}
+        eyebrow="TRUST ZERO AI"
+        title={tr("Security Dashboard", "لوحة التحكم الأمنية")}
         description={tr("Simulated alerts and fictional evidence for demonstration. No real police systems are connected and no live internet monitoring takes place.", "تنبيهات افتراضية وأدلة خيالية للعرض. لا يوجد ربط بأنظمة شرطة فعلية ولا مراقبة حيّة للإنترنت.")}
       >
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4">

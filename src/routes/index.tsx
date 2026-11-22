@@ -46,7 +46,7 @@ function Home() {
     },
     {
       to: "/security" as const, icon: Siren,
-      title: tr("Police Security Dashboard", "لوحة أمن الشرطة"),
+      title: tr("Security Dashboard", "لوحة التحكم الأمنية"),
       body: tr("Simulated alerts, lookalike domains, linked indicators, evidence and case review.", "تنبيهات افتراضية ونطاقات مشابهة ومؤشرات مترابطة وأدلة ومراجعة القضايا."),
       stat: tr("Authorized personnel only", "للموظفين المصرّح لهم فقط"),
     },
@@ -93,7 +93,7 @@ function Home() {
             <div className="relative overflow-hidden rounded-2xl border border-navy-border bg-navy-elevated/60 p-5 shadow-2xl backdrop-blur">
               <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-emerald/20 to-transparent animate-scan" aria-hidden />
               <div className="flex items-center justify-between">
-                <p className="text-xs font-semibold uppercase tracking-widest text-navy-muted">{tr("Live assessment", "تقييم مباشر")}</p>
+                <p className="text-xs font-semibold uppercase tracking-widest text-navy-muted">{tr("Message assessment", "تقييم الرسائل")}</p>
                 <span className="flex items-center gap-2 text-xs text-emerald">
                   <span className="size-2 rounded-full bg-emerald animate-pulse-ring" />
                   {tr("Demo engine", "محرك تجريبي")}
@@ -120,13 +120,12 @@ function Home() {
 
       <section className="mx-auto -mt-10 max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-4 md:grid-cols-3">
-          {portals.map((p, i) => (
+          {portals.map((p) => (
             <Link key={p.to} to={p.to} className="group relative rounded-2xl border bg-card p-6 shadow-card transition hover:-translate-y-0.5 hover:border-emerald/50">
               <div className="flex items-center justify-between">
                 <span className="grid size-11 place-items-center rounded-xl bg-primary text-primary-foreground">
                   <p.icon className="size-5" aria-hidden />
                 </span>
-                <span className="font-mono text-xs text-muted-foreground">0{i + 1}</span>
               </div>
               <h2 className="mt-5 text-lg font-semibold">{p.title}</h2>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{p.body}</p>

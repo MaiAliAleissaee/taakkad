@@ -30,7 +30,7 @@ export function SiteHeader() {
     { to: "/" as const, label: tr("Overview", "نظرة عامة"), icon: LayoutDashboard },
     { to: "/organizations" as const, label: tr("Organization Portal", "بوابة الجهات"), icon: Building2 },
     { to: "/trust" as const, label: tr("Public Trust Portal", "بوابة الثقة العامة"), icon: ShieldCheck },
-    { to: "/security" as const, label: tr("Security Dashboard", "لوحة الأمن"), icon: Siren },
+    { to: "/security" as const, label: tr("Security Dashboard", "لوحة التحكم الأمنية"), icon: Siren },
   ];
 
   const toggleLang = () => setLang(lang === "en" ? "ar" : "en");

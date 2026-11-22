@@ -9,7 +9,7 @@ import { PageHeader } from "@/components/common/bits";
 import { useI18n } from "@/lib/i18n/i18n";
 import { useStaffSession } from "@/lib/security/session";
 import { StaffSignOut } from "@/components/security/staff-sign-out";
-import { canAccessSecurity } from "@/lib/security/access";
+import { staffHome } from "@/lib/security/staff-home";
 import { loginError, staffRoleLabel } from "@/lib/security/labels";
 import type { StaffRole } from "@/lib/security/access";
 import { useServerFn } from "@tanstack/react-start";
@@ -39,7 +39,7 @@ function StaffLogin() {
     try { const result = await setupPassword({ data: { identifier: parsed.data, origin: window.location.origin } }); if (result.ok) setSetupSent(true); else setError("unavailable"); }
     catch { setError("unavailable"); } finally { setBusy(false); }
   }
-  useEffect(() => { if (session.ready && session.securityAccess) void navigate({ to: "/security", replace: true }); }, [session.ready, session.securityAccess, navigate]);
+  useEffect(() => { const home = session.ready ? staffHome(session.roles) : null; if (home) void navigate({ to: home, ...(home === "/organizations" ? { hash: "organization-access" } : {}), replace: true }); }, [session.ready, session.roles, navigate]);
   async function login(e: FormEvent) {
     e.preventDefault(); setError("");
     const parsed = staffLoginSchema.safeParse({ identifier: email, password });
@@ -55,8 +55,9 @@ function StaffLogin() {
       if (!checked.data.user) { setError("session"); return; }
       const roles = await supabase.from("user_roles").select("role").eq("user_id", checked.data.user.id);
       if (roles.error) { setError("access"); return; }
-      if (!canAccessSecurity(roles.data.map(r => r.role))) { setError("forbidden"); return; }
-      await navigate({ to: "/security", replace: true });
+      const home = staffHome(roles.data.map(r => r.role));
+      if (!home) { setError("forbidden"); return; }
+      await navigate({ to: home, ...(home === "/organizations" ? { hash: "organization-access" } : {}), replace: true });
     } catch { setError("unavailable"); }
     finally { setBusy(false); }
   }

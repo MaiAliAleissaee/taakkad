@@ -1,4 +1,6 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import { useStaffSession } from "@/lib/security/session";
+import { isVerificationOfficer } from "@/lib/organizations/schema";
 import { Radar, Search, Send } from "lucide-react";
 import { useEffect, useState, type FormEvent } from "react";
 import { toast } from "sonner";
@@ -153,7 +155,7 @@ function SecurityPage({ snapshot, change, busy }: { snapshot: SecuritySnapshot; 
       </PageHeader>
 
       <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <div className="mb-5 flex flex-wrap items-center justify-between gap-3"><p className="text-xs text-muted-foreground">{tr("Hackathon Demo — Not Connected to Abu Dhabi Police Systems", "عرض تجريبي للهاكاثون — غير متصل بأنظمة شرطة أبوظبي")}</p><div className="flex items-center gap-2"><BrowserArchive /><StaffSignOut /></div></div>
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-3"><p className="text-xs text-muted-foreground">{tr("Hackathon Demo — Not Connected to Abu Dhabi Police Systems", "عرض تجريبي للهاكاثون — غير متصل بأنظمة شرطة أبوظبي")}</p><div className="flex items-center gap-2"><OfficerReviewLink /><BrowserArchive /><StaffSignOut /></div></div>
         <Tabs value={tab} onValueChange={setTab} dir={dir}>
           <TabsList className="h-auto flex-wrap">
             <TabsTrigger value="alerts">{tr("Alerts & cases", "التنبيهات والقضايا")}</TabsTrigger>
@@ -335,4 +337,10 @@ function SecurityPage({ snapshot, change, busy }: { snapshot: SecuritySnapshot; 
       </section>
     </>
   );
+}
+
+function OfficerReviewLink() {
+  const { tr } = useI18n(); const session = useStaffSession();
+  if (!isVerificationOfficer(session.roles)) return null;
+  return <Button asChild variant="outline" size="sm"><Link to="/organizations" hash="organization-access">{tr("Organization review", "مراجعة الجهات")}</Link></Button>;
 }

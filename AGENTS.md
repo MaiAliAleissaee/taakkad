@@ -56,3 +56,4 @@ use the editor.
 - Resolve staff login aliases only inside rate-limited server Auth operations using a service-only profile-linked table; never expose unauthenticated email mappings or infer roles from aliases. Password setup requires a Cloud recovery session and never changes roles.
 - Classify sign-in failures by Cloud Auth codes, separately from role authorization; route organization password recovery to the existing staff setup flow so no duplicate recovery endpoint is introduced.
 - Email-free staff password setup uses service-issued single-use hashed link secrets in the URL fragment, consumed atomically server-side; links never grant roles, so staff onboarding needs no inbox while authorization stays role-based.
+- After staff sign-in, route by role through one shared helper (officers to organization review, analysts to the Security Dashboard) so both sign-in forms agree.

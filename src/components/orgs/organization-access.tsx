@@ -1,7 +1,9 @@
 import { useState, type FormEvent } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Download, LogIn, LogOut, Search, ShieldCheck } from "lucide-react";
+import { Download, LayoutDashboard, LogIn, LogOut, Search, ShieldCheck } from "lucide-react";
+import { signInStaff } from "@/lib/security/staff-login.functions";
+import { staffLoginSchema } from "@/lib/security/staff-login-schema";
 import { supabase } from "@/integrations/supabase/client";
 import { useStaffSession } from "@/lib/security/session";
 import { useI18n } from "@/lib/i18n/i18n";
@@ -49,7 +51,11 @@ export function OrganizationAccess() {
   async function login(e: FormEvent) {
     e.preventDefault(); setError(""); setBusy(true);
     try {
-      const result = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+      const parsed = staffLoginSchema.safeParse({ identifier: email, password });
+      if (!parsed.success) { setError(pick(staffAuthMessages.credentials)); return; }
+      const signedIn = await signInStaff({ data: parsed.data });
+      if (!signedIn.ok) { setError(pick(staffAuthMessages.credentials)); return; }
+      const result = await supabase.auth.setSession({ access_token: signedIn.accessToken, refresh_token: signedIn.refreshToken });
       if (result.error) { setError(pick(staffAuthMessages[staffAuthFailure(result.error)])); return; }
       const checked = await supabase.auth.getUser();
       if (!checked.data.user) throw new Error("Session unavailable");
@@ -76,9 +82,9 @@ export function OrganizationAccess() {
   }
 
   return <div id="organization-access" dir={dir} className="mb-8 scroll-mt-24 border-b pb-8">
-    <div className="mb-5 flex flex-wrap items-center justify-between gap-3"><h2 className="flex items-center gap-2 text-xl font-semibold"><ShieldCheck className="size-5 text-emerald" />{tr("Authorized Officer Login", "دخول الموظف المخوّل")}</h2>{session.user && <Button variant="outline" size="sm" onClick={signOut} disabled={busy}><LogOut />{tr("Logout", "تسجيل الخروج")}</Button>}</div>
+    <div className="mb-5 flex flex-wrap items-center justify-between gap-3"><h2 className="flex items-center gap-2 text-xl font-semibold"><ShieldCheck className="size-5 text-emerald" />{tr("Authorized Officer Login", "دخول الموظف المخوّل")}</h2>{session.user && <div className="flex flex-wrap gap-2">{session.securityAccess && <Button asChild variant="emerald" size="sm"><Link to="/security"><LayoutDashboard />{tr("Open Security Dashboard", "فتح لوحة الأمن")}</Link></Button>}<Button variant="outline" size="sm" onClick={signOut} disabled={busy}><LogOut />{tr("Logout", "تسجيل الخروج")}</Button></div>}</div>
     {!session.user ? <form onSubmit={login} className="max-w-xl space-y-4">
-      <div className="grid gap-3 sm:grid-cols-2"><div className="space-y-2"><Label htmlFor="organization-login-email">{tr("Email", "البريد الإلكتروني")}</Label><Input id="organization-login-email" type="email" dir="ltr" autoComplete="username" required value={email} onChange={e => setEmail(e.target.value)} /></div><div className="space-y-2"><Label htmlFor="organization-login-password">{tr("Password", "كلمة المرور")}</Label><Input id="organization-login-password" type="password" dir="ltr" autoComplete="current-password" minLength={1} required value={password} onChange={e => setPassword(e.target.value)} /></div></div>
+      <div className="grid gap-3 sm:grid-cols-2"><div className="space-y-2"><Label htmlFor="organization-login-email">{tr("Staff ID or email", "معرّف الموظف أو البريد الإلكتروني")}</Label><Input id="organization-login-email" type="text" dir="ltr" autoComplete="username" required value={email} onChange={e => setEmail(e.target.value)} /></div><div className="space-y-2"><Label htmlFor="organization-login-password">{tr("Password", "كلمة المرور")}</Label><Input id="organization-login-password" type="password" dir="ltr" autoComplete="current-password" minLength={1} required value={password} onChange={e => setPassword(e.target.value)} /></div></div>
       <Button type="submit" disabled={busy || !session.ready}><LogIn />{tr("Login", "تسجيل الدخول")}</Button>
       <Button asChild variant="link"><Link to="/auth">{tr("Set or reset password privately", "تعيين كلمة المرور أو إعادة ضبطها بشكل خاص")}</Link></Button>
       <p className="text-xs text-muted-foreground">{tr("Officer access requires an independently assigned verification-officer role.", "يتطلب دخول الموظفين دور مراجع مُعيّناً بشكل مستقل.")}</p>

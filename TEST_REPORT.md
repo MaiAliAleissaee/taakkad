@@ -28,5 +28,8 @@
 ## Resolved during checks
 Inherited anonymous/authenticated table grants were detected on the new numbering ledger. RLS had no public policy, but explicit grants were revoked and private-access assertions then passed. An early rate-test fixture used identical timestamps; it was corrected to distinct real-request timestamps and the existing limits passed. A logout selector used an incorrect label; successful Officer logout was subsequently verified with the actual label.
 
+## Final responsive and cleanup checks
+Final public-page run: Overview, Organizations, Trust, Alerts and staff login had no horizontal overflow at 390x844; desktop checks at 1111x754 also passed. Both protected URLs redirected signed-out visitors to login. Ten example cards and the approved bank sender result remained available; no browser exceptions were reported. Final regression run again passed all 134 tests. The two newly added seeded application channels have submission timestamps for normal officer review.
+
 ## Readiness
 **Hackathon preview: conditional PASS.** Owner credential checks, complete OTP tracking and Supervisor publication demonstration remain unverified. **Production readiness: NOT CLAIMED.** Source and documentation are suitable for repository handoff; publishing requires the owner's separate action.

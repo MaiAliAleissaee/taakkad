@@ -5,8 +5,6 @@ import { Button } from "@/components/ui/button";
 import { useI18n } from "@/lib/i18n/i18n";
 import { cn } from "@/lib/utils";
 import { useStaffSession } from "@/lib/security/session";
-import { isVerificationOfficer } from "@/lib/organizations/schema";
-import { ClipboardCheck } from "lucide-react";
 import { StaffSignOut } from "@/components/security/staff-sign-out";
 
 export function Logo({ compact = false }: { compact?: boolean }) {
@@ -33,7 +31,6 @@ export function SiteHeader() {
     { to: "/organizations" as const, label: tr("Organization Portal", "بوابة الجهات"), icon: Building2 },
     { to: "/trust" as const, label: tr("Public Trust Portal", "بوابة الثقة العامة"), icon: ShieldCheck },
     { to: "/security" as const, label: tr("Security Dashboard", "لوحة التحكم الأمنية"), icon: Siren },
-    ...(isVerificationOfficer(staff.roles) ? [{ to: "/officer" as const, label: tr("Officer Dashboard", "لوحة موظف التحقق"), icon: ClipboardCheck }] : []),
   ];
 
   const toggleLang = () => setLang(lang === "en" ? "ar" : "en");

@@ -53,4 +53,4 @@
 - [ ] Owner sets the HAM123 password with the new 24h link and signs in — waits on the owner.
 - [x] Owner chose to keep the fictional demo account for now (email-only, no staff ID); delete after the hackathon on request.
 
-- [ ] HAM1234 setup: waiting for owner to set password via private link; then verify HAM1234 Security-only access, remove security_analyst from HAM123 (446f3bbf…), verify HAM123 officer-only access and cross-denial.
+- [x] HAM1234/HAM123 role separation done (owner tested HAM1234 login).

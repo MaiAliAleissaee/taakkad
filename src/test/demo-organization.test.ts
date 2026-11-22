@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { demoRegistrationSchema, demoTrackingSchema, demoPayload, demoStatus, demoDecisionReady } from "@/lib/organizations/demo-schema";
+import { demoRegistrationSchema, demoTrackingSchema, demoPayload, demoStatus, demoDecisionReady, canReviewDemo, matchesDemoRegistry, demoTrackingResultSchema } from "@/lib/organizations/demo-schema";
 
 const input = { name: "شركة المرجان التجريبية", website: "https://coral-demo.example/path", email: "contact@coral-demo.example", social: "@CoralDemo", phone: "+971 50 000 0000", sms: "CORAL-DEMO" };
 describe("six-field simulated organization registration", () => {
@@ -35,7 +35,31 @@ describe("six-field simulated organization registration", () => {
     expect(demoDecisionReady("Simulated review completed")).toBe(true);
     expect(demoDecisionReady(" ")).toBe(false);
   });
-  it("rejects unsafe website schemes and non-fictional domains", () => {
-    for (const website of ["javascript:alert(1)", "https://real-bank.com", "https://user:pass@demo.example"]) expect(demoRegistrationSchema.safeParse({ ...input, website }).success).toBe(false);
+  it("rejects unsafe website schemes and embedded credentials", () => {
+    for (const website of ["javascript:alert(1)", "https://user:pass@demo.example"]) expect(demoRegistrationSchema.safeParse({ ...input, website }).success).toBe(false);
+  });
+  it("accepts demo submissions regardless of .example website or email suffix", () => {
+    const submitted = { ...input, website: "https://fictional-coral.test", email: "demo@fictional-coral.test" };
+    expect(demoRegistrationSchema.parse(submitted)).toEqual(submitted);
+    expect(demoPayload(submitted).channels.every(channel => channel.status === "pending")).toBe(true);
+  });
+  it("allows explicit approval and reapproval without reopening final rejected applications", () => {
+    expect(canReviewDemo("pending", "approved")).toBe(true);
+    expect(canReviewDemo("needs_information", "approved")).toBe(true);
+    expect(canReviewDemo("approved", "approved")).toBe(true);
+    expect(canReviewDemo("approved", "rejected")).toBe(false);
+    expect(canReviewDemo("rejected", "approved")).toBe(false);
+  });
+  it("matches public demo search against bilingual names and all registered channels", () => {
+    const org = demoPayload(input);
+    expect(matchesDemoRegistry(org, "المرجان")).toBe(true);
+    for (const query of ["coral-demo.example", "contact@coral-demo.example", "@CoralDemo", "+971 50", "CORAL-DEMO"]) expect(matchesDemoRegistry(org, query)).toBe(true);
+    expect(matchesDemoRegistry(org, "unrelated-company")).toBe(false);
+  });
+  it("public tracking accepts only general status and the actual update date", () => {
+    const safe = { status: "approved", updatedAt: "2026-11-22T13:47:00+00:00" };
+    expect(demoTrackingResultSchema.parse(safe)).toEqual(safe);
+    for (const key of ["email", "documents", "audit", "correction_note", "payload"]) expect(demoTrackingResultSchema.safeParse({ ...safe, [key]: "private" }).success).toBe(false);
+    expect(demoTrackingResultSchema.safeParse({ ...safe, updatedAt: "not-a-date" }).success).toBe(false);
   });
 });

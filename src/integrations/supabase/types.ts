@@ -74,6 +74,7 @@ export type Database = {
           payload: Json
           revision: number
           status: string
+          status_updated_at: string
           submitted_at: string
         }
         Insert: {
@@ -88,6 +89,7 @@ export type Database = {
           payload: Json
           revision?: number
           status?: string
+          status_updated_at?: string
           submitted_at?: string
         }
         Update: {
@@ -102,6 +104,7 @@ export type Database = {
           payload?: Json
           revision?: number
           status?: string
+          status_updated_at?: string
           submitted_at?: string
         }
         Relationships: []
@@ -606,6 +609,10 @@ export type Database = {
       read_demo_organization_status: {
         Args: { tracking_code: string }
         Returns: string
+      }
+      read_demo_organization_tracking: {
+        Args: { tracking_code: string }
+        Returns: Json
       }
       reserve_trust_ai_usage: {
         Args: { visitor_hash: string }

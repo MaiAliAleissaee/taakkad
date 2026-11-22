@@ -3,20 +3,28 @@ import type { Organization } from "@/lib/domain/types";
 
 const websiteSchema = z.string().trim().max(200).url().refine(value => {
   const url = new URL(value);
-  return ["https:", "http:"].includes(url.protocol) && !url.username && !url.password && url.hostname.endsWith(".example");
-}, "Use a fictional HTTP(S) website ending in .example.");
+  return ["https:", "http:"].includes(url.protocol) && !url.username && !url.password;
+}, "Use a valid HTTP(S) website without embedded credentials.");
 export const demoRegistrationSchema = z.object({
   name: z.string().trim().min(2).max(160),
   website: websiteSchema,
-  email: z.string().trim().email().max(200).refine(value => value.toLowerCase().endsWith(".example"), "Use a fictional email ending in .example."),
+  email: z.string().trim().email().max(200),
   social: z.string().trim().min(2).max(200),
   phone: z.string().trim().min(7).max(30).regex(/^\+?[\d\s()-]+$/),
   sms: z.string().trim().min(2).max(30).regex(/^[\p{L}\p{N} _-]+$/u),
 }).strict();
 export type DemoRegistration = z.infer<typeof demoRegistrationSchema>;
 export const demoTrackingSchema = z.object({ code: z.string().trim().regex(/^[1-9]\d{4}$/) }).strict();
-export type DemoReceipt = { code: string; status: "pending" };
+export type DemoReceipt = { code: string; status: "pending"; updatedAt: string };
 export type DemoStatus = "pending" | "under_review" | "needs_information" | "approved" | "rejected";
+export const demoTrackingResultSchema = z.object({ status: z.enum(["pending", "under_review", "needs_information", "approved", "rejected"]), updatedAt: z.string().datetime({ offset: true }) }).strict();
+export function canReviewDemo(status: string, decision: string) {
+  return ["pending", "needs_information"].includes(status) || (status === "approved" && decision === "approved");
+}
+export function matchesDemoRegistry(org: { name: { ar: string; en: string }; channels: Array<{ value: string }> }, query: string) {
+  const term = query.trim().toLowerCase();
+  return !term || [org.name.ar, org.name.en, ...org.channels.map(c => c.value)].some(value => value.toLowerCase().includes(term));
+}
 export function demoPayload(input: DemoRegistration): Organization {
   const data = demoRegistrationSchema.parse(input);
   const at = new Date().toISOString();

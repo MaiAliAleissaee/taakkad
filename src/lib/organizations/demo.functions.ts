@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { Json } from "@/integrations/supabase/types";
 import { z } from "zod";
-import { demoRegistrationSchema, demoTrackingSchema, demoPayload, type DemoStatus } from "./demo-schema";
+import { demoRegistrationSchema, demoTrackingSchema, demoPayload, demoTrackingResultSchema } from "./demo-schema";
 
 export const submitDemoOrganization = createServerFn({ method: "POST" })
   .inputValidator(input => demoRegistrationSchema.parse(input))
@@ -12,7 +12,9 @@ export const submitDemoOrganization = createServerFn({ method: "POST" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const result = await supabaseAdmin.rpc("submit_demo_organization", { application_payload: demoPayload(data) as unknown as Json });
     if (result.error || !result.data) throw new Error("Demo registration unavailable");
-    return { code: result.data, status: "pending" as const };
+    const saved = await supabaseAdmin.rpc("read_demo_organization_tracking", { tracking_code: result.data });
+    const tracking = demoTrackingResultSchema.parse(saved.data);
+    return { code: result.data, status: "pending" as const, updatedAt: tracking.updatedAt };
   });
 
 export const trackDemoOrganization = createServerFn({ method: "POST" })
@@ -24,10 +26,10 @@ export const trackDemoOrganization = createServerFn({ method: "POST" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const budget = await supabaseAdmin.rpc("organization_rate_limit", { bucket_key: "demo-status-global", max_requests: 1000, window_seconds: 3600 });
     if (budget.error || !budget.data) throw new Error("Status lookup temporarily unavailable");
-    const result = await supabaseAdmin.rpc("read_demo_organization_status", { tracking_code: data.code });
+    const result = await supabaseAdmin.rpc("read_demo_organization_tracking", { tracking_code: data.code });
     if (result.error) throw new Error("Status lookup unavailable");
-    const status = z.enum(["pending", "under_review", "needs_information", "approved", "rejected"]).nullable().parse(result.data);
-    return { status: status as DemoStatus | null };
+    const resultData = demoTrackingResultSchema.nullable().parse(result.data);
+    return { code: data.code, status: resultData?.status ?? null, updatedAt: resultData?.updatedAt ?? null };
   });
 
 export const reviewDemoOrganization = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth])
@@ -38,7 +40,10 @@ export const reviewDemoOrganization = createServerFn({ method: "POST" }).middlew
     if (!identity.officer) throw new Error("Officer required");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const result = await supabaseAdmin.rpc("review_demo_organization", { actor_id: identity.userId, application_uuid: data.id, expected_revision: data.revision, decision: data.decision, decision_note: data.note });
-    if (result.error) throw new Error("Review denied or application changed");
+    if (result.error) {
+      console.error("Demo review failed", { code: result.error.code, message: result.error.message });
+      throw new Error("Review denied or application changed");
+    }
     return { ok: true };
   });
 

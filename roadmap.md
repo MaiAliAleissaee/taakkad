@@ -1,5 +1,10 @@
 # Final hackathon polish roadmap
 
+## Demo approval and tracking messages
+- [x] Approve submitted demo organizations without domain restrictions; searchable Demo Approved registry with no trusted-channel promotion or duplicates.
+- [x] Bilingual status panel with five-digit reference, latest update date, status icon and approved registry link; preserve privacy and limiter.
+- [x] 146 regressions passed; fresh .test/.example registration-to-confirmed-approval, immediate public registry refresh, repeat approval, bilingual/mobile and privacy browser checks passed. Owner password/publication unverified; two fictional test records retained.
+
 ## Organization demo simplification
 - [x] Six-field bilingual registration, automatic channels and unique five-digit status reference.
 - [x] Status-only tracking; approved custom limiter (20/address/hour, shared 1000/hour), no edit capability or private data returned.

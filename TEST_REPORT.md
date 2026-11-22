@@ -1,5 +1,15 @@
 # Final polish test report
 
+## Demo approval and tracking refinement — 22 November 2026
+- **PASS:** 146 automated tests across 17 files; preview build OK. Shared validation accepts valid HTTP(S) websites and emails without requiring `.example`; unsafe schemes/embedded website credentials remain rejected.
+- **PASS:** Two new clearly fictional submissions (Approval Validation 20261122 D/E, `.test`/`.example`) received five-digit references. HAM123 authorized officer review, approval confirmation, private audit readback, repeat approval and public registry appearance were exercised. Each application retains exactly one simulated public entry; neither has a trusted projection.
+- **PASS:** An already-open public page refreshed the approved registry following tracking without a page reload. Name and all five channels appeared with Demo Approved / اعتماد تجريبي, a disclaimer and searchable channel values; rejected/corrections-required validation applications remained excluded.
+- **PASS:** Tracking showed pending, under-review, approved, rejected and corrections-required states with the submitted reference and real status-update timestamps. Arabic/English approved messages, registry search/badges, approved registry link and mobile Arabic at 390×844 passed; no browser exceptions or horizontal overflow in the successful runs.
+- **PASS:** Anonymous application reads returned no rows; raw tracking mappings and direct tracking RPC access were denied. Public tracking returned only reference/status/date, never private notes/documents. Demo organizations/channels remain pending internally and excluded from trusted checks; existing channel/AI/privacy regressions passed without inference.
+- **Preserved:** Staff accounts/passwords/roles, AI, all existing records, legacy workflows, original colors and unrelated pages. Two additional clearly named fictional validation submissions were retained; no records deleted.
+- **Test limitations:** The shared local-preview visitor budget was already exhausted by earlier tests; the limiter correctly denied it. Continued browser tests used isolated documentation-address headers for separate visitor budgets without changing/resetting the limiter. An initial rapid review hit a revision conflict; officer action buttons now wait until review-start finishes, and the fresh registration-to-approval rerun passed.
+- **NOT VERIFIED:** Owner username/password login (authorized minted HAM123 session used instead), production publication and multi-connection concurrent load. No AI inference used.
+
 ## Organization demo simplification — 22 November 2026
 - **PASS:** 142 automated tests across 17 files; current harness build OK.
 - **PASS:** Arabic and English registration has exactly six fields; three live fictional submissions received distinct random five-digit numbers, pending status and five pending channels with the website host extracted automatically.

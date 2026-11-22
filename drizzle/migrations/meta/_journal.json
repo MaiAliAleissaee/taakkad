@@ -155,6 +155,13 @@
       "when": 1795353700225,
       "tag": "0021_demo_organization_status_tracking",
       "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1795355281093,
+      "tag": "0022_demo_approval_status_updates",
+      "breakpoints": true
     }
   ]
 }

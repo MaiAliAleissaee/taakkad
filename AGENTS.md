@@ -49,7 +49,7 @@ use the editor.
 - Public checks return only submitted flagged values, never case IDs, evidence or relationship lists; public reports are write-only until authorized review.
 - Applications and attachments stay private. Legacy capabilities remain intact; demo references return status only, never edit rights. Officer decisions use atomic role-authorized commands with audit.
 - The public organization projection contains only approved identity fields and individually active approved channels; merge projections in memory without overwriting legacy browser records so existing saved data survives.
-- Demo approvals use a separate simulated projection, never trusted channels; this preserves public-check semantics.
+- Demo approvals use a searchable, idempotent simulated projection, never trusted channels; tracking returns only status/date to preserve privacy and trust semantics.
 - Keep user-initiated trust checks in component-local memory, outside shared query caches and browser persistence; send only indicator candidates for matching, and share content only through explicit restricted reports so visitors cannot retrieve each other's checks.
 - Keep public security bulletins separate from investigation cases; an atomic role-authorized command maintains private audit and the public published-only projection so draft edits, rejection and withdrawal cannot leak confidential content.
 - Keep semantic fraud inference in server-only Gateway helpers, redact inputs before transmission and again before inference, validate and ground model indicators in supplied text, and keep registry facts distinct from AI interpretations; this prevents model claims from becoming verification facts.

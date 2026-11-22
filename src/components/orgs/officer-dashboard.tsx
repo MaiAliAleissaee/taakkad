@@ -22,7 +22,7 @@ import { ChannelManager } from "./channel-manager";
 import { RegisterOrgDialog, downloadApplicationDocument } from "./register-org-dialog";
 import { orgTypeLabel } from "@/lib/i18n/labels";
 import { reviewDemoOrganization } from "@/lib/organizations/demo.functions";
-import { demoDecisionReady } from "@/lib/organizations/demo-schema";
+import { demoDecisionReady, canReviewDemo } from "@/lib/organizations/demo-schema";
 
 const statusLabels: Record<ApplicationStatus, Bi> = {
   pending: { en: "New — awaiting review", ar: "جديد — بانتظار المراجعة" }, approved: { en: "Approved", ar: "معتمد" }, rejected: { en: "Rejected", ar: "مرفوض" }, needs_information: { en: "Additional Information Required", ar: "مطلوب معلومات إضافية" }, suspended: { en: "Suspended", ar: "موقوف" }, removed: { en: "Removed from registry", ar: "مزال من السجل" },
@@ -53,8 +53,10 @@ export function OfficerDashboard() {
     setSelectedId(id); setDecision(null); setNote(""); setConfirmed([]); setError(""); setNotice(""); window.scrollTo({ top: 0 });
     const row = apps.find(a => a.id === id);
     if (row?.demo_registration && row.status === "pending" && !row.demo_under_review) {
+      setBusy(true);
       try { await reviewDemo({ data: { id, revision: row.revision, decision: "under_review", note: "" } }); await changed(); }
       catch { setError(tr("Unable to start review. Reload the application.", "تعذّر بدء المراجعة. أعد تحميل الطلب.")); }
+      finally { setBusy(false); }
     }
   }
   async function changed() { await queryClient.invalidateQueries({ queryKey: ["organization-applications"] }); await queryClient.invalidateQueries({ queryKey: ["organization-demo-registry"] }); await refreshOrganizationRegistry(); }
@@ -85,7 +87,7 @@ export function OfficerDashboard() {
     const audit = Array.isArray(selected.audit) ? selected.audit as Array<Record<string, unknown>> : [];
     const channelAudit = audit.flatMap(event => Array.isArray(event['details']) ? event['details'] as ChannelAuditEvent[] : []);
     const owned = selected.owner_id === session.user?.id;
-    const decidable = !owned && (selected.status === "pending" || selected.status === "needs_information");
+    const decidable = !owned && (selected.demo_registration ? canReviewDemo(selected.status, "approved") : selected.status === "pending" || selected.status === "needs_information");
     const ready = !!decision && (selected.demo_registration ? demoDecisionReady(note) : canSubmitDecision(decision, note, selected.payload.domains, confirmed));
     return <div dir={dir} className="space-y-6">
       {nav}
@@ -115,9 +117,9 @@ export function OfficerDashboard() {
       {decidable ? <section className="space-y-4 rounded-xl border bg-card p-5">
         <h3 className="font-semibold">{tr("Officer review actions", "إجراءات مراجعة الموظف")}</h3>
         <div className="flex flex-wrap gap-2">
-          <Button variant={decision === "approved" ? "emerald" : "outline"} onClick={() => setDecision("approved")}><CheckCircle2 />{tr("Approve Application", "اعتماد الطلب")}</Button>
-          <Button variant={decision === "rejected" ? "destructive" : "outline"} onClick={() => setDecision("rejected")}><XCircle />{tr("Reject Application", "رفض الطلب")}</Button>
-          <Button variant={decision === "needs_information" ? "default" : "outline"} onClick={() => setDecision("needs_information")}><FileQuestion />{tr("Request Additional Information", "طلب معلومات إضافية")}</Button>
+          <Button disabled={busy} variant={decision === "approved" ? "emerald" : "outline"} onClick={() => setDecision("approved")}><CheckCircle2 />{tr("Approve Application", "اعتماد الطلب")}</Button>
+          {selected.status !== "approved" && <><Button disabled={busy} variant={decision === "rejected" ? "destructive" : "outline"} onClick={() => setDecision("rejected")}><XCircle />{tr("Reject Application", "رفض الطلب")}</Button>
+          <Button disabled={busy} variant={decision === "needs_information" ? "default" : "outline"} onClick={() => setDecision("needs_information")}><FileQuestion />{tr("Request Additional Information", "طلب معلومات إضافية")}</Button></>}
         </div>
         {decision && <form className="max-w-xl space-y-3" onSubmit={e => { e.preventDefault(); if (!ready) return; if (decision === "needs_information") void submit(); else setConfirming(true); }}>
           {decision === "approved" && !selected.demo_registration && <fieldset className="space-y-2"><legend className="mb-2 text-sm font-medium">{tr("Confirm domain ownership review (fictional prototype)", "تأكيد مراجعة ملكية النطاق (نموذج خيالي)")}</legend>{selected.payload.domains.map(domain => <label key={domain} className="flex items-center gap-2 text-sm"><input type="checkbox" className="accent-emerald" checked={confirmed.includes(domain)} onChange={e => setConfirmed(list => e.target.checked ? [...list, domain] : list.filter(d => d !== domain))} /><span dir="ltr" className="break-all font-mono">{domain}</span></label>)}</fieldset>}

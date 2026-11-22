@@ -17,6 +17,8 @@ import { Badge } from "@/components/ui/badge";
 import { NativeSelect } from "@/components/common/native-select";
 import { ChannelManager } from "./channel-manager";
 import { RegisterOrgDialog, downloadApplicationDocument } from "./register-org-dialog";
+import { Link } from "@tanstack/react-router";
+import { staffAuthFailure, staffAuthMessages } from "@/lib/security/auth-errors";
 
 const statusLabels: Record<ApplicationStatus, Bi> = {
   pending: { en: "Pending review", ar: "قيد المراجعة" }, approved: { en: "Approved", ar: "معتمد" }, rejected: { en: "Rejected", ar: "مرفوض" }, needs_information: { en: "Additional information requested", ar: "مطلوب معلومات إضافية" }, suspended: { en: "Suspended", ar: "موقوف" }, removed: { en: "Removed from registry", ar: "مزال من السجل" },
@@ -48,13 +50,13 @@ export function OrganizationAccess() {
     e.preventDefault(); setError(""); setBusy(true);
     try {
       const result = await supabase.auth.signInWithPassword({ email: email.trim(), password });
-      if (result.error) throw result.error;
+      if (result.error) { setError(pick(staffAuthMessages[staffAuthFailure(result.error)])); return; }
       const checked = await supabase.auth.getUser();
       if (!checked.data.user) throw new Error("Session unavailable");
       await queryClient.invalidateQueries({ queryKey: ["organization-applications"] });
       setPassword("");
-    } catch { setError(tr("Unable to sign in. Check your officer account details and try again.", "تعذّر الدخول. تحقق من بيانات حساب الموظف المخوّل ثم حاول مجدداً.")); }
-    finally { setBusy(false); }
+    } catch { setError(pick(staffAuthMessages.unavailable)); }
+    finally { setPassword(""); setBusy(false); }
   }
   async function signOut() {
     setBusy(true); await queryClient.cancelQueries(); queryClient.clear();
@@ -78,6 +80,7 @@ export function OrganizationAccess() {
     {!session.user ? <form onSubmit={login} className="max-w-xl space-y-4">
       <div className="grid gap-3 sm:grid-cols-2"><div className="space-y-2"><Label htmlFor="organization-login-email">{tr("Email", "البريد الإلكتروني")}</Label><Input id="organization-login-email" type="email" dir="ltr" autoComplete="username" required value={email} onChange={e => setEmail(e.target.value)} /></div><div className="space-y-2"><Label htmlFor="organization-login-password">{tr("Password", "كلمة المرور")}</Label><Input id="organization-login-password" type="password" dir="ltr" autoComplete="current-password" minLength={1} required value={password} onChange={e => setPassword(e.target.value)} /></div></div>
       <Button type="submit" disabled={busy || !session.ready}><LogIn />{tr("Login", "تسجيل الدخول")}</Button>
+      <Button asChild variant="link"><Link to="/auth">{tr("Set or reset password privately", "تعيين كلمة المرور أو إعادة ضبطها بشكل خاص")}</Link></Button>
       <p className="text-xs text-muted-foreground">{tr("Officer access requires an independently assigned verification-officer role.", "يتطلب دخول الموظفين دور مراجع مُعيّناً بشكل مستقل.")}</p>
     </form> : <>
       {query.isPending && <p role="status" className="text-sm text-muted-foreground">{tr("Checking account access…", "جارٍ التحقق من صلاحيات الحساب…")}</p>}

@@ -54,7 +54,7 @@ export function OrganizationAccess() {
       const parsed = staffLoginSchema.safeParse({ identifier: email, password });
       if (!parsed.success) { setError(pick(staffAuthMessages.credentials)); return; }
       const signedIn = await signInStaff({ data: parsed.data });
-      if (!signedIn.ok) { setError(pick(staffAuthMessages.credentials)); return; }
+      if (!signedIn.ok) { setError(pick(staffAuthMessages[signedIn.reason])); return; }
       const result = await supabase.auth.setSession({ access_token: signedIn.accessToken, refresh_token: signedIn.refreshToken });
       if (result.error) { setError(pick(staffAuthMessages[staffAuthFailure(result.error)])); return; }
       const checked = await supabase.auth.getUser();

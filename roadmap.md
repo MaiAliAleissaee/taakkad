@@ -49,5 +49,6 @@
 - [x] Officers land on organization review after login, with one-click switching to/from the Security Dashboard in the same session; verified with the demo account.
 - [x] Real reset email to trail.ham@outlook.com accepted by Cloud Auth on 22 Nov 2026 07:44 UTC.
 - [x] Owner approved: HAM123 moved to the fictional demo account; single-use 24h setup link issued.
-- [ ] Owner sets the HAM123 password via the link and signs in — waits on the owner; then verify.
+- [x] Root cause of rejected HAM123 logins: the per-staff-ID attempt limit was exhausted (15 of 10) and reported as a wrong password; counter cleared, lockout now shown distinctly. Full flow re-verified with a temporary test link.
+- [ ] Owner sets the HAM123 password with the new 24h link and signs in — waits on the owner.
 - [x] Owner chose to keep the fictional demo account for now (email-only, no staff ID); delete after the hackathon on request.

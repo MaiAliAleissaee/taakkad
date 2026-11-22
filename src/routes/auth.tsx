@@ -48,7 +48,7 @@ function StaffLogin() {
     try {
       const signedIn = await signIn({ data: parsed.data });
       setPassword("");
-      if (!signedIn.ok) { setError("credentials"); return; }
+      if (!signedIn.ok) { setError(signedIn.reason); return; }
       const result = await supabase.auth.setSession({ access_token: signedIn.accessToken, refresh_token: signedIn.refreshToken });
       if (result.error) { setError("credentials"); return; }
       const checked = await supabase.auth.getUser();

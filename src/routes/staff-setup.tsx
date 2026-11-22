@@ -39,9 +39,9 @@ function StaffSetup() {
     try {
       const result = await completeStaffPasswordSetup({ data: parsed.data });
       setPassword(""); setConfirmation("");
-      if (!result.ok) { setError("failed"); return; }
+      if (!result.ok) { setError(result.reason); return; }
       setToken(""); setDone(true);
-    } catch { setError("failed"); } finally { setBusy(false); }
+    } catch { setError("busy"); } finally { setBusy(false); }
   }
   return <div dir={dir}><PageHeader eyebrow="TRUST ZERO AI" title={tr("Private password setup", "تعيين كلمة المرور بشكل خاص")} description={tr("Authorized staff account", "حساب موظف مصرّح له")} />
     <section className="mx-auto max-w-md px-4 py-8 sm:px-6">
@@ -50,7 +50,7 @@ function StaffSetup() {
         <div className="space-y-2"><Label htmlFor="confirm-password">{tr("Confirm password", "تأكيد كلمة المرور")}</Label><Input id="confirm-password" dir="ltr" type="password" autoComplete="new-password" value={confirmation} onChange={e => setConfirmation(e.target.value)} disabled={busy} /></div>
         <Button variant="emerald" className="w-full" disabled={busy}><LockKeyhole />{tr("Save password", "حفظ كلمة المرور")}</Button>
       </form> : <p role="status">{tr("Open your single-use staff setup link. Missing, used or expired links cannot set a password.", "افتح رابط الإعداد الخاص بك للاستخدام مرة واحدة. لا يمكن تعيين كلمة المرور برابط مفقود أو مستخدم أو منتهي الصلاحية.")}</p>}
-      {error ? <p role="alert" className="mt-4 text-sm text-destructive">{error === "validation" ? tr("Use at least 12 characters and matching passwords.", "استخدم 12 حرفاً على الأقل وكلمتي مرور متطابقتين.") : tr("This link is invalid, used or expired. Ask for a new setup link.", "هذا الرابط غير صالح أو مستخدم أو منتهي الصلاحية. اطلب رابط إعداد جديداً.")}</p> : null}
+      {error ? <p role="alert" className="mt-4 text-sm text-destructive">{error === "validation" ? tr("Use at least 12 characters and matching passwords.", "استخدم 12 حرفاً على الأقل وكلمتي مرور متطابقتين.") : error === "busy" ? tr("Password was not saved because the service is busy. Your link is still valid; wait a few minutes and try again.", "لم تُحفظ كلمة المرور لانشغال الخدمة. لا يزال الرابط صالحاً؛ انتظر بضع دقائق وحاول مجدداً.") : tr("This link is invalid, used or expired. Your password was not changed. Ask for a new setup link.", "هذا الرابط غير صالح أو مستخدم أو منتهي الصلاحية. لم تتغير كلمة المرور. اطلب رابط إعداد جديداً.")}</p> : null}
       <Button asChild variant="link" className="mt-4"><Link to="/auth">{tr("Return to staff login", "العودة لدخول الموظفين")}</Link></Button>
     </section></div>;
 }

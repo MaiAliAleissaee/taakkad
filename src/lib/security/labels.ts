@@ -13,5 +13,6 @@ export const loginError: Record<string, Bi> = {
   session: { en: "Could not verify this session. Please try again.", ar: "تعذّر التحقق من الجلسة. حاول مجدداً." },
   access: { en: "Access check unavailable. Please try again.", ar: "التحقق من الصلاحيات غير متاح. حاول مجدداً." },
   forbidden: { en: "Your account is not authorized to access security cases.", ar: "حسابك غير مصرّح له بالوصول إلى القضايا الأمنية." },
+  rate_limit: { en: "Too many sign-in attempts for this staff ID. Your password was not checked; wait up to an hour and try again.", ar: "محاولات دخول كثيرة لمعرّف الموظف هذا. لم يتم التحقق من كلمة المرور؛ انتظر حتى ساعة ثم حاول مجدداً." },
   unavailable: { en: "Unable to sign in. Please try again.", ar: "تعذّر تسجيل الدخول. حاول مجدداً." },
 };

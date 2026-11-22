@@ -57,6 +57,13 @@
       "when": 1795317533881,
       "tag": "0007_secure_organization_applications",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1795318202006,
+      "tag": "0008_keep_unapproved_application_details_private",
+      "breakpoints": true
     }
   ]
 }

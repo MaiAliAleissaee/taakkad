@@ -49,7 +49,7 @@ export function RegisterOrgDialog({ trigger, application }: { trigger: React.Rea
 
   const reset = () => {
     setNameEn(""); setNameAr(""); setType("business"); setDomainsRaw(""); setContactEmail("");
-    setChannels([{ type: "email", value: "" }]); setErrors([]);
+    setChannels([{ type: "email", value: "" }]); setDocuments([]); setErrors([]);
   };
 
   const orgName = (id: string) => pick(organizations.find((o) => o.id === id)?.name);
@@ -101,7 +101,7 @@ export function RegisterOrgDialog({ trigger, application }: { trigger: React.Rea
     list.length ? <div className="space-y-1">{list.map((e, i) => <p key={i} className="text-xs text-destructive">{errorText(e)}</p>)}</div> : null;
 
   return (
-    <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) setErrors([]); }}>
+    <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) setErrors([]); if (v && savedReference && !application) { setSavedReference(""); reset(); } }}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
         <DialogHeader>

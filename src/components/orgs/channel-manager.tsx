@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Bi, Channel, ChannelAction, ChannelAuditEvent, ChannelStatus, ChannelType, DemoActor, Organization } from "@/lib/domain/types";
-import { repository, uid, useDemoState } from "@/lib/data/local-store";
+import { uid, useDemoState } from "@/lib/data/local-store";
 import { useI18n } from "@/lib/i18n/i18n";
 import { channelLabel } from "@/lib/i18n/labels";
 import { canManageChannels, CHANNEL_TYPES, ChannelWorkflowError, type ChannelCommand, type ChannelError } from "@/lib/services/channels";
@@ -36,7 +36,7 @@ const actions: Record<ChannelAction | "seed" | "organization_verified" | "organi
   organization_suspended: { en: "Organization suspended", ar: "إيقاف الجهة" }, organization_removed: { en: "Organization removed", ar: "حذف الجهة" },
 };
 const errors: Record<ChannelError, Bi> = {
-  forbidden: { en: "This simulated role is not permitted to make this change.", ar: "هذا الدور الافتراضي غير مخوّل لإجراء هذا التغيير." },
+  forbidden: { en: "Your account is not permitted to make this change.", ar: "حسابك غير مخوّل لإجراء هذا التغيير." },
   not_found: { en: "This record no longer exists.", ar: "هذا السجل لم يعد موجوداً." },
   invalid: { en: "Enter a valid channel value (maximum 200 characters).", ar: "أدخل قيمة قناة صحيحة (200 حرف كحد أقصى)." },
   duplicate: { en: "This channel is already registered. Review the existing record.", ar: "هذه القناة مسجّلة بالفعل. راجع السجل الموجود." },
@@ -69,7 +69,7 @@ export function ChannelManager({ org, actor, onCommand, auditEvents }: { org: Or
       toast.success(pick(actions[command.action]));
       return true;
     } catch (e) {
-      const message = pick(errors[e instanceof ChannelWorkflowError ? e.code : "invalid"]);
+      const message = e instanceof ChannelWorkflowError ? pick(errors[e.code]) : tr("Change denied or the application changed. Reload and check your access and editing deadline.", "رُفض التغيير أو تغيّر الطلب. أعد التحميل وتحقق من صلاحياتك وموعد انتهاء التعديل.");
       setError(message); toast.error(message); return false;
     }
   };

@@ -1,7 +1,7 @@
 # TRUST ZERO AI roadmap
 
-- [ ] Organization Portal only: remove public role switching; same-page officer/applicant login; private owner applications with immutable 24-hour editing deadline, documents and audit; authorized independent review and channel decisions; preserve public registry and legacy records.
-- [ ] Verify owner/officer/visitor access, deadlines, corrections, bilingual portal and existing regression tests.
+- [x] Organization Portal only: removed public role switching; same-page officer/applicant login; private owner applications with immutable 24-hour editing deadline, documents and audit; independent authorized review/channel decisions; preserved public registry and legacy browser records. Original fictional samples retained in private review; ownerless legacy records are not publicly claimable.
+- [x] Verified owner/other-applicant/officer/visitor access, backend rejection of forced late edits, same-reference corrections with unchanged deadline, separate organization/channel approvals, revocation, logout, bilingual desktop/mobile portal and regression tests.
 
 - [x] Color-only rollback: restored exact pre-update color files, including navy/teal/emerald/status colors; retained heading cleanup, all functionality/authentication/data and layouts. 56 tests passed; public pages and bilingual protected login verified.
 

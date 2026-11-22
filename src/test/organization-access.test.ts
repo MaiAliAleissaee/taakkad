@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { canEditApplication, isVerificationOfficer } from "@/lib/organizations/schema";
+import { canEditApplication, documentsSchema, isVerificationOfficer } from "@/lib/organizations/schema";
 const submitted = "2026-11-22T03:00:00.000Z";
 describe("Organization application access rules", () => {
   it("allows the original owner to edit within 24 hours", () => {
@@ -20,5 +20,13 @@ describe("Organization application access rules", () => {
   it("requires the assigned verification officer role, not public or organization administrator roles", () => {
     expect(isVerificationOfficer(["organization_verification_officer"])).toBe(true);
     expect(isVerificationOfficer(["public_visitor", "organization_administrator", "security_supervisor"])).toBe(false);
+  });
+  it("does not reopen the original deadline after a correction has been submitted", () => {
+    expect(canEditApplication("owner", "owner", submitted, "pending", Date.parse("2026-11-25T04:00:00.000Z"))).toBe(false);
+  });
+  it("limits private supporting documents to three files", () => {
+    const document = { id: "00000000-0000-4000-8000-000000000001", name: "fictional.txt", type: "text/plain", content: "ZGVtbw==" };
+    expect(documentsSchema.safeParse([document, document, document]).success).toBe(true);
+    expect(documentsSchema.safeParse([document, document, document, document]).success).toBe(false);
   });
 });

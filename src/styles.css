@@ -238,3 +238,20 @@
 .investigation-edge { fill: none; stroke: var(--info); stroke-width: 1.5; opacity: 0.35; }
 .investigation-edge-shared { stroke: var(--unverified); stroke-width: 2.5; stroke-dasharray: 6 4; opacity: 0.85; }
 .investigation-edge-selected { stroke: var(--verified); stroke-width: 3; opacity: 1; }
+
+/* Only the three primary Security Dashboard analytics tiles. */
+.security-summary-statistics {
+  --security-stat-background: #F1F6FA;
+  --security-stat-foreground: #24364B;
+  --security-stat-border: #D8E4ED;
+}
+.security-summary-statistics > div {
+  background-color: var(--security-stat-background);
+  border-color: var(--security-stat-border);
+}
+.security-summary-statistics > div > p {
+  color: var(--security-stat-foreground);
+}
+.security-summary-statistics > div > p:nth-child(2) {
+  font-weight: 700;
+}

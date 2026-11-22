@@ -35,7 +35,7 @@ export function ApplicationTracker({ receipt }: { receipt: ApplicationReceipt | 
   async function reload() { if (!grant) return; setBusy(true); try { setApplication(await read({ data: { id: grant.id, token: grant.token } })); } catch { setApplication(null); setGrant(null); setError("access"); } finally { setBusy(false); } }
   function saveReceipt() {
     if (!receipt) return;
-    const text = `TRUST ZERO AI — private application receipt\nReference: ${receipt.reference}\nTracking secret: ${receipt.secret}\nSubmitted: ${receipt.submittedAt}\nKeep this file private. Email verification is also required.\n`;
+    const text = `Taakkad — private application receipt\nReference: ${receipt.reference}\nTracking secret: ${receipt.secret}\nSubmitted: ${receipt.submittedAt}\nKeep this file private. Email verification is also required.\n`;
     const url = URL.createObjectURL(new Blob([text], { type: "text/plain" })); const link = document.createElement("a"); link.href = url; link.download = "trust-zero-application-receipt.txt"; link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
   return <div id="application-tracking" className="mb-8 scroll-mt-24 border-b pb-8">

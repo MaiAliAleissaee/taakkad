@@ -18,10 +18,10 @@ import { orgStatusLabel, orgTypeLabel } from "@/lib/i18n/labels";
 export const Route = createFileRoute("/organizations")({
   head: () => ({
     meta: [
-      { title: "Organization Portal — TRUST ZERO AI" },
+      { title: "Organization Portal — Taakkad" },
       { name: "description", content: "Register fictional agencies, banks and businesses with their official domains and approved channels, and track verification status." },
-      { property: "og:title", content: "Organization Portal — TRUST ZERO AI" },
-      { property: "og:description", content: "Register official domains and approved communication channels in the TRUST ZERO AI prototype." },
+      { property: "og:title", content: "Organization Portal — Taakkad" },
+      { property: "og:description", content: "Register official domains and approved communication channels in the Taakkad prototype." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

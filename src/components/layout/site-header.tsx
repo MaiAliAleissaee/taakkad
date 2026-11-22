@@ -13,8 +13,8 @@ export function Logo({ compact = false }: { compact?: boolean }) {
       <span className="relative grid size-9 place-items-center rounded-lg bg-emerald-gradient text-emerald-foreground shadow-glow">
         <ShieldCheck className="size-5" aria-hidden />
       </span>
-      <span className="ltr-isolate font-display text-base font-bold leading-none tracking-tight">
-        TRUST <span className="text-emerald">ZERO</span> AI
+      <span className="font-display text-base font-bold leading-none tracking-tight">
+        <span className="text-emerald">تأكّد</span> <span className="text-[0.72em] font-semibold tracking-wide text-navy-muted">Taakkad</span>
         {!compact ? <span className="mt-1 hidden text-[0.6rem] font-medium tracking-[0.25em] text-navy-muted sm:block">IDENTITY · VERIFY · DEFEND</span> : null}
       </span>
     </span>

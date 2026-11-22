@@ -7,9 +7,9 @@ import { useI18n } from "@/lib/i18n/i18n";
 export const Route = createFileRoute("/trust")({
   head: () => ({
     meta: [
-      { title: "Public Trust Portal — TRUST ZERO AI" },
+      { title: "Public Trust Portal — Taakkad" },
       { name: "description", content: "Privately check messages, links and communication channels against approved organization channels without creating an account." },
-      { property: "og:title", content: "Public Trust Portal — TRUST ZERO AI" },
+      { property: "og:title", content: "Public Trust Portal — Taakkad" },
       { property: "og:description", content: "Private, user-initiated channel checks with warning signs and safety advice. Fictional hackathon prototype." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

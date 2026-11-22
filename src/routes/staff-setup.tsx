@@ -11,10 +11,10 @@ import { completeStaffPasswordSetup } from "@/lib/security/staff-login.functions
 
 export const Route = createFileRoute("/staff-setup")({
   head: () => ({ meta: [
-    { title: "Staff Password Link — TRUST ZERO AI" },
-    { name: "description", content: "Set a TRUST ZERO AI staff password privately with a single-use setup link." },
-    { property: "og:title", content: "Staff Password Link — TRUST ZERO AI" },
-    { property: "og:description", content: "Single-use private password setup for authorized TRUST ZERO AI demo staff." },
+    { title: "Staff Password Link — Taakkad" },
+    { name: "description", content: "Set a Taakkad staff password privately with a single-use setup link." },
+    { property: "og:title", content: "Staff Password Link — Taakkad" },
+    { property: "og:description", content: "Single-use private password setup for authorized Taakkad demo staff." },
     { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" },
     { name: "robots", content: "noindex" },
   ] }), component: StaffSetup,
@@ -43,7 +43,7 @@ function StaffSetup() {
       setToken(""); setDone(true);
     } catch { setError("busy"); } finally { setBusy(false); }
   }
-  return <div dir={dir}><PageHeader eyebrow="TRUST ZERO AI" title={tr("Private password setup", "تعيين كلمة المرور بشكل خاص")} description={tr("Authorized staff account", "حساب موظف مصرّح له")} />
+  return <div dir={dir}><PageHeader eyebrow={tr("Taakkad", "تأكّد")} title={tr("Private password setup", "تعيين كلمة المرور بشكل خاص")} description={tr("Authorized staff account", "حساب موظف مصرّح له")} />
     <section className="mx-auto max-w-md px-4 py-8 sm:px-6">
       {done ? <p role="status">{tr("Password saved. Sign in with your staff ID and new password.", "تم حفظ كلمة المرور. سجّل الدخول بمعرّف الموظف وكلمة المرور الجديدة.")}</p> : token ? <form className="space-y-5" onSubmit={save}>
         <div className="space-y-2"><Label htmlFor="new-password">{tr("New password (at least 12 characters)", "كلمة المرور الجديدة (12 حرفاً على الأقل)")}</Label><Input id="new-password" dir="ltr" type="password" autoComplete="new-password" value={password} onChange={e => setPassword(e.target.value)} disabled={busy} /></div>

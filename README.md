@@ -1,4 +1,4 @@
-# TRUST ZERO AI
+# Taakkad
 
 Arabic-first, bilingual digital identity verification and AI-assisted impersonation detection for a UAE cybersecurity hackathon. **Fictional prototype—not a government service, operational police system or production-ready deployment.** Original navy, white and emerald visual identity is retained.
 

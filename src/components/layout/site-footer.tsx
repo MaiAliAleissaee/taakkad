@@ -26,8 +26,8 @@ export function SiteFooter() {
           <Logo compact />
           <p className="max-w-md text-sm leading-relaxed text-navy-muted">
             {tr(
-              "TRUST ZERO AI is a hackathon prototype. It holds no real-world certification, does not monitor the internet in real time, and is not endorsed by any government entity.",
-              "TRUST ZERO AI نموذج أولي لهاكاثون. لا يحمل أي شهادة فعلية، ولا يراقب الإنترنت في الوقت الفعلي، وليس معتمداً من أي جهة حكومية.",
+              "Taakkad is a hackathon prototype. It holds no real-world certification, does not monitor the internet in real time, and is not endorsed by any government entity.",
+              "تأكّد نموذج أولي لهاكاثون. لا يحمل أي شهادة فعلية، ولا يراقب الإنترنت في الوقت الفعلي، وليس معتمداً من أي جهة حكومية.",
             )}
           </p>
         </div>
@@ -74,7 +74,7 @@ export function SiteFooter() {
       </div>
       <div className="border-t border-navy-border">
         <p className="mx-auto max-w-7xl px-4 py-4 text-xs text-navy-muted sm:px-6 lg:px-8">
-          {tr("© 2026 TRUST ZERO AI · UAE cybersecurity hackathon prototype · Fictional demo data", "© 2026 TRUST ZERO AI · نموذج أولي لهاكاثون الأمن السيبراني في الإمارات · بيانات تجريبية خيالية")}
+          {tr("© 2026 Taakkad · UAE cybersecurity hackathon prototype · Fictional demo data", "© 2026 تأكّد · نموذج أولي لهاكاثون الأمن السيبراني في الإمارات · بيانات تجريبية خيالية")}
         </p>
       </div>
     </footer>

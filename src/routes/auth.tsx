@@ -18,9 +18,9 @@ import { staffIdentifierSchema, staffLoginSchema } from "@/lib/security/staff-lo
 
 export const Route = createFileRoute("/auth")({
   head: () => ({ meta: [
-    { title: "Authorized Personnel Portal — TRUST ZERO AI" },
-    { name: "description", content: "Secure staff login for the TRUST ZERO AI fictional hackathon Security Dashboard. Not connected to Abu Dhabi Police systems." },
-    { property: "og:title", content: "Authorized Personnel Portal — TRUST ZERO AI" },
+    { title: "Authorized Personnel Portal — Taakkad" },
+    { name: "description", content: "Secure staff login for the Taakkad fictional hackathon Security Dashboard. Not connected to Abu Dhabi Police systems." },
+    { property: "og:title", content: "Authorized Personnel Portal — Taakkad" },
     { property: "og:description", content: "Authorized hackathon staff access only. No Abu Dhabi Police authentication integration." },
     { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
   ] }), component: StaffLogin,
@@ -62,7 +62,7 @@ function StaffLogin() {
     finally { setBusy(false); }
   }
   return <div dir={dir}>
-    <PageHeader eyebrow="TRUST ZERO AI" title={tr("Authorized Personnel Portal", "بوابة الموظفين المصرّح لهم")} description={tr("Abu Dhabi Police General Headquarters", "القيادة العامة لشرطة أبوظبي")} />
+    <PageHeader eyebrow={tr("Taakkad", "تأكّد")} title={tr("Authorized Personnel Portal", "بوابة الموظفين المصرّح لهم")} description={tr("Abu Dhabi Police General Headquarters", "القيادة العامة لشرطة أبوظبي")} />
     <section className="mx-auto max-w-md px-4 py-8 sm:px-6">
       <div className="mb-6 flex items-center gap-3"><LockKeyhole className="size-7 text-emerald" /><h2 className="text-xl font-semibold">{tr("Employee login", "دخول الموظفين")}</h2></div>
       <p className="mb-6 border-s-4 border-emerald bg-accent p-3 text-sm font-medium">{tr("Hackathon Demo — Not Connected to Abu Dhabi Police Systems", "عرض تجريبي للهاكاثون — غير متصل بأنظمة شرطة أبوظبي")}</p>

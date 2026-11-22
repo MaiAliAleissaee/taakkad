@@ -51,10 +51,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "TRUST ZERO AI — Hackathon Prototype" },
+      { title: "Taakkad — Hackathon Prototype" },
       { name: "description", content: "Bilingual digital identity verification and impersonation detection prototype." },
-      { name: "author", content: "TRUST ZERO AI" },
-      { property: "og:title", content: "TRUST ZERO AI — Hackathon Prototype" },
+      { name: "author", content: "Taakkad" },
+      { property: "og:title", content: "Taakkad — Hackathon Prototype" },
       { property: "og:description", content: "Bilingual digital identity verification and impersonation detection prototype." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

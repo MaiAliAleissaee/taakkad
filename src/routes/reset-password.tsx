@@ -17,10 +17,10 @@ function tokenDigest(token: string) {
 
 export const Route = createFileRoute("/reset-password")({
   head: () => ({ meta: [
-    { title: "Private Staff Password Setup — TRUST ZERO AI" },
-    { name: "description", content: "Privately set your TRUST ZERO AI staff password using a secure account recovery link." },
-    { property: "og:title", content: "Private Staff Password Setup — TRUST ZERO AI" },
-    { property: "og:description", content: "Secure password recovery for authorized TRUST ZERO AI hackathon staff." },
+    { title: "Private Staff Password Setup — Taakkad" },
+    { name: "description", content: "Privately set your Taakkad staff password using a secure account recovery link." },
+    { property: "og:title", content: "Private Staff Password Setup — Taakkad" },
+    { property: "og:description", content: "Secure password recovery for authorized Taakkad hackathon staff." },
     { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" },
   ], scripts: [{ children: "(()=>{const p=new URLSearchParams(location.hash.slice(1));const t=p.get('access_token');if(p.get('type')==='recovery'&&t){window.trustZeroRecoveryDigest=crypto.subtle.digest('SHA-256',new TextEncoder().encode(t)).then(b=>Array.from(new Uint8Array(b),v=>v.toString(16).padStart(2,'0')).join(''));}})();" }] }), component: ResetPassword,
 });
@@ -61,7 +61,7 @@ function ResetPassword() {
       delete window.trustZeroRecoveryDigest;
     } catch { setError("failed"); } finally { setBusy(false); }
   }
-  return <div dir={dir}><PageHeader eyebrow="TRUST ZERO AI" title={tr("Private password setup", "تعيين كلمة المرور بشكل خاص")} description={tr("Authorized staff account", "حساب موظف مصرّح له")} />
+  return <div dir={dir}><PageHeader eyebrow={tr("Taakkad", "تأكّد")} title={tr("Private password setup", "تعيين كلمة المرور بشكل خاص")} description={tr("Authorized staff account", "حساب موظف مصرّح له")} />
     <section className="mx-auto max-w-md px-4 py-8 sm:px-6">
       {done ? <p role="status">{tr("Password saved. Sign in with your staff ID and new password.", "تم حفظ كلمة المرور. سجّل الدخول بمعرّف الموظف وكلمة المرور الجديدة.")}</p> : ready ? <form className="space-y-5" onSubmit={save}>
         <div className="space-y-2"><Label htmlFor="new-password">{tr("New password (at least 12 characters)", "كلمة المرور الجديدة (12 حرفاً على الأقل)")}</Label><Input id="new-password" dir="ltr" type="password" autoComplete="new-password" value={password} onChange={e => setPassword(e.target.value)} disabled={busy} /></div>

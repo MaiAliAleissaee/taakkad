@@ -1,4 +1,4 @@
-# TRUST ZERO AI — five-minute demo guide
+# Taakkad — five-minute demo guide
 
 ## Preparation
 Use the preview. Keep staff passwords private and never show setup-link secrets on a projector. Sign out before changing institution accounts. All domains/records below are fictional and non-operational. No example link is opened by the application.

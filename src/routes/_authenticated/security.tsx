@@ -48,9 +48,9 @@ export const Route = createFileRoute("/_authenticated/security")({
     typeof s["case"] === "string" ? { case: s["case"] } : {},
   head: () => ({
     meta: [
-      { title: "Security Dashboard — TRUST ZERO AI" },
+      { title: "Security Dashboard — Taakkad" },
       { name: "description", content: "Simulated impersonation alerts, lookalike domains, linked indicators, evidence, risk scores and case review." },
-      { property: "og:title", content: "Security Dashboard — TRUST ZERO AI" },
+      { property: "og:title", content: "Security Dashboard — Taakkad" },
       { property: "og:description", content: "Simulated law-enforcement view of impersonation cases. Fictional data." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -151,7 +151,7 @@ function SecurityPage({ snapshot, change, busy }: { snapshot: SecuritySnapshot; 
   return (
     <>
       <PageHeader
-        eyebrow="TRUST ZERO AI"
+        eyebrow={tr("Taakkad", "تأكّد")}
         title={tr("Security Dashboard", "لوحة التحكم الأمنية")}
         description={tr("Simulated alerts and fictional evidence for demonstration. No real police systems are connected and no live internet monitoring takes place.", "تنبيهات افتراضية وأدلة خيالية للعرض. لا يوجد ربط بأنظمة شرطة فعلية ولا مراقبة حيّة للإنترنت.")}
       >

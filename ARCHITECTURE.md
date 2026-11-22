@@ -1,4 +1,4 @@
-# TRUST ZERO AI architecture
+# Taakkad architecture
 
 ## Components and boundaries
 1. **Public presentation:** Overview, Organization Portal, Trust Portal and published alerts; Arabic/English preference and RTL/LTR. Original design tokens remain authoritative.

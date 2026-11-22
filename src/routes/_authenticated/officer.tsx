@@ -14,9 +14,9 @@ export const Route = createFileRoute("/_authenticated/officer")({
   },
   head: () => ({
     meta: [
-      { title: "Organization Verification Officer Dashboard — TRUST ZERO AI" },
+      { title: "Organization Verification Officer Dashboard — Taakkad" },
       { name: "description", content: "Restricted staff workspace for reviewing fictional organization applications." },
-      { property: "og:title", content: "Officer Dashboard — TRUST ZERO AI" },
+      { property: "og:title", content: "Officer Dashboard — Taakkad" },
       { property: "og:description", content: "Restricted staff workspace for organization verification review." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

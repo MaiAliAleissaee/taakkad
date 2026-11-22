@@ -12,9 +12,9 @@ export const Route = createFileRoute("/")({
   loader: ({ context }) => context.queryClient.ensureQueryData(publishedAlertsQuery),
   head: () => ({
     meta: [
-      { title: "TRUST ZERO AI — Identity Verification & Impersonation Detection Prototype" },
+      { title: "Taakkad — Identity Verification & Impersonation Detection Prototype" },
       { name: "description", content: "Hackathon prototype connecting an organization registry, a public trust portal and a security dashboard to spot impersonation. Fictional data." },
-      { property: "og:title", content: "TRUST ZERO AI — Hackathon Prototype" },
+      { property: "og:title", content: "Taakkad — Hackathon Prototype" },
       { property: "og:description", content: "Verify who is really messaging you. Bilingual Arabic/English prototype with fictional demo data." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -69,8 +69,8 @@ function Home() {
             </h1>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-navy-muted sm:text-lg">
               {tr(
-                "TRUST ZERO AI links official organizations, the public and security analysts so impersonation is caught early — without branding honest unknown senders as fraud.",
-                "يربط TRUST ZERO AI بين الجهات الرسمية والجمهور ومحللي الأمن لرصد الانتحال مبكراً — دون وصف المرسلين المجهولين بالاحتيال بلا دليل.",
+                "Taakkad links official organizations, the public and security analysts so impersonation is caught early — without branding honest unknown senders as fraud.",
+                "يربط تأكّد بين الجهات الرسمية والجمهور ومحللي الأمن لرصد الانتحال مبكراً — دون وصف المرسلين المجهولين بالاحتيال بلا دليل.",
               )}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">

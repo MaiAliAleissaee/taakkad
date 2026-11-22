@@ -52,3 +52,5 @@
 - [x] Root cause of rejected HAM123 logins: the per-staff-ID attempt limit was exhausted (15 of 10) and reported as a wrong password; counter cleared, lockout now shown distinctly. Full flow re-verified with a temporary test link.
 - [ ] Owner sets the HAM123 password with the new 24h link and signs in — waits on the owner.
 - [x] Owner chose to keep the fictional demo account for now (email-only, no staff ID); delete after the hackathon on request.
+
+- [ ] HAM1234 setup: waiting for owner to set password via private link; then verify HAM1234 Security-only access, remove security_analyst from HAM123 (446f3bbf…), verify HAM123 officer-only access and cross-denial.

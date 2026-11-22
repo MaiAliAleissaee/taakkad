@@ -141,6 +141,13 @@
       "when": 1795340767521,
       "tag": "0019_lock_report_number_ledger_grants",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1795352269115,
+      "tag": "0020_restrict_public_alert_read",
+      "breakpoints": true
     }
   ]
 }

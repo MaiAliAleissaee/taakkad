@@ -239,19 +239,34 @@
 .investigation-edge-shared { stroke: var(--unverified); stroke-width: 2.5; stroke-dasharray: 6 4; opacity: 0.85; }
 .investigation-edge-selected { stroke: var(--verified); stroke-width: 3; opacity: 1; }
 
-/* Only the three primary Security Dashboard analytics tiles. */
-.security-summary-statistics {
+/* Scoped to the primary analytics and connection-summary statistics only. */
+.security-summary-statistics,
+.security-connection-statistics {
   --security-stat-background: #F1F6FA;
   --security-stat-foreground: #24364B;
   --security-stat-border: #D8E4ED;
+  --security-stat-warning: color-mix(in oklab, var(--unverified) 90%, var(--security-stat-foreground));
+  --security-stat-success: color-mix(in oklab, var(--verified) 90%, var(--security-stat-foreground));
 }
-.security-summary-statistics > div {
+.security-summary-statistics > div,
+.security-connection-statistics > div {
   background-color: var(--security-stat-background);
   border-color: var(--security-stat-border);
 }
-.security-summary-statistics > div > p {
+.security-summary-statistics > div > p,
+.security-connection-statistics > div > p:first-child {
   color: var(--security-stat-foreground);
 }
-.security-summary-statistics > div > p:nth-child(2) {
+.security-summary-statistics > div > p:nth-child(2),
+.security-connection-statistics > div > p:nth-child(2) {
   font-weight: 700;
+}
+.security-connection-statistics > div > p:nth-child(2) {
+  color: var(--info);
+}
+.security-connection-statistics > div > p.text-sev-medium {
+  color: var(--security-stat-warning);
+}
+.security-connection-statistics > div > p.text-emerald {
+  color: var(--security-stat-success);
 }

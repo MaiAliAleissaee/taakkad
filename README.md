@@ -90,5 +90,5 @@ These are proposals, not installed integrations, partnerships or confirmed capab
 - [TEST_REPORT.md](TEST_REPORT.md) — testing evidence / توثيق الاختبارات
 - [DEMO_GUIDE.md](DEMO_GUIDE.md) — demonstration guide / دليل العرض
 - [PRESENTATION_OUTLINE.md](PRESENTATION_OUTLINE.md) — presentation outline / مخطط العرض
-Submission note / ملاحظة تسليم: The current GitHub default branch observed in the project is main. The hackathon instructions refer to “Master Branch”; confirm whether this means the default branch generically or requires the literal branch name master before changing branch settings or disrupting Lovable synchronization.
-الفرع الافتراضي الحالي هو main، بينما تذكر التعليمات «Master Branch». ينبغي تأكيد ما إذا كان المقصود الفرع الرئيسي عموماً أو الاسم الحرفي master قبل تغيير إعدادات الفروع.
+Submission note / ملاحظة تسليم: The GitHub repository uses master as its default branch. The hackathon prototype, source code, and technical documentation are available in this branch.
+يعتمد مستودع GitHub على الفرع master بوصفه الفرع الافتراضي، ويحتوي على النموذج الأولي للهاكاثون والكود المصدري والوثائق التقنية.

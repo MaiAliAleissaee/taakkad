@@ -68,3 +68,4 @@ use the editor.
 - Demo tracking requires a server-issued random receipt secret stored only as SHA-256 alongside the unchanged reference; legacy/lost receipts use independently confirmed active-officer recovery with separate security audit, never code-only fallback.
 - Resolve saved workspace hints against the current ready analyst session and discard stale hints; server ownership checks remain the authority.
 - Keep UAE scenario cues, official reference provenance and phone-format normalization in shared pure local helpers; never turn reference/contact matches into channel approvals or message authentication, and extract only explicitly supplied indicators for private matching.
+- Legacy email-code delivery requires an active session, Cloud-confirmed matching recipient and receipt; never send to a visitor-selected third party or create an account while resending, so verification cannot become an outbound-mail proxy.

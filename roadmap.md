@@ -4,7 +4,8 @@
 - [x] Audit existing UAE detection, official references, normalization, linking, guidance and visual-analysis limits.
 - [x] Add local UAE dialect/request cues, shared phone normalization, explicit text-indicator extraction, source-linked prevention/police guidance and seven fictional scenarios; preserve models, design, security and staff access.
 - [x] 85 targeted tests passed; anonymous Arabic/English checks, normalized phone and benign context verified at 835px/390px with no paid inference or suspicious-site visits. One full regression ran: 373/374 initially passed; outdated ten-example expectation corrected and only that test rechecked: PASS, six already-completed tests skipped. Latest preview build OK; report documented. Quick scan: one unchanged informational finding.
-- [ ] Publication waits on newly reported critical legacy email-verification abuse finding and release clearance; permission to change the legacy workflow requested. No Phase 5.
+- [x] Approved legacy email-code fix: active authenticated session and Cloud-confirmed matching recipient plus existing receipt required; resend cannot create users. 20 targeted tests pass; actual anonymous endpoint denies without email sends, public tracker still visible, build OK. Finding marked fixed; quick scan one unchanged informational finding. No credentials, records, roles or demo workflows changed.
+- [ ] Fresh deep scan of saved Phase 4/email fix, then publication after clearance. Genuine recipient sign-in/inbox completion and staff persistence remain unverified. No Phase 5.
 
 ## Selected deep-scan security fixes
 - [x] Guard all four caller-selected workspace checks/reports with caller ownership and active analyst authorization. Live anonymous denials and public fictional matching passed; 26 targeted regressions passed. Signed-in positive/cross-owner rollback contract remains unverified: the test connection cannot read auth.sessions.
@@ -12,14 +13,14 @@
 - [x] Add atomic hashed private receipt alongside unchanged references; active-officer confirmed/audited recovery. Public owner status readback and wrong-secret/direct-call denial verified; actual officer recovery remains unverified without a usable owner session.
 - [x] Fix stale targets across checks/reporting; 30 scoped tests and bilingual public/mobile browser flows pass. Eight selected findings resolved; fresh quick scan retains only the unrelated informational registry finding.
 - [x] Deep scan completed: newly reported critical legacy email-verification abuse; reappearing tracking warning resolved against existing secret-required code and live denied number-only grants. No security fix removed.
-- [ ] Phase 3/4 publication and live verification wait on legacy email-verification security clearance.
+- [ ] Phase 3/4 publication and live verification wait on fresh deep-scan clearance of the recipient-owned email fix.
 - [x] Mark all eight selected findings fixed after scoped verification; leave the unrelated public organization registry finding unchanged.
 
 ## Phase 3 explainability and private evidence
 - [x] Audit: existing typed links/graph, synthetic/source labels, DNS/RDAP snapshots, private officer documents and confirmed officer decisions are reused.
 - [x] Add shared staff evidence workspace: risk explanations, UTC/UAE timeline, validated private attachments with server SHA-256, human-approved preparation actions and bilingual PDF/JSON exports.
 - [x] 22 targeted tests and one final 321-test regression pass; rollback database contracts, isolated actual JSON/PNG/PDF exports and desktop/mobile print screenshots pass. Production dependency audit clear; quick security scan retains one existing informational finding.
-- [ ] Deep scan completed with a new legacy email-verification concern; publication after release clearance. Protected real staff upload/readback and officer receipt recovery remain NOT VERIFIED because usable owner session is unavailable; Phase 4 subsequently authorized separately.
+- [ ] Legacy email concern fixed with approved recipient authorization; fresh deep scan/publication pending. Protected real staff upload/readback and officer receipt recovery remain NOT VERIFIED because usable owner session is unavailable; Phase 4 subsequently authorized separately.
 
 ## Phase 2 manual import correction
 - [x] Reproduced DEMO-001 rejection at `[0, domain]`; permit valid reserved .example storage only for explicitly synthetic records, with bilingual field-level validation.

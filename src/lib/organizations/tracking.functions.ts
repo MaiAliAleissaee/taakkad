@@ -1,4 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { getRequestHeader, setResponseHeader } from "@tanstack/react-start/server";
 import { z } from "zod";
 import type { Json } from "@/integrations/supabase/types";
 import { applicationGrantSchema, documentsSchema, registrationSchema, trackingCredentialsSchema } from "./schema";
@@ -19,18 +21,27 @@ export const submitTrackedApplication = createServerFn({ method: "POST" })
     return { id: result.data, reference: `TZ-ORG-${result.data.toUpperCase()}`, secret, submittedAt: row.data.submitted_at, status: "pending" as const };
   });
 
-export const requestApplicationCode = createServerFn({ method: "POST" }).inputValidator(input => trackingCredentialsSchema.parse(input))
-  .handler(async ({ data }) => {
+export const requestApplicationCode = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator(input => trackingCredentialsSchema.parse(input))
+  .handler(async ({ data, context }) => {
+    setResponseHeader("Cache-Control", "no-store");
+    const { requestRecipientOwnedCode } = await import("./email-request.server");
     const { trackingRateLimit, trackingIdentity, emailCodeClient } = await import("./tracking.server");
-    await trackingRateLimit("request-code", 20);
-    const identity = await trackingIdentity(data.reference, data.secret);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const permitted = await supabaseAdmin.rpc("begin_application_code", { application_uuid: identity.application_id });
-    if (permitted.error || !permitted.data) throw new Error("Wait before requesting another code");
-    // Standard hosted OTP; no password or account-registration form. An email identity is managed by Cloud Auth.
-    const result = await emailCodeClient().auth.signInWithOtp({ email: identity.email, options: { shouldCreateUser: true } });
-    if (result.error) throw new Error("Email code unavailable; check email sending and retry later");
-    return { sent: true };
+    const token = getRequestHeader("authorization")?.replace(/^Bearer /, "") ?? "";
+    return requestRecipientOwnedCode(context.supabase, token, context.userId, data, {
+      receiptIdentity: async (reference, secret) => {
+        await trackingRateLimit("request-code", 20);
+        return trackingIdentity(reference, secret);
+      },
+      beginCode: async id => {
+        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+        const permitted = await supabaseAdmin.rpc("begin_application_code", { application_uuid: id });
+        return !permitted.error && permitted.data === true;
+      },
+      sendCode: async email => {
+        const result = await emailCodeClient().auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
+        return !result.error;
+      },
+    });
   });
 
 export const verifyApplicationCode = createServerFn({ method: "POST" })

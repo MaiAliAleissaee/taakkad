@@ -32,6 +32,7 @@ import type { UrlIntelligence } from "@/lib/services/url/intelligence";
 import { UrlFindings } from "./url-findings";
 import { useStaffSession } from "@/lib/security/session";
 import { AiFindings } from "./ai-findings";
+import { UaeFindings } from "./uae-findings";
 
 export function MessageChecker() {
   const { tr, pick } = useI18n();
@@ -161,6 +162,7 @@ export function MessageChecker() {
             <ReasonList reasons={result.assessment.reasons.filter(reason => !reason.code.startsWith("content_"))} />
             {result.assessment.reasons.some(reason => reason.code.startsWith("content_")) && <><h3 className="text-sm font-semibold">{tr("Heuristic warning signs", "علامات تحذير استدلالية")}</h3><ReasonList reasons={result.assessment.reasons.filter(reason => reason.code.startsWith("content_"))} /></>}
             <p className="text-sm font-medium">{tr("A registered channel does not guarantee the authenticity of this individual message.", "تسجيل القناة لا يضمن أصالة هذه الرسالة الفردية.")}</p>
+            <UaeFindings input={result.input} />
             <AiFindings outcome={checked?.ai ?? null} risk={overallRisk(result.assessment, checked?.ai ?? null, !!checked?.flaggedValues.length)} flaggedValues={checked?.flaggedValues ?? []} />
             {technical && <UrlFindings analysis={technical} intelligence={checked?.intelligence ?? null} score={combinedRiskScore(result.assessment, checked?.ai ?? null, !!checked?.flaggedValues.length)} />}
             {checked && !checked.flagsAvailable && <p role="status" className="text-sm text-muted-foreground">{tr("Extracted-indicator database matching was unavailable; no match has been confirmed.", "تعذّرت مطابقة المؤشرات المستخرجة في قاعدة البيانات؛ لم تُؤكّد أي مطابقة.")}</p>}

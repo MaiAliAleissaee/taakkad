@@ -6,6 +6,7 @@ import { indicatorKey } from "@/lib/services/investigation";
 import { priority, correlate } from "@/lib/intelligence/engine";
 import type { IntelligenceRecord } from "@/lib/intelligence/schema";
 import type { EvidenceSubject, AttachmentMeta, ActionMeta } from "./schema";
+import { uaeContext, policeUaeGuidance } from "@/lib/services/uae-safety";
 export type Provenance = "technical" | "prediction" | "generated" | "user_report" | "synthetic" | "staff_submission" | "human_review";
 export const provenanceLabels: Record<Provenance, Bi> = {
   technical: { en: "Verified technical observation — not identity or intent", ar: "ملاحظة تقنية متحقق منها — ليست إثباتاً للهوية أو النية" },
@@ -31,6 +32,7 @@ export interface EvidencePackage {
   attachments: Array<{ id: string; createdAt: string; metadata: AttachmentMeta; content: string }>;
   actions: Array<{ id: string; at: string; metadata: ActionMeta }>;
   recommendations: Array<ActionMeta["action"]>; uncertainty: Bi[];
+  uaeGuidance: Bi[]; uaeSources: Array<{ title: Bi; url: string }>;
 }
 export function evidenceTimes(value: string | null) {
   if (!value || !Number.isFinite(Date.parse(value))) return { utc: "Unknown / غير معروف", uaeEn: "Unknown", uaeAr: "غير معروف" };
@@ -44,8 +46,11 @@ const uncertainty: Bi[] = [
 ];
 function base(subject: EvidenceSubject, title: Bi, reference: string, indicators: Indicator[], risk: Bi, timeline: TimelineEvent[]): EvidencePackage {
   const urls = [...new Set(indicators.filter(i => i.type === "url" || i.type === "domain").map(i => i.value))].slice(0,10);
+  const context = uaeContext({ sender: "", body: `${title.en} ${title.ar} ${timeline.map(e => `${e.detail.en} ${e.detail.ar}`).join(" ")}`, url: urls[0] });
+  const uaeGuidance = context.scenarios.length ? [...context.scenarios.map(s => s.guidance), ...policeUaeGuidance] : [];
+  const uaeSources = [...new Map(context.scenarios.flatMap(s => s.sources).map(s => [s.url, s])).values()];
   return { schemaVersion: "taakkad-evidence-1", subject, reference, title, generatedAt: new Date().toISOString(), risk, indicators, timeline,
-    urlFindings: urls.map(value => { const rules = analyzeUrl(value); return { value, ruleIndex: rules.riskScore, signals: rules.signals, ml: classifyUrlMl(value) }; }), links: [], attachments: [], actions: [], recommendations: ["preserve", "verify"], uncertainty };
+    urlFindings: urls.map(value => { const rules = analyzeUrl(value); return { value, ruleIndex: rules.riskScore, signals: rules.signals, ml: classifyUrlMl(value) }; }), links: [], attachments: [], actions: [], recommendations: ["preserve", "verify"], uncertainty, uaeGuidance, uaeSources };
 }
 export function caseEvidence(record: ImpersonationAlert, reports: ImpersonationAlert[]): EvidencePackage {
   const provenance: Provenance = record.source === "public_report" ? "user_report" : "synthetic";
@@ -91,6 +96,7 @@ export function reportLines(pack: EvidencePackage): string[] {
   lines.push("Linked indicators — no guilt attribution / مؤشرات مرتبطة — دون نسبة الذنب", ...pack.links.map(l => `${l.label}${l.synthetic ? " [Synthetic / خيالي]" : ""}: ${l.shared.join(" · ")}`));
   lines.push("Attachments / المرفقات"); for (const a of pack.attachments) lines.push(`${a.metadata.name} (${a.metadata.bytes} bytes)`, `SHA-256: ${a.metadata.sha256}`, `Source / المصدر: ${a.metadata.source}`, `Claimed capture / الالتقاط المصرح به: ${a.metadata.capturedAt}`, provenanceLabels[a.metadata.provenance].en,provenanceLabels[a.metadata.provenance].ar);
   lines.push("Recommended actions / الإجراءات الموصى بها"); for (const a of pack.recommendations) lines.push(actionLabels[a].en,actionLabels[a].ar);
+  if (pack.uaeGuidance?.length) { lines.push("UAE prevention and police review / الوقاية والمراجعة الشرطية الإماراتية"); for (const guidance of pack.uaeGuidance) lines.push(guidance.en, guidance.ar); for (const source of pack.uaeSources ?? []) lines.push(source.title.en, source.title.ar, source.url); }
   lines.push("Human decisions / القرارات البشرية"); for (const a of pack.actions) lines.push(a.at,actionLabels[a.metadata.action].en,actionLabels[a.metadata.action].ar,a.metadata.note);
   return lines;
 }

@@ -5,6 +5,8 @@ import { detectLookalike, detectLookalikeHandle, hostFromUrl, isSameOrSubdomain,
 import { activeChannel, channelKey } from "./channels";
 import { analyzeUrl } from "./url/analyze";
 import { classifyUrlMl } from "./url/ml";
+import { indicatorsFor } from "./reporting";
+import { normalizeUaePhone } from "./uae-phone";
 
 export type ReasonCode =
   | "url_technical"
@@ -96,11 +98,12 @@ function assessRegistryMessage(input: MessageInput, ctx: VerificationContext): A
   const senderDomain = senderDomainOf(input.channel, input.sender);
 
   // 1. Blocklisted indicators from escalated / confirmed cases
-  const blockedValues = new Map(ctx.blocklist.map((b) => [normalizeIndicator(b.value), b.caseId]));
-  const candidates = [input.sender, senderDomain, urlHost, input.url].filter((v): v is string => !!v);
+  const candidateKey = (value: string) => normalizeUaePhone(value) ?? normalizeIndicator(value);
+  const blockedValues = new Map(ctx.blocklist.map((b) => [candidateKey(b.value), b.caseId]));
+  const candidates = [...indicatorsFor(input).map(indicator => indicator.value), input.sender, senderDomain, urlHost, input.url].filter((v): v is string => !!v);
   const seen = new Set<string>();
   for (const value of candidates) {
-    const key = normalizeIndicator(value);
+    const key = candidateKey(value);
     const caseId = blockedValues.get(key);
     if (caseId && !seen.has(caseId)) {
       seen.add(caseId);

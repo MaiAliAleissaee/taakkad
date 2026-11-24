@@ -67,3 +67,4 @@ use the editor.
 - Guard every non-null public check/report workspace argument with active analyst authorization and caller ownership inside the database; null keeps the public synthetic/check and shared report paths without granting private access.
 - Demo tracking requires a server-issued random receipt secret stored only as SHA-256 alongside the unchanged reference; legacy/lost receipts use independently confirmed active-officer recovery with separate security audit, never code-only fallback.
 - Resolve saved workspace hints against the current ready analyst session and discard stale hints; server ownership checks remain the authority.
+- Keep UAE scenario cues, official reference provenance and phone-format normalization in shared pure local helpers; never turn reference/contact matches into channel approvals or message authentication, and extract only explicitly supplied indicators for private matching.

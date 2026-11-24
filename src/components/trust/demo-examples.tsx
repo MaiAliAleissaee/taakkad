@@ -7,7 +7,7 @@ import { useI18n } from "@/lib/i18n/i18n";
 export function DemoExamples() {
   const { tr, pick } = useI18n();
   return <details className="mt-8 border-t pt-5">
-    <summary className="cursor-pointer text-sm font-semibold"><FlaskConical className="me-2 inline size-4 text-info" />{tr("Fictional demonstration examples (10)", "أمثلة عرض خيالية (10)")}</summary>
+    <summary className="cursor-pointer text-sm font-semibold"><FlaskConical className="me-2 inline size-4 text-info" />{tr(`Fictional demonstration examples (${demoExamples.length})`, `أمثلة عرض خيالية (${demoExamples.length})`)}</summary>
     <p className="mt-3 text-sm text-muted-foreground">{tr("Reserved example domains only. Expectations are guidance, not predetermined AI output; registry status can change after officer review.", "نطاقات أمثلة محجوزة فقط. التوقعات إرشادية وليست نتائج ذكاء اصطناعي محددة مسبقاً؛ قد تتغير حالة السجل بعد مراجعة الموظف.")}</p>
     <div className="mt-4 grid gap-4 md:grid-cols-2">{demoExamples.map(example => <article key={example.id} className="min-w-0 rounded-lg border bg-card p-4">
       <h3 className="text-sm font-semibold">{example.id}. {pick(example.title)}</h3>

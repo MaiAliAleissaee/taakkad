@@ -1,5 +1,10 @@
 # Final hackathon polish roadmap
 
+## Obsolete staff receipt recovery section
+- [x] Remove only the receipt recovery section from the shared bilingual officer review screen; retain private recovery protections, evidence, conflict review, actions and audit.
+- [x] Verified removal in actual authenticated HAM123 English/Arabic review screens at 855×754; private evidence entry, three decision actions and audit remain visible, with no page errors. 25 focused tracking/privacy/access tests passed; preview build OK. Quick security scan: only the unchanged informational public-registry finding. No records, permissions or server protections changed.
+- [ ] Final deep security clearance before publication; do not publish while the current saved enhancement remains unverified by the deep scan.
+
 ## Final organization identity conflicts and relationships
 - [x] Add bilingual protected relationship declarations and private normalized conflict detection using existing applications and available technical snapshots; reuse maintained lookalike and bounded DNS/RDAP helpers.
 - [x] Add officer-only conflict/evidence review and atomic documented approval safeguards; preserve projections, audit, records and public tracking.

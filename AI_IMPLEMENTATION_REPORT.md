@@ -1,5 +1,19 @@
 # TRUST ZERO AI — hybrid AI implementation and validation
 
+## Phase 1 URL addendum — 24 November 2026
+
+This addendum supersedes historical counts/scope statements below. This phase adds deterministic local URL inspection and optional live RDAP, **not a new model or browsing agent**. Public-suffix parsing, limited homoglyph/lookalike detection, IP/URL syntax and sensitive-pattern signals are rules. Official references establish domain boundaries only; simulated approvals are not genuine verification. Registration metadata comes from actual RDAP providers, not model claims.
+
+The model remains **OpenAI `openai/gpt-6.1-sol` through Lovable AI Gateway**, with existing server-only prompts, redaction, 2,400-output-token cap, strict schema, grounding, fallbacks and atomic quotas (five checks/visitor/ten minutes, 200 globally/day). No account, credential, permission, case or model setting changed.
+
+AI remains opt-in. Separate RDAP consent transmits only the registrable domain to fixed providers, excluding message/path/query. Local results survive AI/RDAP failure. Missing registry entries are not fraud verdicts. Redirects, page content and cloaking remain **unverified**; no submitted URL is opened.
+
+The displayed 0–100 combined score takes the bounded maximum of existing deterministic assessment, mapped AI severity (0/40/65/90) and flagged-indicator score 65. It is **not a calibrated probability**. Registry facts, technical observations and AI interpretations keep distinct explanations; low risk does not certify safety/authenticity.
+
+Two actual opt-in preview inferences completed on 24 November 2026: English synthetic UAE PASS password/OTP lure → **Critical**; Arabic informational text with the official ADCB contact URL → **Low**. Real bilingual output, grounded supplied indicators and safety actions were inspected. These functional spot checks are not an AI accuracy dataset; no private credentials or report/case submissions were used.
+
+The held-out synthetic benchmark measures **local deterministic URL classification only**, excluding AI/registry/RDAP: precision 95.45%, recall 87.50%, F1 91.30%, false-positive rate 4.17%, accuracy 91.67%. There is no before/after production accuracy or independently labelled real-world performance claim. Full confusion counts, errors and limitations are in `TEST_REPORT.md` and `docs/url-evaluation-results.json`.
+
 ## Actual inference
 
 - **Provider/model:** OpenAI `openai/gpt-6.1-sol`, through the managed Lovable AI Gateway Responses surface. Workspace discovery returned `workspace_models: included`; the selected surface has zero-provider-retention status in that catalog.

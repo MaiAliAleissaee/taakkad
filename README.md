@@ -50,7 +50,7 @@ Fictional registry and demo approvals	Demonstrate workflow without claiming real
 
 
 5. ما لم يُنفذ وحدود النموذج | Exclusions and limitations
-- لا يوجد تحقق مستقل فعلي من ملكية النطاقات أو تفويض ممثلي الجهات. No real domain-ownership lookup or independently validated organization authorization is connected.
+- لا يوجد تحقق مستقل فعلي من ملكية النطاقات أو تفويض ممثلي الجهات. Optional RDAP registration metadata is now available for `.com`, `.net` and `.org`; it is not ownership verification or independently validated organization authorization.
 - لا توجد مصادقة تشفيرية حقيقية للرسائل. No cryptographic message authentication is integrated.
 - لا توجد مراقبة حية أو إزالة محتوى أو خدمة تحديد جغرافي لعناوين IP. No live monitoring, takedown, or IP geolocation service is connected.
 - بيانات السجل المنشورة خيالية. Existing published samples are fictional; reserved .example domains are not opened.
@@ -84,6 +84,18 @@ English: With additional time and resources, priorities include independently ve
 
 These are proposals, not installed integrations, partnerships or confirmed capabilities.
 هذه مقترحات مستقبلية وليست تكاملات أو شراكات أو وظائف مُفعّلة حالياً.
+Phase 1: دقة تحليل الروابط | URL detection accuracy
+
+العربية: يفحص «تأكّد» الروابط محلياً لاستخراج المضيف والنطاق القابل للتسجيل باستخدام بيانات اللواحق العامة، مع كشف التشابه بالأسماء والترميز الدولي والروابط المختصرة والعناوين المضللة. مراجع النطاقات الرسمية موثقة لكنها ليست اعتماداً لقنوات السجل أو إثباتاً لأصالة الرسالة. غياب النطاق من المراجع أو وجود كلمات تسجيل الدخول والدفع وحده لا يعني الاحتيال. الاستعلام الاختياري يرسل النطاق فقط لخدمة تسجيل فعلية، دون الرسالة أو المسار أو بيانات الدخول. وجهة التحويل ومحتوى المواقع وإخفاء الوجهة تظل غير متحقق منها؛ لا تُفتح الروابط المرسلة.
+
+English: Local URL inspection uses maintained public/private suffix data (`tldts`), Punycode decoding and IP classification. It distinguishes the host/registrable domain and detects brand lookalikes, misleading subdomains, userinfo, encoded authorities, shorteners and sensitive patterns. Documented official references do not create approved channels, authenticate messages or promote simulated approvals into trust. Unlisted domains and login/payment words alone are not fraud verdicts.
+
+Optional external registration lookup sends only the registrable domain, never message/path/query/credentials, to fixed RDAP providers. Actual registration date, age, registrar and status appear only when returned. `.ae`, `.abudhabi` and other unsupported suffixes report unavailable. Age alone adds no risk. Redirect expansion, cloaking, page content, DNS and hosting remain **unverified**; submitted URLs are never opened. Existing opt-in AI stays on OpenAI `openai/gpt-6.1-sol`; the combined 0–100 score is ordinal evidence, **not a calibrated fraud probability**. Unavailable services preserve local results and uncertainty.
+
+Reproduce: `bun scripts/evaluate-urls.ts` and `bunx vitest run`. See [evaluation output](docs/url-evaluation-results.json), [labelled fixtures](src/test/fixtures/url-evaluation.ts), [architecture/sources](ARCHITECTURE.md) and [test report](TEST_REPORT.md). Held-out synthetic set: 48 examples; TP 21, TN 23, FP 1, FN 3; precision **95.45%**, recall **87.50%**, F1 **91.30%**, false-positive rate **4.17%**, accuracy **91.67%**. The separate 16-example development split scored 100%, a small sanity check rather than production evidence. No tuning used held-out mistakes. The benchmark measures local deterministic URL classification, excluding AI, registry and RDAP. Independent real-world evaluation is still required.
+
+العربية: دقة العينة التجريبية المنفصلة 91.67%، وليست ادعاءً للدقة في الواقع؛ بقي خطأ إيجابي واحد وثلاث حالات اشتباه غير مكتشفة، موثقة في تقرير الاختبارات. لم تتغير حسابات الموظفين أو الصلاحيات أو البيانات أو إجراءات الجهات.
+
 9. وثائق التسليم | Handoff documents
 - [ARCHITECTURE.md](ARCHITECTURE.md) — technical architecture / البنية التقنية
 - [AI_IMPLEMENTATION_REPORT.md](AI_IMPLEMENTATION_REPORT.md) — AI implementation / تنفيذ الذكاء الاصطناعي

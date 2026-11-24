@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { groundedIndicators, minimizeAiInput, redactAiText } from "@/lib/services/ai-privacy";
-import { overallRisk } from "@/lib/services/hybrid-analysis";
+import { combinedRiskScore, overallRisk } from "@/lib/services/hybrid-analysis";
 import { aiFindingsSchema } from "@/lib/services/ai-schema";
 import { assessMessage } from "@/lib/services/verification";
 import { createSeedState } from "./fixtures/security-seed";
@@ -9,6 +9,26 @@ import { correlateIndicators } from "@/lib/services/ai-correlation";
 import { indicatorsFor } from "@/lib/services/reporting";
 
 describe("AI privacy and hybrid rules", () => {
+  it.each([["low", 0], ["medium", 40], ["high", 65], ["critical", 90]] as const)("maps %s AI severity to ordinal score %s without changing registry facts", (risk, score) => {
+    const assessment = { state: "verified" as const, riskScore: 0, reasons: [] };
+    expect(combinedRiskScore(assessment, { status: "performed", model: "openai/gpt-6.1-sol", findings: { risk, explanation: { en: "Review", ar: "مراجعة" }, warningSigns: [], indicators: [], safeActions: [{ en: "Verify independently", ar: "تحقق بشكل مستقل" }] } })).toBe(score);
+    expect(assessment.state).toBe("verified");
+  });
+  it("bounds the combined score to 0–100", () => {
+    expect(combinedRiskScore({ state: "unverified", riskScore: 150, reasons: [] }, null)).toBe(100);
+    expect(combinedRiskScore({ state: "unverified", riskScore: -10, reasons: [] }, null)).toBe(0);
+  });
+  it("retains the deterministic score when AI is unavailable", () => {
+    expect(combinedRiskScore({ state: "suspicious", riskScore: 80, reasons: [] }, { status: "unavailable", reason: "service" })).toBe(80);
+  });
+  it("does not lower deterministic evidence when AI reports low risk", () => {
+    expect(combinedRiskScore({ state: "suspicious", riskScore: 90, reasons: [] }, { status: "performed", model: "openai/gpt-6.1-sol", findings: { risk: "low", explanation: { en: "Few signs", ar: "مؤشرات قليلة" }, warningSigns: [], indicators: [], safeActions: [{ en: "Verify", ar: "تحقق" }] } })).toBe(90);
+  });
+  it("sets a flagged-indicator floor without promoting a channel to verified", () => {
+    const assessment = { state: "unverified" as const, riskScore: 5, reasons: [] };
+    expect(combinedRiskScore(assessment, null, true)).toBe(65);
+    expect(assessment.state).toBe("unverified");
+  });
   it("does not send passwords, OTPs or identity numbers to inference", () => {
     const output = redactAiText("password: Hunter2 OTP: 123456 رمز التحقق: 654321 ID 784-1990-1234567-1");
     for (const secret of ["Hunter2", "123456", "654321", "784-1990-1234567-1"]) expect(output).not.toContain(secret);

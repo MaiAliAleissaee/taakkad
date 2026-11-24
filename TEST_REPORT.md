@@ -1,5 +1,37 @@
 # Final polish test report
 
+## Phase 1 URL detection accuracy — 24 November 2026
+Current results below supersede historical counts retained later in this report.
+
+### Automated and reproducible checks
+- **211 tests across 19 files passed** (`bunx vitest run`); current harness **build OK**. New coverage: 41 URL detection/evaluation tests + 16 RDAP tests + eight combined-score tests. Existing registry, simulated approval, reporting, roles, AI redaction/grounding/fallback and investigation regressions passed.
+- URL cases cover public/private suffixes (`co.uk`, `github.io`), exact domain boundaries, Punycode/homoglyphs, shorteners, userinfo, encoded authority, malformed/non-HTTP input and blocked IP/local/reserved destinations. Official sensitive paths and unknown domains alone are not suspicious verdicts.
+- RDAP tests cover bounded schema/dates, fixed hosts, no credentials/referrer, rejected redirects, unsupported suffixes, timeout/service failures, malformed records and oversized bodies.
+- Reproduce with `bun scripts/evaluate-urls.ts`. Committed output: `docs/url-evaluation-results.json`; labelled/provenance-annotated inputs: `src/test/fixtures/url-evaluation.ts`. Positive = local deterministic URL classification `suspicious` (score ≥ 50); caution is negative. **AI, registry and RDAP are excluded from benchmark accuracy.**
+
+| Synthetic split | N | TP | TN | FP | FN | Precision | Recall | F1 | False-positive rate | Accuracy |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Development | 16 | 8 | 8 | 0 | 0 | 100% | 100% | 100% | 0% | 100% |
+| Held-out | 48 | 21 | 23 | 1 | 3 | 95.45% | 87.50% | 91.30% | 4.17% | 91.67% |
+
+Each split has balanced labels and disjoint URLs. Development is a small sanity check, not production evidence. Held-out mistakes were not used to tune thresholds. False positive: legitimate `tamm-archive.example/history` (held-24). Misses: suspicious `uaepasssupport.example/account` (held-28), `credential-collector.example/verify` (held-47), `192.0.2.10/login` (held-48). No fixture destination was fetched. Errors remain disclosed rather than patched against the same held-out data.
+
+### Actual preview and live-service observations
+- Desktop: `adcb.com.attacker.example` displayed suspicious indicators and correct registrable domain; official `www.adcb.com/login/payment` did not become suspicious simply for path keywords. Official references remained distinct from registry approval.
+- Arabic mobile 390×844: UAE PASS lure displayed RTL warnings, risk and unverified redirects with no horizontal overflow. English/Arabic evidence screenshots were inspected.
+- Actual UI RDAP for `adcb.com`: registration **2003-06-25**, age **8,552 days** on check date, registrar/statuses. The bounded helper returned live `.net` (`verisign.net`) and `.org` (`ietf.org`) records as well. Unsupported `.ae` displayed unavailable honestly. Age alone did not raise risk.
+- Rate limiting exercised through the UI with an isolated documentation-address localhost header: first **20** domain lookups allowed, **21st** unavailable. Unsupported `.ae` avoided repeated external calls. Global 1,000/hour protection uses the existing atomic command; a 1,001-request global load test was **not performed**.
+- Two real opt-in Gateway calls: English synthetic UAE PASS credential lure → **Critical**; Arabic benign bank contact information → **Low**. Actual bilingual findings/grounded indicators were inspected; these are not part of accuracy metrics.
+- Reload cleared the visit-private result. Overview, Organization Portal, Alerts and sign-in loaded with Taakkad metadata; signed-out `/security` and `/officer` redirected to `/auth`. Successful public URL/AI runs reported no browser errors.
+- Early import/syntax and language-selector failures were corrected before passing runs. The initial rate script's globally applied test header interfered with external calls; scoping it to localhost fixed the test without application changes.
+
+### Limitations and preserved boundaries
+- Redirect expansion/final destination, scripts/page content, cloaking, DNS/hosting and email authentication remain **unverified**. No general URL crawler exists. RDAP supports only `.com`, `.net`, `.org` and is not ownership/security verification.
+- Compound service names, generic credential links and contextual IP lures remain known misses; a brand-archive fixture is a false positive. References and homoglyph rules are limited. An unlisted domain is not automatically malicious; low risk does not certify safety. Scores are ordinal, not calibrated probabilities.
+- No independent real-world labels, confidence interval, historical improvement baseline, published-deployment walkthrough, broad cloaking claims or production certification are supplied. Reported accuracy describes this synthetic split only.
+- Staff password sign-in and authenticated officer/analyst walkthroughs were **not repeated**; existing role/workflow regressions passed. Accounts, roles, auth, database schema, application records and UI colors/layout remain unchanged. Only ordinary rate reservations resulted from live lookup/AI checks.
+- Owner credential checks, legacy OTP completion and independent Supervisor publication remain prior blockers; this phase does not remove them.
+
 ## Demo approval and tracking refinement — 22 November 2026
 - **PASS:** 146 automated tests across 17 files; preview build OK. Shared validation accepts valid HTTP(S) websites and emails without requiring `.example`; unsafe schemes/embedded website credentials remain rejected.
 - **PASS:** Two new clearly fictional submissions (Approval Validation 20261122 D/E, `.test`/`.example`) received five-digit references. HAM123 authorized officer review, approval confirmation, private audit readback, repeat approval and public registry appearance were exercised. Each application retains exactly one simulated public entry; neither has a trusted projection.

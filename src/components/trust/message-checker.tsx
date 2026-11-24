@@ -24,7 +24,11 @@ import { correlatePrivateIndicators } from "@/lib/services/ai-correlation.functi
 import type { correlateIndicators } from "@/lib/services/ai-correlation";
 import type { AiOutcome } from "@/lib/services/ai-schema";
 import { minimizeAiInput } from "@/lib/services/ai-privacy";
-import { overallRisk } from "@/lib/services/hybrid-analysis";
+import { combinedRiskScore, overallRisk } from "@/lib/services/hybrid-analysis";
+import { analyzeUrl } from "@/lib/services/url/analyze";
+import { getUrlIntelligence } from "@/lib/services/url/intelligence.functions";
+import type { UrlIntelligence } from "@/lib/services/url/intelligence";
+import { UrlFindings } from "./url-findings";
 import { useStaffSession } from "@/lib/security/session";
 import { AiFindings } from "./ai-findings";
 
@@ -33,12 +37,15 @@ export function MessageChecker() {
   const staff = useStaffSession();
   const analyze = useServerFn(analyzePrivateMessage);
   const correlate = useServerFn(correlatePrivateIndicators);
+  const lookupDomain = useServerFn(getUrlIntelligence);
+  const [useRdap, setUseRdap] = useState(false);
   const [useAi, setUseAi] = useState(false);
   const { organizations } = useDemoState();
   const emptyInput = { channel: "sms" as PublicCheckChannel, sender: "", url: "", body: "", claimedOrgId: undefined as string | undefined };
   const [input, setInput] = useState(emptyInput);
-  const [checked, setChecked] = useState<{ input: MessageInput; blocklist: BlockedIndicator[]; ai: AiOutcome | null; flaggedValues: string[]; flagsAvailable: boolean; leads: ReturnType<typeof correlateIndicators> } | null>(null);
+  const [checked, setChecked] = useState<{ input: MessageInput; blocklist: BlockedIndicator[]; ai: AiOutcome | null; intelligence: UrlIntelligence | null; flaggedValues: string[]; flagsAvailable: boolean; leads: ReturnType<typeof correlateIndicators> } | null>(null);
   const result = checked ? { input: checked.input, assessment: assessMessage(checked.input, { organizations, blocklist: checked.blocklist }) } : null;
+  const technical = result?.input.url ? analyzeUrl(result.input.url) : null;
   const [error, setError] = useState<"empty" | "unavailable" | null>(null);
   const [busy, setBusy] = useState(false);
   const workspace = usePublicWorkspace();
@@ -60,6 +67,15 @@ export function MessageChecker() {
       if (id !== request.current) return;
       if (flags.error) throw new Error("Unavailable");
       let ai: AiOutcome | null = null;
+      let intelligence: UrlIntelligence | null = null;
+      const urlAnalysis = value.url ? analyzeUrl(value.url) : null;
+      if (useRdap && urlAnalysis) {
+        if (urlAnalysis.networkEligible && urlAnalysis.domain) {
+          try { intelligence = await lookupDomain({ data: { domain: urlAnalysis.domain } }); }
+          catch { intelligence = { rdap: { status: "unavailable", reason: "service" }, redirects: { status: "unverified", reason: "safe_expansion_unavailable", checkedHops: 0 } }; }
+        } else intelligence = { rdap: { status: "unavailable", reason: "blocked" }, redirects: { status: "unverified", reason: "safe_expansion_unavailable", checkedHops: 0 } };
+        if (id !== request.current) return;
+      }
       let flaggedValues: string[] = [];
       let flagsAvailable = true;
       let leads: ReturnType<typeof correlateIndicators> = [];
@@ -77,7 +93,7 @@ export function MessageChecker() {
         }
       }
       if (id !== request.current) return;
-      setChecked({ input: value, blocklist: (flags.data ?? []).map(item => ({ type: "domain", value: item, caseId: "restricted" })), ai, flaggedValues, flagsAvailable, leads });
+      setChecked({ input: value, blocklist: (flags.data ?? []).map(item => ({ type: "domain", value: item, caseId: "restricted" })), ai, intelligence, flaggedValues, flagsAvailable, leads });
     } catch { if (id === request.current) setError("unavailable"); }
     finally { if (id === request.current) setBusy(false); }
   };
@@ -123,6 +139,7 @@ export function MessageChecker() {
         </div>
         <div className="space-y-2">
           <div className="flex items-start gap-2"><Checkbox id="chk-ai" checked={useAi} disabled={busy} onCheckedChange={value => setUseAi(value === true)} /><Label htmlFor="chk-ai" className="leading-relaxed">{tr("Include real AI analysis of redacted content", "تضمين تحليل فعلي بالذكاء الاصطناعي للمحتوى المنقّح")}</Label></div>
+          <div className="flex items-start gap-2"><Checkbox id="chk-rdap" checked={useRdap} disabled={busy} onCheckedChange={value => setUseRdap(value === true)} /><Label htmlFor="chk-rdap" className="leading-relaxed">{tr("Look up domain registration (domain only sent to its RDAP provider; supported suffixes: .com, .net, .org)", "استعلام تسجيل النطاق (يُرسل النطاق فقط إلى مزود RDAP؛ الامتدادات المدعومة: .com و.net و.org)")}</Label></div>
           <p className="text-xs text-muted-foreground">{tr("Remove passwords, OTPs, identity numbers and unnecessary personal details before submitting. Automatic redaction is a safeguard, not a guarantee.", "أزل كلمات المرور ورموز التحقق وأرقام الهوية والبيانات الشخصية غير الضرورية قبل الإرسال. التنقيح الآلي إجراء وقائي وليس ضماناً.")}</p>
         </div>
         {error ? <p role="alert" className="text-sm text-destructive">{error === "empty" ? tr("Enter message text, a sender or a link to check.", "أدخل نص رسالة أو مرسلاً أو رابطاً للفحص.") : tr("The safety check is unavailable. Please try again; no result has been confirmed.", "فحص الأمان غير متاح. حاول مجدداً؛ لم تُؤكد أي نتيجة.")}</p> : null}
@@ -142,6 +159,7 @@ export function MessageChecker() {
             {result.assessment.reasons.some(reason => reason.code.startsWith("content_")) && <><h3 className="text-sm font-semibold">{tr("Heuristic warning signs", "علامات تحذير استدلالية")}</h3><ReasonList reasons={result.assessment.reasons.filter(reason => reason.code.startsWith("content_"))} /></>}
             <p className="text-sm font-medium">{tr("A registered channel does not guarantee the authenticity of this individual message.", "تسجيل القناة لا يضمن أصالة هذه الرسالة الفردية.")}</p>
             <AiFindings outcome={checked?.ai ?? null} risk={overallRisk(result.assessment, checked?.ai ?? null, !!checked?.flaggedValues.length)} flaggedValues={checked?.flaggedValues ?? []} />
+            {technical && <UrlFindings analysis={technical} intelligence={checked?.intelligence ?? null} score={combinedRiskScore(result.assessment, checked?.ai ?? null, !!checked?.flaggedValues.length)} />}
             {checked && !checked.flagsAvailable && <p role="status" className="text-sm text-muted-foreground">{tr("Extracted-indicator database matching was unavailable; no match has been confirmed.", "تعذّرت مطابقة المؤشرات المستخرجة في قاعدة البيانات؛ لم تُؤكّد أي مطابقة.")}</p>}
             {staff.securityAccess && checked && checked.leads.length > 0 && <section className="space-y-2 border-t pt-3"><h3 className="text-sm font-semibold">{tr("Restricted investigation leads — human review required", "خيوط تحقيق مقيّدة — تتطلب مراجعة بشرية")}</h3>{checked.leads.map(lead => <p key={`${lead.type}:${lead.value}`} className="break-all text-sm" dir="auto">{lead.value}: {lead.cases.map(item => item.caseId).join(", ")}</p>)}<p className="text-xs text-muted-foreground">{tr("Exact shared indicators only; no common offender is inferred.", "مؤشرات مشتركة متطابقة فقط؛ لا يُستنتج مرتكب مشترك.")}</p></section>}
             <div className="space-y-2 text-sm">

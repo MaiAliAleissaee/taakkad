@@ -1,4 +1,5 @@
 import type { LookalikeTechnique } from "@/lib/domain/types";
+import { parse } from "tldts";
 
 /** Words commonly bolted onto a brand name to build a convincing fake domain. */
 export const LURE_KEYWORDS = [
@@ -39,6 +40,11 @@ export function hostFromUrl(url: string | undefined): string | undefined {
 
 /** Splits a host into its brand "core" label and public suffix (e.g. alnoor + gov.example). */
 export function splitHost(host: string) {
+  const parsed = parse(normalizeHost(host), { allowPrivateDomains: true });
+  // Preserve legacy fictional .example fixtures; real domains use the maintained PSL.
+  if ((parsed.isIcann || parsed.isPrivate) && parsed.domain && parsed.domainWithoutSuffix && parsed.publicSuffix) {
+    return { core: parsed.domainWithoutSuffix, suffix: parsed.publicSuffix, registrable: parsed.domain };
+  }
   const parts = normalizeHost(host).split(".").filter(Boolean);
   if (parts.length < 2) {
     const core = parts[0] ?? "";

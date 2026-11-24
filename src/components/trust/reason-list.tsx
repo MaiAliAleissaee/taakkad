@@ -21,6 +21,7 @@ export function ReasonList({ reasons }: { reasons: Reason[] }) {
       {reasons.map((r, i) => {
         const Icon = toneIcon[r.tone];
         const params: Record<string, string | number> = { ...r.params };
+        if (r.code === "url_technical") params["detail"] = tr(String(r.params["en"] ?? ""), String(r.params["ar"] ?? ""));
         if (r.params["org"] !== undefined) params["org"] = orgName(r.params["org"]);
         if (r.params["channel"] !== undefined) params["channel"] = pick(channelLabel[r.params["channel"] as ChannelType]);
         if (r.params["technique"] !== undefined) params["technique"] = pick(techniqueLabel[r.params["technique"] as keyof typeof techniqueLabel]);

@@ -3,8 +3,10 @@ import { heuristicAnalyzer, type ContentAnalyzer } from "./content-analysis";
 import { type BlockedIndicator, normalizeIndicator } from "./blocklist";
 import { detectLookalike, detectLookalikeHandle, hostFromUrl, isSameOrSubdomain, normalizeHost } from "./lookalike";
 import { activeChannel, channelKey } from "./channels";
+import { analyzeUrl } from "./url/analyze";
 
 export type ReasonCode =
+  | "url_technical"
   | "sender_registered"
   | "domain_registered"
   | "channel_not_active"
@@ -81,7 +83,7 @@ export function findDomainOrg(orgs: Organization[], host: string | undefined) {
  * indicator, or a false identity claim combined with a sensitive request).
  * Anything not provably registered and verified is "unverified" — never fraud by default.
  */
-export function assessMessage(input: MessageInput, ctx: VerificationContext): Assessment {
+function assessRegistryMessage(input: MessageInput, ctx: VerificationContext): Assessment {
   const analyzer = ctx.analyzer ?? heuristicAnalyzer;
   const orgs = ctx.organizations;
   const reasons: Reason[] = [];
@@ -202,4 +204,18 @@ export function assessMessage(input: MessageInput, ctx: VerificationContext): As
   if (inactiveOrg) return unverified([{ code: "channel_not_active", tone: "warning", params: { value: input.sender, org: inactiveOrg.id } }]);
 
   return unverified([{ code: "no_match", tone: "neutral", params: {} }]);
+}
+
+/** Technical risk augments registry checks but never grants channel verification. */
+export function assessMessage(input: MessageInput, ctx: VerificationContext): Assessment {
+  const base = assessRegistryMessage(input, ctx);
+  const url = input.url || (input.channel === "website" ? input.sender : "");
+  if (!url.trim()) return base;
+  const technical = analyzeUrl(url);
+  const reasons: Reason[] = technical.signals.filter(signal => signal.weight >= 50).map(signal => ({
+    code: "url_technical", tone: "negative", evidence: true,
+    params: { en: signal.en, ar: signal.ar },
+  }));
+  return { ...base, state: technical.classification === "suspicious" ? "suspicious" : base.state,
+    riskScore: Math.max(base.riskScore, technical.riskScore), reasons: [...base.reasons, ...reasons] };
 }

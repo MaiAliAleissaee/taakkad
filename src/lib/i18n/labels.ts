@@ -101,6 +101,7 @@ export const techniqueLabel: Record<LookalikeTechnique, Bi> = {
 };
 
 export const reasonTemplate: Record<ReasonCode, Bi> = {
+  url_technical: { en: "{detail}", ar: "{detail}" },
   channel_not_active: { en: "A record for {value} exists under {org}, but this channel is not currently approved and active. It cannot produce a Verified registry match.", ar: "يوجد سجل لـ{value} لدى {org}، لكن هذه القناة ليست معتمدة ونشطة حالياً. لا يمكنها إنتاج مطابقة موثّقة في السجل." },
   sender_registered: { en: "{value} is a registered {channel} of {org}.", ar: "{value} هو {channel} مسجّل لدى {org}." },
   domain_registered: { en: "Link domain {domain} is registered to {org}.", ar: "نطاق الرابط {domain} مسجّل باسم {org}." },

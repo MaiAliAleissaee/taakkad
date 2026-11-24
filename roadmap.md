@@ -1,5 +1,11 @@
 # Final hackathon polish roadmap
 
+## Phase 1 URL detection accuracy
+- [x] Add public-suffix-aware URL analysis and documented official UAE domain references, separate from demo trust.
+- [x] Add bounded real RDAP lookup and explicit unverified redirect results when safe expansion is unavailable.
+- [x] Integrate private bilingual technical findings with existing AI and registry checks without changing permissions.
+- [x] Run held-out labeled evaluation, regression and live public checks; document actual results and limitations.
+
 ## Demo approval and tracking messages
 - [x] Approve submitted demo organizations without domain restrictions; searchable Demo Approved registry with no trusted-channel promotion or duplicates.
 - [x] Bilingual status panel with five-digit reference, latest update date, status icon and approved registry link; preserve privacy and limiter.
@@ -24,4 +30,4 @@
 - [ ] Legacy applicant inbox delivery and email-code completion — still unverified for preserved legacy capabilities; new demo tracking does not use email or secrets.
 - [ ] Live independent public-alert approval/publication — requires a separately authorized Supervisor; do not grant Supervisor to either demo staff account.
 
-Existing usernames, passwords, institutional roles, private records and the original visual identity must remain unchanged. No publication or new external service is authorized by this task.
+Existing usernames, passwords, institutional roles, private records and the original visual identity must remain unchanged. Phase 1 permits opt-in domain-only RDAP; no publication, new subscription or credential is authorized.

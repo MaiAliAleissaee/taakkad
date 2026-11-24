@@ -1,11 +1,12 @@
 import type { Channel, ChannelAction, ChannelAuditEvent, ChannelType, DemoActor, DemoState, Organization } from "@/lib/domain/types";
 import { hostFromUrl, normalizeHost } from "./lookalike";
+import { phoneKey } from "./uae-phone";
 
 export const CHANNEL_TYPES: ChannelType[] = ["phone", "sms", "email", "website", "social", "other"];
 export const activeChannel = (c: Channel) => c.status === "verified";
 export function channelKey(type: ChannelType, value: string): string {
   if (type === "website") return hostFromUrl(value) ?? normalizeHost(value);
-  if (type === "phone") return value.replace(/[\s().-]/g, "");
+  if (type === "phone") return phoneKey(value);
   return value.trim().toLowerCase().replace(/\s+/g, "");
 }
 export const canManageChannels = (actor: DemoActor, org: Organization) =>

@@ -1,0 +1,81 @@
+{
+  "en": {
+    "modelWarningVisible": true,
+    "ordinalScore": 65,
+    "registryState": "unverified",
+    "aiAndMetadataOff": true,
+    "noTargetRequest": true,
+    "reloadClearsResult": true,
+    "noInputPersistence": true,
+    "noHorizontalOverflow": true,
+    "signedOutDenials": [
+      "security",
+      "officer"
+    ],
+    "runtimeErrors": []
+  },
+  "ar": {
+    "modelWarningVisible": true,
+    "ordinalScore": 65,
+    "registryState": "unverified",
+    "aiAndMetadataOff": true,
+    "noTargetRequest": true,
+    "reloadClearsResult": true,
+    "noInputPersistence": true,
+    "noHorizontalOverflow": true,
+    "signedOutDenials": [
+      "security",
+      "officer"
+    ],
+    "runtimeErrors": []
+  },
+  "finalRegression": {
+    "tests": 277,
+    "files": 24,
+    "passed": true,
+    "wholeSuiteRuns": 1
+  },
+  "build": "build OK",
+  "security": {
+    "quickScanAt": "2026-11-24T09:05:22.796673364Z",
+    "quickFindings": {
+      "info": 1
+    },
+    "dependencyCheck": "failed",
+    "existingAdvisories": [
+      {
+        "package": "source-map-js",
+        "installed": "1.2.1",
+        "severity": "high",
+        "reportedFixed": "1.2.2"
+      },
+      {
+        "package": "js-yaml",
+        "installed": "4.3.0",
+        "severity": "high",
+        "reportedFixed": "4.3.2"
+      },
+      {
+        "package": "zod",
+        "installed": "3.25.76",
+        "severity": "high",
+        "reportedFixed": "4.6.6"
+      },
+      {
+        "package": "seroval",
+        "installed": "1.6.8",
+        "severity": "moderate",
+        "reportedFixed": "1.6.11"
+      }
+    ],
+    "dependenciesChanged": false,
+    "deepAudit": "not performed",
+    "connectorAnalysis": "unavailable: not configured"
+  },
+  "publication": {
+    "attempted": false,
+    "reason": "Existing dependency advisories fail the requested security condition",
+    "publishedPhase1cVerification": "not verified"
+  },
+  "paidInferenceCalls": 0
+}

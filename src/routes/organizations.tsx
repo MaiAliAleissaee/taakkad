@@ -5,25 +5,23 @@ import { EmptyState, PageHeader } from "@/components/common/bits";
 import { NativeSelect } from "@/components/common/native-select";
 import { OrgCard } from "@/components/orgs/org-card";
 import { DemoRegistrationDialog } from "@/components/orgs/demo-registration";
-import { DemoRegistry, demoRegistryQuery } from "@/components/orgs/demo-registry";
 import { ApplicationTracker } from "@/components/orgs/application-tracker";
 import type { DemoReceipt } from "@/lib/organizations/demo-schema";
 import { OrganizationAccess } from "@/components/orgs/organization-access";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type { OrgStatus, OrgType } from "@/lib/domain/types";
-import { useDemoState } from "@/lib/data/local-store";
+import { usePublicOrganizations } from "@/lib/data/local-store";
 import { useI18n } from "@/lib/i18n/i18n";
 import { orgStatusLabel, orgTypeLabel } from "@/lib/i18n/labels";
 
 export const Route = createFileRoute("/organizations")({
-  loader: ({ context }) => context.queryClient.ensureQueryData(demoRegistryQuery),
   head: () => ({
     meta: [
       { title: "Organization Portal — Taakkad" },
-      { name: "description", content: "Submit six fictional organization details, track general application status and browse simulated demo approvals." },
+      { name: "description", content: "Submit an organization application, privately track its status and search independently approved organization channels in Taakkad." },
       { property: "og:title", content: "Organization Portal — Taakkad" },
-      { property: "og:description", content: "Fictional organization registration, status-only tracking and simulated approvals in Taakkad." },
+      { property: "og:description", content: "Organization applications, private status-only tracking and channel registry in the Taakkad hackathon prototype." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -33,8 +31,7 @@ export const Route = createFileRoute("/organizations")({
 
 function OrganizationsPage() {
   const { tr, pick } = useI18n();
-  const state = useDemoState();
-  const organizations = useMemo(() => state.organizations.filter(o => o.status === "verified").map(o => ({ ...o, contactEmail: "", channels: o.channels.filter(c => c.status === "verified") })), [state.organizations]);
+  const organizations = usePublicOrganizations();
   const [q, setQ] = useState("");
   const [type, setType] = useState<OrgType | "all">("all");
   const [status, setStatus] = useState<OrgStatus | "all">("all");
@@ -65,7 +62,6 @@ function OrganizationsPage() {
       <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <OrganizationAccess />
         <ApplicationTracker receipt={receipt} />
-        <DemoRegistry />
         <h2 className="mb-5 text-2xl font-semibold">{tr("Verified organization registry", "سجل الجهات الموثّقة")}</h2>
         <div className="flex flex-col gap-3 rounded-xl border bg-card p-3 shadow-card md:flex-row md:items-center">
           <div className="relative flex-1">

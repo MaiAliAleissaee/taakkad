@@ -35,6 +35,24 @@ export type Database = {
         }
         Relationships: []
       }
+      analyst_intelligence_workspaces: {
+        Row: {
+          payload: Json
+          revision: number
+          user_id: string
+        }
+        Insert: {
+          payload?: Json
+          revision?: number
+          user_id: string
+        }
+        Update: {
+          payload?: Json
+          revision?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       organization_application_grants: {
         Row: {
           application_id: string
@@ -145,14 +163,20 @@ export type Database = {
         Row: {
           application_id: string | null
           code: string
+          recovery_audit: Json
+          secret_hash: string | null
         }
         Insert: {
           application_id?: string | null
           code: string
+          recovery_audit?: Json
+          secret_hash?: string | null
         }
         Update: {
           application_id?: string | null
           code?: string
+          recovery_audit?: Json
+          secret_hash?: string | null
         }
         Relationships: [
           {
@@ -168,14 +192,17 @@ export type Database = {
         Row: {
           organization_id: string
           payload: Json
+          simulated: boolean
         }
         Insert: {
           organization_id: string
           payload: Json
+          simulated?: boolean
         }
         Update: {
           organization_id?: string
           payload?: Json
+          simulated?: boolean
         }
         Relationships: []
       }
@@ -232,6 +259,39 @@ export type Database = {
           },
         ]
       }
+      private_evidence_items: {
+        Row: {
+          content_base64: string
+          created_at: string
+          event_kind: string
+          id: string
+          metadata: Json
+          subject_id: string
+          subject_kind: string
+          user_id: string
+        }
+        Insert: {
+          content_base64?: string
+          created_at?: string
+          event_kind: string
+          id?: string
+          metadata: Json
+          subject_id: string
+          subject_kind: string
+          user_id: string
+        }
+        Update: {
+          content_base64?: string
+          created_at?: string
+          event_kind?: string
+          id?: string
+          metadata?: Json
+          subject_id?: string
+          subject_kind?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -258,16 +318,19 @@ export type Database = {
           content: Json
           id: string
           published_at: string
+          simulated: boolean
         }
         Insert: {
           content: Json
           id: string
           published_at: string
+          simulated?: boolean
         }
         Update: {
           content?: Json
           id?: string
           published_at?: string
+          simulated?: boolean
         }
         Relationships: [
           {
@@ -530,20 +593,83 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      genuine_organization_registry: {
+        Row: {
+          organization_id: string | null
+          payload: Json | null
+        }
+        Insert: {
+          organization_id?: string | null
+          payload?: Json | null
+        }
+        Update: {
+          organization_id?: string | null
+          payload?: Json | null
+        }
+        Relationships: []
+      }
+      genuine_security_alerts: {
+        Row: {
+          content: Json | null
+          id: string | null
+          published_at: string | null
+        }
+        Insert: {
+          content?: Json | null
+          id?: string | null
+          published_at?: string | null
+        }
+        Update: {
+          content?: Json | null
+          id?: string | null
+          published_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_security_alerts_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "security_bulletins"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       allocate_demo_tracking: {
         Args: { application_uuid: string }
         Returns: string
       }
+      append_private_evidence: {
+        Args: {
+          actor_id: string
+          event: string
+          file_content: string
+          kind: string
+          meta: Json
+          subject: string
+        }
+        Returns: string
+      }
       attempt_application_code: {
         Args: { application_uuid: string }
         Returns: boolean
       }
+      authorize_public_security_workspace: {
+        Args: { workspace_user: string }
+        Returns: undefined
+      }
       begin_application_code: {
         Args: { application_uuid: string }
         Returns: boolean
+      }
+      commit_analyst_intelligence: {
+        Args: {
+          actor_id: string
+          expected_revision: number
+          next_payload: Json
+        }
+        Returns: Json
       }
       commit_organization_application: {
         Args: {
@@ -577,7 +703,12 @@ export type Database = {
         Args: { candidate_values: string[]; workspace_user?: string }
         Returns: string[]
       }
+      has_active_app_session: { Args: never; Returns: boolean }
       has_organization_officer_access: { Args: never; Returns: boolean }
+      has_private_evidence_access: {
+        Args: { subject_kind: string }
+        Returns: boolean
+      }
       has_security_access: { Args: never; Returns: boolean }
       import_security_snapshot: {
         Args: { migration_id: string; saved_payload: Json }
@@ -606,6 +737,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      read_analyst_intelligence: { Args: never; Returns: Json }
       read_demo_organization_status: {
         Args: { tracking_code: string }
         Returns: string
@@ -613,6 +745,25 @@ export type Database = {
       read_demo_organization_tracking: {
         Args: { tracking_code: string }
         Returns: Json
+      }
+      read_secure_demo_tracking: {
+        Args: { receipt_hash: string; tracking_code: string }
+        Returns: Json
+      }
+      recover_demo_tracking_receipt: {
+        Args: {
+          actor_id: string
+          application_uuid: string
+          identity_confirmed: boolean
+          receipt_hash: string
+          review_note: string
+        }
+        Returns: string
+      }
+      reserve_analyst_intelligence_check: { Args: never; Returns: boolean }
+      reserve_public_security_action: {
+        Args: { action_kind: string }
+        Returns: undefined
       }
       reserve_trust_ai_usage: {
         Args: { visitor_hash: string }
@@ -628,12 +779,20 @@ export type Database = {
         }
         Returns: undefined
       }
+      save_analyst_intelligence: {
+        Args: { expected_revision: number; next_payload: Json }
+        Returns: Json
+      }
       submit_ai_security_report: {
         Args: { report_input: Json; workspace_user?: string }
         Returns: undefined
       }
       submit_demo_organization: {
         Args: { application_payload: Json }
+        Returns: string
+      }
+      submit_secure_demo_organization: {
+        Args: { application_payload: Json; receipt_hash: string }
         Returns: string
       }
       submit_security_report: {

@@ -23,10 +23,10 @@ export const snapshotSchema = z.object({
 });
 export type SecuritySnapshot = z.infer<typeof snapshotSchema>;
 export const commandSchema = z.discriminatedUnion("action", [
-  z.object({ action: z.literal("status"), id: z.string(), status: z.enum(["new", "investigating", "escalated", "confirmed", "false_positive"]) }),
+  z.object({ action: z.literal("status"), id: z.string(), status: z.enum(["new", "investigating", "escalated", "confirmed", "false_positive"]), confirmed: z.boolean().optional() }).superRefine((data, ctx) => { if ((data.status === "escalated" || data.status === "confirmed") && data.confirmed !== true) ctx.addIssue({ code: "custom", path: ["confirmed"], message: "Human confirmation required" }); }),
   z.object({ action: z.literal("assign"), id: z.string(), assignee: z.string().max(120) }),
   z.object({ action: z.literal("note"), id: z.string(), text: z.string().trim().min(1).max(10000) }),
-  z.object({ action: z.literal("lookalike_status"), id: z.string(), status: z.enum(["monitoring", "flagged", "takedown_requested", "cleared"]) }),
+  z.object({ action: z.literal("lookalike_status"), id: z.string(), status: z.enum(["monitoring", "flagged", "takedown_requested", "cleared"]), confirmed: z.boolean().optional() }).superRefine((data, ctx) => { if (data.status === "takedown_requested" && data.confirmed !== true) ctx.addIssue({ code: "custom", path: ["confirmed"], message: "Human confirmation required" }); }),
   z.object({ action: z.literal("scan"), items: snapshotSchema.shape.lookalikes }),
   z.object({ action: z.literal("reset") }),
 ]);

@@ -6,6 +6,7 @@ import { staffAttemptLimit, staffAuthClient, staffEmail } from "./staff-login.se
 
 export const signInStaff = createServerFn({ method: "POST" }).inputValidator(input => staffLoginSchema.parse(input)).handler(async ({ data }) => {
   try {
+    if (!getRequestHeader("cf-connecting-ip")) return { ok: false as const, reason: "unavailable" as const };
     try { await staffAttemptLimit(data.identifier, "login"); } catch { return { ok: false as const, reason: "rate_limit" as const }; }
     const email = await staffEmail(data.identifier);
     const result = await staffAuthClient().auth.signInWithPassword({ email: email ?? "invalid-staff@invalid.local", password: data.password });
@@ -16,9 +17,9 @@ export const signInStaff = createServerFn({ method: "POST" }).inputValidator(inp
 
 export const requestStaffPasswordSetup = createServerFn({ method: "POST" }).inputValidator(input => z.object({ identifier: staffIdentifierSchema, origin: z.string().url() }).parse(input)).handler(async ({ data }) => {
   try {
-    await staffAttemptLimit(data.identifier, "setup");
     const origin = new URL(data.origin);
     if (origin.origin !== data.origin || getRequestHeader("origin") !== data.origin || (origin.protocol !== "https:" && origin.hostname !== "localhost")) return { ok: false };
+    await staffAttemptLimit(data.identifier, "setup");
     const email = await staffEmail(data.identifier);
     if (email) {
       const result = await staffAuthClient().auth.resetPasswordForEmail(email, { redirectTo: `${origin.origin}/reset-password` });

@@ -1,0 +1,15 @@
+{
+  "frozenAt": "2026-11-24T08:32:58.507673+00:00",
+  "files": {
+    "src/lib/services/url/analyze.ts": "4cf5c3a687813911d631c8cf6aba4f5c0ff5ee6e0e4ac8d345a50d84414ec43c",
+    "src/lib/services/url/official-references.ts": "9107ca8001094a92360779b3d1687e0dbb386e9bd0f01f7e6fdae99e1eccc69d",
+    "src/lib/services/url/controlled-scan.ts": "b0d94c340f85d91f935bf4750076302c06a779d2e69e273f9c698e0dc66007dd",
+    "src/lib/services/url/dns.server.ts": "847aab743eb4144e9e83c5d4dd33fd9d6cac0d373248046b62d02b624ace006f",
+    "src/lib/services/verification.ts": "042e3e43de4528f0918865ddb8ad9653c44100f9a726732aac646e6f5dc4aaf5",
+    "src/lib/services/hybrid-analysis.ts": "c66851a17d751eaa15a5c5c84c2d17047e39e43a18f13a4ac9952ee33e8a39df",
+    "src/lib/services/lookalike.ts": "36a433b855ad84488544a59f4b23a0c3afece0f99f78774890284c9f4d4bf8af",
+    "docs/evaluation/phase1b-resume-final-public.json": "aea7569890d7c85e763ade9ab61c3f4997f3a6bc93273b8040adc7583803c94e",
+    "docs/evaluation/phase1b-resume-controlled.json": "ad46065ad0a446051b5bdf43ab3a6acdefb4ed027ab234daa22a19d23c7893c5",
+    "scripts/scan-url.py": "4537363cc62e9e6a0128eededc145761a36663ce6ad0af729815abaa87474ef7"
+  }
+}

@@ -28,8 +28,9 @@ describe("hackathon presentation rules", () => {
     expect(summary.shared.find(item => item.type === "ip" && item.value === "203.0.113.45")?.cases.map(item => item.caseId)).toEqual(["TZ-1042", "TZ-1043"]);
     expect(summary.leads.every(lead => lead.requiresHumanReview)).toBe(true);
   });
-  it("provides ten unique fictional examples", () => {
-    expect(demoExamples).toHaveLength(10); expect(new Set(demoExamples.map(example => example.id)).size).toBe(10);
+  it("preserves ten original examples and seven unique fictional UAE examples", () => {
+    expect(demoExamples.filter(example => example.id <= 10)).toHaveLength(10);
+    expect(demoExamples).toHaveLength(17); expect(new Set(demoExamples.map(example => example.id)).size).toBe(17);
     expect(demoExamples.filter(example => example.url).every(example => new URL(example.url).hostname.endsWith(".example"))).toBe(true);
   });
   it("first three examples match actual active approved fictional channels", () => {

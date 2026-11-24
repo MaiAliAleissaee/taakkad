@@ -12,11 +12,21 @@ export function staffAuthClient() {
 }
 
 export async function staffAttemptLimit(identifier: string, kind: string) {
+  const requestAddress = getRequestHeader("cf-connecting-ip");
+  // Public login/recovery must never charge the owner of an unverified username.
+  // Deny requests without the hosting-provided address instead of sharing a global fallback.
+  const callerOnly = kind === "setup" || kind === "login";
+  if (callerOnly && !requestAddress) throw new Error("Authentication unavailable");
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  const address = getRequestHeader("cf-connecting-ip") ?? "shared-preview";
-  for (const value of [address, identifier]) {
+  const address = requestAddress ?? "shared-preview";
+  // Ten login attempts per caller across ALL usernames prevents username rotation bypass.
+  // Private setup-link limits retain their additional secret-specific counter.
+  const values = callerOnly ? [address] : [address, identifier];
+  for (const value of values) {
     const hash = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value))), b => b.toString(16).padStart(2, "0")).join("");
-    const result = await supabaseAdmin.rpc("organization_rate_limit", { bucket_key: `staff-${kind}:${hash}`, max_requests: kind === "setup" ? 3 : 10, window_seconds: 3600 });
+    // New namespace also prevents old identifier/shared-preview counters blocking recovery.
+    const bucket = callerOnly ? `staff-${kind}-caller:${hash}` : `staff-${kind}:${hash}`;
+    const result = await supabaseAdmin.rpc("organization_rate_limit", { bucket_key: bucket, max_requests: kind === "setup" ? 3 : 10, window_seconds: 3600 });
     if (result.error || !result.data) throw new Error("Authentication unavailable");
   }
 }

@@ -1,0 +1,12 @@
+{
+  "frozenAt": "2026-11-24T08:13:05.637121+00:00",
+  "files": {
+    "src/lib/services/url/analyze.ts": "913323d18f82786a4c5ac29dd6715c3693662cf1dc98854f956398d7b646049c",
+    "src/lib/services/url/official-references.ts": "898965d2a76f6be6d64b8d86f355f8f06772d9fb0436ae411bdd634de85a6bd9",
+    "src/lib/services/hybrid-analysis.ts": "c66851a17d751eaa15a5c5c84c2d17047e39e43a18f13a4ac9952ee33e8a39df",
+    "src/lib/services/verification.ts": "042e3e43de4528f0918865ddb8ad9653c44100f9a726732aac646e6f5dc4aaf5",
+    "src/lib/services/url/controlled-scan.ts": "e19b3543ac0d8d1ba6c412d5e1305d075423c7f85d61596604b4fa7328e1b0a1"
+  },
+  "positiveThreshold": 50,
+  "protocol": "Final freeze before any new holdout prediction. Earlier freeze superseded only to reject non-IP redirect fixture evidence; no URL threshold changed. Original holdout is previously seen. No tuning after final predictions."
+}

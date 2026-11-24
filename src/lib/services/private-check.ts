@@ -1,5 +1,6 @@
 import type { MessageInput } from "./verification";
 import { indicatorsFor } from "./reporting";
+import { normalizeUaePhone } from "./uae-phone";
 
 export type PublicCheckChannel = MessageInput["channel"] | "whatsapp";
 
@@ -15,5 +16,9 @@ export function preparePrivateCheck(input: Omit<MessageInput, "channel"> & { cha
 
 /** Only exact indicator candidates leave the page; never send the message body. */
 export function privateCheckCandidates(input: MessageInput): string[] {
-  return [...new Set(indicatorsFor(input).map(indicator => indicator.value))].sort();
+  const candidates = indicatorsFor(input).flatMap(indicator => {
+    const phone = indicator.type === "phone" ? normalizeUaePhone(indicator.value) : null;
+    return phone?.startsWith("+971") ? [indicator.value, phone, `0${phone.slice(4)}`, `00971${phone.slice(4)}`] : [indicator.value];
+  });
+  return [...new Set(candidates)].slice(0, 60).sort();
 }

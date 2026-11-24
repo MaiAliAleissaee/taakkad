@@ -1,0 +1,4 @@
+- Run OCR/QR through createClientOnlyFn and dynamic browser imports after explicit image selection; self-host runtime/languages and disable OCR caching so pixels/text stay local and Node OCR dependencies stay out of SSR.
+- Validate raster signatures and dimensions before decoding or preview; treat OCR/QR values as untrusted indicators, never link targets to visit or channel-authentication facts.
+- Keep screenshot state in the owning check component, bound extracted inputs, and reuse existing assessments unchanged; unreadable or conflicting extraction must never yield a verified screenshot claim.
+- Original images may only be saved locally by explicit consent for the existing authorized evidence upload; never append image bytes to public reports or bypass private-subject authorization.

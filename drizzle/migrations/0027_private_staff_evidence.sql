@@ -1,0 +1,24 @@
+CREATE OR REPLACE FUNCTION public.has_private_evidence_access(subject_kind text) RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path=public AS $$ SELECT EXISTS(SELECT 1 FROM auth.sessions s WHERE s.user_id=auth.uid() AND s.id::text=auth.jwt()->>'session_id') AND EXISTS(SELECT 1 FROM public.user_roles r WHERE r.user_id=auth.uid() AND ((subject_kind IN ('case','intelligence') AND r.role='security_analyst') OR (subject_kind='application' AND r.role='organization_verification_officer'))); $$;
+REVOKE ALL ON FUNCTION public.has_private_evidence_access(text) FROM PUBLIC,anon;
+GRANT EXECUTE ON FUNCTION public.has_private_evidence_access(text) TO authenticated,service_role;
+CREATE TABLE public.private_evidence_items(id uuid PRIMARY KEY DEFAULT gen_random_uuid(), user_id uuid NOT NULL, subject_kind text NOT NULL CHECK(subject_kind IN ('case','intelligence','application')), subject_id text NOT NULL CHECK(length(subject_id) BETWEEN 1 AND 200), event_kind text NOT NULL CHECK(event_kind IN ('attachment','action')), metadata jsonb NOT NULL, content_base64 text NOT NULL DEFAULT '' CHECK(length(content_base64)<=699052), created_at timestamptz NOT NULL DEFAULT now());
+GRANT SELECT ON public.private_evidence_items TO authenticated;
+GRANT ALL ON public.private_evidence_items TO service_role;
+REVOKE ALL ON public.private_evidence_items FROM anon;
+REVOKE INSERT,UPDATE,DELETE ON public.private_evidence_items FROM authenticated;
+ALTER TABLE public.private_evidence_items ENABLE ROW LEVEL SECURITY;
+CREATE POLICY private_evidence_owner_read ON public.private_evidence_items FOR SELECT TO authenticated USING(user_id=auth.uid() AND public.has_private_evidence_access(subject_kind));
+CREATE INDEX private_evidence_subject_idx ON public.private_evidence_items(user_id,subject_kind,subject_id,created_at);
+CREATE OR REPLACE FUNCTION public.append_private_evidence(actor_id uuid, kind text, subject text, event text, meta jsonb, file_content text) RETURNS uuid LANGUAGE plpgsql SECURITY DEFINER SET search_path=public AS $$ DECLARE result_id uuid; BEGIN
+ IF actor_id IS NULL OR NOT EXISTS(SELECT 1 FROM public.user_roles WHERE user_id=actor_id AND ((kind IN ('case','intelligence') AND role='security_analyst') OR (kind='application' AND role='organization_verification_officer'))) THEN RAISE EXCEPTION 'Forbidden'; END IF;
+ IF kind NOT IN ('case','intelligence','application') OR event NOT IN ('attachment','action') OR length(subject) NOT BETWEEN 1 AND 200 OR octet_length(meta::text)>20000 OR length(file_content)>699052 THEN RAISE EXCEPTION 'Invalid evidence'; END IF;
+ PERFORM pg_advisory_xact_lock(hashtextextended(actor_id::text||kind||subject,0));
+ IF (SELECT count(*) FROM public.private_evidence_items WHERE user_id=actor_id AND subject_kind=kind AND subject_id=subject)>=100 THEN RAISE EXCEPTION 'Evidence limit'; END IF;
+ IF event='attachment' AND (SELECT count(*) FROM public.private_evidence_items WHERE user_id=actor_id AND subject_kind=kind AND subject_id=subject AND event_kind='attachment')>=6 THEN RAISE EXCEPTION 'Attachment limit'; END IF;
+ IF event='action' AND (file_content<>'' OR meta->>'confirmed' IS DISTINCT FROM 'true') THEN RAISE EXCEPTION 'Human confirmation required'; END IF;
+ IF NOT public.organization_rate_limit('private-evidence:'||actor_id::text,30,600) THEN RAISE EXCEPTION 'Evidence rate limit'; END IF;
+ INSERT INTO public.private_evidence_items(user_id,subject_kind,subject_id,event_kind,metadata,content_base64) VALUES(actor_id,kind,subject,event,meta,file_content) RETURNING id INTO result_id;
+ RETURN result_id; END; $$;
+REVOKE ALL ON FUNCTION public.append_private_evidence(uuid,text,text,text,jsonb,text) FROM PUBLIC,anon,authenticated;
+GRANT EXECUTE ON FUNCTION public.append_private_evidence(uuid,text,text,text,jsonb,text) TO service_role;
+COMMENT ON TABLE public.private_evidence_items IS 'Append-only owner-private staff evidence; bounded files, server-computed SHA-256; no public projection or automatic escalation.';

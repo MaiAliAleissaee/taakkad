@@ -1,0 +1,54 @@
+{
+  "sklearn": "1.9.1",
+  "selection": "Maximum augmented-validation F1 with FPR <= 5%, preferred across three candidates. Four scheme/www variants per domain in train/validation only. All v1 domains excluded; no v2 test prediction or retraining.",
+  "trainOriginalDomains": 16000,
+  "validationOriginalDomains": 4000,
+  "trainAugmentedRows": 64000,
+  "validationAugmentedRows": 16000,
+  "models": {
+    "logistic": {
+      "threshold": 0.5499999999999999,
+      "validation": {
+        "tp": 4608,
+        "tn": 7704,
+        "fp": 296,
+        "fn": 3392,
+        "precision": 0.9396411092985318,
+        "recall": 0.576,
+        "f1": 0.7141971481711097,
+        "accuracy": 0.7695,
+        "falsePositiveRate": 0.037
+      }
+    },
+    "tree": {
+      "threshold": 0.4999999999999999,
+      "validation": {
+        "tp": 4640,
+        "tn": 7714,
+        "fp": 286,
+        "fn": 3360,
+        "precision": 0.9419407226958993,
+        "recall": 0.58,
+        "f1": 0.7179328485223581,
+        "accuracy": 0.772125,
+        "falsePositiveRate": 0.03575
+      }
+    },
+    "gradient_boosting": {
+      "threshold": 0.5749999999999998,
+      "validation": {
+        "tp": 4727,
+        "tn": 7700,
+        "fp": 300,
+        "fn": 3273,
+        "precision": 0.9403222597970957,
+        "recall": 0.590875,
+        "f1": 0.7257234973516543,
+        "accuracy": 0.7766875,
+        "falsePositiveRate": 0.0375
+      }
+    }
+  },
+  "selected": "gradient_boosting",
+  "artifactSha256": "089276cac26e8648a4a294e07195f25f25a9e2469790eff971339e993fdf143c"
+}

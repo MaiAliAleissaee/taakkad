@@ -1,0 +1,50 @@
+[
+  {
+    "id": "hybrid-1",
+    "label": "legitimate",
+    "url": "https://www.emiratesnbd.com/en/personal-banking",
+    "body": "Read the published bank information on its official website. No action or personal information is requested.",
+    "performed": true,
+    "scores": [
+      20,
+      20
+    ],
+    "overall": "Overall risk\nLow"
+  },
+  {
+    "id": "hybrid-2",
+    "label": "suspicious",
+    "url": "https://salik-fine.example/pay-now",
+    "body": "Final warning: pay your Salik fine now at this link or your vehicle will be seized. Enter your card and OTP to clear the fine.",
+    "performed": true,
+    "scores": [
+      90,
+      74
+    ],
+    "overall": "Overall risk\nCritical"
+  },
+  {
+    "id": "hybrid-3",
+    "label": "legitimate",
+    "url": "https://tamm.abudhabi/en/",
+    "body": "يمكنك الاطلاع على الخدمات الحكومية في الموقع الرسمي لتم. هذه رسالة معلوماتية ولا تطلب بيانات شخصية أو دفعاً.",
+    "performed": true,
+    "scores": [
+      30,
+      30
+    ],
+    "overall": "Overall risk\nLow"
+  },
+  {
+    "id": "hybrid-4",
+    "label": "suspicious",
+    "url": "https://emirates-id-update.example/kyc?step=selfie-upload",
+    "body": "سيتم إيقاف هويتك الإماراتية خلال ساعة. افتح الرابط وأرسل صورة هويتك وكلمة المرور ورمز التحقق فوراً لاستعادة الحساب.",
+    "performed": true,
+    "scores": [
+      90,
+      74
+    ],
+    "overall": "Overall risk\nCritical"
+  }
+]

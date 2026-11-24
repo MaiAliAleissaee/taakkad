@@ -18,12 +18,12 @@ export function DemoRegistrationDialog({ trigger, onSubmitted }: { trigger: Reac
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const labels: Array<[keyof DemoRegistration, string, string, string]> = [
-    ["name", tr("Company / Organization Name", "اسم الشركة / الجهة"), "text", "شركة المرجان التجريبية"],
-    ["website", tr("Official Website URL", "رابط الموقع الرسمي"), "url", "https://coral-demo.example"],
-    ["email", tr("Contact Email", "البريد الإلكتروني للتواصل"), "email", "contact@coral-demo.example"],
-    ["social", tr("Social Media Account", "حساب التواصل الاجتماعي"), "text", "@CoralDemo"],
-    ["phone", tr("Contact Phone Number", "رقم هاتف التواصل"), "tel", "+971 50 000 0000"],
-    ["sms", tr("SMS Sender ID", "اسم مرسل الرسائل النصية"), "text", "CORAL-DEMO"],
+    ["name", tr("Company / Organization Name", "اسم الشركة / الجهة"), "text", tr("Enter the organization name", "أدخل اسم الجهة")],
+    ["website", tr("Official Website URL", "رابط الموقع الرسمي"), "url", tr("Enter the complete website URL", "أدخل رابط الموقع كاملاً")],
+    ["email", tr("Contact Email", "البريد الإلكتروني للتواصل"), "email", tr("Enter the contact email", "أدخل بريد التواصل")],
+    ["social", tr("Social Media Account", "حساب التواصل الاجتماعي"), "text", tr("Enter the account handle", "أدخل اسم الحساب")],
+    ["phone", tr("Contact Phone Number", "رقم هاتف التواصل"), "tel", tr("Enter the contact number", "أدخل رقم التواصل")],
+    ["sms", tr("SMS Sender ID", "اسم مرسل الرسائل النصية"), "text", tr("Enter the sender ID", "أدخل اسم المرسل")],
   ];
   async function save(event: FormEvent) {
     event.preventDefault(); setError("");

@@ -2,7 +2,7 @@ import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { useStaffSession } from "@/lib/security/session";
 import { isVerificationOfficer } from "@/lib/organizations/schema";
 import { Search, Send } from "lucide-react";
-import { useEffect, useState, type FormEvent } from "react";
+import { Suspense, useEffect, useState, type ComponentProps, type FormEvent } from "react";
 import { toast } from "sonner";
 import { EmptyState, Mono, PageHeader, RiskMeter, StatTile } from "@/components/common/bits";
 import { NativeSelect } from "@/components/common/native-select";
@@ -35,6 +35,8 @@ import {
 } from "@/lib/i18n/labels";
 import { simulatedDomainMonitor } from "@/lib/services/domain-monitoring";
 import { cn } from "@/lib/utils";
+import { EvidenceTools } from "@/components/evidence/evidence-tools";
+import { IntelligencePanel } from "@/components/intelligence/intelligence-panel";
 
 export const Route = createFileRoute("/_authenticated/security")({
   beforeLoad: async ({ context }) => {
@@ -165,6 +167,7 @@ function SecurityPage({ snapshot, change, busy }: { snapshot: SecuritySnapshot; 
             <TabsTrigger value="connections">{tr("Fraud Connections", "كشف الارتباط")}</TabsTrigger>
             <TabsTrigger value="publishing">{tr("Public Security Alerts", "التحذيرات الأمنية")}</TabsTrigger>
             <TabsTrigger value="analytics">{tr("Analytics and Reports", "الإحصائيات والتقارير")}</TabsTrigger>
+            <AnalystIntelligenceTab />
           </TabsList>
 
           <TabsContent value="alerts" className="mt-5">
@@ -223,7 +226,7 @@ function SecurityPage({ snapshot, change, busy }: { snapshot: SecuritySnapshot; 
                   <div className="grid gap-3 sm:grid-cols-2">
                     <label className="space-y-1 text-sm">
                       <span className="text-xs text-muted-foreground">{tr("Case review status", "حالة مراجعة القضية")}</span>
-                      <NativeSelect value={selected.status} disabled={busy} aria-label={tr("Case review status", "حالة مراجعة القضية")} onChange={async (e) => { try { await change({ action: "status", id: selected.id, status: e.target.value as AlertStatus }); toast.success(tr("Status updated", "تم تحديث الحالة")); } catch { /* mutation shows error */ } }}>
+                      <NativeSelect value={selected.status} disabled={busy} aria-label={tr("Case review status", "حالة مراجعة القضية")} onChange={async (e) => { const nextStatus = e.target.value as AlertStatus; const needsApproval = nextStatus === "escalated" || nextStatus === "confirmed"; if (needsApproval && !window.confirm(tr("Confirm human review? This updates existing public indicator warnings; no police or takedown request is sent.", "تأكيد المراجعة البشرية؟ يحدّث هذا التحذيرات العامة القائمة للمؤشرات؛ لا يُرسل طلب للشرطة أو الإزالة."))) return; try { await change({ action: "status", id: selected.id, status: nextStatus, confirmed: needsApproval }); toast.success(tr("Status updated", "تم تحديث الحالة")); } catch { /* mutation shows error */ } }}>
                         {STATUSES.map((s) => <option key={s} value={s}>{pick(alertStatusLabel[s])}</option>)}
                       </NativeSelect>
                     </label>
@@ -270,6 +273,7 @@ function SecurityPage({ snapshot, change, busy }: { snapshot: SecuritySnapshot; 
                     </ul>
                   </details>
 
+                  <EvidenceTools key={`evidence:${selected.id}`} subject={{ kind: "case", id: selected.id }} />
                   <div>
                     <h3 className="text-sm font-semibold">{tr("Analyst notes", "ملاحظات المحلل")}</h3>
                     <ul className="mt-2 space-y-2">
@@ -292,7 +296,7 @@ function SecurityPage({ snapshot, change, busy }: { snapshot: SecuritySnapshot; 
           </TabsContent>
 
           <TabsContent value="connections" className="mt-5">
-            <FraudConnections alerts={alerts} lookalikes={lookalikes} organizations={organizations} scanOrg={scanOrg} setScanOrg={setScanOrg} busy={busy} scanning={scanning} onScan={() => { void runScan(); }} onOpenReport={id => { select(id); setTab("alerts"); }} onStatus={(id, nextStatus) => { void change({ action: "lookalike_status", id, status: nextStatus }).catch(() => {}); }} />
+            <FraudConnections alerts={alerts} lookalikes={lookalikes} organizations={organizations} scanOrg={scanOrg} setScanOrg={setScanOrg} busy={busy} scanning={scanning} onScan={() => { void runScan(); }} onOpenReport={id => { select(id); setTab("alerts"); }} onStatus={(id, nextStatus) => { const needsApproval = nextStatus === "takedown_requested"; if (needsApproval && !window.confirm(tr("Record a human-reviewed preparation status only? No takedown request will be sent.", "تسجيل حالة إعداد راجعها إنسان فقط؟ لن يُرسل طلب إزالة."))) return; void change({ action: "lookalike_status", id, status: nextStatus, confirmed: needsApproval }).catch(() => {}); }} />
           </TabsContent>
           <TabsContent value="analytics" className="mt-5 space-y-5">
             <p className="text-xs text-muted-foreground">{tr("Workspace summary. Seeded investigation statistics are fictional; visitor reports are unverified submissions. Risk indices are not probabilities.", "ملخص مساحة العمل. إحصاءات التحقيق المعدّة خيالية؛ بلاغات الزوار غير متحقق منها. مؤشرات الخطر ليست احتمالات.")}</p>
@@ -300,6 +304,7 @@ function SecurityPage({ snapshot, change, busy }: { snapshot: SecuritySnapshot; 
             <details className="border-t pt-4"><summary className="cursor-pointer text-sm font-semibold">{tr("Detailed breakdown", "تفصيل الإحصاءات")}</summary><div className="mt-4 grid gap-3 sm:grid-cols-3"><StatTile label={tr("Average open risk index", "متوسط مؤشر خطر البلاغات المفتوحة")} value={num(avgRisk)} tone="warning" />{STATUSES.map(s => <StatTile key={s} label={pick(alertStatusLabel[s])} value={num(alerts.filter(a => a.status === s).length)} />)}</div></details>
           </TabsContent>
           <TabsContent value="publishing" className="mt-5"><AlertManager /></TabsContent>
+          <TabsContent value="intelligence" className="mt-5"><AnalystIntelligenceContent reports={alerts} onOpenReport={id => { select(id); setTab("alerts"); }} /></TabsContent>
         </Tabs>
       </section>
     </>
@@ -310,4 +315,14 @@ function OfficerReviewLink() {
   const { tr } = useI18n(); const session = useStaffSession();
   if (!isVerificationOfficer(session.roles)) return null;
   return <Button asChild variant="outline" size="sm"><Link to="/officer">{tr("Officer Dashboard", "لوحة موظف التحقق")}</Link></Button>;
+}
+
+function AnalystIntelligenceTab() {
+  const session = useStaffSession(); const { tr } = useI18n();
+  return session.roles.includes("security_analyst") ? <TabsTrigger value="intelligence">{tr("Proactive Intelligence", "الرصد الاستباقي")}</TabsTrigger> : null;
+}
+function AnalystIntelligenceContent(props: ComponentProps<typeof IntelligencePanel>) {
+  const session = useStaffSession(); const { tr } = useI18n();
+  if (!session.roles.includes("security_analyst")) return null;
+  return <Suspense fallback={<p role="status">{tr("Loading intelligence…", "جارٍ تحميل الرصد…")}</p>}><IntelligencePanel {...props} /></Suspense>;
 }

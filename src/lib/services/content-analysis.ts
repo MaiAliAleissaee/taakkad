@@ -1,3 +1,5 @@
+import { uaeRequestSignals } from "./uae-safety";
+
 /**
  * Content analysis extension point. The prototype ships a transparent keyword
  * heuristic; a future AI analyzer can implement the same interface.
@@ -50,6 +52,9 @@ export const heuristicAnalyzer: ContentAnalyzer = {
           break;
         }
       }
+    }
+    for (const signal of uaeRequestSignals(text)) {
+      if (!signals.some(existing => existing.code === signal.code)) signals.push(signal);
     }
     return signals;
   },

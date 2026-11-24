@@ -20,9 +20,12 @@ describe("six-field simulated organization registration", () => {
       ["website", input.website, "pending"], ["email", input.email, "pending"], ["social", input.social, "pending"], ["phone", input.phone, "pending"], ["sms", input.sms, "pending"],
     ]);
   });
-  it("requires only a five-digit tracking number", () => {
-    expect(demoTrackingSchema.parse({ code: "12345" })).toEqual({ code: "12345" });
-    for (const code of ["1234", "123456", "00001", "abcde"]) expect(demoTrackingSchema.safeParse({ code }).success).toBe(false);
+  it("requires the unchanged five-digit reference plus a private secret", () => {
+    const secret = "a".repeat(64);
+    expect(demoTrackingSchema.parse({ code: "12345", secret })).toEqual({ code: "12345", secret });
+    expect(demoTrackingSchema.safeParse({ code: "12345" }).success).toBe(false);
+    for (const code of ["1234", "123456", "00001", "abcde"]) expect(demoTrackingSchema.safeParse({ code, secret }).success).toBe(false);
+    for (const invalid of ["", "a".repeat(63), "g".repeat(64)]) expect(demoTrackingSchema.safeParse({ code: "12345", secret: invalid }).success).toBe(false);
   });
   it("maps every requested general status", () => {
     expect(demoStatus({ status: "pending" })).toBe("pending");

@@ -162,6 +162,69 @@
       "when": 1795355281093,
       "tag": "0022_demo_approval_status_updates",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1795512517210,
+      "tag": "0023_analyst_proactive_intelligence",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1795512662343,
+      "tag": "0024_protect_intelligence_evidence_writes",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1795512996219,
+      "tag": "0025_retain_intelligence_session_revocation_checks",
+      "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1795513201571,
+      "tag": "0026_narrow_analyst_intelligence_grants",
+      "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1795515166297,
+      "tag": "0027_private_staff_evidence",
+      "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1795516815465,
+      "tag": "0028_guard_public_security_workspace_arguments",
+      "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "7",
+      "when": 1795517180050,
+      "tag": "0029_private_demo_tracking_receipts",
+      "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1795517203683,
+      "tag": "0030_active_authenticated_ai_sessions",
+      "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1795525386927,
+      "tag": "0031_separate_simulated_public_projections",
+      "breakpoints": true
     }
   ]
 }

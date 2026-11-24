@@ -1,0 +1,3 @@
+CREATE FUNCTION public.has_active_app_session() RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path=public AS $$ SELECT auth.uid() IS NOT NULL AND EXISTS(SELECT 1 FROM auth.sessions s WHERE s.user_id=auth.uid() AND s.id::text=auth.jwt()->>'session_id'); $$;
+REVOKE ALL ON FUNCTION public.has_active_app_session() FROM PUBLIC,anon;
+GRANT EXECUTE ON FUNCTION public.has_active_app_session() TO authenticated,service_role;

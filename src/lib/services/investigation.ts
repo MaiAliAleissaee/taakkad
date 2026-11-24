@@ -1,5 +1,6 @@
 import type { ImpersonationAlert, IndicatorType } from "@/lib/domain/types";
 import { normalizeIndicator } from "./blocklist";
+import { phoneKey } from "./uae-phone";
 
 export interface InvestigationIndicator {
   id: string;
@@ -9,7 +10,7 @@ export interface InvestigationIndicator {
 }
 
 export function indicatorKey(type: IndicatorType, value: string) {
-  const normalized = type === "phone" ? value.replace(/[\s().-]/g, "") : normalizeIndicator(value);
+  const normalized = type === "phone" ? phoneKey(value) : normalizeIndicator(value);
   return `${type}:${normalized}`;
 }
 

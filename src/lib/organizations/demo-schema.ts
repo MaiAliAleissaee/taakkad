@@ -14,8 +14,10 @@ export const demoRegistrationSchema = z.object({
   sms: z.string().trim().min(2).max(30).regex(/^[\p{L}\p{N} _-]+$/u),
 }).strict();
 export type DemoRegistration = z.infer<typeof demoRegistrationSchema>;
-export const demoTrackingSchema = z.object({ code: z.string().trim().regex(/^[1-9]\d{4}$/) }).strict();
-export type DemoReceipt = { code: string; status: "pending"; updatedAt: string };
+export const demoTrackingSecretSchema = z.string().trim().regex(/^[a-f0-9]{64}$/);
+export const demoTrackingSchema = z.object({ code: z.string().trim().regex(/^[1-9]\d{4}$/), secret: demoTrackingSecretSchema }).strict();
+export const demoRecoverySchema = z.object({ id: z.string().uuid(), note: z.string().trim().min(10).max(1000), confirmed: z.literal(true) }).strict();
+export type DemoReceipt = { code: string; secret: string; status: "pending"; updatedAt: string };
 export type DemoStatus = "pending" | "under_review" | "needs_information" | "approved" | "rejected";
 export const demoTrackingResultSchema = z.object({ status: z.enum(["pending", "under_review", "needs_information", "approved", "rejected"]), updatedAt: z.string().datetime({ offset: true }) }).strict();
 export function canReviewDemo(status: string, decision: string) {

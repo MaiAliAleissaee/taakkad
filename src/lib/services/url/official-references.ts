@@ -1,0 +1,26 @@
+/** Curated references, not registry approvals or message authentication. Sources checked 2026-11-24. */
+export const officialReferences = [
+  { domain: "u.ae", name: "UAE Government", ar: "حكومة الإمارات", aliases: ["uaegov"], source: "https://u.ae/en/" },
+  { domain: "tamm.abudhabi", name: "TAMM", ar: "تم", aliases: ["tamm"], source: "https://u.ae/en/about-the-uae/digital-uae/digital-cities/smart-abu-dhabi" },
+  { domain: "uaepass.ae", name: "UAE PASS", ar: "الهوية الرقمية", aliases: ["uaepass"], source: "https://u.ae/en/about-the-uae/digital-uae/digital-transformation/platforms-and-apps/the-uae-pass-app" },
+  { domain: "moi.gov.ae", name: "Ministry of Interior", ar: "وزارة الداخلية", aliases: ["moi"], source: "https://u.ae/en/information-and-services/justice-safety-and-the-law/safety/road-safety" },
+  { domain: "adpolice.gov.ae", name: "Abu Dhabi Police", ar: "شرطة أبوظبي", aliases: ["adpolice", "abudhabipolice"], source: "https://u.ae/en/information-and-services/justice-safety-and-the-law/safety/road-safety" },
+  { domain: "dubaipolice.gov.ae", name: "Dubai Police", ar: "شرطة دبي", aliases: ["dubaipolice"], source: "https://u.ae/en/information-and-services/justice-safety-and-the-law/safety/road-safety" },
+  { domain: "rta.ae", name: "Dubai RTA", ar: "هيئة الطرق والمواصلات", aliases: ["rta"], source: "https://u.ae/en/information-and-services/justice-safety-and-the-law/safety/road-safety" },
+  { domain: "adcb.com", name: "ADCB", ar: "بنك أبوظبي التجاري", aliases: ["adcb"], source: "https://www.adcb.com/en/get-in-touch/call-us/" },
+  { domain: "emiratesnbd.com", name: "Emirates NBD", ar: "الإمارات دبي الوطني", aliases: ["emiratesnbd", "enbd"], source: "https://www.emiratesnbd.com/en/help-and-support/contact-us" },
+  { domain: "bankfab.com", name: "First Abu Dhabi Bank", ar: "بنك أبوظبي الأول", aliases: ["bankfab"], source: "https://www.bankfab.com/en-ae/personal/help-and-support/fraud-and-security" },
+  { domain: "dib.ae", name: "Dubai Islamic Bank", ar: "بنك دبي الإسلامي", aliases: ["dib"], source: "https://www.dib.ae/support" },
+  { domain: "icp.gov.ae", name: "ICP / Emirates ID", ar: "الهوية والجنسية / الهوية الإماراتية", aliases: ["icp", "emiratesid"], source: "https://u.ae/en/information-and-services/visa-and-emirates-id/emirates-id" },
+  { domain: "mohre.gov.ae", name: "MOHRE", ar: "وزارة الموارد البشرية والتوطين", aliases: ["mohre"], source: "https://www.mohre.gov.ae/en/" },
+  { domain: "dewa.gov.ae", name: "DEWA", ar: "هيئة كهرباء ومياه دبي", aliases: ["dewa"], source: "https://www.dewa.gov.ae/en/consumer/billing" },
+  { domain: "salik.ae", name: "Salik", ar: "سالك", aliases: ["salik"], source: "https://www.salik.ae/en/" },
+  { domain: "adib.ae", name: "Abu Dhabi Islamic Bank legacy domain", ar: "مصرف أبوظبي الإسلامي — نطاق سابق", aliases: ["adib"], source: "https://www.adib.com/en/" },
+  { domain: "adib.com", name: "Abu Dhabi Islamic Bank", ar: "مصرف أبوظبي الإسلامي", aliases: ["adib"], source: "https://www.adib.com/en/" },
+  { domain: "mashreq.com", name: "Mashreq", ar: "المشرق", aliases: ["mashreq"], source: "https://www.mashreq.com/en/uae/customer-care/" },
+  { domain: "rakbank.ae", name: "RAKBANK", ar: "راك بنك", aliases: ["rakbank"], source: "https://www.rakbank.ae/en/contact-us" },
+  { domain: "cbd.ae", name: "Commercial Bank of Dubai", ar: "بنك دبي التجاري", aliases: ["cbd"], source: "https://www.cbd.ae/personal/help-and-support" },
+  { domain: "emiratesislamic.ae", name: "Emirates Islamic", ar: "الإمارات الإسلامي", aliases: ["emiratesislamic"], source: "https://www.emiratesislamic.ae/en/help-and-support" },
+  { domain: "du.ae", name: "du", ar: "دو", aliases: ["du"], source: "https://www.du.ae/" },
+] as const;
+export const isDomainBoundary = (host: string, domain: string) => host === domain || host.endsWith(`.${domain}`);

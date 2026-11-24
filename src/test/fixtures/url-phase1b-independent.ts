@@ -1,0 +1,48 @@
+/** Independent read-only labeling reviewer supplied these BEFORE predictions.
+ * Labels describe controlled URL scenarios, not live page safety or status.
+ * Some first-party paths are illustrative. All difficult rows are retained.
+ */
+const cases = [
+  ["https://u.ae/en/information-and-services","legitimate","gov-portal"],
+  ["https://uaepass.ae/","legitimate","identity-brand"],
+  ["https://www.icp.gov.ae/en/","legitimate","identity-gov"],
+  ["https://www.mohre.gov.ae/en/services","legitimate","gov-service"],
+  ["https://www.dubaipolice.gov.ae/wps/portal/home","legitimate","gov-service"],
+  ["https://www.dewa.gov.ae/en/consumer/billing","legitimate","payment-utility"],
+  ["https://www.rta.ae/wps/portal/rta/ae/home","legitimate","gov-service"],
+  ["https://www.salik.gov.ae/en","legitimate","payment-toll"],
+  ["https://www.emiratesnbd.com/en/personal-banking","legitimate","bank"],
+  ["https://www.adcb.com/en/personal/","legitimate","bank"],
+  ["https://www.bankfab.com/en-ae/personal","legitimate","bank"],
+  ["https://www.du.ae/personal","legitimate","telecom"],
+  ["https://www.emirates.com/ae/english/manage-booking/","legitimate","login-payment-adjacent"],
+  ["https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=abc&redirect_uri=https%3A%2F%2Fportal.office.com%2F","legitimate","login-nested-target"],
+  ["https://www.khaleejtimes.com/uae/beware-fake-emirates-id-sms-scam","legitimate","brand-mention-news"],
+  ["https://www.thenationalnews.com/uae/2024/01/10/uae-pass-how-to-register/","legitimate","brand-mention-news"],
+  ["https://support.google.com/accounts/answer/32050?hl=en","legitimate","hard-brand"],
+  ["https://github.com/topics/uae-pass","legitimate","hard-brand-ugc"],
+  ["https://tamm.abudhabi/en/","legitimate","gov-newTLD"],
+  ["https://www.xn--mnchen-3ya.de/","legitimate","unicode-benign"],
+  ["https://uaepass-verify.example/login?eid=784","suspicious","brand-lookalike-login"],
+  ["https://icp-gov-ae.example/emirates-id/renew/payment","suspicious","gov-impersonation-payment"],
+  ["https://www.icp.gov.ae.secure-update.example/id/login","suspicious","subdomain-spoof"],
+  ["https://secure-update.example/https://www.emiratesnbd.com/login","suspicious","path-embedded-brand"],
+  ["https://emiratesnbd-secure.example/online-banking/otp","suspicious","bank-otp-harvest"],
+  ["https://dewa-bill-pay.example/pay?amount=1&card=","suspicious","utility-payment-lure"],
+  ["https://salik-fine.example/pay-now","suspicious","toll-fine-lure"],
+  ["https://dubaipolice-fines.example/traffic/pay","suspicious","police-fine-lure"],
+  ["https://redirect.example/go?url=https%3A%2F%2Fuaepass-login.example%2Fauth","suspicious","nested-encoded"],
+  ["https://redirect.example/r?u=aHR0cHM6Ly91YWVwYXNzLWxvZ2luLmV4YW1wbGUv","suspicious","base64-nested"],
+  ["https://xn--emirtesid-8db.example/verify","suspicious","unicode-homograph"],
+  ["https://uаepass.example/login","suspicious","cyrillic-homograph"],
+  ["https://emirates-id-update.example/kyc?step=selfie-upload","suspicious","compound-lure-kyc"],
+  ["https://mohre-visa-refund.example/claim?bank=iban","suspicious","compound-lure"],
+  ["https://etisalat-rewards.example/claim/login","suspicious","telecom-reward"],
+  ["https://ada.example@uaepass-login.example/auth","suspicious","userinfo-trick"],
+  ["https://emirates-airline-refund.example/refund/card","suspicious","airline-refund"],
+  ["https://bit-redirect.example/r?to=http%3A%2F%2F203.0.113.9%2Fadcb%2Flogin.php","suspicious","ip-nested"],
+  ["https://uaepass.example.com.verify-id.example/signin","suspicious","deep-subdomain"],
+  ["https://tamm-abudhabi-services.example/login?return=%2Femirates-id","suspicious","gov-lookalike"],
+] as const;
+export const independentUrls = cases.map(([url, label, category], i) => ({ id: `independent-${i+1}`, url, label, category }));
+export const uncertaintyControls = ["https://uae-pass-guide.example/how-to-register","https://bit.ly/3xYzAbc","https://xn--80ak6aa92e.example/","https://emiratesid-fan.example/forum"];

@@ -1,0 +1,13 @@
+{
+  "frozenAt": "2026-11-24T09:00:20.417Z",
+  "files": {
+    "src/lib/services/url/ml-features.ts": "546854a9f4fb55bd1771f20adb9da22553191942e2b1ec7516663717882fe74d",
+    "src/lib/services/url/ml-model.json": "8b50012a7a0f7608c4853b6d01b8917f21c3f72a230fafbb63f4a1a379acfd93",
+    "src/lib/services/url/ml.ts": "bfa676fafaca73590031e0574209af2332794306af09863fc98887f7f2164d74",
+    "src/lib/services/verification.ts": "5075f68c0ab29b29b95220920f875f7e99cce0c87384fb4c1bd7ccf274b27b9b",
+    "src/lib/services/hybrid-analysis.ts": "c66851a17d751eaa15a5c5c84c2d17047e39e43a18f13a4ac9952ee33e8a39df",
+    "src/lib/services/url/analyze.ts": "4cf5c3a687813911d631c8cf6aba4f5c0ff5ee6e0e4ac8d345a50d84414ec43c",
+    "scripts/evaluate-phase1c.ts": "54f60da323934f24481a401ef319675eab3be4746665444348c6d781169c3e49",
+    "docs/evaluation/phase1c-data.json": "43a46e61d9a6241c37934df04627b8842fedd7b6e962c7c04ac9ad20b06a1df0"
+  }
+}

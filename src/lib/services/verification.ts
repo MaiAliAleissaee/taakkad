@@ -3,8 +3,13 @@ import { heuristicAnalyzer, type ContentAnalyzer } from "./content-analysis";
 import { type BlockedIndicator, normalizeIndicator } from "./blocklist";
 import { detectLookalike, detectLookalikeHandle, hostFromUrl, isSameOrSubdomain, normalizeHost } from "./lookalike";
 import { activeChannel, channelKey } from "./channels";
+import { analyzeUrl } from "./url/analyze";
+import { classifyUrlMl } from "./url/ml";
+import { indicatorsFor } from "./reporting";
+import { normalizeUaePhone } from "./uae-phone";
 
 export type ReasonCode =
+  | "url_technical"
   | "sender_registered"
   | "domain_registered"
   | "channel_not_active"
@@ -81,7 +86,7 @@ export function findDomainOrg(orgs: Organization[], host: string | undefined) {
  * indicator, or a false identity claim combined with a sensitive request).
  * Anything not provably registered and verified is "unverified" — never fraud by default.
  */
-export function assessMessage(input: MessageInput, ctx: VerificationContext): Assessment {
+function assessRegistryMessage(input: MessageInput, ctx: VerificationContext): Assessment {
   const analyzer = ctx.analyzer ?? heuristicAnalyzer;
   const orgs = ctx.organizations;
   const reasons: Reason[] = [];
@@ -93,11 +98,12 @@ export function assessMessage(input: MessageInput, ctx: VerificationContext): As
   const senderDomain = senderDomainOf(input.channel, input.sender);
 
   // 1. Blocklisted indicators from escalated / confirmed cases
-  const blockedValues = new Map(ctx.blocklist.map((b) => [normalizeIndicator(b.value), b.caseId]));
-  const candidates = [input.sender, senderDomain, urlHost, input.url].filter((v): v is string => !!v);
+  const candidateKey = (value: string) => normalizeUaePhone(value) ?? normalizeIndicator(value);
+  const blockedValues = new Map(ctx.blocklist.map((b) => [candidateKey(b.value), b.caseId]));
+  const candidates = [...indicatorsFor(input).map(indicator => indicator.value), input.sender, senderDomain, urlHost, input.url].filter((v): v is string => !!v);
   const seen = new Set<string>();
   for (const value of candidates) {
-    const key = normalizeIndicator(value);
+    const key = candidateKey(value);
     const caseId = blockedValues.get(key);
     if (caseId && !seen.has(caseId)) {
       seen.add(caseId);
@@ -202,4 +208,23 @@ export function assessMessage(input: MessageInput, ctx: VerificationContext): As
   if (inactiveOrg) return unverified([{ code: "channel_not_active", tone: "warning", params: { value: input.sender, org: inactiveOrg.id } }]);
 
   return unverified([{ code: "no_match", tone: "neutral", params: {} }]);
+}
+
+/** Technical risk augments registry checks but never grants channel verification. */
+export function assessMessage(input: MessageInput, ctx: VerificationContext): Assessment {
+  const base = assessRegistryMessage(input, ctx);
+  const url = input.url || (input.channel === "website" ? input.sender : "");
+  if (!url.trim()) return base;
+  const technical = analyzeUrl(url);
+  const ml = technical.valid ? classifyUrlMl(url) : null;
+  const reasons: Reason[] = technical.signals.filter(signal => signal.weight >= 50).map(signal => ({
+    code: "url_technical", tone: "negative", evidence: true,
+    params: { en: signal.en, ar: signal.ar },
+  }));
+  if (ml?.flagged) reasons.push({ code: "url_technical", tone: "warning", evidence: false, params: {
+    en: "The local supervised URL model flags possible phishing. This is an uncalibrated statistical warning, not confirmed fraud or a channel-verification fact.",
+    ar: "يشير نموذج الروابط المحلي المدرّب إلى تصيّد محتمل. هذا تحذير إحصائي غير معاير، وليس احتيالاً مؤكداً أو حقيقة توثيق للقناة.",
+  } });
+  return { ...base, state: technical.classification === "suspicious" ? "suspicious" : base.state,
+    riskScore: Math.max(base.riskScore, technical.riskScore, ml?.riskScore ?? 0), reasons: [...base.reasons, ...reasons] };
 }

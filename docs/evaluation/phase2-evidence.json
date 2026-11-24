@@ -1,0 +1,218 @@
+{
+  "phase": "2",
+  "checkedAt": "2026-11-24T09:44:32Z",
+  "regression": {
+    "tests": 302,
+    "files": 27,
+    "passed": true
+  },
+  "targeted": {
+    "tests": 20,
+    "passed": true
+  },
+  "databaseIntegration": {
+    "rolledBack": true,
+    "passed": true,
+    "scope": [
+      "grants",
+      "active database-session fixture",
+      "analyst-only read",
+      "30th allowed / 31st denied",
+      "non-active session denial",
+      "officer denial"
+    ],
+    "notPasswordOrBrowserLoginProof": true
+  },
+  "liveMetadata": [
+    {
+      "domain": "uaepass.ae",
+      "observation": {
+        "checkedAt": "2026-11-24T09:37:38.505Z",
+        "dns": "resolved",
+        "dnsSource": "https://dns.google/resolve?name=uaepass.ae&type=A",
+        "records": [
+          {
+            "name": "uaepass.ae.",
+            "type": 1,
+            "data": "213.42.56.87"
+          },
+          {
+            "name": "uaepass.ae.",
+            "type": 15,
+            "data": "0 uaepass-ae.mail.protection.outlook.com."
+          },
+          {
+            "name": "uaepass.ae.",
+            "type": 2,
+            "data": "a22-67.akam.net."
+          },
+          {
+            "name": "uaepass.ae.",
+            "type": 2,
+            "data": "a11-64.akam.net."
+          },
+          {
+            "name": "uaepass.ae.",
+            "type": 2,
+            "data": "a4-66.akam.net."
+          },
+          {
+            "name": "uaepass.ae.",
+            "type": 2,
+            "data": "ns2.dubai.gov.ae."
+          },
+          {
+            "name": "uaepass.ae.",
+            "type": 2,
+            "data": "a8-67.akam.net."
+          },
+          {
+            "name": "uaepass.ae.",
+            "type": 2,
+            "data": "a1-133.akam.net."
+          },
+          {
+            "name": "uaepass.ae.",
+            "type": 2,
+            "data": "a13-64.akam.net."
+          },
+          {
+            "name": "uaepass.ae.",
+            "type": 2,
+            "data": "ns3.dubai.gov.ae."
+          }
+        ],
+        "addresses": [
+          "213.42.56.87"
+        ],
+        "dnssecValidated": false,
+        "nonPublicAnswers": false,
+        "asns": [
+          204206
+        ],
+        "networkSource": "https://stat.ripe.net/data/network-info/data.json?resource=213.42.56.87",
+        "registration": "unsupported",
+        "rdapSource": null,
+        "registeredAt": null,
+        "ageDays": null
+      },
+      "origins": [
+        "https://dns.google",
+        "https://stat.ripe.net"
+      ]
+    },
+    {
+      "domain": "example.com",
+      "observation": {
+        "checkedAt": "2026-11-24T09:37:38.608Z",
+        "dns": "resolved",
+        "dnsSource": "https://dns.google/resolve?name=example.com&type=A",
+        "records": [
+          {
+            "name": "example.com.",
+            "type": 1,
+            "data": "104.20.23.154"
+          },
+          {
+            "name": "example.com.",
+            "type": 1,
+            "data": "172.66.147.243"
+          },
+          {
+            "name": "example.com.",
+            "type": 28,
+            "data": "2606:4700:10::6814:179a"
+          },
+          {
+            "name": "example.com.",
+            "type": 28,
+            "data": "2606:4700:10::ac42:93f3"
+          },
+          {
+            "name": "example.com.",
+            "type": 15,
+            "data": "0 ."
+          },
+          {
+            "name": "example.com.",
+            "type": 2,
+            "data": "elliott.ns.cloudflare.com."
+          },
+          {
+            "name": "example.com.",
+            "type": 2,
+            "data": "hera.ns.cloudflare.com."
+          }
+        ],
+        "addresses": [
+          "104.20.23.154",
+          "172.66.147.243",
+          "2606:4700:10::6814:179a",
+          "2606:4700:10::ac42:93f3"
+        ],
+        "dnssecValidated": true,
+        "nonPublicAnswers": false,
+        "asns": [
+          13335
+        ],
+        "networkSource": "https://stat.ripe.net/data/network-info/data.json?resource=104.20.23.154",
+        "registration": "confirmed",
+        "rdapSource": "https://rdap.verisign.com/com/v1/domain/example.com",
+        "registeredAt": "1995-08-14T04:00:00.000Z",
+        "ageDays": 11425
+      },
+      "origins": [
+        "https://dns.google",
+        "https://rdap.verisign.com",
+        "https://stat.ripe.net"
+      ]
+    },
+    {
+      "domain": "uaepass-login.com",
+      "observation": {
+        "checkedAt": "2026-11-24T09:37:38.685Z",
+        "dns": "no_records",
+        "dnsSource": "https://dns.google/resolve?name=uaepass-login.com&type=A",
+        "records": [],
+        "addresses": [],
+        "dnssecValidated": false,
+        "nonPublicAnswers": false,
+        "asns": [],
+        "networkSource": null,
+        "registration": "not_found",
+        "rdapSource": null,
+        "registeredAt": null,
+        "ageDays": null
+      },
+      "origins": [
+        "https://dns.google",
+        "https://rdap.verisign.com"
+      ]
+    }
+  ],
+  "productionDependencyAudit": {},
+  "security": {
+    "critical": 0,
+    "warning": 0,
+    "info": 1,
+    "existingPublicRegistryFindingUntouched": true,
+    "deepScanPerformed": false
+  },
+  "modelSha256": "089276cac26e8648a4a294e07195f25f25a9e2469790eff971339e993fdf143c",
+  "modelByteIdenticalTo": "7d76645",
+  "authenticatedBrowserFlow": {
+    "verified": false,
+    "reason": "Temporary preview sessions do not satisfy existing auth.sessions revocation check; owner replied yes but no usable owner session was available. No bypass."
+  },
+  "savedNewIntelligenceRecords": 0,
+  "paidAiInferenceCalls": 0,
+  "publication": {
+    "requested": true,
+    "site": "https://taakkad.lovable.app",
+    "publicPagesAndSignedOutBoundariesVerified": true,
+    "englishDesktopArabicMobileScreenshotsInspected": true,
+    "phase2IntelligenceExecutionVerified": false,
+    "newIntelligenceBundleConfirmed": false,
+    "verified": false
+  }
+}

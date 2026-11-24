@@ -1,0 +1,50 @@
+{
+  "methodology": "Fixed synthetic development/held-out split. Positive = deterministic URL classification suspicious (score >= 50). No URL fetch, AI or RDAP in this evaluation. Not real-world performance.",
+  "development": {
+    "size": 16,
+    "tp": 8,
+    "tn": 8,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1,
+    "recall": 1,
+    "f1": 1,
+    "falsePositiveRate": 0,
+    "accuracy": 1,
+    "errors": []
+  },
+  "heldOut": {
+    "size": 48,
+    "tp": 21,
+    "tn": 23,
+    "fp": 1,
+    "fn": 3,
+    "precision": 0.9545454545454546,
+    "recall": 0.875,
+    "f1": 0.9130434782608695,
+    "falsePositiveRate": 0.041666666666666664,
+    "accuracy": 0.9166666666666666,
+    "errors": [
+      {
+        "id": "held-24",
+        "expected": "legitimate",
+        "actual": "suspicious"
+      },
+      {
+        "id": "held-28",
+        "expected": "suspicious",
+        "actual": "not_suspicious"
+      },
+      {
+        "id": "held-47",
+        "expected": "suspicious",
+        "actual": "not_suspicious"
+      },
+      {
+        "id": "held-48",
+        "expected": "suspicious",
+        "actual": "not_suspicious"
+      }
+    ]
+  }
+}

@@ -1,7 +1,20 @@
 # Taakkad — five-minute demo guide
 
 ## Preparation
-Use the preview. Keep staff passwords private and never show setup-link secrets on a projector. Sign out before changing institution accounts. All domains/records below are fictional and non-operational. No example link is opened by the application.
+Use https://taakkad.lovable.app/trust — screenshot `5e10491` is published and live public checks passed. Keep staff passwords private and never show setup-link secrets on a projector. Sign out before changing institution accounts. All seeded records below are fictional and non-operational. No example link is opened by the application. Official reference controls are identity context, not verified messages.
+
+Phase 5 is documentation-only. [Final results, pilot proposal and owner checklist](docs/PHASE_5_REPORT.md). Run staff demonstrations only after the owner verifies the existing private credentials/workflows; otherwise show clearly labeled fictional explanations, not simulated login success. Basic checking needs no account; paid semantic AI needs a real active session and explicit consent.
+
+## Screenshot demonstration / عرض لقطة الشاشة
+
+1. Prepare a clearly marked **FICTIONAL / خيالي** PNG/JPEG/WebP without personal information. Example: `طرشلي الكود الحين` and `https://uaepass-login.example`; optionally a second QR containing `https://qr-pay.example`. Do not scan someone else's real messages for the presentation.
+2. Select the image; wait for local Arabic/English OCR and QR extraction. Show editable text and any mistaken digit/uncertainty; confidence is reading confidence, not safety probability. English/Arabic controls and local mixed-language reading are live-tested.
+3. Check with AI/metadata off. Explain the difference between reference lookalike warnings, registry matches and ordinal risk. QR payloads/links are never opened.
+4. Add a different manual URL (`https://manual-demo.example`) and check again. Show unresolved conflict and both URLs; do not claim the screenshot was authenticated.
+5. Remove the image and show manual-only controls: `https://www.adcb.com/` returned 20; `https://adcb.com.attacker.example/login` returned 74/Suspicious Indicators. Disclose `www.adcb.com/login/payment` returned 65 from ML, a false-warning example; never promise every legitimate path is Low.
+6. Explain original image saving requires explicit consent and is local only. Public reporting does not attach pixels; authorized private evidence upload is separate, PNG/JPEG up to 512 KiB. Actual owner upload/readback remains unverified. Do not expose private evidence/setup/tracking secrets on a projector.
+
+العربية: القراءة محلية، والروابط وQR نصوص غير موثوقة لا تُفتح. راجع الأخطاء قبل الفحص؛ بصمة الملف لا تثبت أصالة الصورة، ولا يُنفّذ تصعيد أو إجراء شرطي تلقائياً.
 
 - Officer: **HAM123**, entry under **Accreditation Authority Staff Login** in `/organizations`; expected destination `/officer`.
 - Analyst: **HAM1234**, username/password at `/auth`; expected destination `/security`.
@@ -10,7 +23,7 @@ Use the preview. Keep staff passwords private and never show setup-link secrets 
 
 ## Suggested transitions
 1. **0:00–0:40 — Overview:** prototype disclaimer and three previously published fictional security warnings; open the full alerts list.
-2. **0:40–1:40 — Trust Portal:** expand the ten fictional examples; copy sender/link/message independently. Check an approved sender without AI, then a suspicious Arabic message with optional real AI enabled. Explain channel matching does not authenticate the message.
+2. **0:40–1:40 — Trust Portal:** select a fictional bilingual screenshot/QR or expand the 17 fictional examples; show editable extraction, then manual/combined checks with AI off. Explain channel matching does not authenticate the message. Optional real AI only with an owner-tested active session and credit consent; it is not required for the demo.
 3. **1:40–2:50 — Analyst:** sign in as HAM1234. Reports use permanent `1/2026` numbers. Open evidence, add a fictional note, view Fraud Connections summary and Show connection network. Reports 1/2026 and 2/2026 share documentation IP 203.0.113.45; relationships require human review. No real location is claimed.
 4. **2:50–4:10 — Officer:** logout, sign in as HAM123 from the Organization Portal. Review a fictional application, documents, correction note and audit. Organization approval and each channel approval are separate. Use Lighthouse Library / Harbor Learning examples or submit a new fictional application; do not modify real applicant records.
 5. **4:10–5:00 — Boundaries and governance:** show denied access to the other dashboard and the return button. Analysts prepare alert drafts; publication requires an independently authorized Supervisor. End with limitations and future integrations, not a production-readiness claim.
@@ -107,7 +120,7 @@ Expectations are guidance only. AI responses are real and can vary. Active chann
 - Approved legacy channel examples: `FALCONBANK`, `services.alnoor.gov.example`, `tracking@saqrexpress.example`.
 
 ## Recovery steps
-- **AI unavailable/limited:** leave AI off and show the honest rule-based result. Limits are five per visitor per ten minutes and 200 daily globally; do not clear cookies to evade the global cost ceiling.
+- **AI unavailable/limited:** leave AI off and show honest rules/local ML. Paid AI requires authentication and reserves five/user/ten minutes and 200 globally/UTC day; do not bypass quotas or present replayed results as fresh inference.
 - **Wrong institutional account:** use the return button, logout and use the correct username. Do not request additional privileges.
 - **Password not accepted:** use the existing private setup/recovery flow outside the demonstration. Do not display passwords, reset owner accounts automatically or assume tester credentials apply to HAM accounts.
 - **Tracking email delayed:** show the receipt/status and Officer-side review, but explicitly mark positive OTP retrieval unverified. Never bypass the code.
@@ -115,4 +128,4 @@ Expectations are guidance only. AI responses are real and can vary. Active chann
 - **Workspace edit conflict:** reload and retry the requested action; do not reset the workspace or delete saved work.
 
 ## Handoff
-README, ARCHITECTURE, TEST_REPORT and PRESENTATION_OUTLINE accompany the source. The project was not published in the supplied status; use the preview until publication is separately authorized. No source archive was requested or generated.
+README, ARCHITECTURE, AI_IMPLEMENTATION_REPORT, TEST_REPORT, PRESENTATION_OUTLINE and docs/PHASE_5_REPORT.md accompany the source. The actual screenshot application is published and verified; final handoff is documentation-only. 424 tests passed; genuine staff workflows and production prerequisites remain explicitly unverified. No source archive was requested or generated.

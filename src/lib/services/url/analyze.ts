@@ -1,9 +1,8 @@
 import { parse } from "tldts";
-import punycode from "punycode/";
+import { toUnicode } from "punycode";
 import ipaddr from "ipaddr.js";
 import { levenshtein } from "../lookalike";
 import { officialReferences, isDomainBoundary } from "./official-references";
-const { toUnicode } = punycode;
 
 export interface UrlSignal { code: string; kind: "observation" | "suspicious"; weight: number; en: string; ar: string }
 export interface UrlAnalysis {

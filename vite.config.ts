@@ -27,7 +27,7 @@ export default defineConfig({
         "sonner",
         "tailwind-merge",
         "tldts",
-        "punycode/",
+        "punycode",
         "ipaddr.js",
       ],
     },

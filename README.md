@@ -18,8 +18,8 @@ The deployed website is a demonstration, not proof of production readiness or ex
 
 ## Judges' Demo Access | بيانات الدخول التجريبية للجنة التحكيم
 
-These are **temporary hackathon demonstration accounts** for judging only; they will be disabled or have their passwords changed after the evaluation.
-هذان **حسابان تجريبيان مؤقتان لأغراض الهاكاثون** مخصّصان للتحكيم فقط، وسيتم تعطيلهما أو تغيير كلمتي المرور بعد انتهاء التقييم.
+These are **temporary hackathon demonstration accounts** for judging only.
+هذان **حسابان تجريبيان مؤقتان لأغراض الهاكاثون** مخصّصان للتحكيم فقط.
 
 Live website / الموقع المنشور: https://taakkad.lovable.app
 

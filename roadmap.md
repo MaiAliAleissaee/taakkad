@@ -1,5 +1,9 @@
 # Final hackathon polish roadmap
 
+## Targeted public registry presentation
+- [x] Use one bilingual registry heading, compact green Approved badges and one prototype disclaimer; hide the empty genuine section without combining data categories. Preserve officer presentation, records, filters, tracking and global disclaimer.
+- [x] 23 focused registry isolation and tracking tests passed; all four cards, concise badges, search and pending filters verified in Arabic/English at 855px/390px with no overflow or page errors. Preview build OK; records, trust policy and staff views unchanged. Ready, not published; no paid calls.
+
 ## Targeted reference-only public application tracking
 - [x] Separate public status lookup from private receipt access; return only reference, submission date, general status and bilingual generic message. Preserve records and recovery.
 - [x] 38 focused tests passed; existing approved reference readback and missing-reference response verified in Arabic/English at 489px/1280px, no overflow/page errors, reload clears input. Actual response contains only four allowed fields; original submission date confirmed. Private receipt/recovery protections retained and covered by tests; genuine officer recovery not re-exercised. Preview build OK; quick security check retains only unchanged informational registry finding. Ready, not published; no record/credential/role changes or paid calls. Existing custom limits: 20 lookups/caller/hour and 1000 globally/hour, misses included; five-digit status existence cannot be concealed while returning real status.

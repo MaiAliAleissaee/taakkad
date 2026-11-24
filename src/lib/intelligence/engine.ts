@@ -38,7 +38,7 @@ export function correlate(record: IntelligenceRecord, records: IntelligenceRecor
   };
 }
 export function mergeRecords(existing: IntelligenceRecord[], incoming: IntelligenceRecord[]) {
-  const key = (r: IntelligenceRecord) => `${r.source}|${r.targetDomain}|${r.domain ?? ""}|${r.sourceReference}|${r.title}|${r.synthetic}|${JSON.stringify(r.indicators)}`;
+  const key = (r: IntelligenceRecord) => JSON.stringify([r.source, r.targetDomain, r.domain, r.sourceReference, r.title, r.synthetic, r.sourceObservedAt, r.notes, r.indicators]);
   const seen = new Set(existing.map(key));
   return [...existing, ...incoming.filter(r => { const k = key(r); if (seen.has(k)) return false; seen.add(k); return true; })];
 }

@@ -2,7 +2,7 @@ import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { useStaffSession } from "@/lib/security/session";
 import { isVerificationOfficer } from "@/lib/organizations/schema";
 import { Search, Send } from "lucide-react";
-import { Suspense, useEffect, useState, type FormEvent } from "react";
+import { Suspense, useEffect, useState, type ComponentProps, type FormEvent } from "react";
 import { toast } from "sonner";
 import { EmptyState, Mono, PageHeader, RiskMeter, StatTile } from "@/components/common/bits";
 import { NativeSelect } from "@/components/common/native-select";
@@ -319,7 +319,7 @@ function AnalystIntelligenceTab() {
   const session = useStaffSession(); const { tr } = useI18n();
   return session.roles.includes("security_analyst") ? <TabsTrigger value="intelligence">{tr("Proactive Intelligence", "الرصد الاستباقي")}</TabsTrigger> : null;
 }
-function AnalystIntelligenceContent(props: React.ComponentProps<typeof IntelligencePanel>) {
+function AnalystIntelligenceContent(props: ComponentProps<typeof IntelligencePanel>) {
   const session = useStaffSession(); const { tr } = useI18n();
   if (!session.roles.includes("security_analyst")) return null;
   return <Suspense fallback={<p role="status">{tr("Loading intelligence…", "جارٍ تحميل الرصد…")}</p>}><IntelligencePanel {...props} /></Suspense>;

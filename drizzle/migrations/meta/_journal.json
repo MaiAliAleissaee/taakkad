@@ -176,6 +176,20 @@
       "when": 1795512662343,
       "tag": "0024_protect_intelligence_evidence_writes",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1795512996219,
+      "tag": "0025_retain_intelligence_session_revocation_checks",
+      "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1795513201571,
+      "tag": "0026_narrow_analyst_intelligence_grants",
+      "breakpoints": true
     }
   ]
 }

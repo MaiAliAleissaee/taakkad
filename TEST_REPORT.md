@@ -1,5 +1,11 @@
 # Final polish test report
 
+## Phase 2 proactive intelligence — 24 November 2026
+
+**20 targeted tests and one final regression of 302 tests / 27 files passed.** Rollback-only database checks passed for private grants, active-session/Analyst access, Officer/non-active-session denial and 30th allowed / 31st denied metadata commands. Free live helpers observed UAE PASS DNS/ASN without a fabricated `.ae` registration date; `example.com` RDAP supplied its reliable 1995 registration; a generated UAE PASS candidate had no observed DNS/RDAP record. Production dependency audit returned `{}`; backend scan had no critical/warnings and retained the existing informational public projection finding. The managed preview compiled successfully; ML artifact unchanged.
+
+**Not verified:** genuine authenticated analyst UI save/readback and full bilingual/mobile analyst view. Temporary test sessions do not satisfy existing `auth.sessions` revocation checks; the dashboard failed before the new tab loaded. An isolated visual harness did not complete and is not counted as passed. No credential/role bypass or permanent test record occurred. Publication/live outcome is recorded in [the Phase 2 report](docs/PHASE_2_REPORT.md) and `docs/evaluation/phase2-evidence.json`; Phase 3 not started. Earlier “Phase 2 not started” entries below are historical.
+
 ## Phase 1C publication blocker resolved — 24 November 2026
 
 Six scoped security package updates (source-map-js 1.2.2, js-yaml 4.3.2, Seroval 1.6.11, Zod 4.6.7, Nanoid 3.3.18, Vite 8.1.6); two offline `z.record` API signatures updated, no evaluation executed. **One final regression: 282 tests / 25 files passed**; targeted compatibility 56 + 38 tests passed. New tests cover the actual constrained-collection, YAML-merge, source-map and serializer security fixes. Both production audits passed (`bun audit --production`: `{}`, scanner: no vulnerabilities in 59 production packages). Quick backend scan retained one informational public-projection finding; no critical/warnings and no finding suppression. Unrelated development-only advisories remain documented.

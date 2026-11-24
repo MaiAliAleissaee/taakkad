@@ -1,9 +1,11 @@
 # Final hackathon polish roadmap
 
 ## Phase 2 proactive intelligence
-- [ ] Analyst-only private intelligence records, target candidate generation, live bounded DNS/RDAP verification and evidence-backed early warnings.
-- [ ] Source-attributed manual/batch imports, exact indicator correlation with current reports, bilingual dashboard; no suspicious website visits or public accusations.
-- [ ] Targeted safety/authorization tests and one final regression; security checks, publication, live verification and complete implementation report.
+- [x] Analyst-only private intelligence records, target candidate generation, live bounded DNS/RDAP verification and evidence-backed early warnings.
+- [x] Source-attributed manual/batch imports, exact indicator correlation with current reports, bilingual dashboard; no suspicious website visits or public accusations.
+- [x] 20 targeted tests, one final 302-test regression and rollback-only database/session/limit checks; free live metadata observations and production security checks pass; complete report written.
+- [x] Publication requested after security checks; actual live public pages and signed-out staff boundaries pass in English/Arabic, screenshots inspected. Phase 2 protected execution/bundle confirmation remains unverified.
+- [ ] Genuine authenticated bilingual/mobile analyst import/check/save/readback — temporary preview sessions fail the existing active-session check; owner confirmed willingness but no usable signed-in session is available. Do not bypass revocation or change credentials.
 
 ## Phase 1C credit-efficient URL ML
 - [x] Verify original advisories and actual paths; six minimal security dependency updates, modern Zod validation and two record-schema API corrections; 282 regressions, targeted parser/serializer checks and production dependency audits pass, model unchanged.

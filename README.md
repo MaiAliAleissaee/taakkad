@@ -9,6 +9,8 @@ Hackathon prototype / نموذج أولي للهاكاثون — not an official
 The deployed website is a demonstration, not proof of production readiness or external verification. All seeded examples are fictional.
 الموقع المنشور لأغراض العرض التجريبي، ولا يُعد إثباتاً للجاهزية التشغيلية أو التحقق المستقل من الجهات. جميع الأمثلة المُعدّة للعرض خيالية.
 
+Phase 2 / المرحلة الثانية: Analyst-only proactive intelligence adds sourced candidate generation, explicit free DNS/RDAP observations, attributed manual/batch imports, shared-indicator review and private early warnings. DNS is not registration or fraud proof; no suspicious websites are visited or accusations published. [Capabilities, actual tests and limitations](docs/PHASE_2_REPORT.md). The trained ML model and existing staff roles/passwords are unchanged. Genuine signed-in analyst save/readback remains unverified; temporary sessions cannot bypass existing revocation checks.
+
 1. المشكلة والحل | Problem and proposed solution
 العربية: قد يتلقى الأفراد رسائل أو اتصالات تنتحل صفة جهة معروفة، ولا تتوافر لهم دائماً طريقة واضحة للتحقق من القناة الرسمية أو الإبلاغ عن مؤشرات الاشتباه. يقترح «تأكّد» بوابة عامة لفحص قنوات التواصل والرسائل، وسجلاً للقنوات المعتمدة في بيئة تجريبية، ومساراً منظماً لتسجيل الجهات ومراجعتها، ولوحة أمنية لمراجعة البلاغات والروابط بين المؤشرات. نتائج الذكاء الاصطناعي مؤشرات مساعدة وليست حكماً قاطعاً بوجود احتيال.
 
@@ -18,6 +20,7 @@ English: People may receive messages or calls impersonating familiar organizatio
 - طلبات الجهات | Organization applications: private registration, one-time tracking secret, email-code verification, original 24-hour edit deadline and officer-requested corrections.
 - مراجعة مستقلة | Independent review: organization and channel review; private documents and audit trail; only approved, active channels appear publicly.
 - لوحة أمنية | Security dashboard: reports, fraud connections, public security alerts, analytics and reports; display identifiers such as 1/2026 retain underlying legacy/internal IDs.
+- الرصد الاستباقي للمحلل | Analyst proactive intelligence: candidate versus RDAP-confirmed registration, source attribution, DNS evidence and private human-review warnings; synthetic records remain labeled.
 - تحليل الروابط | Investigation leads: type-aware graph, shared indicators, deduplicated domain views and correctly labeled documentation IP addresses.
 - صلاحيات منفصلة | Separated staff roles: HAM123 Officer only; HAM1234 Analyst only. Staff passwords are not documented here. Officer entry is in the Organization Portal.
 - بيانات تجريبية | Fictional demo data: ten reports, ten domain examples, ten existing application records, ten managed bulletins (three published and seven drafts), and ten copyable public examples, as described in the supplied project documentation.

@@ -1,6 +1,6 @@
 # Taakkad — Phase 3: Explainability, Digital Evidence and Actionability
 
-24 November 2026. Phase 4 not started.
+24 November 2026. Phase 4 was subsequently approved separately; Phase 5 not started.
 
 ## Audit and scope
 
@@ -55,7 +55,8 @@ Missing functionality implemented as a shared evidence panel in Security report 
 - Corrected shared stale workspace targeting across public checks and reporting: logout/account switches immediately fall back to public mode and remove the stale hint without deleting records.
 - **30 targeted tests passed**, including the corrected hook mount race; only the two initially failing hook tests were rerun. Prior final 321-test regression and isolated Phase 3 JSON/PDF/hash results above were retained, not repeated. Preview compilation passed. Actual bilingual public browser checks verified local ML/checking, anonymous reporting, secret-receipt registration, owner status readback, wrong-secret denial, no browser-secret persistence and mobile layout. Three direct anonymous database bypass attempts were rejected. One explicitly fictional application and one fictional report were retained. Zero paid inference, metadata calls, benchmark repeats or new accounts.
 - Genuine staff upload/readback, receipt recovery/rotation and authenticated owner/cross-owner execution remain **NOT VERIFIED**. Existing-account restoration failed with no matching requester identity; no test user, permission bypass, role or credential change was introduced. Mocked session/recovery boundary tests are not password-login or persistence proof.
-- All eight selected findings have been marked fixed. The unrelated informational public organization-registry finding remains untouched. Publication is withheld until the fresh deep scan clears the saved changes; no Phase 4 work.
+- All eight selected findings have been marked fixed. The unrelated informational public organization-registry finding remains untouched. Subsequent owner-approved email-recipient and staff recovery/sign-in lockout corrections preserve this evidence implementation. Phase 3/4 publication is authorized but withheld until fresh deep-scan clearance of the saved fixes; Phase 5 is not started.
+- Latest staff sign-in/recovery correction: caller-only budgets prevent charging a submitted staff identifier; ten login attempts/hour across usernames, three recovery requests/hour, private-link limits unchanged. 34 targeted tests pass; local live checks verify safe missing-address denial on both portals, not successful hosted password login. No evidence/regression tests or paid calls repeated. Full details and retained limitations are in `PHASE_4_REPORT.md`; genuine staff evidence persistence, officer recovery and inbox completion remain unverified.
 
 ## Changed files
 

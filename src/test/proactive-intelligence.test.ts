@@ -15,6 +15,20 @@ describe("proactive intelligence rules", () => {
   it("generates unique candidates for UAE banks, UAE PASS, TAMM and fine services without claiming discovery", () => { for (const target of ["adcb.com", "bankfab.com", "uaepass.ae", "tamm.abudhabi", "moi.gov.ae", "adpolice.gov.ae"]) { const domains = generateCandidates(target); expect(domains.length).toBe(target === "moi.gov.ae" ? 20 : 24); expect(new Set(domains).size).toBe(domains.length); expect(domains).not.toContain(target); } });
   it("requires real registrable domains and rejects local hosts, IPs, credentials and paths", () => { for (const value of ["localhost", "127.0.0.1", "192.168.0.1", "foo.example", "example.com/path", "https://example.com", "user:pass@example.com", "sub.example.com"]) expect(domainSchema.safeParse(value).success).toBe(false); expect(domainSchema.safeParse("example.com").success).toBe(true); });
   it("requires explicit source attribution and synthetic flag on imports", () => { expect(importSchema.safeParse([{ title: "Lead", targetDomain: "uaepass.ae", source: "advertisement", indicators: record.indicators }]).success).toBe(false); expect(importSchema.safeParse([{ title: "Lead", targetDomain: "uaepass.ae", source: "advertisement", sourceReference: "Captured advertisement reference", synthetic: true, indicators: record.indicators }]).success).toBe(true); });
+  it("saves DEMO-001 with a reserved .example domain only as an explicit fictional observation", () => {
+    const row = { title: "Fictional UAE PASS observation", targetDomain: "uaepass.ae", domain: "uaepass-demo.example", source: "manual", sourceReference: "DEMO-001", synthetic: true, indicators: [{ type: "domain", value: "uaepass-demo.example" }] };
+    const parsed = importSchema.parse([row]);
+    expect(parsed[0]?.domain).toBe("uaepass-demo.example");
+    expect(parsed[0]?.sourceReference).toBe("DEMO-001");
+    expect(recordSchema.safeParse({ ...parsed[0], id: record.id, createdAt: record.createdAt, observation: null }).success).toBe(true);
+    expect(importSchema.safeParse([{ ...row, synthetic: false }]).success).toBe(false);
+    expect(domainSchema.safeParse(row.domain).success).toBe(false);
+  });
+  it("keeps malformed and unsafe domain inputs invalid even with the fictional checkbox", () => {
+    for (const domain of ["localhost", "127.0.0.1", "https://uaepass-demo.example", "uaepass-demo.example/path", "-bad.example", "a..example"]) {
+      expect(importSchema.safeParse([{ title: "Demo", targetDomain: "uaepass.ae", domain, source: "manual", sourceReference: "DEMO-001", synthetic: true, indicators: record.indicators }]).success).toBe(false);
+    }
+  });
   it("rejects more than 50 imported rows", () => { const row = { title: "Lead", targetDomain: "uaepass.ae", source: "manual", sourceReference: "Source", synthetic: true, indicators: record.indicators }; expect(importSchema.safeParse(Array.from({ length: 51 }, () => row)).success).toBe(false); });
   it("limits each verified batch to four domains", () => expect(commandSchema.safeParse({ action: "verify", ids: Array.from({ length: 5 }, () => record.id), revision: 0 }).success).toBe(false));
   it("does not call a generated candidate an evidence-backed warning", () => { expect(priority(record).earlyWarning).toBe(false); expect(priority(record).risk).toBe("low"); });

@@ -1,5 +1,10 @@
 # Final hackathon polish roadmap
 
+## Phase 2 manual import correction
+- [x] Reproduced DEMO-001 rejection at `[0, domain]`; permit valid reserved .example storage only for explicitly synthetic records, with bilingual field-level validation.
+- [x] 22 targeted intelligence/authorization tests pass; preview compilation is clean. No full regression, metadata requests or AI calls.
+- [ ] Authenticated existing-session save/readback: owner reports signed in, but automation cannot restore that session; a separate HAM1234 verification session reaches `Workspace unavailable`. No DEMO-001 record exists on readback yet; await owner's save/refresh confirmation without weakening session checks.
+
 ## Phase 2 proactive intelligence
 - [x] Analyst-only private intelligence records, target candidate generation, live bounded DNS/RDAP verification and evidence-backed early warnings.
 - [x] Source-attributed manual/batch imports, exact indicator correlation with current reports, bilingual dashboard; no suspicious website visits or public accusations.

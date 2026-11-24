@@ -61,3 +61,4 @@ use the editor.
 - Officer review lives in the gated /officer workspace; the public Organization Portal keeps only staff sign-in, tracking and registry, so staff and public experiences stay separate.
 - Allocate report display numbers through a private permanent year ledger in database triggers; preserve internal IDs and return saved payloads so deletion, reordering and concurrent writes never recycle numbers.
 - Analyze URLs locally; follow src/lib/services/url/AGENTS.md for safe metadata and evaluation.
+- Validate fictional intelligence .example domains only for explicitly synthetic storage records; retain strict public-domain validation for metadata requests so demo imports never enable network scanning.

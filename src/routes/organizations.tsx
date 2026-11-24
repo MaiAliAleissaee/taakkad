@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { EmptyState, PageHeader } from "@/components/common/bits";
 import { NativeSelect } from "@/components/common/native-select";
 import { OrgCard } from "@/components/orgs/org-card";
+import { DemoRegistry, demoRegistryQuery } from "@/components/orgs/demo-registry";
 import { DemoRegistrationDialog } from "@/components/orgs/demo-registration";
 import { ApplicationTracker } from "@/components/orgs/application-tracker";
 import type { DemoReceipt } from "@/lib/organizations/demo-schema";
@@ -16,6 +17,7 @@ import { useI18n } from "@/lib/i18n/i18n";
 import { orgStatusLabel, orgTypeLabel } from "@/lib/i18n/labels";
 
 export const Route = createFileRoute("/organizations")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(demoRegistryQuery),
   head: () => ({
     meta: [
       { title: "Organization Portal — Taakkad" },
@@ -62,7 +64,7 @@ function OrganizationsPage() {
       <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <OrganizationAccess />
         <ApplicationTracker receipt={receipt} />
-        <h2 className="mb-5 text-2xl font-semibold">{tr("Verified organization registry", "سجل الجهات الموثّقة")}</h2>
+        <h2 className="mb-5 text-2xl font-semibold">{tr("Organization registry", "سجل الجهات")}</h2>
         <div className="flex flex-col gap-3 rounded-xl border bg-card p-3 shadow-card md:flex-row md:items-center">
           <div className="relative flex-1">
             <Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -75,11 +77,14 @@ function OrganizationsPage() {
             </NativeSelect>
             <NativeSelect aria-label={tr("Status", "الحالة")} value={status} onChange={(e) => setStatus(e.target.value as OrgStatus | "all")}>
               <option value="all">{tr("All statuses", "كل الحالات")}</option>
-              {(["verified", "pending", "suspended"] as const).map((s) => <option key={s} value={s}>{pick(orgStatusLabel[s])}</option>)}
+              <option value="verified">{tr("Approved", "معتمدة")}</option>
+              {(["pending", "suspended"] as const).map((s) => <option key={s} value={s}>{pick(orgStatusLabel[s])}</option>)}
             </NativeSelect>
           </div>
         </div>
 
+        <div className="mt-5"><DemoRegistry search={q} type={type} status={status} /></div>
+        <h2 className="mb-3 text-2xl font-semibold">{tr("Genuinely verified organizations", "الجهات الموثّقة فعلياً")}</h2>
         {filtered.length ? (
           <div className="mt-3 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {filtered.map((o) => <OrgCard key={o.id} org={o} actor={{ role: "viewer" }}  />)}

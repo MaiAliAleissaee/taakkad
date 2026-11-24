@@ -4,12 +4,12 @@ import { TrustBadge } from "@/components/trust/trust-badge";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { publishedAlertsQuery } from "@/lib/alerts/queries";
+import { publishedAlertsQuery, simulatedAwarenessAlertsQuery } from "@/lib/alerts/queries";
 import { PublicAlertCard } from "@/components/security/public-alert-card";
 import { useI18n } from "@/lib/i18n/i18n";
 
 export const Route = createFileRoute("/")({
-  loader: ({ context }) => context.queryClient.ensureQueryData(publishedAlertsQuery),
+  loader: ({ context }) => Promise.all([context.queryClient.ensureQueryData(publishedAlertsQuery), context.queryClient.ensureQueryData(simulatedAwarenessAlertsQuery)]),
   head: () => ({
     meta: [
       { title: "Taakkad — Identity Verification & Impersonation Detection Prototype" },
@@ -26,6 +26,7 @@ export const Route = createFileRoute("/")({
 function Home() {
   const { tr } = useI18n();
   const { data: alerts } = useSuspenseQuery(publishedAlertsQuery);
+  const { data: awarenessAlerts } = useSuspenseQuery(simulatedAwarenessAlertsQuery);
   const preview = alerts.slice(0, 3);
 
   const portals = [
@@ -99,7 +100,11 @@ function Home() {
               <ul className="mt-4 space-y-3">
                 {preview.map(alert => <li key={alert.id}><PublicAlertCard alert={alert} /></li>)}
               </ul>
-              {!preview.length && <p className="mt-4 text-sm text-navy-muted">{tr("No published alerts", "لا توجد تنبيهات منشورة")}</p>}
+              {!preview.length && !awarenessAlerts.length && <p className="mt-4 text-sm text-navy-muted">{tr("No published alerts", "لا توجد تنبيهات منشورة")}</p>}
+              {!!awarenessAlerts.length && <>
+                <h3 className="mt-4 text-xs font-semibold text-navy-muted">{tr("Simulated Awareness Alerts", "تنبيهات توعوية تجريبية")}</h3>
+                <ul className="mt-3 space-y-3">{awarenessAlerts.slice(0, 3).map(alert => <li key={alert.id}><PublicAlertCard alert={alert} /></li>)}</ul>
+              </>}
               <Button variant="onNavy" size="sm" asChild className="mt-4"><Link to="/alerts">{tr("View All Alerts", "عرض جميع التنبيهات")}<ArrowRight className="rtl:rotate-180" /></Link></Button>
             </div>
           </div>

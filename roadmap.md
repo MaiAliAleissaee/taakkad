@@ -1,10 +1,14 @@
 # Final hackathon polish roadmap
 
 ## Final presentation cleanup
-- [ ] Remove public sample cards, simulated organization lists and fictional alert previews; keep empty independent verification forms and existing workflows.
+- [ ] Remove public sample cards and simulated organization lists; keep empty independent verification forms and existing workflows. Simulated awareness alerts retained separately by the subsequent targeted request.
 - [ ] Separate genuine public channel projections from preserved synthetic records with data-level safeguards.
 - [ ] Assemble bilingual demo-kit guides, all existing safe scenario sources, screenshot and QR samples; link from README.
 - [ ] Run focused regression and security release checks, publish only after clearance, verify hosted cleanup and report the commit.
+
+## Targeted simulated awareness alert restoration
+- [x] Restore existing public simulated alert cards separately on homepage and all-alerts page; bilingual per-card simulation label, no record writes or detection/statistics changes.
+- [x] 19 focused tests pass; original three alerts verified on both pages in Arabic/English at desktop/mobile widths with reloads and no page errors/overflow. Verification remains empty. Build OK; quick security check has only the unchanged informational registry finding. Ready for publication, not published; no record writes or paid AI calls.
 
 ## Phase 5 feasibility, scalability and submission readiness
 - [x] Publish security-cleared screenshot implementation without changing features/data; actual hosted `5e10491` OCR/QR execution confirms deployment.

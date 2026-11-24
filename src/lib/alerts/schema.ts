@@ -4,7 +4,15 @@ const bi = z.object({ en: publicText, ar: publicText });
 export const alertContentSchema = z.object({ title: bi, category: z.enum(["bank", "delivery", "traffic", "government", "social", "shopping"]), explanation: bi, safety: bi, severity: z.enum(["critical", "high", "medium", "low"]) });
 export type AlertContent = z.infer<typeof alertContentSchema>;
 export type AlertStatus = "draft" | "approved" | "published" | "rejected" | "withdrawn";
-export type PublicAlert = { id: string; content: AlertContent; published_at: string };
+export type PublicAlert = { id: string; content: AlertContent; published_at: string; simulated?: true };
+export function simulatedAwarenessAlerts(rows: readonly { id: string; content: unknown; published_at: string | null; simulated: boolean }[], now: number): PublicAlert[] {
+  const seen = new Set<string>();
+  return rows.flatMap(row => {
+    if (!row.simulated || !row.published_at || !Number.isFinite(Date.parse(row.published_at)) || Date.parse(row.published_at) > now || seen.has(row.id)) return [];
+    seen.add(row.id);
+    return [{ id: row.id, content: alertContentSchema.parse(row.content), published_at: row.published_at, simulated: true as const }];
+  });
+}
 export type ManagedAlert = { id: string; content: AlertContent; status: AlertStatus; author_id: string; revision: number; published_at: string | null };
 export const alertCommandSchema = z.object({ id: z.string().uuid().optional(), revision: z.number().int().min(0).optional(), action: z.enum(["save", "approve", "publish", "reject", "withdraw"]), content: alertContentSchema.optional(), note: z.string().trim().min(3).max(500), privacyReviewed: z.boolean().default(false) });
 export function mayManageAlert(roles: readonly string[], action: z.infer<typeof alertCommandSchema>["action"], status?: AlertStatus) {

@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { alertCommandSchema, alertContentSchema, type ManagedAlert, type PublicAlert } from "./schema";
+import { alertCommandSchema, alertContentSchema, simulatedAwarenessAlerts, type ManagedAlert, type PublicAlert } from "./schema";
 
 export const listPublishedAlerts = createServerFn({ method: "GET" }).handler(async (): Promise<PublicAlert[]> => {
   const { createClient } = await import("@supabase/supabase-js");
@@ -10,6 +10,15 @@ export const listPublishedAlerts = createServerFn({ method: "GET" }).handler(asy
   const result = await client.from("genuine_security_alerts").select("id,content,published_at").order("published_at", { ascending: false }).order("id");
   if (result.error) throw new Error("Alerts unavailable");
   return result.data.map(row => ({ id: row.id as string, content: alertContentSchema.parse(row.content), published_at: row.published_at as string }));
+});
+export const listSimulatedAwarenessAlerts = createServerFn({ method: "GET" }).handler(async (): Promise<PublicAlert[]> => {
+  const { createClient } = await import("@supabase/supabase-js");
+  const url = process.env["SUPABASE_URL"]; const key = process.env["SUPABASE_PUBLISHABLE_KEY"];
+  if (!url || !key) throw new Error("Alerts unavailable");
+  const client = createClient(url, key, { auth: { persistSession: false }, global: { fetch: (input, init) => { const headers = new Headers(init?.headers); if (headers.get("Authorization") === `Bearer ${key}`) headers.delete("Authorization"); headers.set("apikey", key); return fetch(input, { ...init, headers }); } } });
+  const result = await client.from("public_security_alerts").select("id,content,published_at,simulated").eq("simulated", true).lte("published_at", new Date().toISOString()).order("published_at", { ascending: false }).order("id");
+  if (result.error) throw new Error("Alerts unavailable");
+  return simulatedAwarenessAlerts(result.data, Date.now());
 });
 export const listManagedAlerts = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
   const { securityIdentity } = await import("@/lib/security/authorization.server"); await securityIdentity(context.supabase);

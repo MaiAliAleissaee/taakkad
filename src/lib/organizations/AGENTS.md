@@ -1,7 +1,7 @@
 # Organization identity review boundaries
 - Store relationship declarations in private application fields, stripped from identity payloads before projection; public tracking remains its strict four-field projection.
 - Keep legacy syntax and channel-domain validation, but route duplicate/lookalike identity comparisons to private human review rather than rejecting legitimate relationships at submission.
-- Use the database normalized conflict engine and serialized approval guard as the authority; fingerprint current indicators, declaration, documents and technical observations so changed evidence invalidates earlier resolution.
+- Use the database normalized conflict engine for advisory comparisons only; keep original authorization, revisions, decision audit and private evidence without similarity-based approval gates.
 - Supplement database matches with the existing maintained lookalike detector on authorized application snapshots; these medium-risk leads never downgrade exact conflicts or grant trust.
-- Require the approving independent officer's active session and documented explanation/evidence review for high-risk exact overlaps; declarations never clear conflicts, and shared DNS, IP or ASN alone remains low-risk and never proves fraud.
+- Preserve original independent officer authorization and approval requirements; no extra conflict-resolution form, checkbox or decision is required for similarity, and shared DNS, IP or ASN alone never proves fraud.
 - Obtain technical observations only in officer-initiated server calls to existing bounded fixed-origin DNS/RDAP helpers; retain source timestamps and unknown/ineligible results rather than fabricating metadata or fetching submitted websites.

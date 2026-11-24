@@ -45,7 +45,6 @@ export function OfficerDashboard() {
   const [decision, setDecision] = useState<Decision | null>(null);
   const [note, setNote] = useState(""); const [confirmed, setConfirmed] = useState<string[]>([]);
   const [confirming, setConfirming] = useState(false);
-  const [conflictReady, setConflictReady] = useState(false);
   const [busy, setBusy] = useState(false); const [error, setError] = useState(""); const [notice, setNotice] = useState("");
   const apps = query.data?.applications ?? [];
   const stats = queueStats(apps);
@@ -53,7 +52,7 @@ export function OfficerDashboard() {
   const selected = apps.find(a => a.id === selectedId);
 
   async function open(id: string) {
-    setSelectedId(id); setDecision(null); setNote(""); setConfirmed([]); setConflictReady(false); setError(""); setNotice(""); window.scrollTo({ top: 0 });
+    setSelectedId(id); setDecision(null); setNote(""); setConfirmed([]); setError(""); setNotice(""); window.scrollTo({ top: 0 });
     const row = apps.find(a => a.id === id);
     if (row?.demo_registration && row.status === "pending" && !row.demo_under_review) {
       setBusy(true);
@@ -91,7 +90,7 @@ export function OfficerDashboard() {
     const channelAudit = audit.flatMap(event => Array.isArray(event['details']) ? event['details'] as ChannelAuditEvent[] : []);
     const owned = selected.owner_id === session.user?.id;
     const decidable = !owned && (selected.demo_registration ? canReviewDemo(selected.status, "approved") : selected.status === "pending" || selected.status === "needs_information");
-    const ready = !!decision && (decision !== "approved" || conflictReady) && (selected.demo_registration ? demoDecisionReady(note) : canSubmitDecision(decision, note, selected.payload.domains, confirmed));
+    const ready = !!decision && (selected.demo_registration ? demoDecisionReady(note) : canSubmitDecision(decision, note, selected.payload.domains, confirmed));
     return <div dir={dir} className="space-y-6">
       {nav}
       <Button variant="ghost" size="sm" onClick={() => { setSelectedId(""); setNotice(""); }}><ArrowLeft className="rtl:rotate-180" />{tr("Return to applications list", "العودة إلى قائمة الطلبات")}</Button>
@@ -117,12 +116,12 @@ export function OfficerDashboard() {
           {selected.correction_note && <div className="mt-4"><p className="text-xs text-muted-foreground">{tr("Latest review note", "آخر ملاحظة مراجعة")}</p><p dir="auto" className="border-s-4 border-emerald bg-accent p-3 text-sm">{selected.correction_note}</p></div>}
         </section>
       </div>}
-      <ConflictReview key={`conflicts:${selected.id}`} id={selected.id} revision={selected.revision} userId={query.data.userId} independent={!owned} changed={changed} onApprovalReady={setConflictReady} />
+      <ConflictReview key={`conflicts:${selected.id}`} id={selected.id} revision={selected.revision} userId={query.data.userId} declaration={selected.relationship_declaration} independent={!owned} changed={changed} />
       <EvidenceTools key={`evidence:${selected.id}`} subject={{ kind: "application", id: selected.id }} />
       {decidable ? <section className="space-y-4 rounded-xl border bg-card p-5">
         <h3 className="font-semibold">{tr("Officer review actions", "إجراءات مراجعة الموظف")}</h3>
         <div className="flex flex-wrap gap-2">
-          <Button disabled={busy || !conflictReady} variant={decision === "approved" ? "emerald" : "outline"} onClick={() => setDecision("approved")}><CheckCircle2 />{tr("Approve Application", "اعتماد الطلب")}</Button>
+          <Button disabled={busy} variant={decision === "approved" ? "emerald" : "outline"} onClick={() => setDecision("approved")}><CheckCircle2 />{tr("Approve Application", "اعتماد الطلب")}</Button>
           {selected.status !== "approved" && <><Button disabled={busy} variant={decision === "rejected" ? "destructive" : "outline"} onClick={() => setDecision("rejected")}><XCircle />{tr("Reject Application", "رفض الطلب")}</Button>
           <Button disabled={busy} variant={decision === "needs_information" ? "default" : "outline"} onClick={() => setDecision("needs_information")}><FileQuestion />{tr("Request Additional Information", "طلب معلومات إضافية")}</Button></>}
         </div>

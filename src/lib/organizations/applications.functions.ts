@@ -44,11 +44,6 @@ export const reviewOrganizationApplication = createServerFn({ method: "POST" }).
     const tracking = await context.supabase.rpc("officer_is_application_contact", { application_uuid: row.id });
     if (tracking.error || tracking.data) throw new Error("Independent officer required");
     if (data.decision === "approved" && !data.domainsConfirmed) throw new Error("Domain review required");
-    if (data.decision === "approved") {
-      const { readIdentityConflicts } = await import("./conflicts.server");
-      const conflicts = await readIdentityConflicts(context.supabase, row.id);
-      if (conflicts.conflicts.some(c => c.severity === "high") && (!conflicts.resolved || conflicts.review.actor !== identity.userId)) throw new Error("Documented conflict review required");
-    }
     const payload = { ...organizationPayload(row.payload), status: data.decision === "approved" ? "verified" as const : data.decision === "suspended" || data.decision === "removed" ? "suspended" as const : "pending" as const };
     await commitApplication({ userId: identity.userId, id: row.id, operation: "review", revision: data.revision, payload, documents: documentsSchema.parse(row.documents), status: data.decision, note: data.note });
     return { ok: true };

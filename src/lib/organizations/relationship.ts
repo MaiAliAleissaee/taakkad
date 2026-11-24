@@ -16,11 +16,11 @@ export const relationshipSchema = z.object({
 export type Relationship = z.infer<typeof relationshipSchema>;
 export const emptyRelationship: Relationship = { kind: "none", organization: "", explanation: "", evidence: "" };
 export const relationshipLabels: Record<Relationship["kind"], Bi> = {
-  none: { en: "No relationship", ar: "لا توجد علاقة" },
+  none: { en: "Independent organization", ar: "جهة مستقلة" },
   parent: { en: "Parent company", ar: "شركة أم" },
   subsidiary: { en: "Subsidiary", ar: "شركة تابعة" },
   sister: { en: "Sister company", ar: "شركة شقيقة" },
-  common_ownership: { en: "Common ownership", ar: "ملكية مشتركة" },
+  common_ownership: { en: "Corporate group / common ownership", ar: "مجموعة شركات / ملكية مشتركة" },
   shared_channels: { en: "Shared communication channels", ar: "قنوات تواصل مشتركة" },
   shared_provider: { en: "Shared service or hosting provider", ar: "مزود خدمة أو استضافة مشترك" },
   other: { en: "Other relationship", ar: "علاقة أخرى" },
@@ -50,6 +50,7 @@ export const conflictReviewSchema = z.object({
   id: z.string().uuid(), revision: z.number().int().nonnegative(),
   note: z.string().trim().min(20).max(2000), explanationReviewed: z.literal(true), evidenceReviewed: z.literal(true),
 }).strict();
-export function requiresConflictDecision(conflicts: IdentityConflict[]) {
-  return conflicts.some(c => c.severity === "high");
+export function similarityAdvisories(conflicts: IdentityConflict[]) {
+  // A name alone is not a matching channel or technical indicator. No advisory is an approval condition.
+  return conflicts.filter(c => c.indicator !== "name");
 }

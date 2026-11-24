@@ -64,7 +64,7 @@ function OrganizationsPage() {
       <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <OrganizationAccess />
         <ApplicationTracker receipt={receipt} />
-        <h2 className="mb-5 text-2xl font-semibold">{tr("Organization Registry", "سجل الجهات")}</h2>
+        <h2 className="mb-5 text-2xl font-semibold">{tr("Approved Organizations", "الجهات المعتمدة")}</h2>
         <div className="flex flex-col gap-3 rounded-xl border bg-card p-3 shadow-card md:flex-row md:items-center">
           <div className="relative flex-1">
             <Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />

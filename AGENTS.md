@@ -40,7 +40,7 @@ use the editor.
 - Keep convenience input recognition and registry-result wording in the presentation layer; they must not alter detection assessments or infer cryptographic message authentication.
 - Resolve locale through the shared preference helper and inherit direction in reusable dialogs and notifications to keep navigation, reloads and portal overlays consistent.
 - Translate fixed fictional notes and analyst labels at display time without rewriting stored records; visitor-authored free text retains its original language and uses automatic text direction.
-- Keep six core demo fields plus private relationships; compute conflicts in the database and require audited high-risk review, never automatic rejection or trust.
+- Keep six core demo fields plus private relationships; similarities are officer-only advice, never approval gates or trust, so legitimate groups can be approved.
 - Preserve the pre-redesign presentation; security storage may move to Cloud without changing channel policy, detection or investigation semantics.
 - Keep legacy accent token names as semantic palette aliases and primary CTAs on the primary token so controlled palette changes do not require restructuring existing screens.
 - Store restricted security snapshots in role-gated per-user Cloud workspaces; never bundle private case seeds or write cases to browser storage because UI-only gates do not protect data.

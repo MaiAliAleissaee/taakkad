@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
-import { relationshipKinds, relationshipSchema, emptyRelationship, conflictReviewSchema, requiresConflictDecision, type IdentityConflict } from "@/lib/organizations/relationship";
+import { relationshipKinds, relationshipSchema, emptyRelationship, conflictReviewSchema, similarityAdvisories, type IdentityConflict } from "@/lib/organizations/relationship";
 import { collectIdentityMetadata, readIdentityConflicts } from "@/lib/organizations/conflicts.server";
 import { demoPayload, demoRegistrationSchema } from "@/lib/organizations/demo-schema";
 import { pendingOrganization, validateApplication } from "@/lib/organizations/applications.server";
@@ -37,11 +37,14 @@ describe("private relationship declarations", () => {
     await expect(validateApplication({ nameEn: "Test Org", nameAr: "جهة", type: "business", domains: ["test.example"], contactEmail: "a@test.example", channels: [{ type: "email", value: "a@outside.example" }] })).rejects.toThrow();
   });
 });
-describe("documented conflict review policy", () => {
+describe("advisory matches and preserved historical review validation", () => {
   const review = { id, revision: 2, note: "Reviewed relationship and missing evidence", explanationReviewed: true, evidenceReviewed: true };
-  it("exact channel conflicts require enhanced review", () => expect(requiresConflictDecision([conflict])).toBe(true));
-  it("shared hosting alone never triggers high-risk approval blocking", () => expect(requiresConflictDecision([{ ...conflict, indicator: "ip", severity: "low", reason: "shared_infrastructure", provenance: "technical_snapshot" }])).toBe(false));
-  it("similar names are review leads, not automatic rejection", () => expect(requiresConflictDecision([{ ...conflict, indicator: "name", match: "approximate", severity: "medium", reason: "similar_identity" }])).toBe(false));
+  it("includes exact channel overlaps as advisory indicators", () => expect(similarityAdvisories([conflict])).toEqual([conflict]));
+  it("retains shared IP context without changing its low-risk classification", () => {
+    const shared = { ...conflict, indicator: "ip", severity: "low" as const, reason: "shared_infrastructure" as const, provenance: "technical_snapshot" as const };
+    expect(similarityAdvisories([shared])[0]?.severity).toBe("low");
+  });
+  it("does not raise a channel/technical warning for a name alone", () => expect(similarityAdvisories([{ ...conflict, indicator: "name", match: "approximate", severity: "medium", reason: "similar_identity" }])).toEqual([]));
   it("requires a documented explanation of at least 20 characters", () => expect(conflictReviewSchema.safeParse({ ...review, note: "short" }).success).toBe(false));
   it("requires human review of the declaration", () => expect(conflictReviewSchema.safeParse({ ...review, explanationReviewed: false }).success).toBe(false));
   it("requires human review of available or missing evidence", () => expect(conflictReviewSchema.safeParse({ ...review, evidenceReviewed: false }).success).toBe(false));

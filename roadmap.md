@@ -1,5 +1,10 @@
 # Final hackathon polish roadmap
 
+## Advisory-only approval simplification
+- [x] Preserve private corporate declarations and concise officer-only matching channel/technical notices; no mandatory resolution form or similarity approval gate. Declared relationships remain visible from the authorized application even if optional similarity metadata is unavailable.
+- [x] Remove similarity blockers from browser, both review actions and the database trigger while preserving original authorization, revisions, audit and simulation boundaries. Historical private dispositions retained; original decision notes/domain review/confirmation remain.
+- [x] 80 focused tests passed and privileged rollback-only approval/privacy/projection contracts passed. HAM123 browser approval with matching channels updated the anonymous registry automatically without reload; Arabic correction/rejection and mobile Approved badge passed. Removed only the two new test records; four original approved organizations remain. Quick scan: unchanged informational finding only; preview build OK. No publication or paid AI. See docs/ADVISORY_APPROVAL_REPORT.md for limitations.
+
 ## Obsolete staff receipt recovery section
 - [x] Remove only the receipt recovery section from the shared bilingual officer review screen; retain private recovery protections, evidence, conflict review, actions and audit.
 - [x] Verified removal in actual authenticated HAM123 English/Arabic review screens at 855×754; private evidence entry, three decision actions and audit remain visible, with no page errors. 25 focused tracking/privacy/access tests passed; preview build OK. Quick security scan: only the unchanged informational public-registry finding. No records, permissions or server protections changed.
@@ -9,7 +14,7 @@
 - [x] Add bilingual protected relationship declarations and private normalized conflict detection using existing applications and available technical snapshots; reuse maintained lookalike and bounded DNS/RDAP helpers.
 - [x] Add officer-only conflict/evidence review and atomic documented approval safeguards; preserve projections, audit, records and public tracking.
 - [x] 78 distinct focused tests passed, plus rollback-only conflict/approval/stale-review/infrastructure contracts. Public registration, bilingual mobile forms, anonymous operation denial and safe four-field reference tracking observed. Four original public cards preserved; quick scan only unchanged informational finding; preview build OK. Details in docs/ORGANIZATION_IDENTITY_CONFLICT_REPORT.md.
-- [ ] Genuine active-session HAM123 conflict read/resolution and browser approval readback — owner offered to sign in, but that session is not yet available to the sandbox; no bypass. Keep the new private TEMP validation application for this check, then clean up only that test record. Temporary tester role removed; original accounts unchanged.
+- [x] Separate conflict-resolution verification superseded by advisory-only simplification; authorized HAM123 approval and public readback now verified without resolution. Live optional similarity/evidence access still requires its existing active-session predicate and was not bypassed. Preserve the earlier owner-reviewed TEMP record; only newly created validation records were cleaned up.
 - [ ] Saved-enhancement deep security clearance and publication — pending scan completion and genuine staff check; do not publish before release gates pass.
 
 ## Targeted public registry presentation

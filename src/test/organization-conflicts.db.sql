@@ -1,5 +1,6 @@
 -- Privileged, rollback-only contract checks. Never grants roles or creates auth sessions.
 -- Uses an existing officer only inside the rollback; never simulates an active Auth session.
+-- Similarities are advisory; original authorization/revision/note checks remain mandatory.
 BEGIN;
 DO $$
 DECLARE subject_id uuid; other_id uuid; conflicts jsonb; actor uuid; payload jsonb; high_count integer; tracking_code text;
@@ -23,33 +24,40 @@ BEGIN
  SELECT count(*) INTO high_count FROM jsonb_array_elements(conflicts) c WHERE c->>'severity'='high' AND c->>'indicator' IN('email','phone','sms');
  IF high_count<3 THEN RAISE EXCEPTION 'Exact communication conflict detection failed: %',conflicts; END IF;
  BEGIN
-  PERFORM public.review_demo_organization(actor,subject_id,0,'approved','Attempt without documented conflict resolution');
-  RAISE EXCEPTION 'High-risk approval bypass succeeded';
+  PERFORM public.review_demo_organization(NULL,subject_id,0,'approved','Unauthorized attempted approval');
+  RAISE EXCEPTION 'Anonymous approval succeeded';
  EXCEPTION WHEN raise_exception THEN
-  IF SQLERRM NOT LIKE 'Unresolved high-risk identity conflicts%' THEN RAISE; END IF;
+  IF SQLERRM <> 'Officer required' THEN RAISE; END IF;
  END;
- IF EXISTS(SELECT 1 FROM public.organization_demo_registry WHERE application_id=subject_id AND approved) THEN RAISE EXCEPTION 'Blocked application leaked to registry'; END IF;
+ IF EXISTS(SELECT 1 FROM public.organization_demo_registry WHERE application_id=subject_id AND approved) THEN RAISE EXCEPTION 'Unauthorized application leaked to registry'; END IF;
+ BEGIN
+  PERFORM public.review_demo_organization(actor,subject_id,99,'approved','Stale revision');
+  RAISE EXCEPTION 'Stale revision approval succeeded';
+ EXCEPTION WHEN raise_exception THEN
+  IF SQLERRM <> 'Application changed or decision final' THEN RAISE; END IF;
+ END;
+ BEGIN
+  PERFORM public.review_demo_organization(actor,subject_id,0,'approved','');
+  RAISE EXCEPTION 'Empty decision note accepted';
+ EXCEPTION WHEN raise_exception THEN
+  IF SQLERRM <> 'Invalid decision' THEN RAISE; END IF;
+ END;
  BEGIN
   PERFORM public.resolve_organization_identity_conflicts(subject_id,0,'Unauthorized fabricated conflict resolution',true,true);
   RAISE EXCEPTION 'Resolution without live officer session succeeded';
  EXCEPTION WHEN raise_exception THEN
   IF SQLERRM<>'Documented officer review required' THEN RAISE; END IF;
  END;
- -- Service-side review fixture exercises only the atomic guard/projection contract,
- -- not the authenticated human resolution command (which needs a genuine session).
- UPDATE public.organization_applications SET conflict_review=jsonb_build_object('fingerprint',public.organization_conflict_fingerprint(subject_id),'actor',actor,'note','Fixture-only documented corporate authorization; not real ownership verification') WHERE id=subject_id;
- PERFORM public.review_demo_organization(actor,subject_id,0,'approved','Fixture-only approval after stored documented review');
+ IF (SELECT conflict_review FROM public.organization_applications WHERE id=subject_id) <> '{}'::jsonb THEN RAISE EXCEPTION 'Fixture has unexpected separate resolution'; END IF;
+ PERFORM public.review_demo_organization(actor,subject_id,0,'approved','Fixture-only approval with advisory exact matches');
  IF (SELECT count(*) FROM public.organization_demo_registry WHERE application_id=subject_id AND approved AND simulated)<>1 THEN RAISE EXCEPTION 'Approval public projection failed'; END IF;
- PERFORM public.review_demo_organization(actor,subject_id,1,'approved','Idempotent prototype reapproval with current documented review');
+ IF EXISTS(SELECT 1 FROM public.organization_demo_registry WHERE application_id=subject_id AND channels::text LIKE '%relationship%') THEN RAISE EXCEPTION 'Private declaration leaked'; END IF;
+ IF EXISTS(SELECT 1 FROM public.organization_applications a CROSS JOIN LATERAL jsonb_array_elements(a.payload->'channels') c WHERE a.id=subject_id AND c->>'status'<>'pending') THEN RAISE EXCEPTION 'Prototype approval established channel trust'; END IF;
+ PERFORM public.review_demo_organization(actor,subject_id,1,'approved','Idempotent prototype reapproval without conflict resolution');
  IF (SELECT count(*) FROM public.organization_demo_registry WHERE application_id=subject_id)<>1 THEN RAISE EXCEPTION 'Duplicate approved registry projection'; END IF;
  -- Technical matches are only low-risk, even when an IP or DNS value is identical.
  UPDATE public.organization_applications SET identity_technical='[{"domain":"rollback-conflict.example","observation":{"addresses":["192.0.2.123"],"records":[{"type":2,"data":"ns.shared.example"}],"asns":[64500]}}]' WHERE id=subject_id;
- BEGIN
-  PERFORM public.review_demo_organization(actor,subject_id,2,'approved','Attempt with stale technical evidence review');
-  RAISE EXCEPTION 'Stale conflict review approval succeeded';
- EXCEPTION WHEN raise_exception THEN
-  IF SQLERRM NOT LIKE 'Unresolved high-risk identity conflicts%' THEN RAISE; END IF;
- END;
+ PERFORM public.review_demo_organization(actor,subject_id,2,'approved','Changed technical context does not add an approval requirement');
  payload:=jsonb_build_object('id','other','name',jsonb_build_object('en','Unrelated infrastructure operator','ar','جهة مختلفة'),'type','business','domains',jsonb_build_array('completely-unrelated.example'),'contactEmail','unrelated@completely-unrelated.example','status','pending','channels',jsonb_build_array(jsonb_build_object('type','sms','value','OTHER-SENDER','status','pending')));
  payload:=jsonb_set(payload,'{channels}',payload->'channels'||jsonb_build_array(jsonb_build_object('type','website','value','https://completely-unrelated.example','status','pending'),jsonb_build_object('type','social','value','@INFRA-UNIQUE','status','pending'),jsonb_build_object('type','email','value','unrelated@completely-unrelated.example','status','pending'),jsonb_build_object('type','phone','value','0600000000','status','pending')));
  tracking_code:=public.submit_secure_demo_organization(payload,repeat('b',64));
@@ -57,5 +65,9 @@ BEGIN
  UPDATE public.organization_applications SET identity_technical='[{"domain":"completely-unrelated.example","observation":{"addresses":["192.0.2.123"],"records":[{"type":2,"data":"ns.shared.example"}],"asns":[64500]}}]' WHERE id=other_id;
  conflicts:=public.organization_identity_conflicts(subject_id);
  IF (SELECT count(*) FROM jsonb_array_elements(conflicts) c WHERE c->>'reason'='shared_infrastructure' AND c->>'severity'='low')<3 OR EXISTS(SELECT 1 FROM jsonb_array_elements(conflicts) c WHERE c->>'reason'='shared_infrastructure' AND c->>'severity'='high') THEN RAISE EXCEPTION 'Shared infrastructure severity regression'; END IF;
+ PERFORM public.review_demo_organization(actor,other_id,0,'needs_information','Private correction fixture');
+ IF (SELECT status FROM public.organization_applications WHERE id=other_id)<>'needs_information' OR EXISTS(SELECT 1 FROM public.organization_demo_registry WHERE application_id=other_id AND approved) THEN RAISE EXCEPTION 'Correction status/projection regression'; END IF;
+ PERFORM public.review_demo_organization(actor,other_id,1,'rejected','Private rejection fixture');
+ IF (SELECT status FROM public.organization_applications WHERE id=other_id)<>'rejected' OR EXISTS(SELECT 1 FROM public.organization_demo_registry WHERE application_id=other_id AND approved) THEN RAISE EXCEPTION 'Rejection status/projection regression'; END IF;
 END $$;
 ROLLBACK;

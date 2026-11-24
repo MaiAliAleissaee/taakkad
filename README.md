@@ -114,6 +114,8 @@ Reproduce: download [UCI 967 CSV](https://archive.ics.uci.edu/static/public/967/
 
 العربية: لم تتحقق أهداف الدقة المطلوبة. الدقة المستقلة التجريبية 84.62% ودقة بيانات البحث الخارجية 50.50% فقط؛ لا تُعرض هذه النتائج بوصفها دقة تشغيلية أو ضماناً لنقاط التحكيم. لم تُنشر التحسينات بعد، ولم تتغير كلمات المرور أو الصلاحيات، ولن ننتقل إلى المرحلة الثانية.
 
+**Post-publication verification:** owner approved publishing after tests. The current published portal now serves the new refund rule and live MX/NS/RIPE records; English/Arabic real AI output, Arabic mobile, result clearing and signed-out staff redirects passed. 269 app tests and seven scanner tests passed. Four fresh AI calls total (two preview, two published) are functional checks only. Prior publication FAIL statements above are historical and superseded. Accuracy targets and unsupported scanner/cloaking/registration limits remain unchanged.
+
 9. وثائق التسليم | Handoff documents
 ### Phase 1B resumed — 24 November 2026
 

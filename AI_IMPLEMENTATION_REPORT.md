@@ -1,5 +1,8 @@
 # TRUST ZERO AI — hybrid AI implementation and validation
 
+### Published real inference verification
+After explicit owner publication approval, two additional genuine calls completed on the published portal: English ADCB credential lure **High / combined 74**, Arabic government information **Low /20**. Preview previously returned Critical for the same lure; this is model nondeterminism, not fabricated identical predictions. Four fresh total calls are separate functional observations, not an independent full-hybrid benchmark. No model/quota/prompt change. Published new-rule and DNS output verified; prior publication-absence statements are historical.
+
 ## Resumed Phase 1B — 24 November 2026
 
 Preserved model/provider: server-only OpenAI **`openai/gpt-6.1-sol`**, Lovable Gateway Responses, original 2,400-token cap, prompts/schema/redaction/grounding, 5/visitor/10 minutes and 200/day global reservation. No model/key/quota/role change. Expanded URL rules feed the existing hybrid maximum; real DNS and operator page evidence do **not** become registry facts or model-authenticated website identity. Remote static HTML is never injected into AI prompts or executed.

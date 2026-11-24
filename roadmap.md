@@ -1,15 +1,15 @@
 # Final hackathon polish roadmap
 
 ## Phase 1B detection accuracy
-- [ ] Resumed audit: implement general error fixes, expanded DNS and isolated operator scanning; preserve prior evidence.
-- [ ] Freeze revised engine and evaluate a new disjoint 500+ labeled sample, including separate controlled scenarios.
-- [ ] Run complete regressions, verify preview/published state, and update all Phase 1B technical reports.
+- [x] Resumed audit: general error fixes, expanded DNS and separate operator-authorized IP-pinned scanner; preserve prior evidence.
+- [x] Freeze revised engine; retain first 1000 + 80 controlled cases, regression correction and fresh final 1000-domain holdout; targets fail.
+- [x] 269 app + 7 scanner tests pass; bilingual preview/published DNS/AI/mobile/privacy checked; all required reports updated.
 - [x] Diagnose previously seen errors; strengthen general URL handling while preserving original evaluation artifacts.
 - [x] Investigate scanning; add real fixed-origin DNS/RIPE and explicitly offline page/redirect fixtures only.
 - [x] Freeze engine; evaluate 1,000 external labeled + 39 new controlled cases, baseline/fallback/category matrices and all errors; targets unmet.
 - [x] Verify preview bilingual/mobile/privacy, published-engine absence and read-only staff mappings; 251 regressions pass, build OK, required documentation updated.
-- [ ] Publish Phase 1B after final tests and verify published new engine — owner approved publication on 24 November 2026.
-- [ ] Actual safe redirect/shortener and live cloaking scan — needs authorized isolated scanner/transport with pinned public-IP egress and privacy controls.
+- [x] Publish Phase 1B after final tests; owner-approved deployment verified with new rule, real DNS and two actual bilingual AI calls.
+- [ ] Public visitor redirect/shortener and live cloaking scan — separate operator CLI works; app integration still needs isolated deployed scanner and explicit URL/privacy authorization.
 - [ ] Large full-AI hybrid evaluation — requires approved multi-day plan/credits within existing quotas; 4 real functional checks only.
 
 ## Phase 1 URL detection accuracy
@@ -42,4 +42,4 @@
 - [ ] Legacy applicant inbox delivery and email-code completion — still unverified for preserved legacy capabilities; new demo tracking does not use email or secrets.
 - [ ] Live independent public-alert approval/publication — requires a separately authorized Supervisor; do not grant Supervisor to either demo staff account.
 
-Existing usernames, passwords, institutional roles, private records and the original visual identity must remain unchanged. Phase 1 permits opt-in domain-only RDAP; no publication, new subscription or credential is authorized.
+Existing usernames, passwords, institutional roles, private records and the original visual identity must remain unchanged. Owner authorized Phase 1B publication on 24 November 2026; no new subscription or credential is authorized.

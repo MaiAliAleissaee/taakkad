@@ -1,5 +1,8 @@
 # Final polish test report
 
+### Final post-publication evidence
+**269 tests across 23 files passed**, plus **seven Python scanner safety tests**; harness build OK. After owner approval, actual published checks passed: new refund rule High/74, real MX/NS/ASN records, English AI High/74 and Arabic AI Low/20. Published Arabic 390×844 no overflow, reload cleared result, signed-out protected paths redirected to `/auth`, no runtime exceptions. Two preview + two published actual AI calls are not a benchmark. Pre-publication FAIL observations are historical, superseded by current deployment PASS; detection accuracy targets remain FAIL.
+
 ## Resumed Phase 1B verification — 24 November 2026
 
 Current evidence supersedes earlier current-state claims; historical artifacts below remain unchanged. Final new external holdout: 1,000 distinct registrable-domain groups, 500 source-positive/500 source-negative, disjoint from original/reviewer/previous two external samples. Source PhiUSIIL UCI 967, Prasad & Chandra (2024), CC BY 4.0; only URL/label used, no sites visited. Final TP/TN/FP/FN **0/500/0/500**, accuracy **50%**, precision **undefined**, recall/F1 **0%**, FPR **0%**; baseline `21eb114` identical on the same sample. Targets fail. Every case/error is retained.

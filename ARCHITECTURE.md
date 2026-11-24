@@ -1,5 +1,8 @@
 # Taakkad architecture
 
+### Post-publication status
+Owner authorized publication after all tests. Real published checks now confirm new local rules and hostname-only DNS/NS/MX/RIPE; both-language real AI output, Arabic mobile privacy and signed-out staff boundaries passed. The operator scanner remains separate, not publicly deployed. Earlier version-absence claims are retained as pre-publication history.
+
 ## Resumed Phase 1B architecture — 24 November 2026
 
 The public application and offline operator scanner are deliberately separate trust boundaries. `scripts/scan-url.py` is a POSIX operator CLI, **not Worker/server-function code and not a public route**. Explicit exact-host authorization is required at every redirect. It rejects userinfo/query/fragment URLs, special hosts, IP literals, nonstandard ports, non-public/mixed DNS answers, redirect loops, HTTPS downgrades and excessive hops. Each fresh resolver result is validated before a literal-IP socket connection; actual peer equality and the original-host verified TLS SNI remove the DoH-to-fetch rebinding gap. It ignores proxy environment settings and uses no browser credentials/cookies/referrer. Fresh socket per hop, five-second connection/read timeout, six response maximum, 128 KiB uncompressed cap, no compression, and a POSIX 20-second process alarm including resolver/TLS/slow reads. An external isolated container/egress policy remains necessary before serving arbitrary visitor URLs. Windows execution is rejected without POSIX deadline support. No JS, credential submission, automatic HTML redirects or browser rendering is performed.

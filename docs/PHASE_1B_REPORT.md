@@ -2,7 +2,7 @@
 
 ## Resumed Phase 1B final audit — 24 November 2026
 
-**Overall PARTIAL. Detection-accuracy targets FAIL. Published updated engine FAIL/pending owner approval. Phase 2 NOT started.** This section supersedes current-state claims in the retained earlier report below. The Punycode named import and matching Vite entry remain preserved.
+**Overall PARTIAL. Detection-accuracy targets FAIL. Published updated engine PASS after owner-approved publication and real verification. Phase 2 NOT started.** This section supersedes current-state claims in the retained earlier report below. The Punycode named import and matching Vite entry remain preserved.
 
 ### Requirement audit and implemented changes
 
@@ -74,7 +74,9 @@ Confusion ordering is TP/TN/FP/FN. Undefined precision means **zero predicted po
 3. Final frozen evaluation: `bun scripts/evaluate-phase1b-resume.ts --final`. First-pass replay deliberately fails if its frozen engine no longer matches; use its historical checkpoint/artifacts, not regenerated hashes. Final dataset reproduction: `python3 scripts/sample-phase1b-resume.py /path/to/data.csv --final` with the retained first sample present. Labels/features never modified based on predictions.
 4. New reviewer scenarios serializer: `python3 scripts/save-phase1b-reviewer.py`. Public artifacts remain defanged and docs-only. All original Phase 1/1B artifacts untouched.
 
-Local branch: **main**. Exact source/docs/test/evaluation file list is in `docs/evaluation/phase1b-resume-delivery.json`; commit ID is supplied in the final delivery (a file cannot contain its own resulting commit hash). GitHub **master synchronization NOT VERIFIED**; no push/branch settings/history rewrite. Open blockers: owner publication approval; isolated deployed visitor scanner/privacy authorization; live browser cloaking; `.ae` registration service; full multi-day AI accuracy benchmark; owner-password and preserved legacy/Supervisor flows. **Phase 2 not started.**
+**Final delivery evidence:** 269 app tests across 23 files and seven Python scanner tests passed; preview harness build OK. Owner approved publication, and the deployed Trust Portal was then genuinely verified: new refund rule High/74, real `du.ae` MX/NS/RIPE display, English AI High/combined 74 and Arabic AI Low/20. Two published AI calls are separate from two preview calls (four fresh total), not a new accuracy benchmark; model nondeterminism produced Critical in preview and High published, both positive. Published Arabic 390×844 layout has no horizontal overflow; reload clears results and both protected staff paths redirect signed-out users to `/auth`, no runtime exceptions. Earlier pre-publication FAIL observations below remain timestamped historical evidence, superseded by this PASS. Existing informational public-registry scan finding was not modified; scan is not a comprehensive security certification. No new critical finding was returned by the inspected scan results.
+
+Local branch: **main**. Exact source/docs/test/evaluation file list is in `docs/evaluation/phase1b-resume-delivery.json`; commit ID is supplied in the final delivery (a file cannot contain its own resulting commit hash). GitHub **master synchronization NOT VERIFIED**; no push/branch settings/history rewrite. Open blockers: isolated deployed visitor scanner/privacy authorization; live browser cloaking; `.ae` registration service; full multi-day AI accuracy benchmark; owner-password and preserved legacy/Supervisor flows. **Phase 2 not started.**
 
 ---
 

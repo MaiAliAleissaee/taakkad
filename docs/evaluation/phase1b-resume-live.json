@@ -1,0 +1,188 @@
+{
+  "recordedAt": "2026-11-24T08:46:45.439917+00:00",
+  "published": {
+    "url": "https://taakkad.lovable.app/trust",
+    "publishedNewRule": true,
+    "publishedMetadataConsent": 1,
+    "publishedDnsRecords": true,
+    "runtimeErrors": []
+  },
+  "publishedLayout": {
+    "mobileOverflow": false,
+    "reloadClearsResult": true,
+    "signedOutProtectedUrls": {
+      "/security": "https://taakkad.lovable.app/auth",
+      "/officer": "https://taakkad.lovable.app/auth"
+    },
+    "runtimeErrors": []
+  },
+  "dns": {
+    "status": "available",
+    "domain": "du.ae",
+    "source": "https://dns.google/resolve?name=du.ae&type=A",
+    "checkedAt": "2026-11-24T08:29:45.104Z",
+    "dnssecValidated": false,
+    "addresses": [
+      "94.206.168.161"
+    ],
+    "aliases": [],
+    "records": [
+      {
+        "name": "du.ae.",
+        "type": 1,
+        "data": "94.206.168.161"
+      },
+      {
+        "name": "du.ae.",
+        "type": 15,
+        "data": "2 du-ae.mail.protection.outlook.com."
+      },
+      {
+        "name": "du.ae.",
+        "type": 2,
+        "data": "dxbns1.duhosting.ae."
+      },
+      {
+        "name": "du.ae.",
+        "type": 2,
+        "data": "dxbns3.duhosting.ae."
+      },
+      {
+        "name": "du.ae.",
+        "type": 2,
+        "data": "dxbns2.duhosting.ae."
+      }
+    ],
+    "nonPublicAnswers": false,
+    "network": {
+      "asns": [
+        15802
+      ],
+      "prefix": "94.206.160.0/19",
+      "source": "https://stat.ripe.net/data/network-info/data.json?resource=94.206.168.161"
+    }
+  },
+  "rdapAe": {
+    "ianaPublication": "2026-11-20T23:00:03Z",
+    "services": []
+  },
+  "scanner": [
+    {
+      "scope": "operator_authorized_static_scan",
+      "hops": [
+        {
+          "url": "https://httpbin.org/redirect/2",
+          "resolvedIps": [
+            "2600:1f18:2da1:d400:5c03:f07e:e0be:7edd",
+            "2600:1f18:2da1:d401:3bc4:1b7d:6e3d:8acb",
+            "2600:1f18:2da1:d402:54c2:29a8:4a48:2547",
+            "3.221.253.123",
+            "44.209.237.184",
+            "54.172.45.38"
+          ],
+          "status": 302,
+          "tls": {
+            "verified": true,
+            "protocol": "TLSv1.3",
+            "notBefore": "Nov  5 19:21:40 2026 GMT",
+            "notAfter": "Feb  3 19:21:39 2027 GMT"
+          }
+        },
+        {
+          "url": "https://httpbin.org/relative-redirect/1",
+          "resolvedIps": [
+            "2600:1f18:2da1:d400:5c03:f07e:e0be:7edd",
+            "2600:1f18:2da1:d401:3bc4:1b7d:6e3d:8acb",
+            "2600:1f18:2da1:d402:54c2:29a8:4a48:2547",
+            "3.221.253.123",
+            "44.209.237.184",
+            "54.172.45.38"
+          ],
+          "status": 302,
+          "tls": {
+            "verified": true,
+            "protocol": "TLSv1.3",
+            "notBefore": "Nov  5 19:21:40 2026 GMT",
+            "notAfter": "Feb  3 19:21:39 2027 GMT"
+          }
+        },
+        {
+          "url": "https://httpbin.org/get",
+          "resolvedIps": [
+            "2600:1f18:2da1:d400:5c03:f07e:e0be:7edd",
+            "2600:1f18:2da1:d401:3bc4:1b7d:6e3d:8acb",
+            "2600:1f18:2da1:d402:54c2:29a8:4a48:2547",
+            "3.221.253.123",
+            "44.209.237.184",
+            "54.172.45.38"
+          ],
+          "status": 200,
+          "tls": {
+            "verified": true,
+            "protocol": "TLSv1.3",
+            "notBefore": "Nov  5 19:21:40 2026 GMT",
+            "notAfter": "Feb  3 19:21:39 2027 GMT"
+          }
+        }
+      ],
+      "finalUrl": "https://httpbin.org/get",
+      "bodySha256": "9b53bf6bb5a9daf6a5230ee6dce8c049e8417ad307659bb75baee5e914c934ed",
+      "scriptsExecuted": false,
+      "confirmedCloaking": false
+    },
+    {
+      "scope": "operator_authorized_static_scan",
+      "hops": [
+        {
+          "url": "https://example.org/",
+          "resolvedIps": [
+            "104.20.26.136",
+            "172.66.157.237",
+            "2606:4700:10::6814:1a88",
+            "2606:4700:10::ac42:9ded"
+          ],
+          "status": 200,
+          "tls": {
+            "verified": true,
+            "protocol": "TLSv1.3",
+            "notBefore": "Sep 26 22:05:05 2026 GMT",
+            "notAfter": "Dec 25 22:13:27 2026 GMT"
+          }
+        }
+      ],
+      "finalUrl": "https://example.org/",
+      "bodySha256": "25ddf2c883e0d1958ea971d279a7e4f0fd446724ee3db7db19dadabd4a62e484",
+      "scriptsExecuted": false,
+      "confirmedCloaking": false
+    },
+    {
+      "status": "unavailable",
+      "errorType": "ValueError",
+      "reason": "HTTPS downgrade blocked"
+    }
+  ],
+  "ai": {
+    "preview": {
+      "calls": 2,
+      "englishRisk": "Critical",
+      "englishCombinedScore": 90,
+      "arabicRisk": "Low",
+      "arabicCombinedScore": 20
+    },
+    "published": {
+      "calls": 2,
+      "englishRisk": "High",
+      "englishCombinedScore": 74,
+      "arabicRisk": "Low",
+      "arabicCombinedScore": 20
+    },
+    "model": "openai/gpt-6.1-sol",
+    "scope": "functional spot checks only, not benchmark"
+  },
+  "tests": {
+    "vitestPassed": 269,
+    "testFiles": 23,
+    "pythonPassed": 7,
+    "build": "OK"
+  }
+}

@@ -13,6 +13,6 @@ export function TrackingReceipt({ code, secret }: { code: string; secret: string
   return <div className="my-4 space-y-2">
     <p className="text-sm">{tr("Private tracking receipt", "إيصال متابعة خاص")}: <strong dir="ltr" className="font-mono">{code}</strong></p>
     <Button type="button" variant="outline" size="sm" onClick={download}><Download />{tr("Save private receipt", "حفظ الإيصال الخاص")}</Button>
-    <p className="text-xs text-muted-foreground">{tr("Keep the receipt private. Lost receipts require an officer's independent identity check; the reference alone grants no access.", "احتفظ بالإيصال بشكل خاص. يتطلب فقدانه تحققاً مستقلاً من الهوية لدى الموظف؛ لا يمنح الرقم وحده صلاحية الوصول.")}</p>
+    <p className="text-xs text-muted-foreground">{tr("Keep the receipt private. The reference shows general status only, never private details or edit access. Lost receipts require an officer's independent identity check.", "احتفظ بالإيصال بشكل خاص. يعرض الرقم الحالة العامة فقط، ولا يكشف التفاصيل الخاصة أو يمنح صلاحية التعديل. يتطلب فقدان الإيصال تحققاً مستقلاً من الهوية لدى الموظف.")}</p>
   </div>;
 }

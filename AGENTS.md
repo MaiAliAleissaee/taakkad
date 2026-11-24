@@ -40,7 +40,7 @@ use the editor.
 - Keep convenience input recognition and registry-result wording in the presentation layer; they must not alter detection assessments or infer cryptographic message authentication.
 - Resolve locale through the shared preference helper and inherit direction in reusable dialogs and notifications to keep navigation, reloads and portal overlays consistent.
 - Translate fixed fictional notes and analyst labels at display time without rewriting stored records; visitor-authored free text retains its original language and uses automatic text direction.
-- Legacy registration retains its validator; demo registration uses a shared six-field schema so browser/server validation agree.
+- Keep six core demo fields plus private relationships; similarities are officer-only advice, never approval gates or trust, so legitimate groups can be approved.
 - Preserve the pre-redesign presentation; security storage may move to Cloud without changing channel policy, detection or investigation semantics.
 - Keep legacy accent token names as semantic palette aliases and primary CTAs on the primary token so controlled palette changes do not require restructuring existing screens.
 - Store restricted security snapshots in role-gated per-user Cloud workspaces; never bundle private case seeds or write cases to browser storage because UI-only gates do not protect data.
@@ -65,7 +65,7 @@ use the editor.
 - Keep staff evidence in bounded append-only owner-private Cloud records; authorize the subject and active institution-specific session before every operation, compute SHA-256 server-side and recheck before exports so attachments never become publicly accessible or verified-source claims.
 - Build evidence packages from authorized server snapshots, separate model outputs from observed facts, and print escaped bilingual text with the browser PDF dialog; exports and human preparation approvals never transmit external requests.
 - Guard every non-null public check/report workspace argument with active analyst authorization and caller ownership inside the database; null keeps the public synthetic/check and shared report paths without granting private access.
-- Demo tracking requires a server-issued random receipt secret stored only as SHA-256 alongside the unchanged reference; legacy/lost receipts use independently confirmed active-officer recovery with separate security audit, never code-only fallback.
+- Public reference tracking exposes only status/submission date/generic messages under durable limits; private access keeps hashed receipts and active-officer audited recovery, never reference-only grants.
 - Resolve saved workspace hints against the current ready analyst session and discard stale hints; server ownership checks remain the authority.
 - Keep UAE scenario cues, official reference provenance and phone-format normalization in shared pure local helpers; never turn reference/contact matches into channel approvals or message authentication, and extract only explicitly supplied indicators for private matching.
 - Legacy email-code delivery requires an active session, Cloud-confirmed matching recipient and receipt; never send to a visitor-selected third party or create an account while resending, so verification cannot become an outbound-mail proxy.

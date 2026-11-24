@@ -1,5 +1,6 @@
 import { z } from "zod";
 import type { Organization } from "@/lib/domain/types";
+import { relationshipSchema, type Relationship } from "./relationship";
 
 const websiteSchema = z.string().trim().max(200).url().refine(value => {
   const url = new URL(value);
@@ -12,10 +13,18 @@ export const demoRegistrationSchema = z.object({
   social: z.string().trim().min(2).max(200),
   phone: z.string().trim().min(7).max(30).regex(/^\+?[\d\s()-]+$/),
   sms: z.string().trim().min(2).max(30).regex(/^[\p{L}\p{N} _-]+$/u),
+  relationship: relationshipSchema.optional(),
 }).strict();
 export type DemoRegistration = z.infer<typeof demoRegistrationSchema>;
 export const demoTrackingSecretSchema = z.string().trim().regex(/^[a-f0-9]{64}$/);
 export const demoTrackingSchema = z.object({ code: z.string().trim().regex(/^[1-9]\d{4}$/), secret: demoTrackingSecretSchema }).strict();
+export const publicReferenceSchema = demoTrackingSchema.pick({ code: true }).strict();
+export const publicTrackingResultSchema = z.object({
+  code: publicReferenceSchema.shape.code,
+  submittedAt: z.string().datetime({ offset: true }).nullable(),
+  status: z.enum(["pending", "under_review", "needs_information", "approved", "rejected"]).nullable(),
+  message: z.object({ en: z.string(), ar: z.string() }).strict(),
+}).strict();
 export const demoRecoverySchema = z.object({ id: z.string().uuid(), note: z.string().trim().min(10).max(1000), confirmed: z.literal(true) }).strict();
 export type DemoReceipt = { code: string; secret: string; status: "pending"; updatedAt: string };
 export type DemoStatus = "pending" | "under_review" | "needs_information" | "approved" | "rejected";
@@ -31,13 +40,14 @@ export function matchesDemoRegistry(org: { name: { ar: string; en: string }; cha
 export function matchesPrototypeRegistry(org: Parameters<typeof matchesDemoRegistry>[0], query: string, type: string, status: string) {
   return (type === "all" || type === "business") && (status === "all" || status === "verified") && matchesDemoRegistry(org, query);
 }
-export function demoPayload(input: DemoRegistration): Organization {
+export function demoPayload(input: DemoRegistration): Organization & { relationshipDeclaration?: Relationship } {
   const data = demoRegistrationSchema.parse(input);
   const at = new Date().toISOString();
   return {
     id: crypto.randomUUID(), name: { en: data.name, ar: data.name }, type: "business",
     domains: [new URL(data.website).hostname.toLowerCase()], contactEmail: data.email,
     status: "pending", registeredAt: at, keyFingerprint: "SIMULATED",
+    ...(data.relationship ? { relationshipDeclaration: data.relationship } : {}),
     channels: ([['website', data.website], ['email', data.email], ['social', data.social], ['phone', data.phone], ['sms', data.sms]] as const)
       .map(([type, value]) => ({ id: crypto.randomUUID(), type, value, status: "pending", addedAt: at, submittedAt: at })),
   };

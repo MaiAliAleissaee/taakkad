@@ -7,6 +7,8 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { useI18n } from "@/lib/i18n/i18n";
 import { demoRegistrationSchema, type DemoRegistration, type DemoReceipt } from "@/lib/organizations/demo-schema";
 import { submitDemoOrganization } from "@/lib/organizations/demo.functions";
+import { RelationshipFields } from "./relationship-fields";
+import { emptyRelationship } from "@/lib/organizations/relationship";
 
 const empty: DemoRegistration = { name: "", website: "", email: "", social: "", phone: "", sms: "" };
 export function DemoRegistrationDialog({ trigger, onSubmitted }: { trigger: ReactNode; onSubmitted: (receipt: DemoReceipt) => void }) {
@@ -17,7 +19,7 @@ export function DemoRegistrationDialog({ trigger, onSubmitted }: { trigger: Reac
   const [invalid, setInvalid] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const labels: Array<[keyof DemoRegistration, string, string, string]> = [
+  const labels: Array<[Exclude<keyof DemoRegistration, "relationship">, string, string, string]> = [
     ["name", tr("Company / Organization Name", "اسم الشركة / الجهة"), "text", tr("Enter the organization name", "أدخل اسم الجهة")],
     ["website", tr("Official Website URL", "رابط الموقع الرسمي"), "url", tr("Enter the complete website URL", "أدخل رابط الموقع كاملاً")],
     ["email", tr("Contact Email", "البريد الإلكتروني للتواصل"), "email", tr("Enter the contact email", "أدخل بريد التواصل")],
@@ -38,6 +40,6 @@ export function DemoRegistrationDialog({ trigger, onSubmitted }: { trigger: Reac
     <DialogHeader><DialogTitle>{tr("Add Organization", "إضافة جهة")}</DialogTitle><DialogDescription>{tr("Demo registration — fictional organizations and contact details are accepted. Approval does not verify real-world identity or channel ownership.", "تسجيل تجريبي — تُقبل الجهات وبيانات التواصل الخيالية. لا يثبت الاعتماد الهوية الفعلية أو ملكية القنوات.")}</DialogDescription></DialogHeader>
     <form onSubmit={save} noValidate className="space-y-5"><fieldset disabled={busy} className="grid gap-4 sm:grid-cols-2">
       {labels.map(([key, label, type, placeholder]) => <div key={key} className="space-y-1.5"><Label htmlFor={`demo-${key}`}>{label}</Label><Input id={`demo-${key}`} type={type} dir={key === "name" ? "auto" : "ltr"} maxLength={key === "phone" || key === "sms" ? 30 : key === "name" ? 160 : 200} value={fields[key]} required placeholder={placeholder} aria-invalid={invalid.includes(key)} onChange={e => setFields(value => ({ ...value, [key]: e.target.value }))} />{invalid.includes(key) && <p className="text-xs text-destructive">{key === "website" || key === "email" ? tr("Enter a valid website or email address.", "أدخل رابط موقع أو بريداً إلكترونياً صحيحاً.") : tr("Enter a valid value for this field.", "أدخل قيمة صحيحة لهذا الحقل.")}</p>}</div>)}
-    </fieldset>{error && <p role="alert" className="text-sm text-destructive">{error}</p>}<DialogFooter><Button type="button" variant="outline" onClick={() => setOpen(false)}>{tr("Cancel", "إلغاء")}</Button><Button type="submit" disabled={busy}>{busy ? tr("Submitting…", "جارٍ الإرسال…") : tr("Submit registration", "إرسال التسجيل")}</Button></DialogFooter></form>
+    </fieldset><fieldset disabled={busy}><RelationshipFields value={fields.relationship ?? emptyRelationship} onChange={relationship => setFields(value => ({ ...value, relationship }))} invalid={invalid.includes("relationship")} /></fieldset>{error && <p role="alert" className="text-sm text-destructive">{error}</p>}<DialogFooter><Button type="button" variant="outline" onClick={() => setOpen(false)}>{tr("Cancel", "إلغاء")}</Button><Button type="submit" disabled={busy}>{busy ? tr("Submitting…", "جارٍ الإرسال…") : tr("Submit registration", "إرسال التسجيل")}</Button></DialogFooter></form>
   </DialogContent></Dialog>;
 }

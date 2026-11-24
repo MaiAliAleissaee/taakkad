@@ -3,7 +3,16 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { setResponseHeader } from "@tanstack/react-start/server";
 import type { Json } from "@/integrations/supabase/types";
 import { z } from "zod";
-import { demoRegistrationSchema, demoTrackingSchema, demoRecoverySchema, demoPayload, demoTrackingResultSchema } from "./demo-schema";
+import { demoRegistrationSchema, demoTrackingSchema, demoRecoverySchema, demoPayload, demoTrackingResultSchema, publicReferenceSchema } from "./demo-schema";
+
+export const trackPublicReference = createServerFn({ method: "POST" })
+  .inputValidator(input => publicReferenceSchema.parse(input))
+  .handler(async ({ data }) => {
+    setResponseHeader("Cache-Control", "no-store");
+    const { readPublicReference } = await import("./public-tracking.server");
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    return readPublicReference(supabaseAdmin, data);
+  });
 
 export const submitDemoOrganization = createServerFn({ method: "POST" })
   .inputValidator(input => demoRegistrationSchema.parse(input))

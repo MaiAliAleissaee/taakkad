@@ -16,6 +16,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { saveOrganizationApplication } from "@/lib/organizations/applications.functions";
 import { submitTrackedApplication, editTrackedApplication } from "@/lib/organizations/tracking.functions";
 import { documentsSchema, type ApplicationDocument, type ApplicationReceipt } from "@/lib/organizations/schema";
+import { RelationshipFields } from "./relationship-fields";
+import { emptyRelationship, relationshipSchema, type Relationship } from "@/lib/organizations/relationship";
 
 const CHANNEL_TYPES: ChannelType[] = ["email", "sms", "phone", "website", "social", "other"];
 const ORG_TYPES: OrgType[] = ["government", "bank", "business"];
@@ -26,7 +28,7 @@ export function downloadApplicationDocument(document: ApplicationDocument) {
   const link = window.document.createElement("a"); link.href = url; link.download = document.name; link.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
-export type ApplicationEditor = { id: string; revision: number; payload: Organization; documents: ApplicationDocument[]; reference: string; editable: boolean };
+export type ApplicationEditor = { id: string; revision: number; payload: Organization; documents: ApplicationDocument[]; reference: string; editable: boolean; relationship?: Relationship };
 
 export function RegisterOrgDialog({ trigger, application, trackingToken, onSubmitted, onEdited }: { trigger: React.ReactNode; application?: ApplicationEditor; trackingToken?: string; onSubmitted?: (receipt: ApplicationReceipt) => void; onEdited?: () => Promise<void> }) {
   const { tr, pick } = useI18n();
@@ -43,6 +45,8 @@ export function RegisterOrgDialog({ trigger, application, trackingToken, onSubmi
   const [documents, setDocuments] = useState<ApplicationDocument[]>(application?.documents ?? []);
   const [saveError, setSaveError] = useState("");
   const [trackingEmail, setTrackingEmail] = useState("");
+  const [relationship, setRelationship] = useState(application?.relationship ?? emptyRelationship);
+  const [relationshipInvalid, setRelationshipInvalid] = useState(false);
   const saveApplication = useServerFn(saveOrganizationApplication);
   const submitTracked = useServerFn(submitTrackedApplication);
   const editTracked = useServerFn(editTrackedApplication);
@@ -51,6 +55,7 @@ export function RegisterOrgDialog({ trigger, application, trackingToken, onSubmi
   const reset = () => {
     setNameEn(""); setNameAr(""); setType("business"); setDomainsRaw(""); setContactEmail("");
     setChannels([{ type: "email", value: "" }]); setDocuments([]); setErrors([]);
+    setRelationship(emptyRelationship); setRelationshipInvalid(false);
   };
 
   const orgName = (id: string) => pick(organizations.find((o) => o.id === id)?.name);
@@ -80,10 +85,12 @@ export function RegisterOrgDialog({ trigger, application, trackingToken, onSubmi
   const onSubmit = async (ev: FormEvent) => {
     ev.preventDefault();
     const domains = parseDomains(domainsRaw);
-    const input = { nameEn, nameAr, type, domains, contactEmail, channels };
-    const found = validateRegistration(input, organizations.filter(o => o.id !== application?.payload.id));
+    const input = { nameEn, nameAr, type, domains, contactEmail, channels, relationship };
+    const found = validateRegistration(input, []);
+    const validRelationship = relationshipSchema.safeParse(relationship).success;
+    setRelationshipInvalid(!validRelationship);
     setErrors(found);
-    if (found.length) return;
+    if (found.length || !validRelationship) return;
     setSubmitting(true);
     setSaveError("");
     try {
@@ -184,6 +191,7 @@ export function RegisterOrgDialog({ trigger, application, trackingToken, onSubmi
             </Button>
             <FieldError list={fieldErrors("channels")} />
           </fieldset>
+          <RelationshipFields value={relationship} onChange={setRelationship} invalid={relationshipInvalid} />
           <div className="space-y-2">
             <Label htmlFor="application-documents">{tr("Supporting documents (fictional only)", "المستندات الداعمة (خيالية فقط)")}</Label>
             <Input id="application-documents" type="file" accept="application/pdf,text/plain,image/png,image/jpeg" multiple onChange={async e => {

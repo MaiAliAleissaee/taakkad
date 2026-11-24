@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Plus, Search } from "lucide-react";
 import { useMemo, useState } from "react";
-import { EmptyState, PageHeader } from "@/components/common/bits";
+import { PageHeader } from "@/components/common/bits";
 import { NativeSelect } from "@/components/common/native-select";
 import { OrgCard } from "@/components/orgs/org-card";
 import { DemoRegistry, demoRegistryQuery } from "@/components/orgs/demo-registry";
@@ -21,9 +21,9 @@ export const Route = createFileRoute("/organizations")({
   head: () => ({
     meta: [
       { title: "Organization Portal — Taakkad" },
-      { name: "description", content: "Submit an organization application, privately track its status and search independently approved organization channels in Taakkad." },
+      { name: "description", content: "Submit an organization application, track its general status by five-digit reference and search independently approved organization channels in Taakkad." },
       { property: "og:title", content: "Organization Portal — Taakkad" },
-      { property: "og:description", content: "Organization applications, private status-only tracking and channel registry in the Taakkad hackathon prototype." },
+      { property: "og:description", content: "Organization applications, reference-only general status tracking and channel registry in the Taakkad hackathon prototype." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -64,7 +64,7 @@ function OrganizationsPage() {
       <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <OrganizationAccess />
         <ApplicationTracker receipt={receipt} />
-        <h2 className="mb-5 text-2xl font-semibold">{tr("Organization registry", "سجل الجهات")}</h2>
+        <h2 className="mb-5 text-2xl font-semibold">{tr("Approved Organizations", "الجهات المعتمدة")}</h2>
         <div className="flex flex-col gap-3 rounded-xl border bg-card p-3 shadow-card md:flex-row md:items-center">
           <div className="relative flex-1">
             <Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -83,14 +83,11 @@ function OrganizationsPage() {
           </div>
         </div>
 
-        <div className="mt-5"><DemoRegistry search={q} type={type} status={status} /></div>
-        <h2 className="mb-3 text-2xl font-semibold">{tr("Genuinely verified organizations", "الجهات الموثّقة فعلياً")}</h2>
-        {filtered.length ? (
+        <div className="mt-5"><DemoRegistry compact search={q} type={type} status={status} /></div>
+        {filtered.length > 0 && (
           <div className="mt-3 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {filtered.map((o) => <OrgCard key={o.id} org={o} actor={{ role: "viewer" }}  />)}
           </div>
-        ) : (
-          <div className="mt-3"><EmptyState title={tr("No organizations match these filters", "لا توجد جهات مطابقة")} description={tr("Clear the search or change the filters.", "امسح البحث أو غيّر عوامل التصفية.")} /></div>
         )}
       </section>
     </>

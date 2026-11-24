@@ -1,5 +1,30 @@
 # Final hackathon polish roadmap
 
+## Advisory-only approval simplification
+- [x] Preserve private corporate declarations and concise officer-only matching channel/technical notices; no mandatory resolution form or similarity approval gate. Declared relationships remain visible from the authorized application even if optional similarity metadata is unavailable.
+- [x] Remove similarity blockers from browser, both review actions and the database trigger while preserving original authorization, revisions, audit and simulation boundaries. Historical private dispositions retained; original decision notes/domain review/confirmation remain.
+- [x] 80 focused tests passed and privileged rollback-only approval/privacy/projection contracts passed. HAM123 browser approval with matching channels updated the anonymous registry automatically without reload; Arabic correction/rejection and mobile Approved badge passed. Removed only the two new test records; four original approved organizations remain. Quick scan: unchanged informational finding only; preview build OK. No publication or paid AI. See docs/ADVISORY_APPROVAL_REPORT.md for limitations.
+
+## Obsolete staff receipt recovery section
+- [x] Remove only the receipt recovery section from the shared bilingual officer review screen; retain private recovery protections, evidence, conflict review, actions and audit.
+- [x] Verified removal in actual authenticated HAM123 English/Arabic review screens at 855×754; private evidence entry, three decision actions and audit remain visible, with no page errors. 25 focused tracking/privacy/access tests passed; preview build OK. Quick security scan: only the unchanged informational public-registry finding. No records, permissions or server protections changed.
+- [ ] Final deep security clearance before publication; do not publish while the current saved enhancement remains unverified by the deep scan.
+
+## Final organization identity conflicts and relationships
+- [x] Add bilingual protected relationship declarations and private normalized conflict detection using existing applications and available technical snapshots; reuse maintained lookalike and bounded DNS/RDAP helpers.
+- [x] Add officer-only conflict/evidence review and atomic documented approval safeguards; preserve projections, audit, records and public tracking.
+- [x] 78 distinct focused tests passed, plus rollback-only conflict/approval/stale-review/infrastructure contracts. Public registration, bilingual mobile forms, anonymous operation denial and safe four-field reference tracking observed. Four original public cards preserved; quick scan only unchanged informational finding; preview build OK. Details in docs/ORGANIZATION_IDENTITY_CONFLICT_REPORT.md.
+- [x] Separate conflict-resolution verification superseded by advisory-only simplification; authorized HAM123 approval and public readback now verified without resolution. Live optional similarity/evidence access still requires its existing active-session predicate and was not bypassed. Preserve the earlier owner-reviewed TEMP record; only newly created validation records were cleaned up.
+- [ ] Saved-enhancement deep security clearance and publication — pending scan completion and genuine staff check; do not publish before release gates pass.
+
+## Targeted public registry presentation
+- [x] Use one bilingual registry heading, compact green Approved badges and one prototype disclaimer; hide the empty genuine section without combining data categories. Preserve officer presentation, records, filters, tracking and global disclaimer.
+- [x] 23 focused registry isolation and tracking tests passed; all four cards, concise badges, search and pending filters verified in Arabic/English at 855px/390px with no overflow or page errors. Preview build OK; records, trust policy and staff views unchanged. Ready, not published; no paid calls.
+
+## Targeted reference-only public application tracking
+- [x] Separate public status lookup from private receipt access; return only reference, submission date, general status and bilingual generic message. Preserve records and recovery.
+- [x] 38 focused tests passed; existing approved reference readback and missing-reference response verified in Arabic/English at 489px/1280px, no overflow/page errors, reload clears input. Actual response contains only four allowed fields; original submission date confirmed. Private receipt/recovery protections retained and covered by tests; genuine officer recovery not re-exercised. Preview build OK; quick security check retains only unchanged informational registry finding. Ready, not published; no record/credential/role changes or paid calls. Existing custom limits: 20 lookups/caller/hour and 1000 globally/hour, misses included; five-digit status existence cannot be concealed while returning real status.
+
 ## Targeted staff-approved prototype registry restoration
 - [x] Restore four existing officer-approved simulated projections with green, explicitly prototype badges; preserve shared search/type/status filters and genuine registry isolation. Original yellow seed organizations remain hidden; supersedes only the simulated-list removal below.
 - [x] 43 focused tests pass; Arabic/English live search, filters, reload and 15-second automatic refresh pass at 855px/390px without overflow or page errors. Anonymous projection reads work; all four approvals have officer audit, direct public/staff writes and public approval RPC execution denied. Quick scan: only unchanged informational registry finding. No records/alerts/demo-kit/paid inference changed. Ready, not published; new authenticated approval-to-public readback not exercised to avoid record changes.

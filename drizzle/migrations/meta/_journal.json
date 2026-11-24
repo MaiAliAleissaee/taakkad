@@ -225,6 +225,27 @@
       "when": 1795525386927,
       "tag": "0031_separate_simulated_public_projections",
       "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1795540040366,
+      "tag": "0032_private_organization_identity_conflicts",
+      "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1795540264119,
+      "tag": "0033_require_live_organization_conflict_sessions",
+      "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "7",
+      "when": 1795542217644,
+      "tag": "0034_advisory_organization_similarity",
+      "breakpoints": true
     }
   ]
 }

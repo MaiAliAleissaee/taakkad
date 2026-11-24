@@ -1,5 +1,14 @@
 # Final hackathon polish roadmap
 
+## Phase 1B detection accuracy
+- [x] Diagnose previously seen errors; strengthen general URL handling while preserving original evaluation artifacts.
+- [x] Investigate scanning; add real fixed-origin DNS/RIPE and explicitly offline page/redirect fixtures only.
+- [x] Freeze engine; evaluate 1,000 external labeled + 39 new controlled cases, baseline/fallback/category matrices and all errors; targets unmet.
+- [x] Verify preview bilingual/mobile/privacy, published-engine absence and read-only staff mappings; 251 regressions pass, build OK, required documentation updated.
+- [ ] Publish Phase 1B and verify published new engine — owner publishing action not authorized in this request; current live site uses older engine.
+- [ ] Actual safe redirect/shortener and live cloaking scan — needs authorized isolated scanner/transport with pinned public-IP egress and privacy controls.
+- [ ] Large full-AI hybrid evaluation — requires approved multi-day plan/credits within existing quotas; 4 real functional checks only.
+
 ## Phase 1 URL detection accuracy
 - [x] Add public-suffix-aware URL analysis and documented official UAE domain references, separate from demo trust.
 - [x] Add bounded real RDAP lookup and explicit unverified redirect results when safe expansion is unavailable.

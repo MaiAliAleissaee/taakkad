@@ -71,7 +71,7 @@ export function MessageChecker() {
       const urlAnalysis = value.url ? analyzeUrl(value.url) : null;
       if (useRdap && urlAnalysis) {
         if (urlAnalysis.networkEligible && urlAnalysis.domain) {
-          try { intelligence = await lookupDomain({ data: { domain: urlAnalysis.domain } }); }
+          try { intelligence = await lookupDomain({ data: { domain: urlAnalysis.domain, host: urlAnalysis.host } }); }
           catch { intelligence = { rdap: { status: "unavailable", reason: "service" }, redirects: { status: "unverified", reason: "safe_expansion_unavailable", checkedHops: 0 } }; }
         } else intelligence = { rdap: { status: "unavailable", reason: "blocked" }, redirects: { status: "unverified", reason: "safe_expansion_unavailable", checkedHops: 0 } };
         if (id !== request.current) return;
@@ -139,7 +139,7 @@ export function MessageChecker() {
         </div>
         <div className="space-y-2">
           <div className="flex items-start gap-2"><Checkbox id="chk-ai" checked={useAi} disabled={busy} onCheckedChange={value => setUseAi(value === true)} /><Label htmlFor="chk-ai" className="leading-relaxed">{tr("Include real AI analysis of redacted content", "تضمين تحليل فعلي بالذكاء الاصطناعي للمحتوى المنقّح")}</Label></div>
-          <div className="flex items-start gap-2"><Checkbox id="chk-rdap" checked={useRdap} disabled={busy} onCheckedChange={value => setUseRdap(value === true)} /><Label htmlFor="chk-rdap" className="leading-relaxed">{tr("Look up domain registration (domain only sent to its RDAP provider; supported suffixes: .com, .net, .org)", "استعلام تسجيل النطاق (يُرسل النطاق فقط إلى مزود RDAP؛ الامتدادات المدعومة: .com و.net و.org)")}</Label></div>
+          <div className="flex items-start gap-2"><Checkbox id="chk-rdap" checked={useRdap} disabled={busy} onCheckedChange={value => setUseRdap(value === true)} /><Label htmlFor="chk-rdap" className="leading-relaxed">{tr("Look up registration and DNS/network metadata (domain/host only sent to RDAP, Google DNS and RIPE; RDAP: .com, .net, .org)", "استعلام التسجيل وDNS وبيانات الشبكة (يُرسل النطاق والمضيف فقط إلى RDAP وGoogle DNS وRIPE؛ التسجيل: .com و.net و.org)")}</Label></div>
           <p className="text-xs text-muted-foreground">{tr("Remove passwords, OTPs, identity numbers and unnecessary personal details before submitting. Automatic redaction is a safeguard, not a guarantee.", "أزل كلمات المرور ورموز التحقق وأرقام الهوية والبيانات الشخصية غير الضرورية قبل الإرسال. التنقيح الآلي إجراء وقائي وليس ضماناً.")}</p>
         </div>
         {error ? <p role="alert" className="text-sm text-destructive">{error === "empty" ? tr("Enter message text, a sender or a link to check.", "أدخل نص رسالة أو مرسلاً أو رابطاً للفحص.") : tr("The safety check is unavailable. Please try again; no result has been confirmed.", "فحص الأمان غير متاح. حاول مجدداً؛ لم تُؤكد أي نتيجة.")}</p> : null}

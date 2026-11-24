@@ -11,17 +11,25 @@ export interface UrlAnalysis {
   officialDomain: string | null; signals: UrlSignal[]; riskScore: number;
   classification: "low" | "caution" | "suspicious"; networkEligible: boolean;
 }
-const sensitive = /(?:login|signin|verify|verification|password|credential|payment|pay|account|otp|fine|fines|تسجيل|دفع|تحقق)/i;
+const sensitive = /(?:login|signin|verify|verification|password|credential|payment|pay|account|otp|fine|fines|auth|kyc|card|تسجيل|دفع|تحقق)/i;
 const shorteners = new Set(["bit.ly", "t.co", "tinyurl.com", "is.gd", "cutt.ly", "rb.gy", "shorturl.at", "s.id", "rebrand.ly", "ow.ly"]);
 const glyphs: Record<string, string> = { "а":"a", "е":"e", "о":"o", "р":"p", "с":"c", "х":"x", "у":"y", "і":"i", "ј":"j", "ѕ":"s", "ӏ":"l", "ԁ":"d", "α":"a", "ο":"o", "ρ":"p", "ν":"v", "ι":"i", "0":"o", "1":"l" };
 const skeleton = (text: string) => [...text.toLowerCase().normalize("NFKC")].map(c => glyphs[c] ?? c).join("");
+const identityContext = /(?:support|secure|service|portal|auth|helpdesk|customer|update|recover|unlock|kyc|تحديث|دعم)/i;
+const editorialContext = /(?:^|[\/-])(?:archive|history|news|blog|article|review|museum)(?:[\/-]|$)/i;
+/** Decode only three layers, with the same bounded input as the outer analysis. */
+function decodeLayers(value: string): string {
+  let result = value;
+  for (let i = 0; i < 3; i++) { try { const next = decodeURIComponent(result); if (next === result) break; result = next; } catch { break; } }
+  return result;
+}
 export function isBlockedHost(host: string): boolean {
   const plain = host.replace(/^\[|\]$/g, "").toLowerCase();
   if (ipaddr.isValid(plain)) return ipaddr.parse(plain).range() !== "unicast";
   return !plain.includes(".") || /(?:^|\.)(?:localhost|local|internal|test|example|invalid|onion)$/.test(plain) || plain === "metadata.google.internal";
 }
 /** Pure, bounded analysis. Never requests the submitted URL or emits its query/userinfo. */
-export function analyzeUrl(raw: string): UrlAnalysis {
+export function analyzeUrl(raw: string, depth = 0): UrlAnalysis {
   const signals: UrlSignal[] = [];
   const add = (code: string, weight: number, en: string, ar: string) => {
     if (!signals.some(s => s.code === code)) signals.push({ code, weight, en, ar, kind: weight >= 50 ? "suspicious" : "observation" });
@@ -57,6 +65,9 @@ export function analyzeUrl(raw: string): UrlAnalysis {
   try { decodedPath = decodeURIComponent(decodeURIComponent(decodedPath)); } catch { add("bad_encoding", 20, "Part of the path has invalid or repeated encoding.", "يتضمن المسار ترميزاً غير صالح أو متكرراً."); }
   if (/%(?:25|2f|3a|40)/i.test(url.pathname)) add("encoded_path", 10, "The path contains nested or structural URL encoding.", "يتضمن المسار ترميزاً متداخلاً أو بنيوياً للرابط.");
   const hasSensitive = sensitive.test(`${decodedPath} ${[...url.searchParams.keys()].join(" ")}`);
+  const editorial = editorialContext.test(`${core}/${decodedPath}`) && !hasSensitive;
+  if (isIp && hasSensitive) add("ip_credential_context", 50, "An IP-address URL requests an account or payment action. Confirm the destination independently; this is not a fraud verdict.", "يطلب رابط بعنوان IP إجراءً للحساب أو الدفع. تحقق من الوجهة بشكل مستقل؛ ليس هذا حكماً بالاحتيال.");
+  if (!official && /(?:credential|password|otp|card)[-]?(?:collector|harvest|capture|steal)|(?:collector|harvest|capture)[-]?(?:credential|password|otp)/i.test(core) && hasSensitive) add("credential_collection", 60, "The host describes credential collection together with an account action; possible credential theft.", "يصف المضيف جمع بيانات الدخول مع إجراء للحساب؛ احتمال سرقة بيانات الدخول.");
   if (!official && hasSensitive) add("sensitive_path", 20, "The URL contains login, payment or account-related patterns on an unconfirmed domain; these words alone do not prove fraud.", "يتضمن الرابط أنماط تسجيل أو دفع أو حساب على نطاق غير مؤكد؛ هذه الكلمات وحدها لا تثبت الاحتيال.");
   if (!official) {
     for (const ref of officialReferences) {
@@ -66,11 +77,12 @@ export function analyzeUrl(raw: string): UrlAnalysis {
         const labelTokens = normalized.split(/[.-]/);
         const compact = core.replace(/-/g, "");
         const exact = labelTokens.includes(alias) || core === alias;
-        const compound = compact.startsWith(alias) && sensitive.test(compact.slice(alias.length));
+        const position = compact.indexOf(alias);
+        const compound = position >= 0 && (sensitive.test(compact.replace(alias, "")) || identityContext.test(compact.replace(alias, "")));
         const typo = alias.length >= 5 && core.length >= 5 && levenshtein(core.replace(/-/g, ""), alias) <= 1;
-        return exact || compound || typo;
+        return compound || typo || (exact && (hasSensitive || identityContext.test(core)));
       });
-      if (fullReference || impersonates) {
+      if ((fullReference || impersonates) && !editorial) {
         add("brand_impersonation", 60, `The domain resembles ${ref.name} but is outside ${ref.domain}. Possible impersonation, not confirmed fraud.`, `يشبه النطاق ${ref.ar} لكنه خارج ${ref.domain}. انتحال محتمل وليس احتيالاً مؤكداً.`);
         if (unicode !== host && normalized !== unicode) add("homoglyph", 15, "Unicode characters visually resemble letters in an official brand.", "تشبه أحرف Unicode بصرياً أحرفاً في علامة رسمية.");
         break;
@@ -78,9 +90,20 @@ export function analyzeUrl(raw: string): UrlAnalysis {
     }
     if (/(?:^|\.)gov\.ae\./.test(host) || /(?:^|[.-])(?:uae-government|uaegov|traffic-fines)(?:[.-]|$)/.test(host)) add("government_lure", 60, "The domain presents a UAE government or traffic-fine identity outside the documented official references; confirm independently.", "يعرض النطاق هوية حكومية إماراتية أو مخالفات مرورية خارج المراجع الرسمية الموثقة؛ تحقق بشكل مستقل.");
   }
+  if (!official && hasSensitive && !editorial && officialReferences.some(ref => decodeLayers(url.pathname).toLowerCase().includes(ref.domain))) add("brand_path_lure", 50, "An official domain name appears in an account-action path, not in the actual host. Confirm the identity independently.", "يظهر اسم نطاق رسمي في مسار إجراء للحساب وليس في المضيف الفعلي. تحقق من الهوية بشكل مستقل.");
+  if (!official && !signals.some(s => s.code === "brand_impersonation") && officialReferences.some(ref => ref.aliases.some(alias => normalized.split(/[.-]/).includes(alias)))) add("brand_mention", 15, "The host mentions an official brand outside its domain; a brand mention alone does not establish impersonation.", "يذكر المضيف علامة رسمية خارج نطاقها؛ ذكر العلامة وحده لا يثبت الانتحال.");
   for (const [key, dest] of url.searchParams) {
-    if (!/^(?:url|redirect|redirect_uri|redirecturl|next|continue|return|returnurl|destination)$/i.test(key) || !/^https?:\/\//i.test(dest)) continue;
-    try { const nested = new URL(dest); if (nested.hostname !== host) add("redirect_parameter", 20, "A URL parameter points to another host. This is a potential redirect, not an observed redirect chain.", "يشير معامل في الرابط إلى مضيف آخر. هذا تحويل محتمل وليس سلسلة تحويلات تمت ملاحظتها."); } catch { /* No destination request. */ }
+    let decoded = decodeLayers(dest);
+    if (!/^(?:url|u|to|target|redirect|redirect_uri|redirecturl|next|continue|return|returnurl|destination)$/i.test(key)) continue;
+    if (/^[a-z\d+/_=-]{16,2000}$/i.test(decoded)) { try { const text = atob(decoded.replace(/-/g, "+").replace(/_/g, "/")); if (/^https?:\/\//i.test(text)) decoded = text; } catch { /* Invalid base64 is not a destination. */ } }
+    if (!/^(?:https?:)?\/\//i.test(decoded)) continue;
+    try {
+      const nested = new URL(decoded, url);
+      if (nested.hostname !== host) {
+        add("redirect_parameter", 20, "A URL parameter points to another host. This is a potential redirect, not an observed redirect chain.", "يشير معامل في الرابط إلى مضيف آخر. هذا تحويل محتمل وليس سلسلة تحويلات تمت ملاحظتها.");
+        if (depth < 3 && analyzeUrl(nested.href, depth + 1).classification === "suspicious") add("nested_suspicion", 60, "A nested destination contains suspicious URL evidence. The destination was analyzed locally, not opened or verified as a redirect.", "تتضمن وجهة متداخلة أدلة اشتباه في الرابط. حُللت محلياً ولم تُفتح أو يُتحقق منها كتحويل فعلي.");
+      }
+    } catch { /* No destination request. */ }
   }
   const weights = signals.map(s => s.weight).sort((a,b) => b-a);
   const riskScore = Math.min(100, (weights[0] ?? 0) + weights.slice(1).reduce((sum,w) => sum + Math.round(w / 3), 0));

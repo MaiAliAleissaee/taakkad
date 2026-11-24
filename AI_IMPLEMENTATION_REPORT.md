@@ -1,5 +1,17 @@
 # TRUST ZERO AI — hybrid AI implementation and validation
 
+## Phase 1B — measured hybrid boundaries (24 November 2026)
+
+The current brand is Taakkad / تأكّد; the historical report below remains unchanged. Existing server-only **OpenAI `openai/gpt-6.1-sol`**, Responses surface, 2,400-output-token cap, double redaction, strict bilingual JSON schema, prompt-injection instructions, supplied-text grounding and atomic quotas remain unchanged. No alternate model, external key or new browsing tool was introduced.
+
+Improved local URL evidence feeds the existing deterministic assessment before the bounded hybrid maximum. Official-domain facts do not suppress local nested-target evidence or semantic risk. DNS/RIPE/RDAP fields are separately labeled metadata; they are not sent to AI or converted into registry facts. Queries, URL credentials and private text are still removed from external domain lookups; AI continues its existing minimization. No HTML from an untrusted live website enters a prompt or is executed.
+
+**Separate measurement:** On 1,000 externally labeled URL-only examples, deterministic and explicit AI-unavailable hybrid fallback both scored TP/TN/FP/FN **5/500/0/495**, accuracy **50.50%**, recall **1%**. On 39 independent controlled URLs, both scored **16/17/2/4**, accuracy **84.62%**. Identical results are expected here: no message text, trusted registry, live metadata or AI outcome was supplied. This is not a full AI-assisted accuracy benchmark.
+
+**Actual full-hybrid spot checks:** four fresh UI inferences completed in the preview: English bank information → Low/score 20; English Salik payment/OTP intimidation → Critical/90; Arabic TAMM information → Low/30; Arabic Emirates ID document/credential threat → Critical/90. Tiny-set TP/TN/FP/FN **2/2/0/0** at combined score ≥50, excluding uncertainty labels. The synthetic inputs were predefined before inference, contain no real passwords/OTPs and no reports were submitted. Both languages rendered actual output. This N=4 observation cannot establish 98–99% performance. Existing usage protections remain 5/visitor/10 minutes and 200/day; 500 full inferences exceed the daily ceiling and would require an approved multi-day evaluation plan and credit budget, not limiter bypass.
+
+No post-test prompt/rule tuning, simulated model success or inference replay was used. Safe redirect/shortener expansion, live webpage/cloaking and TLS inspection remain blocked by scanner/transport/privacy prerequisites. Current published application was checked and does not yet use Phase 1B. Accounts/passwords/roles were untouched. Full evidence, source limitations and failure lists are in `docs/PHASE_1B_REPORT.md` and `TEST_REPORT.md`.
+
 ## Phase 1 URL addendum — 24 November 2026
 
 This addendum supersedes historical counts/scope statements below. This phase adds deterministic local URL inspection and optional live RDAP, **not a new model or browsing agent**. Public-suffix parsing, limited homoglyph/lookalike detection, IP/URL syntax and sensitive-pattern signals are rules. Official references establish domain boundaries only; simulated approvals are not genuine verification. Registration metadata comes from actual RDAP providers, not model claims.

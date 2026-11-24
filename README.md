@@ -96,6 +96,24 @@ Reproduce: `bun scripts/evaluate-urls.ts` and `bunx vitest run`. See [evaluation
 
 العربية: دقة العينة التجريبية المنفصلة 91.67%، وليست ادعاءً للدقة في الواقع؛ بقي خطأ إيجابي واحد وثلاث حالات اشتباه غير مكتشفة، موثقة في تقرير الاختبارات. لم تتغير حسابات الموظفين أو الصلاحيات أو البيانات أو إجراءات الجهات.
 
+Phase 1B: تقييم مستقل وحدود فعلية | Independent accuracy evaluation — 24 November 2026
+
+العربية: عولجت الأسباب العامة لأخطاء العينة القديمة عبر تحليل الأسماء المركبة، وسياق جمع بيانات الدخول، وروابط IP الحساسة، والوجهات المتداخلة والمشفرة. العينة القديمة أصبحت بيانات سبق الاطلاع عليها وليست اختباراً مستقلاً جديداً. أُضيف استعلام اختياري فعلي لـDNS والشبكات عبر Google DNS وRIPE، بإرسال اسم المضيف فقط دون الرسالة أو المسار. لا تُستخدم هذه البيانات كدليل ملكية أو ثقة أو احتمال احتيال.
+
+English: The frozen Phase 1B engine improves compound identity/service names, contextual credential collection, IP account actions, misleading brand paths and bounded nested/percent/base64 URL analysis. Editorial brand mentions are not automatically impersonation. Exact official-reference boundaries remain separate from channel approval; references cannot suppress suspicious nested destinations. Optional registration consent now also covers **hostname-only Google DNS and RIPE routing observations**, with explicit sources and unavailable states. No submitted webpage is fetched.
+
+**Independent targets NOT achieved.** On 39 new reviewer-labeled controlled cases (one of 40 supplied cases overlapped original data and is retained as seen), accuracy rose **66.67% → 84.62%**, recall **40% → 80%**, with TP/TN/FP/FN **16/17/2/4**. On 1,000 externally labeled historical PhiUSIIL URLs, accuracy rose **50% → 50.50%**, with **5/500/0/495**; recall is **1%**. The public dataset is older, not UAE-specific, and URL-only checks cannot recover unknown page/content deception. All failed cases remain in the evaluation output; no final-set tuning or label corrections were made. The old 48-example set improved **91.67% → 100%**, but it is now previously seen development evidence, not independent accuracy.
+
+The deterministic engine and **hybrid fallback** were measured separately and returned the same confusion counts for URL-only inputs. Four actual bilingual AI-assisted UI checks returned two Low and two Critical results, all correctly classified on that tiny controlled set; this is **not** a 500-example full-hybrid benchmark. Existing OpenAI `openai/gpt-6.1-sol`, quotas, model settings and redaction remain unchanged. No new credentials, paid services, accounts, permissions, database schema or deployment settings were added.
+
+**Unavailable:** verified redirect/shortener expansion, live cloaking/page scanning, live TLS certificate inspection and `.ae` registration dates. The hosting runtime has no established arbitrary-host DNS-pinned transport or authorized isolated scanner. Controlled HTML/redirect fixtures use a non-executing parser and explicitly return fixture-only/partial indicators, never successful live scanning. IANA currently lists no `.ae` RDAP service; `.ae` DNS/routing observations do work. Network metadata is not hosting-owner identification and contributes no risk alone.
+
+**Publication:** the current published Trust Portal was checked and still returned Unverified/Low (20) for a compound lure detected in the updated preview; it lacks the new metadata option. Phase 1B is **not yet published**. Staff mappings/confirmed status/password presence were read without changing them; their owner-only password login remains unverified.
+
+Reproduce: download [UCI 967 CSV](https://archive.ics.uci.edu/static/public/967/data.csv), run `python3 scripts/sample-phase1b-public.py /path/to/data.csv`, then `bun scripts/evaluate-phase1b.ts` and `bunx vitest run`. The sampler uses fixed seeded hash ranking and original development-domain exclusions before predictions; listed fraud URLs are stored defanged and never visited. [Frozen hashes and all results](docs/evaluation/) · [full Phase 1B report](docs/PHASE_1B_REPORT.md). The original Phase 1 fixtures/output remain unchanged; historical replay is pinned to commit `d58af97`.
+
+العربية: لم تتحقق أهداف الدقة المطلوبة. الدقة المستقلة التجريبية 84.62% ودقة بيانات البحث الخارجية 50.50% فقط؛ لا تُعرض هذه النتائج بوصفها دقة تشغيلية أو ضماناً لنقاط التحكيم. لم تُنشر التحسينات بعد، ولم تتغير كلمات المرور أو الصلاحيات، ولن ننتقل إلى المرحلة الثانية.
+
 9. وثائق التسليم | Handoff documents
 - [ARCHITECTURE.md](ARCHITECTURE.md) — technical architecture / البنية التقنية
 - [AI_IMPLEMENTATION_REPORT.md](AI_IMPLEMENTATION_REPORT.md) — AI implementation / تنفيذ الذكاء الاصطناعي

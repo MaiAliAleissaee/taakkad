@@ -1,5 +1,42 @@
 # Final polish test report
 
+## Phase 1B — 24 November 2026 (current evidence)
+
+### Frozen-engine measurements
+Baseline replay from `d58af97` reproduced the original 48-example result exactly. That dataset is **now seen**, not independent. The new final engine was frozen before predictions, including a pre-evaluation redirect-policy fixture correction; no rules, thresholds or labels were tuned after final results. Original `docs/url-evaluation-results.json` and fixture files remain unchanged.
+
+| Set / engine | N | TP | TN | FP | FN | Precision | Recall | F1 | FPR | Accuracy |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Old 48 / Phase 1 baseline | 48 | 21 | 23 | 1 | 3 | 95.45% | 87.50% | 91.30% | 4.17% | 91.67% |
+| Old 48 / Phase 1B, **seen** | 48 | 24 | 24 | 0 | 0 | 100% | 100% | 100% | 0% | 100% |
+| New controlled / Phase 1 baseline | 39 | 8 | 18 | 1 | 12 | 88.89% | 40% | 55.17% | 5.26% | 66.67% |
+| New controlled / Phase 1B deterministic | 39 | 16 | 17 | 2 | 4 | 88.89% | 80% | 84.21% | 10.53% | 84.62% |
+| External public / Phase 1 baseline | 1000 | 0 | 500 | 0 | 500 | N/A (no positives) | 0% | 0% | 0% | 50% |
+| External public / Phase 1B deterministic | 1000 | 5 | 500 | 0 | 495 | 100% | 1% | 1.98% | 0% | 50.50% |
+| External public / hybrid fallback | 1000 | 5 | 500 | 0 | 495 | 100% | 1% | 1.98% | 0% | 50.50% |
+| New controlled / hybrid fallback | 39 | 16 | 17 | 2 | 4 | 88.89% | 80% | 84.21% | 10.53% | 84.62% |
+| Actual AI+rules UI spot checks | 4 | 2 | 2 | 0 | 0 | 100% | 100% | 100% | 0% | 100% |
+
+**Targets NOT achieved.** N=4 AI observations are functional evidence, not a general AI accuracy claim. All category confusion matrices and 495 external / six controlled errors are retained in `docs/evaluation/phase1b-results.json`. Source dataset is historical PhiUSIIL/UCI 967, Prasad & Chandra, CC BY 4.0, 235,795 rows; only original URL/label used, never derived page features. Fixed seeded/domain-grouped selection created 500 positive/500 negative rows, independent of predictions. One of 40 reviewer URLs overlapped the old dataset and was retained as seen before evaluation. Cases/labels were not edited to improve scores; invalid Punycode remains a scored miss. Historical labels, unverified illustrative legitimate paths and reviewer scenario labels are limitations, not real-time website verdicts.
+
+### Causes and remaining failures
+- Old false positive: bare editorial brand token treated as impersonation. Old misses: compound `support` not a sensitive suffix; credential-collection context unrecognized; IP + login observations individually below threshold. General rules now address these; all four old mistakes are resolved on the **seen** set.
+- New false positives: the full-reference substring check can mistake `du.ae` for `u.ae`; `salik.gov.ae` is absent from the confirmed reference library but resembles Salik. The reviewer's latter legitimacy label is not independently live-certified. Both are retained, not relabeled or patched against final data.
+- New misses: malformed Punycode; MOHRE refund/bank-context without a configured sensitive key; telecom rewards; airline refund context. Most external phishing URLs lack any configured UAE brand/syntax evidence; unknown domains can be malicious via page content or compromised sites, which URL strings alone do not reveal. Missing reference/age never becomes automatic fraud.
+
+### Actual live checks and protections
+- Preview English: compound service lure, legitimate brand archive, official-domain nested encoded lure, real UAE PASS hostname DNS/RDAP omission all exercised. Google DNS returned `213.42.56.87` and CNAME `selfcare.gslb.uaepass.ae`; RIPE returned ASN **204206**, prefix **213.42.56.0/24**. No hosting ownership or DNS pinning was inferred. Actual string-valued RIPE ASNs prompted a schema-contract fix and matching regression before final verification.
+- Four real AI calls completed: two Low informational controls (English/Arabic), two Critical credential/payment threats (English/Arabic). No replay/new subscription/credential. Separate inference results are in `docs/evaluation/phase1b-live-hybrid.json`.
+- Arabic/English result screenshots inspected, including DNS/ASN; mobile 390×844 no horizontal overflow. Reload removed private result. No page exceptions in successful public runs. A language-specific screenshot locator initially failed after inference; rerun corrected the locator and **did not repeat** AI calls.
+- Controlled HTML parser never executes scripts; title/form mismatch, same-domain legitimate login, editorial mentions, variants as **partial not confirmed cloaking**, redirect hop/public-IP checks and oversized content tested. These are offline fixtures, not live expansion or cloaking detection.
+- Published `https://taakkad.lovable.app/trust` was genuinely loaded and checked: compound lure remained **Unverified / Low / 20**, no `chk-rdap` option. **FAIL: Phase 1B is not published**, not a missing live site. No publication/settings change was made.
+- Signed-out `/security` and `/officer` redirected to `/auth`. Read-only staff check found both confirmed, password-configured, and with recent prior sign-in timestamps; HAM123 Officer only, HAM1234 Analyst only (plus public visitor). No credentials/roles/users changed. Positive owner password login and authenticated dashboard walkthrough **NOT VERIFIED**; tests/mappings are not a substitute.
+
+### Regression and blockers
+Final automated count/status is recorded in `docs/PHASE_1B_REPORT.md`. Existing AI privacy/fallback, organization policies, authentication, role separation, reports, alerts and graph tests are included. New coverage checks nested/base64 URLs, every controlled-hop public IP, non-IP rejection, private DNS, provider redirects/size bounds, real-shaped string ASNs and dataset leakage. An early evaluation integrity assertion conflated all IP/no-PSL hosts as `null`; corrected it to the sampler's domain-or-host grouping without altering a single row/label or prediction.
+
+Verified destination/shortener expansion and live cloaking remain unavailable: no established third-party DNS-pinned HTTP transport or approved isolated scanning environment. `.ae` registration/TLS remain unavailable; DoH/RIS metadata does work. 500 full model calls need an approved multi-day plan within the existing 200/day ceiling. Independent targets remain unmet; no Phase 2, production readiness or guaranteed 30/30 is claimed. Owner passwords, legacy OTP and separately authorized Supervisor publication remain prior blockers.
+
 ## Phase 1 URL detection accuracy — 24 November 2026
 Current results below supersede historical counts retained later in this report.
 

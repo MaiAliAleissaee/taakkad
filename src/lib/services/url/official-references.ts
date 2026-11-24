@@ -11,5 +11,15 @@ export const officialReferences = [
   { domain: "emiratesnbd.com", name: "Emirates NBD", ar: "الإمارات دبي الوطني", aliases: ["emiratesnbd", "enbd"], source: "https://www.emiratesnbd.com/en/help-and-support/contact-us" },
   { domain: "bankfab.com", name: "First Abu Dhabi Bank", ar: "بنك أبوظبي الأول", aliases: ["bankfab"], source: "https://www.bankfab.com/en-ae/personal/help-and-support/fraud-and-security" },
   { domain: "dib.ae", name: "Dubai Islamic Bank", ar: "بنك دبي الإسلامي", aliases: ["dib"], source: "https://www.dib.ae/support" },
+  { domain: "icp.gov.ae", name: "ICP / Emirates ID", ar: "الهوية والجنسية / الهوية الإماراتية", aliases: ["icp", "emiratesid"], source: "https://u.ae/en/information-and-services/visa-and-emirates-id/emirates-id" },
+  { domain: "mohre.gov.ae", name: "MOHRE", ar: "وزارة الموارد البشرية والتوطين", aliases: ["mohre"], source: "https://www.mohre.gov.ae/en/" },
+  { domain: "dewa.gov.ae", name: "DEWA", ar: "هيئة كهرباء ومياه دبي", aliases: ["dewa"], source: "https://www.dewa.gov.ae/en/consumer/billing" },
+  { domain: "salik.ae", name: "Salik", ar: "سالك", aliases: ["salik"], source: "https://www.salik.ae/en/" },
+  { domain: "adib.ae", name: "Abu Dhabi Islamic Bank legacy domain", ar: "مصرف أبوظبي الإسلامي — نطاق سابق", aliases: ["adib"], source: "https://www.adib.com/en/" },
+  { domain: "adib.com", name: "Abu Dhabi Islamic Bank", ar: "مصرف أبوظبي الإسلامي", aliases: ["adib"], source: "https://www.adib.com/en/" },
+  { domain: "mashreq.com", name: "Mashreq", ar: "المشرق", aliases: ["mashreq"], source: "https://www.mashreq.com/en/uae/customer-care/" },
+  { domain: "rakbank.ae", name: "RAKBANK", ar: "راك بنك", aliases: ["rakbank"], source: "https://www.rakbank.ae/en/contact-us" },
+  { domain: "cbd.ae", name: "Commercial Bank of Dubai", ar: "بنك دبي التجاري", aliases: ["cbd"], source: "https://www.cbd.ae/personal/help-and-support" },
+  { domain: "emiratesislamic.ae", name: "Emirates Islamic", ar: "الإمارات الإسلامي", aliases: ["emiratesislamic"], source: "https://www.emiratesislamic.ae/en/help-and-support" },
 ] as const;
 export const isDomainBoundary = (host: string, domain: string) => host === domain || host.endsWith(`.${domain}`);

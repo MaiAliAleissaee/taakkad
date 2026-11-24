@@ -218,6 +218,13 @@
       "when": 1795517203683,
       "tag": "0030_active_authenticated_ai_sessions",
       "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1795525386927,
+      "tag": "0031_separate_simulated_public_projections",
+      "breakpoints": true
     }
   ]
 }

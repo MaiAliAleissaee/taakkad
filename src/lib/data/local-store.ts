@@ -3,6 +3,7 @@ import type { DemoState, Organization } from "@/lib/domain/types";
 import type { TrustRepository } from "./repository";
 import { createSeedState, SEED_VERSION } from "./seed";
 import { applyChannelCommand, applyOrganizationReview, upgradeChannelRegistry } from "@/lib/services/channels";
+import { publicOrganizations } from "./public-registry";
 
 const STORAGE_KEY = "trustzero.demo.v1";
 const serverSnapshot = createSeedState();
@@ -21,9 +22,9 @@ const emit = () => {
 /** Safe public projections only; never persist over a visitor's legacy records. */
 export async function refreshOrganizationRegistry() {
   const { supabase } = await import("@/integrations/supabase/client");
-  const result = await supabase.from("organization_public_registry").select("payload");
+  const result = await supabase.from("genuine_organization_registry").select("payload");
   if (result.error) return;
-  registry = result.data.map(r => r.payload as unknown as Organization);
+  registry = publicOrganizations(result.data.map(r => r.payload as unknown as Organization));
   emit();
 }
 
@@ -111,4 +112,10 @@ const subscribe = (l: () => void) => {
 
 export function useDemoState(): DemoState {
   return useSyncExternalStore(subscribe, () => visibleState, () => serverSnapshot);
+}
+
+const emptyPublicRegistry: Organization[] = [];
+/** No fallback to fictional seeds or legacy browser records for real public verification. */
+export function usePublicOrganizations(): Organization[] {
+  return useSyncExternalStore(subscribe, () => registry, () => emptyPublicRegistry);
 }

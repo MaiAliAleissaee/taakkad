@@ -1,5 +1,11 @@
 # Final hackathon polish roadmap
 
+## Final presentation cleanup
+- [ ] Remove public sample cards, simulated organization lists and fictional alert previews; keep empty independent verification forms and existing workflows.
+- [ ] Separate genuine public channel projections from preserved synthetic records with data-level safeguards.
+- [ ] Assemble bilingual demo-kit guides, all existing safe scenario sources, screenshot and QR samples; link from README.
+- [ ] Run focused regression and security release checks, publish only after clearance, verify hosted cleanup and report the commit.
+
 ## Phase 5 feasibility, scalability and submission readiness
 - [x] Publish security-cleared screenshot implementation without changing features/data; actual hosted `5e10491` OCR/QR execution confirms deployment.
 - [x] Run full regression once: 424 tests / 37 files passed on 24 November 2026; quick security check retains only the untouched informational registry finding.

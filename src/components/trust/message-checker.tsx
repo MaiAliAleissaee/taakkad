@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import type { BlockedIndicator } from "@/lib/services/blocklist";
 import { usePublicWorkspace } from "@/lib/data/hooks";
-import { useDemoState } from "@/lib/data/local-store";
+import { usePublicOrganizations } from "@/lib/data/local-store";
 import { useI18n } from "@/lib/i18n/i18n";
 import { channelLabel, trustStateHelp } from "@/lib/i18n/labels";
 import { assessMessage, type MessageInput } from "@/lib/services/verification";
@@ -44,7 +44,7 @@ export function MessageChecker() {
   const lookupDomain = useServerFn(getUrlIntelligence);
   const [useRdap, setUseRdap] = useState(false);
   const [useAi, setUseAi] = useState(false);
-  const { organizations } = useDemoState();
+  const organizations = usePublicOrganizations();
   const emptyInput = { channel: "sms" as PublicCheckChannel, sender: "", url: "", body: "", claimedOrgId: undefined as string | undefined };
   const [input, setInput] = useState(emptyInput);
   const [screenshot, setScreenshot] = useState<ScreenshotReview | null>(null);

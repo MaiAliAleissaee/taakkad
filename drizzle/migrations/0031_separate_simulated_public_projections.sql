@@ -1,0 +1,10 @@
+ALTER TABLE public.organization_public_registry ADD COLUMN simulated boolean NOT NULL DEFAULT true;
+ALTER TABLE public.public_security_alerts ADD COLUMN simulated boolean NOT NULL DEFAULT true;
+COMMENT ON COLUMN public.organization_public_registry.simulated IS 'Defaults to simulated for all prototype approvals; only independently verified service-side records may be explicitly non-simulated. Existing payloads are preserved.';
+COMMENT ON COLUMN public.public_security_alerts.simulated IS 'Existing and new prototype bulletins are simulated by default and retained for authorized demonstrations.';
+CREATE VIEW public.genuine_organization_registry WITH (security_invoker=true) AS SELECT organization_id,payload FROM public.organization_public_registry WHERE simulated=false;
+GRANT SELECT ON public.genuine_organization_registry TO anon,authenticated,service_role;
+CREATE VIEW public.genuine_security_alerts WITH (security_invoker=true) AS SELECT id,content,published_at FROM public.public_security_alerts WHERE simulated=false AND published_at<=now();
+GRANT SELECT ON public.genuine_security_alerts TO anon,authenticated,service_role;
+COMMENT ON VIEW public.genuine_organization_registry IS 'Public verification reads only this data-level non-simulated projection; legacy browser data and demo registry are never trust inputs.';
+COMMENT ON VIEW public.genuine_security_alerts IS 'Public-facing warnings exclude simulated records without deleting their managed staff records.';

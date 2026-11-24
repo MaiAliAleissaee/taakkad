@@ -192,14 +192,17 @@ export type Database = {
         Row: {
           organization_id: string
           payload: Json
+          simulated: boolean
         }
         Insert: {
           organization_id: string
           payload: Json
+          simulated?: boolean
         }
         Update: {
           organization_id?: string
           payload?: Json
+          simulated?: boolean
         }
         Relationships: []
       }
@@ -315,16 +318,19 @@ export type Database = {
           content: Json
           id: string
           published_at: string
+          simulated: boolean
         }
         Insert: {
           content: Json
           id: string
           published_at: string
+          simulated?: boolean
         }
         Update: {
           content?: Json
           id?: string
           published_at?: string
+          simulated?: boolean
         }
         Relationships: [
           {
@@ -587,7 +593,47 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      genuine_organization_registry: {
+        Row: {
+          organization_id: string | null
+          payload: Json | null
+        }
+        Insert: {
+          organization_id?: string | null
+          payload?: Json | null
+        }
+        Update: {
+          organization_id?: string | null
+          payload?: Json | null
+        }
+        Relationships: []
+      }
+      genuine_security_alerts: {
+        Row: {
+          content: Json | null
+          id: string | null
+          published_at: string | null
+        }
+        Insert: {
+          content?: Json | null
+          id?: string | null
+          published_at?: string | null
+        }
+        Update: {
+          content?: Json | null
+          id?: string | null
+          published_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_security_alerts_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "security_bulletins"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       allocate_demo_tracking: {

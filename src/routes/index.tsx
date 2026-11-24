@@ -93,7 +93,7 @@ function Home() {
                 <h2 className="text-xs font-semibold uppercase tracking-widest text-navy-muted">{tr("Security Alerts", "التنبيهات الأمنية")}</h2>
                 <span className="flex items-center gap-2 text-xs text-emerald">
                   <span className="size-2 rounded-full bg-emerald animate-pulse-ring" />
-                  {tr("Fictional demo", "عرض خيالي")}
+                  {tr("Published warnings", "تحذيرات منشورة")}
                 </span>
               </div>
               <ul className="mt-4 space-y-3">

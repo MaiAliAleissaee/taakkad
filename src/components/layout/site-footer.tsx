@@ -39,7 +39,7 @@ export function SiteFooter() {
             <li><Link to="/security" className="hover:text-navy-foreground">{tr("Security Dashboard", "لوحة التحكم الأمنية")}</Link></li>
           </ul>
         </div>
-        <div className="space-y-3">
+        {staff.securityAccess && <div className="space-y-3">
           <p className="text-xs font-semibold uppercase tracking-widest text-emerald">{tr("Demo data", "البيانات التجريبية")}</p>
           <p className="text-sm text-navy-muted">{tr("Organization changes stay in this browser. Security records are saved in your authorized Cloud account.", "تبقى تغييرات الجهات في هذا المتصفح. تُحفظ السجلات الأمنية في حسابك المصرّح له في Cloud.")}</p>
           <AlertDialog>
@@ -70,7 +70,7 @@ export function SiteFooter() {
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
-        </div>
+        </div>}
       </div>
       <div className="border-t border-navy-border">
         <p className="mx-auto max-w-7xl px-4 py-4 text-xs text-navy-muted sm:px-6 lg:px-8">

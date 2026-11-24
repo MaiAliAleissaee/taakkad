@@ -27,7 +27,7 @@ export function ApplicationTracker({ receipt }: { receipt: DemoReceipt | null })
     needs_information: tr("Corrections Required", "مطلوب تصحيحات"), approved: tr("Approved — Simulated", "معتمد — تجريبي"), rejected: tr("Rejected", "مرفوض"),
   };
   const messages: Record<DemoStatus, string> = {
-    approved: tr(`Application ${resultCode} has been approved successfully. We are pleased to confirm your organization's registration in the Taakkad demo platform. It now appears in the demo-approved organization registry.`, `تم اعتماد طلبكم رقم ${resultCode} بنجاح. يسرّنا إبلاغكم بأنه تمت الموافقة على تسجيل جهتكم في منصة تأكّد التجريبية، وأصبحت ظاهرة ضمن سجل الجهات المعتمدة تجريبياً.`),
+    approved: tr(`Application ${resultCode} has been approved in the prototype. Its simulated registration is available to authorized officers, not the genuine public trust registry.`, `تم اعتماد طلبكم رقم ${resultCode} في النموذج الأولي. يتاح التسجيل التجريبي للموظفين المصرّح لهم، وليس سجل الثقة العام الفعلي.`),
     pending: tr(`Application ${resultCode} has been received successfully and is awaiting review by the designated officer.`, `تم استلام طلبكم رقم ${resultCode} بنجاح، وهو حالياً بانتظار المراجعة من الموظف المختص.`),
     under_review: tr(`Application ${resultCode} is currently under review. Its status will be updated once a decision has been made.`, `طلبكم رقم ${resultCode} قيد المراجعة حالياً، وسيتم تحديث حالة الطلب بعد اتخاذ القرار.`),
     needs_information: tr(`Application ${resultCode} requires additional or corrected information before approval. Please contact the designated authority for instructions; private review notes are not available through this tracker.`, `طلبكم رقم ${resultCode} يحتاج إلى استكمال أو تعديل بعض البيانات قبل الاعتماد. يرجى التواصل مع الجهة المختصة للحصول على التعليمات؛ لا تُعرض ملاحظات المراجعة الخاصة عبر المتابعة.`),
@@ -56,7 +56,7 @@ export function ApplicationTracker({ receipt }: { receipt: DemoReceipt | null })
       <div className="flex items-start gap-3"><StatusIcon aria-hidden="true" className={`mt-1 size-6 shrink-0 ${tone}`} /><div className="min-w-0"><p className="text-sm text-muted-foreground">{tr("Tracking number", "رقم المتابعة")}</p><p dir="ltr" className="mt-1 text-start font-mono text-2xl font-bold">{resultCode}</p><h3 className="mt-2 font-semibold">{labels[status]}</h3></div></div>
       <p className="text-sm leading-relaxed">{messages[status]}</p>
       {updatedAt && <p className="text-xs text-muted-foreground">{tr("Latest status update", "آخر تحديث للحالة")}: <time dateTime={updatedAt}>{date(updatedAt, true)}</time></p>}
-      {status === "approved" && <><p className="text-xs text-muted-foreground">{tr("Demo approval does not verify real-world identity or channel ownership.", "الاعتماد التجريبي لا يثبت الهوية الفعلية أو ملكية القنوات.")}</p><Button asChild variant="outline" size="sm"><a href="#approved-organizations">{tr("View public organization registry", "عرض سجل الجهات العام")}</a></Button></>}
+      {status === "approved" && <p className="text-xs text-muted-foreground">{tr("Demo approval does not verify real-world identity or channel ownership.", "الاعتماد التجريبي لا يثبت الهوية الفعلية أو ملكية القنوات.")}</p>}
     </div>}
     {error && <p role="alert" className="mt-3 text-sm text-destructive">{error}</p>}
   </div>;

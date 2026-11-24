@@ -3,6 +3,8 @@ import { OfficerDashboard } from "@/components/orgs/officer-dashboard";
 import { AccessDeniedDialog } from "@/components/security/access-denied-dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { isVerificationOfficer } from "@/lib/organizations/schema";
+import { Suspense } from "react";
+import { DemoRegistry } from "@/components/orgs/demo-registry";
 
 export const Route = createFileRoute("/_authenticated/officer")({
   // UI gate only; officer server functions and RLS still authorize every request.
@@ -29,5 +31,5 @@ export const Route = createFileRoute("/_authenticated/officer")({
 function OfficerRoute() {
   const { officerDenied, roleList } = Route.useRouteContext();
   if (officerDenied) return <AccessDeniedDialog area="officer" roles={roleList} />;
-  return <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8"><OfficerDashboard /></section>;
+  return <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8"><OfficerDashboard /><Suspense fallback={null}><DemoRegistry /></Suspense></section>;
 }

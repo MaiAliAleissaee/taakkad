@@ -7,7 +7,7 @@ export const listPublishedAlerts = createServerFn({ method: "GET" }).handler(asy
   const url = process.env["SUPABASE_URL"]; const key = process.env["SUPABASE_PUBLISHABLE_KEY"];
   if (!url || !key) throw new Error("Alerts unavailable");
   const client = createClient(url, key, { auth: { persistSession: false }, global: { fetch: (input, init) => { const headers = new Headers(init?.headers); if (headers.get("Authorization") === `Bearer ${key}`) headers.delete("Authorization"); headers.set("apikey", key); return fetch(input, { ...init, headers }); } } });
-  const result = await client.from("public_security_alerts").select("id,content,published_at").order("published_at", { ascending: false }).order("id");
+  const result = await client.from("genuine_security_alerts").select("id,content,published_at").order("published_at", { ascending: false }).order("id");
   if (result.error) throw new Error("Alerts unavailable");
   return result.data.map(row => ({ id: row.id as string, content: alertContentSchema.parse(row.content), published_at: row.published_at as string }));
 });

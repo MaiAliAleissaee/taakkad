@@ -29,6 +29,8 @@ export default defineConfig({
         "tldts",
         "punycode",
         "ipaddr.js",
+        "tesseract.js",
+        "jsqr",
       ],
     },
   },

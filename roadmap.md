@@ -1,5 +1,11 @@
 # Final hackathon polish roadmap
 
+## Focused public screenshot analysis (not Phase 5)
+- [x] Add local Arabic/English OCR, raster/dimension validation, paired QR decoding, editable/conflicting input handling and screenshot-only/combined inputs; preserve manual checks. Self-host assets and explicit browser-only boundary.
+- [x] Reuse rules, URL ML, registry and reporting without altering policy; no automatic image upload or persistence. Explicit consent enables an exact original local download for the existing authorized evidence upload, not anonymous attachment. Existing 512 KiB PNG/JPEG evidence limits remain; actual staff persistence is unverified.
+- [x] 74 distinct targeted tests pass across corrected scoped runs. Actual bilingual PNG/JPEG/WebP, blur/blank, paired QR, conflict, manual-only, consent/download, retry/cancellation, invalid files and mobile checks pass. Isolated OCR makes zero external/POST requests; extended flow only existing font/Cloud GETs. Latest build OK, dependency scans clear, quick security scan only untouched informational registry finding. Report documents OCR errors separately from detection; no paid calls or full benchmark/suite repeat.
+- [ ] Latest saved-code deep security clearance and release decision; do not publish screenshot changes before clearance. Existing Phases 3/4 remain published; no Phase 5. Genuine private evidence attachment remains unverified without an owner session.
+
 ## Phase 4 UAE relevance and innovation
 - [x] Audit existing UAE detection, official references, normalization, linking, guidance and visual-analysis limits.
 - [x] Add local UAE dialect/request cues, shared phone normalization, explicit text-indicator extraction, source-linked prevention/police guidance and seven fictional scenarios; preserve models, design, security and staff access.

@@ -2,6 +2,14 @@
 
 Date: 24 November 2026. Phase 3 not started.
 
+## Final manual-import correction and verification deferral
+
+Correction saved as `30c9c57`: the exact failure was Zod path `[0, "domain"]`, "Enter a registrable public domain, not a URL", for `uaepass-demo.example`, even when `synthetic: true`. Valid reserved `.example` names are now accepted only for explicitly synthetic storage records; manual and batch imports, server input and workspace readback share that rule. DNS/RDAP eligibility remains strict and synthetic scanning remains prohibited. Invalid fields now receive specific English/Arabic errors.
+
+The correction passed **22 targeted tests** in the intelligence and authorization files, and managed preview compilation reported `build OK`. The prior 302-test regression was not repeated; no AI calls, metadata requests, retraining or record changes were made for this correction.
+
+On 24 November 2026 the owner explicitly deferred manual verification and authorized publication after security checks. Authenticated save/readback and bilingual analyst end-to-end rendering remain **NOT VERIFIED**, not passed: automation could not restore the owner's working session; its separate HAM1234 verification session reached `Workspace unavailable`, and the latest read found no `DEMO-001` record. No security control was weakened. Publication scheduling is not deployment-completion or protected execution proof.
+
 ## Implemented
 
 - **Analyst-only intelligence tab** in the existing Security Dashboard, preserving its other tabs, design and controls. Existing `security_analyst` role required; officers, visitors and supervisors without Analyst role are denied. Both server authentication and database policies retain the existing active-session/revocation check.

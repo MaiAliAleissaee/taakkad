@@ -6,7 +6,7 @@
 - [x] Add atomic hashed private receipt alongside unchanged references; active-officer confirmed/audited recovery. Public owner status readback and wrong-secret/direct-call denial verified; actual officer recovery remains unverified without a usable owner session.
 - [x] Fix stale targets across checks/reporting; 30 scoped tests and bilingual public/mobile browser flows pass. Eight selected findings resolved; fresh quick scan retains only the unrelated informational registry finding.
 - [ ] Fresh deep scan clearance of saved changes, then Phase 3 publication/live verification; do not start Phase 4.
-- [x] Mark the six selected ownership findings fixed after live endpoint verification; leave two visitor-facing findings active pending approval and the public organization registry finding unchanged.
+- [x] Mark all eight selected findings fixed after scoped verification; leave the unrelated public organization registry finding unchanged.
 
 ## Phase 3 explainability and private evidence
 - [x] Audit: existing typed links/graph, synthetic/source labels, DNS/RDAP snapshots, private officer documents and confirmed officer decisions are reused.

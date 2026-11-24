@@ -1,159 +1,266 @@
-تأكّد | TAAKKAD
-التحقق من الهوية الرقمية والكشف المساعد بالذكاء الاصطناعي عن انتحال الجهات
-Digital identity verification and AI-assisted organization impersonation detection
+# تأكّد | TAAKKAD
 
-Hackathon prototype / نموذج أولي للهاكاثون — not an official UAE government service, operational police platform, or production-ready system.
+**التحقق من الهوية الرقمية والكشف المساعد بالذكاء الاصطناعي عن انتحال الجهات**
+**Digital identity verification and AI-assisted organization impersonation detection**
+
+**Hackathon prototype / نموذج أولي للهاكاثون** — not an official UAE government service, operational police platform, or production-ready system.
+ليس خدمة حكومية إماراتية رسمية ولا منصة شرطية تشغيلية ولا نظاماً جاهزاً للإنتاج.
+
 - Live demo / العرض المنشور: https://taakkad.lovable.app
 - Source repository / المستودع: https://github.com/MaiAliAleissaee/taakkad
-- Documentation / الوثائق: [ARCHITECTURE.md](ARCHITECTURE.md) · [AI_IMPLEMENTATION_REPORT.md](AI_IMPLEMENTATION_REPORT.md) · [TEST_REPORT.md](TEST_REPORT.md) · [DEMO_GUIDE.md](DEMO_GUIDE.md) · [PRESENTATION_OUTLINE.md](PRESENTATION_OUTLINE.md)
+- Submission branch / فرع التسليم: **master** (default branch / الفرع الافتراضي)
+- Documentation / الوثائق: [ARCHITECTURE.md](ARCHITECTURE.md) · [AI_IMPLEMENTATION_REPORT.md](AI_IMPLEMENTATION_REPORT.md) · [TEST_REPORT.md](TEST_REPORT.md) · [DEMO_GUIDE.md](DEMO_GUIDE.md) · [PRESENTATION_OUTLINE.md](PRESENTATION_OUTLINE.md) · [docs/](docs/)
+
 The deployed website is a demonstration, not proof of production readiness or external verification. All seeded examples are fictional.
-الموقع المنشور لأغراض العرض التجريبي، ولا يُعد إثباتاً للجاهزية التشغيلية أو التحقق المستقل من الجهات. جميع الأمثلة المُعدّة للعرض خيالية.
+الموقع المنشور لأغراض العرض التجريبي، ولا يُعد إثباتاُ للجاهزية التشغيلية أو التحقق المستقل من الجهات. جميع الأمثلة المُعدّة للعرض خيالية.
 
-## Final submission status — Phase 5 / حالة التسليم النهائي
+---
 
-**24 November 2026:** Screenshot implementation `5e10491` is published and actual hosted Arabic/English OCR, paired QR, screenshot-only, manual-only and combined checks were exercised. One final regression passed **424 tests / 37 files**. Phase 5 changes documentation only; credentials, roles, records, registry and model are preserved. [Final report, controlled police pilot proposal, five-criterion summary and owner acceptance checklist](docs/PHASE_5_REPORT.md) · [Screenshot analysis](docs/SCREENSHOT_ANALYSIS_REPORT.md).
+## Judges' Demo Access | بيانات دخول لجنة التحكيم
 
-**24 نوفمبر 2026:** نُشرت ميزة لقطة الشاشة واختُبرت قراءة العربية والإنجليزية وQR والفحص اليدوي والمدمج فعلياً؛ نجح 424 اختباراً في 37 ملفاً. المرحلة الخامسة توثيقية دون ميزات إضافية. دخول الموظفين الفعلي وحفظ الأدلة الخاصة واسترجاعها لا يزال يتطلب اختبار المالك؛ لا ندّعي جاهزية تشغيلية أو شراكة شرطية.
+**Organization approval officer / موظف اعتماد الجهات: `HAM123`**
+**Security analyst / محلل أمني: `HAM1234`**
 
-Current safety limits are **five paid semantic requests/authenticated user/ten minutes and 200 globally/UTC day**; basic local rules/ML, registry and explicit reporting stay anonymous. Screenshot pixels remain local; reviewed indicators are matched only on explicit checking. Private evidence upload is a separate authorized staff workflow with PNG/JPEG/512 KiB restrictions. An official ADCB homepage control scored 20; a legitimate sensitive path scored 65 from local ML, a disclosed false-warning limitation. No new accuracy or throughput claims were measured. The informational public-registry finding remains untouched. Historical phase/deployment/visitor-limit notes below describe earlier versions; this section and the Phase 5 report are authoritative for current status.
+Passwords are **not published here**. They are supplied separately in the private judges' presentation or submission notes.
+كلمات المرور غير منشورة هنا؛ تُزوَّد بشكل منفصل في العرض الخاص بلجنة التحكيم أو ملاحظات التسليم.
 
-Phase 2 / المرحلة الثانية: Analyst-only proactive intelligence adds sourced candidate generation, explicit free DNS/RDAP observations, attributed manual/batch imports, shared-indicator review and private early warnings. DNS is not registration or fraud proof; no suspicious websites are visited or accusations published. [Capabilities, actual tests and limitations](docs/PHASE_2_REPORT.md). The trained ML model and existing staff roles/passwords are unchanged. Genuine signed-in analyst save/readback remains unverified; temporary sessions cannot bypass existing revocation checks.
+| Role / الدور | Username / اسم الدخول | Sign-in page / صفحة الدخول | Lands on / يوصل إلى |
+|---|---|---|---|
+| Organization approval officer / موظف اعتماد الجهات | `HAM123` | https://taakkad.lovable.app/organizations (staff sign-in / دخول الموظفين) | https://taakkad.lovable.app/officer |
+| Security analyst / محلل أمني | `HAM1234` | https://taakkad.lovable.app/auth | https://taakkad.lovable.app/security |
 
-Phase 3 / المرحلة الثالثة: Private staff evidence tools add bilingual explanations, UTC/UAE timelines, server-hashed bounded attachments, JSON evidence packages and printable bilingual PDF reports. Human approval records preparation only; nothing is sent externally. / تضيف أدوات الأدلة الخاصة تفسيراً ثنائي اللغة وتسلسلاً زمنياً UTC/الإمارات ومرفقات محدودة ببصمات خادم وحزم JSON وتقارير PDF قابلة للطباعة؛ يعتمد الإنسان الإعداد فقط ولا يُرسل شيء خارجياً. [Actual results and limitations](docs/PHASE_3_REPORT.md).
+Login instructions / تعليمات الدخول:
+1. Open the sign-in page for the required role and enter the username exactly as shown (case-sensitive / مع حساسية الأحرف الكبيرة والصغيرة).
+2. Enter the password supplied privately to the judges / أدخل كلمة المرور المسلَّمة للجنة التحكيم بشكل خاص.
+3. After sign-in the application routes automatically by role: officers to `/officer`, analysts to `/security` / يُوجَّه المستخدم آلياً حسب الدور.
+4. Each account holds exactly one role. An officer who opens `/security`, or an analyst who opens `/officer`, sees a bilingual access-denied dialog and stays on their own workspace / كل حساب يملك دوراً واحداً فقط، ومحاولة فتح مساحة الدور الآخر تُظهر رسالة رفض ثنائية اللغة.
+5. Use **Sign out / تسجيل الخروج** after the demonstration / سجّل الخروج بعد العرض.
 
-Security completion / استكمال الأمان: Paid semantic AI requires an active signed-in session; basic checks, local URL ML, registry searches and write-only reporting remain public. Demo tracking now requires the unchanged five-digit reference plus a private receipt secret; older/lost receipts require independently verified officer recovery. / يتطلب التحليل الدلالي المدفوع جلسة دخول نشطة؛ تبقى الفحوص الأساسية والتعلم الآلي المحلي والبحث في السجل والإبلاغ متاحة للعامة. تتطلب المتابعة التجريبية الرقم السابق من خمسة أرقام وسر الإيصال الخاص؛ تُستعاد الإيصالات السابقة أو المفقودة عبر موظف بعد تحقق مستقل من الهوية.
+Credential handling / التعامل مع بيانات الدخول: the two accounts above are the only demonstration staff accounts. No passwords, API keys or environment secrets are committed to this repository.
+الحسابان أعلاه هما حسابا الموظفين التجريبيين الوحيدين. لا تُنشر كلمات المرور أو مفاتيح API أو أسرار البيئة في هذا المستودع.
 
-1. المشكلة والحل | Problem and proposed solution
-العربية: قد يتلقى الأفراد رسائل أو اتصالات تنتحل صفة جهة معروفة، ولا تتوافر لهم دائماً طريقة واضحة للتحقق من القناة الرسمية أو الإبلاغ عن مؤشرات الاشتباه. يقترح «تأكّد» بوابة عامة لفحص قنوات التواصل والرسائل، وسجلاً للقنوات المعتمدة في بيئة تجريبية، ومساراً منظماً لتسجيل الجهات ومراجعتها، ولوحة أمنية لمراجعة البلاغات والروابط بين المؤشرات. نتائج الذكاء الاصطناعي مؤشرات مساعدة وليست حكماً قاطعاً بوجود احتيال.
+---
 
-English: People may receive messages or calls impersonating familiar organizations without an easy way to check official channels or report suspicious indicators. Taakkad demonstrates a public channel/message checker, a fictional approved-channel registry, an organization registration and review workflow, and a security dashboard for reports and shared-indicator leads. AI results support review; they do not establish that a person or organization is fraudulent.
-2. الوظائف الأساسية | Key features
-- فحص عام وخاص بالزيارة | Visit-private public checks: channel/message checks with optional AI-assisted content analysis, explanations and explicit restricted reporting.
-- طلبات الجهات | Organization applications: private registration, one-time tracking secret, email-code verification, original 24-hour edit deadline and officer-requested corrections.
-- مراجعة مستقلة | Independent review: organization and channel review; private documents and audit trail; only approved, active channels appear publicly.
-- لوحة أمنية | Security dashboard: reports, fraud connections, public security alerts, analytics and reports; display identifiers such as 1/2026 retain underlying legacy/internal IDs.
-- الرصد الاستباقي للمحلل | Analyst proactive intelligence: candidate versus RDAP-confirmed registration, source attribution, DNS evidence and private human-review warnings; synthetic records remain labeled.
-- تحليل الروابط | Investigation leads: type-aware graph, shared indicators, deduplicated domain views and correctly labeled documentation IP addresses.
-- صلاحيات منفصلة | Separated staff roles: HAM123 Officer only; HAM1234 Analyst only. Staff passwords are not documented here. Officer entry is in the Organization Portal.
-- بيانات تجريبية | Fictional demo data: ten reports, ten domain examples, ten existing application records, ten managed bulletins (three published and seven drafts), and ten copyable public examples, as described in the supplied project documentation.
-3. البنية التقنية والذكاء الاصطناعي | Architecture and AI
-Component / المكوّن	Current implementation / التنفيذ الحالي	Purpose / الغرض
-Web application	TanStack Start, React 19, TypeScript	Typed interactive application and server functions / واجهة تفاعلية ووظائف خادم
-Interface	Tailwind CSS v4	Responsive bilingual UI / واجهة متجاوبة ثنائية اللغة
-Data fetching	TanStack Query	Query state and data synchronization / إدارة الاستعلامات
-Hosting and managed services	Lovable Cloud	Prototype infrastructure and publishing / استضافة النموذج ونشره
-Access control	App-internal server authorization plus Cloud row-level policies	Defense in depth for restricted records / طبقات حماية للبيانات المقيدة
-AI	Managed AI Gateway; model identifier documented in the original project: openai/gpt-6.1-sol	Optional message analysis / تحليل اختياري للرسائل
-AI safeguards	Browser- and server-side redaction, validated structured output, deterministic checks and rule-based fallback	Reduce exposure and avoid treating model output as verified fact / تقليل كشف البيانات وتجنب اعتبار النتائج حقائق مثبتة
+## 1. Overview: problem and proposed solution | نظرة عامة: المشكلة والحل
 
+**English:** People receive messages, calls and links that imitate familiar organizations, and often have no clear way to check whether a channel is official or to report suspicious indicators. Taakkad demonstrates three connected surfaces: a public checker for channels, links, messages and screenshots; a registration and review workflow for organizations; and an analyst dashboard for reports, evidence and cross-report leads. AI output is advisory evidence for a human reviewer — it never establishes that a person or organization is fraudulent, and simulated approvals in this prototype are not real-world verification.
 
-العربية: تُحجب المعلومات الحساسة في المتصفح ومرة أخرى على الخادم قبل طلب الاستدلال. تُتحقق بنية المخرجات، وتُربط المؤشرات بالنص المقدم، وتُدمج مؤشرات المخاطر مع قواعد محددة دون تغيير حقائق السجل. تصنيفات المخاطر تفسيرية وليست احتمالات إحصائية معايرة. في حال تعطل خدمة الذكاء الاصطناعي، يظهر بديل قائم على القواعد مع توضيح محدوديته.
+**العربية:** يتلقى الأفراد رسائل واتصالات وروابط تنتحل صفة جهات معروفة، وغالباً لا تتوافر لهم طريقة واضحة للتحقق من القناة الرسمية أو الإبلاغ عن مؤشرات الاشتباه. يعرض «تأكّد» ثلاث مساحات مترابطة: بوابة عامة لفحص القنوات والروابط والرسائل ولقطات الشاشة، ومسار تسجيل ومراجعة للجهات، ولوحة أمنية للبلاغات والأدلة وروابط التحقيق. مخرجات الذكاء الاصطناعي أدلة استشارية للمراجع البشري، ولا تثبت أن شخصاً أو جهة احتيالية، والاعتمادات التجريبية في هذا النموذج ليست توثيقاً حقيقياً.
 
-English: Sensitive information is redacted in the browser and again server-side before inference. Structured output is validated, indicators must be grounded in supplied text, and risk interpretation is combined with deterministic checks without altering registry facts. Categories are interpretations, not calibrated probabilities. AI failures use an explicitly labeled rule-based fallback.
+## 2. The three portals and their functionality | البوابات الثلاث ووظائفها
 
-Usage limits / حدود الاستخدام: five paid semantic requests per authenticated user per rolling ten minutes; 200 globally per UTC day. Resetting browser cookies does not reset the authenticated budget. / خمسة طلبات تحليل دلالي للمستخدم المسجل خلال عشر دقائق و200 طلب يومياً إجمالاً.
-4. مبررات الاختيارات والمفاضلات | Technical choices and trade-offs
-These are design rationales, not claims that every alternative was benchmarked or experimentally evaluated.
-هذه مبررات تصميمية، وليست ادعاءً بإجراء اختبارات مقارنة فعلية لجميع البدائل.
-Chosen approach / الاختيار	Rationale / المبرر	Alternative and trade-off / البديل والمفاضلة
-TypeScript + React + TanStack Start	Shared typed web stack and app-integrated server functions / تطوير متكامل مع أنواع بيانات واضحة	Separate frontend/backend services can allow independent scaling, but add deployment and integration work / فصل الواجهة والخادم يمنح مرونة تشغيلية مقابل تعقيد أكبر
-Managed Lovable Cloud	Faster prototype delivery and integrated publishing / تسريع تنفيذ النموذج	Self-managed infrastructure offers more operational control but requires greater setup, maintenance and security operations / استضافة مستقلة تمنح تحكماً أكبر مقابل عبء تشغيل أعلى
-Managed AI Gateway with structured output	Flexible interpretation of varied suspicious messages / تحليل مرن لصيغ الرسائل المتنوعة	Rules-only checks are cheaper and more predictable but may miss linguistic nuance; AI adds cost and error risk / القواعد أوضح وأقل تكلفة لكنها أقل مرونة لغوياً
-Deterministic checks + AI fallback	Preserve auditable signals when AI is unavailable / استمرار الفحص الأساسي عند تعطل الذكاء الاصطناعي	AI-only decisions would be less explainable and more dependent on service availability / الاعتماد على الذكاء الاصطناعي وحده يقلل قابلية التفسير
-Server role checks + row-level policies	Two enforcement boundaries for restricted data / مستويان للتحكم في الوصول	Client-side visibility alone is insufficient because browser logic cannot secure backend records / إخفاء العناصر في الواجهة وحده لا يحمي البيانات
-Fictional registry and demo approvals	Demonstrate workflow without claiming real authority / عرض سير العمل دون ادعاء اعتماد حقيقي	Real authoritative verification needs independent domain ownership evidence and authorized institutional approval / التحقق الحقيقي يتطلب إثبات ملكية وموافقة مخوّلة
+### A. Public Trust Portal / بوابة الثقة العامة — `/trust`
+- Visit-private channel and message checks: results stay in the component during the visit and are not stored automatically / الفحص خاص بالزيارة ولا يُحفظ تلقائياً.
+- Official-channel registry search over individually approved, active channels / البحث في سجل القنوات المعتمدة النشطة.
+- Local URL analysis: host and registrable-domain extraction, Punycode/IDN handling, brand lookalikes, misleading subdomains, userinfo, shorteners and sensitive paths / تحليل محلي للروابط.
+- Local supervised machine-learning classifier beside the deterministic rules / نموذج تعلّم آلي محلي بجانب القواعد.
+- Screenshot analysis: Arabic/English OCR and QR extraction, fully in the browser / تحليل لقطة الشاشة محلياً.
+- Optional paid semantic AI analysis (requires an active signed-in session) / تحليل دلائي اختياري يتطلب جلسة دخول.
+- Five-digit reference-only organization status tracking / متابعة الطلبات بالرقم المرجعي فقط.
+- Explicit, write-only suspicious-indicator reporting / بلاغ صريح للإرسال فقط.
+- Bilingual public prevention guidance linked to detected UAE scenario cues / إرشادات وقائية ثنائية اللغة.
 
+### B. Organization Portal / بوابة الجهات — `/organizations`
+- Six-field bilingual demonstration registration: organization name, website, contact email, social account, phone number, SMS Sender ID / تسجيل بستة حقول.
+- Optional corporate relationship declaration (independent, parent, subsidiary, sister, corporate group/common ownership, shared channels, shared provider, other) / إقرار اختياري بالعلاقة المؤسسية.
+- Communication channels are created automatically from the submitted values with pending status / تُنشأ القنوات تلقائياً بوضع «معلّق».
+- Staff sign-in for the verification officer, plus status tracking and registry access / دخول الموظفين للموظف المختص.
+- Public registry of staff-approved prototype organizations under **Approved Organizations / الجهات المعتمدة** with a green **Approved / معتمد** badge / السجل العام للجهات المعتمدة.
 
-5. ما لم يُنفذ وحدود النموذج | Exclusions and limitations
-- لا يوجد تحقق مستقل فعلي من ملكية النطاقات أو تفويض ممثلي الجهات. Optional RDAP registration metadata is now available for `.com`, `.net` and `.org`; it is not ownership verification or independently validated organization authorization.
-- لا توجد مصادقة تشفيرية حقيقية للرسائل. No cryptographic message authentication is integrated.
-- لا توجد مراقبة حية أو إزالة محتوى أو خدمة تحديد جغرافي لعناوين IP. No live monitoring, takedown, or IP geolocation service is connected.
-- بيانات السجل المنشورة خيالية. Existing published samples are fictional; reserved .example domains are not opened.
-- النشر يتطلب موافقة مشرف أمني مستقل. Publication requires independent Security Supervisor approval; neither demo staff account is a Supervisor.
-- المتابعة التجريبية تتطلب الرقم وسر الإيصال وتُظهر الحالة والتاريخ فقط. Demo tracking requires the reference and private receipt secret, and returns status/date only. The separate legacy email-code flow requires a confirmed matching authenticated recipient; positive inbox delivery/retrieval remains unverified. Decisions do not send automatic email notifications.
-- دخول الموظفين يحتاج تأكيد المالك. HAM123/`HAM1234` password login must be personally confirmed by the account owner; isolated tester login does not establish their credentials work.
-- الفحص العام لا يحفظ محتوى الرسائل تلقائياً. Public checks remain component-local; only explicit reports share content and extracted indicators with authorized staff. Full private AI explanations are not retained in reports.
-- التخزين المحلي محدود. Browser storage holds public preferences and legacy organization samples only; legacy private snapshots are archived before migration.
-- النشر ليس اعتماداً تشغيلياً. The website has been published for demonstration, but production security, performance, legal compliance and external integrations have not been validated merely by publishing it.
-6. الخصوصية والأمان | Security and privacy
-العربية: تعتمد الحماية على تقليل جمع البيانات، وحجب المعلومات الحساسة قبل التحليل، وفصل الصلاحيات، والتحقق من الأذونات في الخادم وسياسات الصفوف في Cloud، وإبقاء المستندات والسجلات المقيدة خارج حزمة المتصفح. لا تُنشر بيانات البلاغات الخاصة ضمن السجل العام. يجب عدم إضافة كلمات المرور أو مفاتيح API أو أسرار البيئة إلى GitHub.
+### C. Police Security Dashboard / اللوحة الأمنية — `/security`
+- Report review, fraud connections, shared-indicator correlation and investigation graph / مراجعة البلاغات وشبكة الارتباط.
+- Analyst-only proactive intelligence: candidate generation, DNS/RDAP observations, attributed imports, private early warnings / الرصد الاستباقي للمحلل.
+- Public security bulletins (published-only projection) separate from private cases / نشرات أمنية عامة منفصلة عن القضايا الخاصة.
+- Private evidence attachments, timelines, JSON packages and printable bilingual PDF reports / الأدلة الخاصة والتقارير.
+- Bilingual statistics and reports with colored values / إحصائيات وتقارير ثنائية اللغة.
+- Officer review lives in the separate role-gated workspace `/officer` / مراجعة الموظف في مساحة مخصصة.
 
-English: The prototype uses data minimization, redaction before AI inference, separated roles, server-side authorization, Cloud row-level access policies, and restricted records outside the client bundle. Private report data is not made part of the public registry. Do not commit passwords, API keys, or environment secrets to GitHub.
+## 3. AI-assisted detection, machine learning, OCR and QR | الذكاء الاصطناعي والتعلّم الآلي وOCR وQR
 
-Repository hygiene / سلامة المستودع: review .env handling and Git history before any change to public visibility. Repository privacy alone is not a substitute for secret management.
-7. التثبيت والتشغيل والاختبارات | Installation, running and tests
-Prerequisites / المتطلبات: Bun and a current Node-compatible development environment. Access to the project's configured Lovable Cloud services is needed for cloud-backed workflows.
+| Layer / الطبقة | Implementation / التنفيذ | Boundary / الحد |
+|---|---|---|
+| Semantic AI | Lovable AI Gateway, model `openai/gpt-6.1-sol`, server-side only / استدلال دلالي على الخادم | Requires an active signed-in session; browser- and server-side redaction before inference; validated structured output; indicators must be grounded in supplied text / يتطلب جلسة نشطة وحجباً للبيانات |
+| Local rules | Deterministic channel, URL, UAE phone and language heuristics / قواعد حتمية | Explainable, offline, anonymous / تفسيري ومحلي ومجهول |
+| Local ML | Compact offline-trained 40-tree URL classifier, bundled and run in the app / نموذج محلي | Advisory only; never grants verification / استشاري فقط |
+| OCR | Tesseract.js 7.0.0, Arabic + English, lazy-loaded browser worker, same-origin assets / قراءة نصية محلية | Images and extracted text are not uploaded by the OCR path / لا تُرفع الصور |
+| QR | jsQR 1.4.0, up to five payloads, bounded crops / فك تشفير QR محلي | Decoded payloads are inert text; destinations are never visited / لا تُفتح الوجهات |
+| Hybrid assessment | Rules + ML + optional semantic findings combined with registry facts / دمج المؤشرات | Registry facts stay separate from AI interpretation / حقائق السجل مستقلة |
+
+Usage limits / حدود الاستخدام: **five paid semantic requests per authenticated user per rolling ten minutes; 200 globally per UTC day.** Basic local rules/ML, registry search and write-only reporting remain anonymous. Resetting browser cookies does not reset the authenticated budget.
+خمسة طلبات تحليل دلالي للمستخدم المسجل كل عشر دقائق و200 يومياً إجمالياً؛ تبقى الفحوص الأساسية والبحث في السجل والإبلاغ متاحين دون دخول.
+
+## 4. Actual ML evaluation results | نتائج التقييم الفعلية
+
+**Methodology / المنهجية:** domain-disjoint train/validation splits with an unseen final holdout; fixed seeded-hash ranking for external sampling; original development domains excluded before prediction; no tuning on held-out mistakes; labels never altered; fraudulent URLs stored defanged and never visited. Frozen hashes and manifests: [docs/evaluation/](docs/evaluation/). Reproduce: `bun scripts/evaluate-urls.ts`, `bun scripts/evaluate-phase1b.ts`, `bun scripts/evaluate-phase1b-resume.ts --final`, `bunx vitest run`.
+
+| Evaluation / التقييم | Data source / المصدر | Set / العينة | TP/TN/FP/FN | Precision | Recall | F1 | Accuracy | FPR |
+|---|---|---|---|---|---|---|---|---|
+| Phase 1 deterministic URL rules | Synthetic labelled fixtures [src/test/fixtures/url-evaluation.ts](src/test/fixtures/url-evaluation.ts) | 48 held-out | 21/23/1/3 | **95.45%** | **87.50%** | **91.30%** | **91.67%** | **4.17%** |
+| Phase 1B controlled reviewer cases | 39 new reviewer-labeled cases | 39 | 16/17/2/4 | — | **80%** | — | **84.62%** | — |
+| Phase 1B external historical set | UCI ML Repository dataset 967 (PhiUSIIL URL phishing) | 1,000 | 5/500/0/495 | — | **1%** | — | **50.50%** | 0% |
+| Phase 1B resumed final holdout | UCI 967, domain-disjoint final holdout | 1,000 | 0/500/0/500 | undefined (no predicted positives) | **0%** | **0%** | **50%** | **0%** |
+| Phase 1C trained classifier | Same-source balanced historical data, unseen holdout | 4,000 | 1182/1914/86/818 | **93.22%** | **59.10%** | **72.34%** | **77.40%** | **4.30%** |
+
+**What these numbers do and do not mean / ما تعنيه ولا تعنيه:** the Phase 1C classifier is the model actually shipped in the public checker; its 77.40% accuracy is a balanced historical same-source result, **not production accuracy** and not a benchmark of the paid semantic AI. Independent external generalization remained poor (50% accuracy, 0% recall on the final PhiUSIIL holdout), which is reported rather than hidden. URL-only inspection cannot recover page-content or cloaking deception. A legitimate ADCB homepage scored 20 (Low) while a legitimate sensitive path `www.adcb.com/login/payment` scored **65** from local ML — a disclosed false-warning limitation that was kept and documented, not selected away. Risk scores are ordinal evidence, **not calibrated fraud probabilities**.
+
+## 5. Proactive threat intelligence | الرصد الاستباقي
+
+- Lookalike domain candidate generation from curated brand/organization references / توليد نطاقات مشابهة مرشّحة.
+- Real, explicit free DNS observations (A/AAAA/CNAME, MX, NS, CAA, RIPE routing) sent as hostname only / فحوص DNS فعلية باسم المضيف فقط.
+- RDAP registration metadata where available (`.com`, `.net`, `.org`); `.ae` has no IANA RDAP service and reports unavailable / بيانات RDAP عند توفرها.
+- Attributed manual and batch suspicious-source imports with bilingual field-level validation / استيراد يدوي ودفعي منسوب المصدر.
+- Cross-report shared-indicator correlation (domain, phone, email, social, SMS sender ID, hosting IP, DNS/ASN) / ربط المؤشرات المشتركة.
+- Private analyst-only early warnings with provenance; generated, confirmed and synthetic records stay distinctly labelled / تحذيرات خاصة بالمحلل مع توثيق المصدر.
+- **No suspicious website is ever visited, and nothing is published as an accusation.** DNS or RDAP data is not ownership proof or fraud proof.
+لا تُفتح أي مواقع مشبوهة ولا يُنشر أي اتهام؛ بيانات DNS/RDAP ليست إثبات ملكية ولا دليلاً على الاحتيال.
+
+## 6. Organization registration, relationships, similarity warnings and approval | التسجيل والعلاقات والتحذيرات والاعتماد
+
+- **Six fields only** / ستة حقول فقط: name, website, contact email, social account, phone, SMS Sender ID. No applicant account, OTP or secret is required to register.
+- **Relationship declaration** / إقرار العلاقة: independent organization, parent company, subsidiary, sister company, corporate group/common ownership, shared communication channels, shared service/hosting provider, other — with related organization and explanation.
+- **Similarity warnings are officer-only advice** / تحذيرات التشبه استشارية للموظف فقط: only channel/domain or technical indicator matches produce a notice; a matching name alone does not. The notice shows the matching organization, the matching indicator and the declared corporate relationship.
+- **Shared IP addresses, nameservers and ASN are contextual indicators, never proof of fraud** / العناوين والبُنى المشتركة قرينة سياق لا دليل احتيال.
+- **No approval blockers were added because of similarity** / لا عوائق اعتماد إضافية: no mandatory conflict-resolution form, no extra confirmation checkbox, no separate resolution step.
+- **The three original staff actions are preserved** / الإجراءات الثلاثة الأصلية: Approve / اعتماد, Reject / رفض, Request Additional Information / طلب معلومات إضافية — each with a required note, a confirmation step, role authorization and audit logging.
+- Approved organizations appear automatically in the public registry with the green **Approved / معتمد** badge; pending, rejected and unapproved organizations never appear / الجهات المعتمدة تظهر تلقائياً في السجل.
+- The global prototype disclaimer stays in force: simulated approval is not genuine identity verification / الاعتماد التجريبي ليس توثيقاً حقيقياً.
+
+## 7. Five-digit reference-only status tracking | المتابعة بالرقم المرجعي فقط
+
+Public tracking needs **only the existing five-digit reference number** — no password, no secret.
+المتابعة العامة تحتاج الرقم المرجعي من خمسة أرقام فقط، دون كلمة مرور أو سر.
+
+- The response contains exactly four fields / الاستجابة أربعة حقول فقط: reference number, submission date, application status, and one fixed generic bilingual message / الرقم، تاريخ التقديم، الحالة، ورسالة عامة ثابتة.
+- Never returned / لا تُعرض أبداً: applicant names, organization private details, contact information, documents, internal notes, rejection reasons or any other sensitive record.
+- Server-side enforcement / إنفاذ على الخادم: privileged read of deliberately public projection columns only; payloads and receipt hashes are never fetched in this path.
+- Rate limiting and enumeration protection / حدّ المعدّل والحماية من التخمين: 20 lookup per caller per hour and 1,000 global lookups per hour; misses are charged exactly like hits.
+- Private receipt protections remain separate / حماية الإيصال الخاص مستقلة: the optional private receipt (reference + 256-bit secret, SHA-256 stored) still protects the private status path and the legacy email-code flow; the obsolete officer receipt-recovery screen has been removed.
+- The five-digit space is small by design; the remaining privacy risk is stated in section 11 / المخاطر المتبقية موضحة في القسم 11.
+
+## 8. Security dashboards, evidence, exports and correlation | اللوحات الأمنية والأدلة والتقارير
+
+- Role-gated `/security` analyst workspace and `/officer` review workspace with separate authorization / مساحتان مفصولتان بالصلاحيات.
+- Investigation graph: type-aware, deduplicated indicator nodes and case links; leads are human-review hints, never offender attribution / شبكة تحقيق خيوطها للتحقق البشري.
+- Private evidence: bounded PNG/JPEG attachments (512 KiB), server-computed SHA-256 hashes, owner-private rows under row-level policies, append-only events and bounded rates / أدلة خاصة محدودة ببصمات خادم.
+- Timelines with UTC and UAE (Asia/Dubai) timestamps, typed source attribution and available DNS/RDAP/hosting observations / تسلسل زمني UTC/الإمارات مع نسب المصدر.
+- Exports: JSON evidence packages with manifest, and printable bilingual PDF reports rendered with escaped text through the browser print dialog / حزم JSON وتقارير PDF ثنائية اللغة.
+- Recommended police actions are evidence-based suggestions that require explicit human confirmation; nothing is transmitted externally and no takedown is automated / الإجراءات المقترحة تعتمد على أدلة وتتطلب موافقة بشرية.
+- Public security bulletins are a published-only projection maintained by an atomic role-authorized command with private audit / النشرات العامة إسقاط منشور فقط.
+
+## 9. Technical architecture, tools, APIs and data sources | البنية التقنية والأدوات والمصادر
+
+| Component / المكوّن | Implementation / التنفيذ |
+|---|---|
+| Framework | TanStack Start v1, React 19, TypeScript, Vite 7 |
+| Styling | Tailwind CSS v4, bilingual RTL/LTR layout / واجهة ثنائية اللغة مع دعم RTL |
+| Data | TanStack Query, route loaders and server functions / TanStack Query ووظائف خادم |
+| Backend | Lovable Cloud (managed Postgres, auth, row-level policies, storage) / خدمات مُدارة |
+| AI | Lovable AI Gateway, `openai/gpt-6.1-sol` / بوابة الذكاء الاصطناعي |
+| Local ML | Offline-trained compact tree classifier bundled with the app / نموذج محلي |
+| OCR / QR | Tesseract.js 7.0.0, jsQR 1.4.0 (self-hosted, pinned assets) |
+| URL parsing | `tldts` public suffix data, Punycode/IDN handling |
+| Network signals | Google DNS / RIPE routing (hostname only), RDAP for `.com`/`.net`/`.org` |
+| Testing | Vitest; SQL and Python contracts outside Vitest |
+| Reference data | Curated UAE official references; fictional `.example` domains for all demo records |
+
+Migrations live in `drizzle/`; `scripts/hackathon-demo-data.sql` is additive and idempotent for authorized data tools — it is not a page-load seed or a fresh-backend installer.
+ملفات التهيئة في `drizzle/`؛ ملف البيانات التجريبية إضافي وقابل للتكرار ولا يُطبَّق عند تحميل الصفحة.
+
+## 10. Installation, build, run and test | التثبيت والبناء والتشغيل والاختبار
+
+```bash
 bun install
-bun run dev
-bun run test
-bun run build
-العربية: ثبّت الاعتماديات، وشغّل بيئة التطوير، ثم الاختبارات، وبعدها بناء نسخة الإنتاج. تعتمد الوظائف المتصلة بالخادم على إعدادات Cloud والتكامل المُدار للذكاء الاصطناعي داخل المشروع. لا تُعدّل ملفات Cloud المُولّدة يدوياً، ولا ترفع بيانات الاعتماد الخاصة إلى المستودع.
+bun run dev      # development server / خادم التطوير
+bun run test     # test suite / مجموعة الاختبار
+bun run build    # production build / بناء الإنتاج
+```
 
-English: Install dependencies, start the development server, run tests and build the application. Cloud-backed functionality depends on the project's configured Cloud and managed AI integration. Do not manually edit generated Cloud clients/configuration or commit private credentials.
+- Prerequisites / المتطلبات: Bun and a current Node-compatible development environment; Cloud-backed workflows need the project's configured Lovable Cloud services.
+- Targeted checks / فحوص موجهة: `bunx vitest run src/test/<file>.test.ts`.
+- Evaluation reproduction / إعادة إنتاج التقييم: `bun scripts/evaluate-urls.ts`, `bun scripts/evaluate-phase1b.ts`, `bun scripts/evaluate-phase1b-resume.ts --final`, `python3 scripts/sample-phase1b-public.py <csv>`, `python3 scripts/test_scan_url.py`.
+- Do not manually edit generated Cloud clients/configuration, and never commit private credentials / لا تعدّل ملفات Cloud المُولّدة ولا ترفع بيانات اعتماد.
+- Full regression at the last published release: **424 tests across 37 files**. Latest focused workflow checks: **80 tests** covering declarations, advisory filtering, officer requirements, registry filtering, private access and public reference privacy.
+- A fresh clone alone may not reproduce the managed backend without the required configuration and permissions.
 
-The repository contains migration history. scripts/hackathon-demo-data.sql is additive and idempotent for authorized data tools; it is not a page-load seed or complete fresh-backend installer. Production packaging uses the existing bun run build script and Lovable publishing. A fresh clone alone may not reproduce the managed backend without the required configuration and permissions.
-8. التطوير المستقبلي | Future development
-العربية: عند توفر وقت وموارد إضافية، تشمل الأولويات: التحقق الحقيقي من ملكية النطاقات والتفويض المؤسسي؛ إدارة ذاتية مضبوطة الصلاحيات لقنوات الجهات الرسمية؛ مصادقة البريد والرسائل؛ تغذية مؤشرات تهديد بمصادر موثقة وموافقات مناسبة؛ معلومات IP تقريبية موثقة؛ اختبارات أمنية وتشغيلية مستقلة؛ وآليات حوكمة ومراجعة وإشعارات قابلة للتدقيق.
+## 11. Security, privacy, known limitations and remaining risk | الأمان والخصوصية والحدود والمخاطر المتبقية
 
-English: With additional time and resources, priorities include independently verified domain ownership and organization authorization; permission-controlled self-service management of official channels; email/message authentication; consented and sourced threat intelligence; sourced approximate IP intelligence; independent security and operational testing; and auditable governance, review and notification workflows.
+**Security controls / ضوابط الأمان**
+- Data minimization, redaction in the browser and again server-side before AI inference, validated structured output / تقليل الجمع والحجب قبل الاستدلال.
+- Separated staff roles with server-side authorization plus Cloud row-level policies; client-side visibility is never the control / أدلة منفصلة وإنفاذ على الخادم.
+- Paid semantic AI requires an active authenticated session with hashed per-user usage and a shared daily ceiling / التحليل المدفوع يتطلب جلسة.
+- Applications, documents, staff notes, evidence and private reports stay out of the browser bundle and out of the public registry / الطلبات والمستندات والأدلة خاصة.
+- Public reporting is write-only; public checks are visit-local and never auto-persist / الفحص العام محليّ بالزيارة، والبلاغ للإرسال فقط.
+- Screenshots stay in the owning browser component; the OCR path performs no image or text upload / لقطات الشاشة لا تُرفع.
+- No passwords, API keys or environment secrets are committed to this repository.
 
-These are proposals, not installed integrations, partnerships or confirmed capabilities.
-هذه مقترحات مستقبلية وليست تكاملات أو شراكات أو وظائف مُفعّلة حالياً.
-Phase 1: دقة تحليل الروابط | URL detection accuracy
+**Known limitations / حدود معروفة**
+- No independent verification of domain ownership or organizational authorization; RDAP is registration metadata, not identity proof.
+- No cryptographic message authentication; caller ID and SMS sender IDs can be spoofed.
+- No live monitoring, takedown, content removal or IP geolocation service is connected.
+- Visual impersonation assessment is limited to URL/Unicode cues and human-reviewed screenshot evidence; there is no logo/pixel similarity or screenshot classifier.
+- Emirati dialect and mixed-language cues are deterministic heuristics, not a measured language model; they may miss paraphrase, Arabizi, audio and complex negation.
+- `.ae` registration dates are unavailable; redirect expansion, cloaking, page content and live TLS inspection remain unverified because submitted links are never opened.
+- Publication requires independent Security Supervisor approval; neither demo staff account is a Supervisor.
+- Owner-verified username/password entry, genuine Cloud evidence attachment persistence and owner-authenticated exports remain **unverified** by the account owner; automated checks used restored sessions, not password entry.
+- The published website demonstrates the prototype; publishing does not validate production security, performance, legal compliance or external integrations.
 
-العربية: يفحص «تأكّد» الروابط محلياً لاستخراج المضيف والنطاق القابل للتسجيل باستخدام بيانات اللواحق العامة، مع كشف التشابه بالأسماء والترميز الدولي والروابط المختصرة والعناوين المضللة. مراجع النطاقات الرسمية موثقة لكنها ليست اعتماداً لقنوات السجل أو إثباتاً لأصالة الرسالة. غياب النطاق من المراجع أو وجود كلمات تسجيل الدخول والدفع وحده لا يعني الاحتيال. الاستعلام الاختياري يرسل النطاق فقط لخدمة تسجيل فعلية، دون الرسالة أو المسار أو بيانات الدخول. وجهة التحويل ومحتوى المواقع وإخفاء الوجهة تظل غير متحقق منها؛ لا تُفتح الروابط المرسلة.
+**Remaining reference-only tracking privacy risk / المخاطر المتبقية في المتابعة بالرقم المرجعي**
+The five-digit reference space holds at most 90,000 values. Reference-only tracking therefore reveals, to anyone who can guess a live number, that *some* application exists with that status and submission date — a low-value but real existence signal. This is an accepted, deliberate trade-off for a judge-friendly demo and was reported by the security scan as a warning that was **not** dismissed. Mitigations in force: only four non-sensitive fields are returned, generic messages never expose reasons or private details, misses are rate-charged like hits, per-caller and global hourly ceilings apply, and the private receipt path remains required for anything beyond that projection. Reducing this risk further would require longer references or an issued secret, which would undo the reference-only simplicity the prototype was asked to provide.
+الرقم من خمسة أرقام يحوي ما لا يزيد على 90,000 قيمة، لذا يمكن لمن يخمّن رقماً نشطاً أن يعرف أن طلباً ما موجود بحالته وتاريخه؛ وهذا مقصود للعرض ومُبلَّغ عنه في الفحص الأمني دون تجاهله.
 
-English: Local URL inspection uses maintained public/private suffix data (`tldts`), Punycode decoding and IP classification. It distinguishes the host/registrable domain and detects brand lookalikes, misleading subdomains, userinfo, encoded authorities, shorteners and sensitive patterns. Documented official references do not create approved channels, authenticate messages or promote simulated approvals into trust. Unlisted domains and login/payment words alone are not fraud verdicts.
+## 12. UAE relevance and proposed police pilot roadmap | الصلة بالإمارات ومسار التجربة الشرطية المقترح
 
-Optional external registration lookup sends only the registrable domain, never message/path/query/credentials, to fixed RDAP providers. Actual registration date, age, registrar and status appear only when returned. `.ae`, `.abudhabi` and other unsupported suffixes report unavailable. Age alone adds no risk. Redirect expansion, cloaking, page content, DNS and hosting remain **unverified**; submitted URLs are never opened. Existing opt-in AI stays on OpenAI `openai/gpt-6.1-sol`; the combined 0–100 score is ordinal evidence, **not a calibrated fraud probability**. Unavailable services preserve local results and uncertainty.
+**UAE relevance / الصلة بالإمارات**
+- Curated UAE government and banking references with visible provenance, kept separate from channel approval / مراجع حكومية ومصرفية موثقة.
+- Fictional demonstration scenarios for UAE PASS, TAMM, traffic/fines, delivery and payment fraud, including unsolicited approval and mixed-language bank-support patterns, all using reserved `.example` links / سيناريوهات إماراتية خيالية.
+- Emirati/Arabic/English/mixed request cues such as طرشلي الكود, عطنا OTP, الحين, and «حوّل … درهم», with Arabic diacritic/alef/digit normalization / مؤشرات لهجية حتمية.
+- UAE phone normalization (+971, 00971, 05x/0x, Arabic/Persian digits) so equivalent formats share one comparison key / توحيد صيغ الأرقام الإماراتية.
+- Official help-desk references (for example UAE PASS 600 561 111) are reference information only and never grant channel approval or message authentication / المراجع الرسمية معلومات مرجعية فقط.
+- Bilingual public prevention guidance and private police-review recommendations tied to detected cues / إرشادات وقائية وتوصيات شرطية ثنائية اللغة.
 
-Reproduce: `bun scripts/evaluate-urls.ts` and `bunx vitest run`. See [evaluation output](docs/url-evaluation-results.json), [labelled fixtures](src/test/fixtures/url-evaluation.ts), [architecture/sources](ARCHITECTURE.md) and [test report](TEST_REPORT.md). Held-out synthetic set: 48 examples; TP 21, TN 23, FP 1, FN 3; precision **95.45%**, recall **87.50%**, F1 **91.30%**, false-positive rate **4.17%**, accuracy **91.67%**. The separate 16-example development split scored 100%, a small sanity check rather than production evidence. No tuning used held-out mistakes. The benchmark measures local deterministic URL classification, excluding AI, registry and RDAP. Independent real-world evaluation is still required.
+**Proposed pilot roadmap / مسار التجربة المقترح** — a proposal, not an installed integration or partnership / مقترح وليس تكاملاً مفعّلاً:
+1. **Pilot A — read-only triage / تجربة الفحص فقط:** a police or regulator unit reviews public reports and registry status without changing detection policy; measure false-warning and miss rates on real submissions.
+2. **Pilot B — authorized channel registry / سجل قنوات مخوّل:** organizations manage their own channels through permission-controlled self-service with verified domain ownership; simulated approvals are replaced by authoritative evidence.
+3. **Pilot C — sourced intelligence feed / تغذية مؤشرات موثقة:** consented and attributed intelligence sources with documented consent, retention and appeal workflows; no auto-publication of accusations.
+4. **Pilot D — evidence handoff / تسليم الأدلة:** JSON/PDF evidence packages reviewed by a human officer before any external action, with full audit and independent security testing.
+Each stage requires independent security and legal review, official authorization, and explicit human approval before any external action.
 
-العربية: دقة العينة التجريبية المنفصلة 91.67%، وليست ادعاءً للدقة في الواقع؛ بقي خطأ إيجابي واحد وثلاث حالات اشتباه غير مكتشفة، موثقة في تقرير الاختبارات. لم تتغير حسابات الموظفين أو الصلاحيات أو البيانات أو إجراءات الجهات.
+## 13. Live demo and repository links | روابط العرض والمستودع
 
-Phase 1B: تقييم مستقل وحدود فعلية | Independent accuracy evaluation — 24 November 2026
+- Live demo / العرض المنشور: https://taakkad.lovable.app
+- Public Trust Portal / البوابة العامة: https://taakkad.lovable.app/trust
+- Organization Portal / بوابة الجهات: https://taakkad.lovable.app/organizations
+- Organization registry / سجل الجهات: https://taakkad.lovable.app/organizations (registry section)
+- Application tracking / متابعة الطلب: https://taakkad.lovable.app/organizations (tracking form)
+- Public alerts / التنبيهات العامة: https://taakkad.lovable.app/alerts
+- Staff sign-in / دخول الموظفين: https://taakkad.lovable.app/auth
+- Officer workspace / مساحة الموظف: https://taakkad.lovable.app/officer
+- Analyst workspace / مساحة المحلل: https://taakkad.lovable.app/security
+- Source repository / المستودع: https://github.com/MaiAliAleissaee/taakkad
 
-العربية: عولجت الأسباب العامة لأخطاء العينة القديمة عبر تحليل الأسماء المركبة، وسياق جمع بيانات الدخول، وروابط IP الحساسة، والوجهات المتداخلة والمشفرة. العينة القديمة أصبحت بيانات سبق الاطلاع عليها وليست اختباراً مستقلاً جديداً. أُضيف استعلام اختياري فعلي لـDNS والشبكات عبر Google DNS وRIPE، بإرسال اسم المضيف فقط دون الرسالة أو المسار. لا تُستخدم هذه البيانات كدليل ملكية أو ثقة أو احتمال احتيال.
+## 14. Submission branch | فرع التسليم
 
-English: The frozen Phase 1B engine improves compound identity/service names, contextual credential collection, IP account actions, misleading brand paths and bounded nested/percent/base64 URL analysis. Editorial brand mentions are not automatically impersonation. Exact official-reference boundaries remain separate from channel approval; references cannot suppress suspicious nested destinations. Optional registration consent now also covers **hostname-only Google DNS and RIPE routing observations**, with explicit sources and unavailable states. No submitted webpage is fetched.
+The GitHub repository uses **master** as its default branch. The hackathon prototype, source code, and technical documentation are available in this branch.
+يعتمد مستودع GitHub على الفرع **master** بوصفه الفرع الافتراضي، ويحتوي على النموذج الأولي للهاكاثون والكود المصدري والوثائق التقنية.
 
-**Independent targets NOT achieved.** On 39 new reviewer-labeled controlled cases (one of 40 supplied cases overlapped original data and is retained as seen), accuracy rose **66.67% → 84.62%**, recall **40% → 80%**, with TP/TN/FP/FN **16/17/2/4**. On 1,000 externally labeled historical PhiUSIIL URLs, accuracy rose **50% → 50.50%**, with **5/500/0/495**; recall is **1%**. The public dataset is older, not UAE-specific, and URL-only checks cannot recover unknown page/content deception. All failed cases remain in the evaluation output; no final-set tuning or label corrections were made. The old 48-example set improved **91.67% → 100%**, but it is now previously seen development evidence, not independent accuracy.
+---
 
-The deterministic engine and **hybrid fallback** were measured separately and returned the same confusion counts for URL-only inputs. Four actual bilingual AI-assisted UI checks returned two Low and two Critical results, all correctly classified on that tiny controlled set; this is **not** a 500-example full-hybrid benchmark. Existing OpenAI `openai/gpt-6.1-sol`, quotas, model settings and redaction remain unchanged. No new credentials, paid services, accounts, permissions, database schema or deployment settings were added.
-
-**Unavailable:** verified redirect/shortener expansion, live cloaking/page scanning, live TLS certificate inspection and `.ae` registration dates. The hosting runtime has no established arbitrary-host DNS-pinned transport or authorized isolated scanner. Controlled HTML/redirect fixtures use a non-executing parser and explicitly return fixture-only/partial indicators, never successful live scanning. IANA currently lists no `.ae` RDAP service; `.ae` DNS/routing observations do work. Network metadata is not hosting-owner identification and contributes no risk alone.
-
-**Publication:** the current published Trust Portal was checked and still returned Unverified/Low (20) for a compound lure detected in the updated preview; it lacks the new metadata option. Phase 1B is **not yet published**. Staff mappings/confirmed status/password presence were read without changing them; their owner-only password login remains unverified.
-
-Reproduce: download [UCI 967 CSV](https://archive.ics.uci.edu/static/public/967/data.csv), run `python3 scripts/sample-phase1b-public.py /path/to/data.csv`, then `bun scripts/evaluate-phase1b.ts` and `bunx vitest run`. The sampler uses fixed seeded hash ranking and original development-domain exclusions before predictions; listed fraud URLs are stored defanged and never visited. [Frozen hashes and all results](docs/evaluation/) · [full Phase 1B report](docs/PHASE_1B_REPORT.md). The original Phase 1 fixtures/output remain unchanged; historical replay is pinned to commit `d58af97`.
-
-العربية: لم تتحقق أهداف الدقة المطلوبة. الدقة المستقلة التجريبية 84.62% ودقة بيانات البحث الخارجية 50.50% فقط؛ لا تُعرض هذه النتائج بوصفها دقة تشغيلية أو ضماناً لنقاط التحكيم. لم تُنشر التحسينات بعد، ولم تتغير كلمات المرور أو الصلاحيات، ولن ننتقل إلى المرحلة الثانية.
-
-**Post-publication verification:** owner approved publishing after tests. The current published portal now serves the new refund rule and live MX/NS/RIPE records; English/Arabic real AI output, Arabic mobile, result clearing and signed-out staff redirects passed. 269 app tests and seven scanner tests passed. Four fresh AI calls total (two preview, two published) are functional checks only. Prior publication FAIL statements above are historical and superseded. Accuracy targets and unsupported scanner/cloaking/registration limits remain unchanged.
-
-### Phase 1C — local supervised URL classifier
-
-**Published and verified — 24 November 2026.** The scoped dependency fix passed **282 tests**, both production dependency audits and automated build checks. Actual English/Arabic live ML warnings and benign controls, privacy and signed-out staff boundaries passed at https://taakkad.lovable.app/trust. Six minimal security dependency updates were applied; the trained model, workflows, credentials, permissions, records and design remain unchanged. Development-only advisories are separately documented, not silently ignored. [Exact advisories, paths, compatibility results and remaining tooling limits](docs/PHASE_1C_SECURITY_REPORT.md).
-
-Free local inference now augments existing rules using a compact, offline-trained 40-tree classifier. A biased first model was rejected; one formatting-invariant correction used entirely new domains and a fresh 4000-example final holdout. **ML and combined local engines: precision 93.22%, recall 59.10%, F1 72.34%, accuracy 77.40%, FPR 4.30%** (1182/1914/86/818 TP/TN/FP/FN). These are balanced historical same-source results, not production accuracy or a paid semantic-AI benchmark. Original registry facts, credentials, permissions, privacy and design are unchanged. ML warnings never grant verification; 818 missed phishing URLs and 86 false positives remain. No paid service was used; Phase 2 has not started. [Complete Phase 1C report, rejected-model evidence and reproduction](docs/PHASE_1C_REPORT.md).
-
-العربية: أُضيف نموذج روابط محلي مدرّب دون خدمات مدفوعة. دقة الاختبار التاريخي المنفصل 77.40%، والاستدعاء 59.10%، والإيجابيات الكاذبة 4.30%؛ ليست هذه دقة تشغيلية أو إثبات أمان. لم تتغير بيانات الموظفين أو الصلاحيات أو التصميم، ولم تبدأ المرحلة الثانية.
-
-9. وثائق التسليم | Handoff documents
-### Phase 1B resumed — 24 November 2026
-
-An **operator-only POSIX scanner** now implements real manually authorized redirect resolution, fresh all-answer public-IP checks, IP-pinned connections, verified TLS/SNI, six-hop/128 KiB limits and a hard 20-second process deadline. Real `httpbin.org/redirect/2` → `/get` and `example.org` static HTML/TLS checks passed. The public application **does not call this scanner**: it still never opens submitted links. Arbitrary public shortener resolution and live cloaking remain unavailable without a separately deployed isolated scanner and explicit URL-disclosure authorization. No remote JavaScript or forms are executed. Controlled HTML checks now include base-element and submit-button action overrides.
-
-The application adds actual hostname-only MX/NS/CAA observations beside A/AAAA/CNAME/RIPE; live `du.ae` returned `94.206.168.161`, NS/MX and ASN 15802. Whole-DNS-label brand matching prevents `u.ae` matching inside unrelated names; short brand substrings cannot convert the existing fictional DunePay channel into a telecom impersonation. Financial-return contexts and invalid IDN handling are improved. `.ae` registration dates remain unavailable in IANA RDAP.
-
-**Final independent result: targets NOT achieved.** A new 1,000-case historical PhiUSIIL domain-disjoint final holdout scored TP/TN/FP/FN **0/500/0/500**, accuracy **50%**, precision **undefined (no predicted positives)**, recall/F1 **0%**, FPR **0%**. The prior engine scored the same on those labels. Independent first-pass controlled URL results were **19/29/1/11** (80% accuracy); after a separately required preserved-demo regression correction, the now-seen controlled replay is **18/29/1/12** (78.33%, not fresh independent evidence). The first external pass, all 80 reviewer scenarios, every failure and both freeze manifests are retained; no labels were altered or cases dropped. These failures show URL-only generalization remains poor, not maximum accuracy. Full-hybrid 500-case evaluation is not claimed; two fresh bilingual functional AI calls succeeded within unchanged limits.
-
-Reproduce: `python3 scripts/test_scan_url.py`; `python3 scripts/scan-url.py https://httpbin.org/redirect/2 --allow-host httpbin.org`; `bun scripts/analyze-scan.ts /path/to/capture.json`; `bun scripts/evaluate-phase1b-resume.ts --final`; `bunx vitest run`. Scanner output is sensitive operator evidence: do not publish arbitrary captures. No scanner endpoint, credential, role, database, deployment setting or private data was changed. **Published verification FAIL:** the real published portal still uses the older engine; publishing awaits owner approval. [Complete audit, exact metrics, safety boundaries and blockers](docs/PHASE_1B_REPORT.md).
+## Handoff documents | وثائق التسليم
 
 - [ARCHITECTURE.md](ARCHITECTURE.md) — technical architecture / البنية التقنية
 - [AI_IMPLEMENTATION_REPORT.md](AI_IMPLEMENTATION_REPORT.md) — AI implementation / تنفيذ الذكاء الاصطناعي
 - [TEST_REPORT.md](TEST_REPORT.md) — testing evidence / توثيق الاختبارات
 - [DEMO_GUIDE.md](DEMO_GUIDE.md) — demonstration guide / دليل العرض
 - [PRESENTATION_OUTLINE.md](PRESENTATION_OUTLINE.md) — presentation outline / مخطط العرض
-Submission note / ملاحظة تسليم: The GitHub repository uses master as its default branch. The hackathon prototype, source code, and technical documentation are available in this branch.
-يعتمد مستودع GitHub على الفرع master بوصفه الفرع الافتراضي، ويحتوي على النموذج الأولي للهاكاثون والكود المصدري والوثائق التقنية.
+- [docs/PHASE_1B_REPORT.md](docs/PHASE_1B_REPORT.md) · [docs/PHASE_1C_REPORT.md](docs/PHASE_1C_REPORT.md) · [docs/PHASE_1C_SECURITY_REPORT.md](docs/PHASE_1C_SECURITY_REPORT.md) — URL accuracy, trained model and security fixes
+- [docs/PHASE_2_REPORT.md](docs/PHASE_2_REPORT.md) — proactive intelligence / الرصد الاستباقي
+- [docs/PHASE_3_REPORT.md](docs/PHASE_3_REPORT.md) — evidence and exports / الأدلة والتقارير
+- [docs/PHASE_4_REPORT.md](docs/PHASE_4_REPORT.md) — UAE relevance / الصلة بالإمارات
+- [docs/PHASE_5_REPORT.md](docs/PHASE_5_REPORT.md) — feasibility, scalability and presentation readiness
+- [docs/SCREENSHOT_ANALYSIS_REPORT.md](docs/SCREENSHOT_ANALYSIS_REPORT.md) — OCR and QR / قراءة لقطات الشاشة
+- [docs/ADVISORY_APPROVAL_REPORT.md](docs/ADVISORY_APPROVAL_REPORT.md) — simplified approval workflow / سير الاعتماد المبسّط
+- [docs/ORGANIZATION_IDENTITY_CONFLICT_REPORT.md](docs/ORGANIZATION_IDENTITY_CONFLICT_REPORT.md) — identity leads / مؤشرات الهوية
+- [demo-kit/](demo-kit/) — demonstration fixtures, QR samples, screenshots and source catalog
+
+**Status summary / ملخص الحالة:** screenshot OCR/QR, the trained local URL model, proactive intelligence, evidence tools, UAE relevance work, the simplified advisory-only approval workflow, the single-section registry and reference-only tracking are implemented and tested; the published release reflects the screenshot Phase 5 deployment. Owner-verified staff password entry, genuine Cloud evidence persistence/export and the remaining reference-only tracking risk are the open items above. No claim in this file should be read as an operational, legal or police-authorization guarantee.
+ميزات لقطات الشاشة والنموذج المحلي والرصد والأدلة والعمل الإماراتي وسير الاعتماد المبسّط والسجل ذي القسم الواحد والمتابعة بالرقم المرجعي مُنفَّذة ومُختبرة، والإصدار المنشور يعكس نشر المرحلة الخامسة. دخول الموظفين بكلمة المرور والتحقق من الأدلة في السحابة وتصديرها والمخاطر المتبقية للمتابعة بالرقم المرجعي هي البنود المفتوحة أعلاه.

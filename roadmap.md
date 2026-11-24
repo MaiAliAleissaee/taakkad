@@ -8,6 +8,7 @@
 - [ ] Fresh deep scan of saved Phase 4/email fix, then publication after clearance. Genuine recipient sign-in/inbox completion and staff persistence remain unverified. No Phase 5.
 
 ## Selected deep-scan security fixes
+- [x] Fix only selected staff-recovery lockout: hosting-address-only recovery allowance, no identifier/shared fallback bucket, origin checked before counter writes; login/link limits unchanged. Eight new and 18 preserved targeted tests pass; actual anonymous recovery form safely denies without email requests or page errors. Selected finding marked fixed; quick scan one unrelated informational finding unchanged. Legitimate hosted inbox completion remains unverified; publication awaits saved-code deep clearance separately.
 - [x] Guard all four caller-selected workspace checks/reports with caller ownership and active analyst authorization. Live anonymous denials and public fictional matching passed; 26 targeted regressions passed. Signed-in positive/cross-owner rollback contract remains unverified: the test connection cannot read auth.sessions.
 - [x] Authenticate paid semantic AI only; retain anonymous local ML, checks, registry/reporting and durable limits. Anonymous paid inference denial verified; no paid calls.
 - [x] Add atomic hashed private receipt alongside unchanged references; active-officer confirmed/audited recovery. Public owner status readback and wrong-secret/direct-call denial verified; actual officer recovery remains unverified without a usable owner session.

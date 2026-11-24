@@ -1,0 +1,50 @@
+{
+  "sklearn": "1.9.1",
+  "selection": "Maximum validation F1 among thresholds with validation FPR <= 5%, preferred across three candidates; no test prediction or retraining",
+  "models": {
+    "logistic": {
+      "threshold": 0.125,
+      "validation": {
+        "tp": 1993,
+        "tn": 1991,
+        "fp": 9,
+        "fn": 7,
+        "precision": 0.9955044955044955,
+        "recall": 0.9965,
+        "f1": 0.9960019990004998,
+        "accuracy": 0.996,
+        "falsePositiveRate": 0.0045
+      }
+    },
+    "tree": {
+      "threshold": 0.27499999999999997,
+      "validation": {
+        "tp": 1996,
+        "tn": 1998,
+        "fp": 2,
+        "fn": 4,
+        "precision": 0.998998998998999,
+        "recall": 0.998,
+        "f1": 0.9984992496248124,
+        "accuracy": 0.9985,
+        "falsePositiveRate": 0.001
+      }
+    },
+    "gradient_boosting": {
+      "threshold": 0.24999999999999997,
+      "validation": {
+        "tp": 1999,
+        "tn": 1997,
+        "fp": 3,
+        "fn": 1,
+        "precision": 0.9985014985014985,
+        "recall": 0.9995,
+        "f1": 0.999000499750125,
+        "accuracy": 0.999,
+        "falsePositiveRate": 0.0015
+      }
+    }
+  },
+  "selected": "gradient_boosting",
+  "artifactSha256": "8b50012a7a0f7608c4853b6d01b8917f21c3f72a230fafbb63f4a1a379acfd93"
+}

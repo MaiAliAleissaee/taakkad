@@ -1,5 +1,12 @@
 # Final hackathon polish roadmap
 
+## Phase 1C credit-efficient URL ML
+- [x] Diagnose external misses; create URL-only features and domain-disjoint train/validation/fresh test partitions excluding previous evaluations.
+- [x] Compare three compact models; reject formatting-biased v1, make one invariant correction, freeze fresh v2 and integrate local inference without changing registry facts.
+- [x] Measure v2 ML/combined on 4000 unseen domains; 277 tests in one final suite, build OK, bilingual desktop/mobile/private-result/staff-denial checks passed without paid inference.
+- [x] Update documentation with actual metrics, rejected evidence, limitations and exact file inventory; save commit, no Phase 2.
+- [ ] Publish Phase 1C — withheld because dependency scan found existing high advisories in source-map-js, js-yaml and Zod, plus moderate Seroval advisories. Requires compatibility-tested dependency remediation and fresh regression/security checks; no dependencies, credentials or settings changed here.
+
 ## Phase 1B detection accuracy
 - [x] Resumed audit: general error fixes, expanded DNS and separate operator-authorized IP-pinned scanner; preserve prior evidence.
 - [x] Freeze revised engine; retain first 1000 + 80 controlled cases, regression correction and fresh final 1000-domain holdout; targets fail.

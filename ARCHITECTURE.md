@@ -1,5 +1,13 @@
 # Taakkad architecture
 
+## Phase 1C local supervised inference — 24 November 2026
+
+Status: preview/browser and 277-test regression verified; **not published** because existing dependency advisories failed the publication security condition. Dependency compatibility remediation is a separate blocker; runtime dependencies and hosting settings remain unchanged.
+
+Offline public URL/label training uses three scikit-learn candidates with domain-disjoint splits. A first formatting-biased model was rejected; one correction augments both schemes/www forms in train/validation only, excludes all rejected domains, and freezes a new 4000-domain final test before predictions. The selected depth-3 40-tree gradient booster is exported as a 23223-byte numeric JSON artifact. Shared `ml-features.ts` derives 36 URL-only numeric values; `ml.ts` performs bounded local JavaScript traversal, with no Python/native/server service dependency, request, cache or persistence. Historical datasets are not imported by production code.
+
+`assessMessage` takes max(existing registry/rule risk, technical URL risk, 65 for positive ML warning). ML adds a bilingual **non-evidence statistical observation** and does not alter registry state, grant verification or change authorization. Existing semantic AI maximum/quotas and component-local private checking remain unchanged. Private/reserved/invalid inputs abstain. Actual ML/combined holdout TP/TN/FP/FN 1182/1914/86/818, 77.40% accuracy, 59.10% recall, 4.30% FPR; these are same-source historical measurements, not calibrated probabilities or a full semantic-AI evaluation. See `docs/PHASE_1C_REPORT.md` for rejected evidence, synthetic invariance assumptions, freeze, limits and deployment checks. No Phase 2.
+
 ### Post-publication status
 Owner authorized publication after all tests. Real published checks now confirm new local rules and hostname-only DNS/NS/MX/RIPE; both-language real AI output, Arabic mobile privacy and signed-out staff boundaries passed. The operator scanner remains separate, not publicly deployed. Earlier version-absence claims are retained as pre-publication history.
 

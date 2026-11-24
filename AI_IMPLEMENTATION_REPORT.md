@@ -1,5 +1,15 @@
 # TRUST ZERO AI — hybrid AI implementation and validation
 
+## Phase 1C supervised URL ML — 24 November 2026
+
+Status: actual preview learned inference and 277 regression tests passed; publishing withheld after high dependency advisories were detected. No fresh published Phase 1C inference or paid semantic-AI call is claimed.
+
+Actual new inference is **local learned gradient-boosted tree computation**, not an external language-model request. Three small models were compared locally; a dataset-formatting shortcut was exposed and the first artifact rejected. One revised experiment uses four scheme/www training/validation variants per domain and entirely excludes the first experiment's domains. Its 40-tree export is 23223 bytes; runtime is shared pure TypeScript/JSON. 36 URL-only features, no source page columns, no paid calls, no new credentials/services, no visitor input persistence.
+
+New independent 4000-domain historical holdout: ML and actual combined AI-unavailable local pipeline both TP/TN/FP/FN **1182/1914/86/818**, precision **93.22%**, recall **59.10%**, F1 **72.34%**, accuracy **77.40%**, FPR **4.30%**. Threshold 0.575 was selected on augmented validation, never on final results. HTTPS-only recall 93.49% but HTTP phishing recall only 34.76%; source bias and many misses remain. www/HTTP legitimate stress FPR 4.10% each. Rejected first score 99.775% must not be advertised as shipped accuracy.
+
+An ML-positive result raises ordinal local risk to >=65, with a bilingual uncalibrated statistical warning, never registry trust or confirmed evidence. Existing OpenAI `openai/gpt-6.1-sol`, opt-in redaction/grounding, atomic quotas and server authorization remain unchanged. **Zero paid semantic inferences in Phase 1C**; no claims of 4000 full-model requests. Full source/training/rejected artifacts and limits: `docs/PHASE_1C_REPORT.md`. Phase 2 not started.
+
 ### Published real inference verification
 After explicit owner publication approval, two additional genuine calls completed on the published portal: English ADCB credential lure **High / combined 74**, Arabic government information **Low /20**. Preview previously returned Critical for the same lure; this is model nondeterminism, not fabricated identical predictions. Four fresh total calls are separate functional observations, not an independent full-hybrid benchmark. No model/quota/prompt change. Published new-rule and DNS output verified; prior publication-absence statements are historical.
 

@@ -4,6 +4,7 @@ import { type BlockedIndicator, normalizeIndicator } from "./blocklist";
 import { detectLookalike, detectLookalikeHandle, hostFromUrl, isSameOrSubdomain, normalizeHost } from "./lookalike";
 import { activeChannel, channelKey } from "./channels";
 import { analyzeUrl } from "./url/analyze";
+import { classifyUrlMl } from "./url/ml";
 
 export type ReasonCode =
   | "url_technical"
@@ -212,10 +213,15 @@ export function assessMessage(input: MessageInput, ctx: VerificationContext): As
   const url = input.url || (input.channel === "website" ? input.sender : "");
   if (!url.trim()) return base;
   const technical = analyzeUrl(url);
+  const ml = technical.valid ? classifyUrlMl(url) : null;
   const reasons: Reason[] = technical.signals.filter(signal => signal.weight >= 50).map(signal => ({
     code: "url_technical", tone: "negative", evidence: true,
     params: { en: signal.en, ar: signal.ar },
   }));
+  if (ml?.flagged) reasons.push({ code: "url_technical", tone: "warning", evidence: false, params: {
+    en: "The local supervised URL model flags possible phishing. This is an uncalibrated statistical warning, not confirmed fraud or a channel-verification fact.",
+    ar: "يشير نموذج الروابط المحلي المدرّب إلى تصيّد محتمل. هذا تحذير إحصائي غير معاير، وليس احتيالاً مؤكداً أو حقيقة توثيق للقناة.",
+  } });
   return { ...base, state: technical.classification === "suspicious" ? "suspicious" : base.state,
-    riskScore: Math.max(base.riskScore, technical.riskScore), reasons: [...base.reasons, ...reasons] };
+    riskScore: Math.max(base.riskScore, technical.riskScore, ml?.riskScore ?? 0), reasons: [...base.reasons, ...reasons] };
 }

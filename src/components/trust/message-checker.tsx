@@ -154,7 +154,7 @@ export function MessageChecker() {
               <Button type="button" size="icon" variant="ghost" title={tr("Clear private check", "مسح الفحص الخاص")} aria-label={tr("Clear private check", "مسح الفحص الخاص")} onClick={() => { request.current += 1; setChecked(null); setInput(emptyInput); setError(null); setBusy(false); }}><X /></Button>
             </div>
             <p className="text-sm text-muted-foreground">{pick(trustStateHelp[result.assessment.state])}</p>
-            <h3 className="text-sm font-semibold">{tr("Registry facts and deterministic checks", "حقائق السجل والفحوص القائمة على القواعد")}</h3>
+            <h3 className="text-sm font-semibold">{tr("Registry facts, rule checks and local ML warnings", "حقائق السجل وفحوص القواعد وتحذيرات التعلم الآلي المحلي")}</h3>
             <ReasonList reasons={result.assessment.reasons.filter(reason => !reason.code.startsWith("content_"))} />
             {result.assessment.reasons.some(reason => reason.code.startsWith("content_")) && <><h3 className="text-sm font-semibold">{tr("Heuristic warning signs", "علامات تحذير استدلالية")}</h3><ReasonList reasons={result.assessment.reasons.filter(reason => reason.code.startsWith("content_"))} /></>}
             <p className="text-sm font-medium">{tr("A registered channel does not guarantee the authenticity of this individual message.", "تسجيل القناة لا يضمن أصالة هذه الرسالة الفردية.")}</p>
@@ -171,7 +171,7 @@ export function MessageChecker() {
               </ul>
             </div>
             <div>
-              <p className="mb-1 text-xs text-muted-foreground">{tr("Rule-based risk score (not a probability)", "درجة الخطورة القائمة على القواعد (ليست احتمالاً)")}</p>
+              <p className="mb-1 text-xs text-muted-foreground">{tr("Local risk score: rules + URL ML (not a probability)", "درجة الخطورة المحلية: قواعد + تعلم آلي للروابط (ليست احتمالاً)")}</p>
               <RiskMeter score={result.assessment.riskScore} />
             </div>
             {(result.assessment.state !== "verified" || (checked?.ai?.status === "performed" && checked.ai.findings.risk !== "low") || !!checked?.flaggedValues.length) && <div className="space-y-2"><p className="text-xs text-muted-foreground">{tr("Reporting shares this message and extracted indicators with authorized security staff for review, not with other visitors. It does not confirm or automatically escalate a criminal case.", "الإبلاغ يشارك هذه الرسالة والمؤشرات المستخرجة مع موظفي الأمن المصرّح لهم للمراجعة، وليس مع الزوار الآخرين. ولا يؤكد قضية جنائية أو يصعّدها تلقائياً.")}</p><ReportButton key={JSON.stringify(result.input)} input={result.input} assessment={result.assessment} aiIndicators={checked?.ai?.status === "performed" ? checked.ai.findings.indicators : undefined} allowVerifiedReport={!!checked?.flaggedValues.length || (checked?.ai?.status === "performed" && checked.ai.findings.risk !== "low")} /></div>}

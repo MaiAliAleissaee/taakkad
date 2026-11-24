@@ -1,5 +1,21 @@
 # Final polish test report
 
+## Phase 1C measured results — 24 November 2026
+
+Fresh corrected final set: **4000 domains**, balanced historical PhiUSIIL labels, disjoint from 16000 training and 4000 validation domains and all previous experiments (including rejected Phase 1C). Final URLs are unaugmented; synthetic formatting variants exist only in training/validation. Selection: three local models, augmented-validation FPR <=5% then best F1, no final-set tuning. Frozen hashes and every prediction/error are in `docs/evaluation/phase1c-*`.
+
+| Engine | TP/TN/FP/FN | Precision | Recall | F1 | Accuracy | FPR |
+|---|---|---:|---:|---:|---:|---:|
+| Existing URL rules on new test | 2/2000/0/1998 | 100% | 0.10% | 0.20% | 50.05% | 0% |
+| Corrected local ML | 1182/1914/86/818 | 93.22% | 59.10% | 72.34% | 77.40% | 4.30% |
+| Actual combined local/AI-unavailable engine | 1182/1914/86/818 | 93.22% | 59.10% | 72.34% | 77.40% | 4.30% |
+
+Original rejected model: 99.775% original-test accuracy but **100% FPR** for legitimate HTTP variants and **99.25% FPR** for legitimate non-www variants. Do not pool or claim that biased result as delivered quality. Revised model: 4.10% FPR on each legitimate perturbation set; original HTTPS-only recall 93.49%, HTTP phishing recall 34.76%. These same-source and synthetic probes do not establish live UAE/production performance. All rejected evidence is retained; one bounded correction only, followed by an entirely new final test.
+
+Targeted tests passed (62 first-phase checks; six revised export checks). **One final regression suite: 277 tests / 24 files PASS**, including eight ML tests; development harness build OK. Assertions verify sklearn/JavaScript parity, bounded finite features, reserved/unsafe abstention, no verification promotion, preserved technical evidence, no ML network requests, artifact-data hash and excluded/disjoint domains. Live English desktop and Arabic mobile checks passed: actual learned warning/65, unverified registry state, AI/metadata off, no target request/input persistence, reload clearing, signed-out staff denials and no browser errors/overflow. No paid AI call or Phase 1B scanner test was repeated.
+
+**Publication NOT ATTEMPTED:** quick database scan has only one existing informational public-projection finding, but dependency check reports pre-existing high source-map-js/js-yaml/Zod and moderate Seroval advisories. Dependencies remain unchanged; publication is withheld until compatibility-tested remediation and fresh checks. Current Phase 1C published verification is therefore **NOT VERIFIED**. Full evidence, advisory fixes and diagnosis/reproduction/limits: `docs/PHASE_1C_REPORT.md`.
+
 ### Final post-publication evidence
 **269 tests across 23 files passed**, plus **seven Python scanner safety tests**; harness build OK. After owner approval, actual published checks passed: new refund rule High/74, real MX/NS/ASN records, English AI High/74 and Arabic AI Low/20. Published Arabic 390×844 no overflow, reload cleared result, signed-out protected paths redirected to `/auth`, no runtime exceptions. Two preview + two published actual AI calls are not a benchmark. Pre-publication FAIL observations are historical, superseded by current deployment PASS; detection accuracy targets remain FAIL.
 

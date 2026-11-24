@@ -116,6 +116,14 @@ Reproduce: download [UCI 967 CSV](https://archive.ics.uci.edu/static/public/967/
 
 **Post-publication verification:** owner approved publishing after tests. The current published portal now serves the new refund rule and live MX/NS/RIPE records; English/Arabic real AI output, Arabic mobile, result clearing and signed-out staff redirects passed. 269 app tests and seven scanner tests passed. Four fresh AI calls total (two preview, two published) are functional checks only. Prior publication FAIL statements above are historical and superseded. Accuracy targets and unsupported scanner/cloaking/registration limits remain unchanged.
 
+### Phase 1C — local supervised URL classifier
+
+**Preview verified; publication withheld.** One final suite passed **277 tests**, but existing high dependency advisories must be compatibility-tested and remediated before publishing. No dependency or deployment setting was changed. Historical Phase 1B publication statements below do not mean Phase 1C is published.
+
+Free local inference now augments existing rules using a compact, offline-trained 40-tree classifier. A biased first model was rejected; one formatting-invariant correction used entirely new domains and a fresh 4000-example final holdout. **ML and combined local engines: precision 93.22%, recall 59.10%, F1 72.34%, accuracy 77.40%, FPR 4.30%** (1182/1914/86/818 TP/TN/FP/FN). These are balanced historical same-source results, not production accuracy or a paid semantic-AI benchmark. Original registry facts, credentials, permissions, privacy and design are unchanged. ML warnings never grant verification; 818 missed phishing URLs and 86 false positives remain. No paid service was used; Phase 2 has not started. [Complete Phase 1C report, rejected-model evidence and reproduction](docs/PHASE_1C_REPORT.md).
+
+العربية: أُضيف نموذج روابط محلي مدرّب دون خدمات مدفوعة. دقة الاختبار التاريخي المنفصل 77.40%، والاستدعاء 59.10%، والإيجابيات الكاذبة 4.30%؛ ليست هذه دقة تشغيلية أو إثبات أمان. لم تتغير بيانات الموظفين أو الصلاحيات أو التصميم، ولم تبدأ المرحلة الثانية.
+
 9. وثائق التسليم | Handoff documents
 ### Phase 1B resumed — 24 November 2026
 

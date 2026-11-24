@@ -603,6 +603,10 @@ export type Database = {
         Args: { application_uuid: string }
         Returns: boolean
       }
+      authorize_public_security_workspace: {
+        Args: { workspace_user: string }
+        Returns: undefined
+      }
       begin_application_code: {
         Args: { application_uuid: string }
         Returns: boolean

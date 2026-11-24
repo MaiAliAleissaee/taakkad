@@ -1,5 +1,11 @@
 # Final hackathon polish roadmap
 
+## Selected deep-scan security fixes
+- [x] Guard all four caller-selected workspace checks/reports with caller ownership and active analyst authorization. Live anonymous denials and public fictional matching passed; 26 targeted regressions passed. Signed-in positive/cross-owner rollback contract remains unverified: the test connection cannot read auth.sessions.
+- [ ] Public metered AI access — changing visitor access requires owner confirmation; do not ignore the selected finding.
+- [ ] Five-digit demo status enumeration — stronger access proof requires owner confirmation; preserve existing references and records meanwhile.
+- [x] Mark the six selected ownership findings fixed after live endpoint verification; leave two visitor-facing findings active pending approval and the public organization registry finding unchanged.
+
 ## Phase 3 explainability and private evidence
 - [x] Audit: existing typed links/graph, synthetic/source labels, DNS/RDAP snapshots, private officer documents and confirmed officer decisions are reused.
 - [x] Add shared staff evidence workspace: risk explanations, UTC/UAE timeline, validated private attachments with server SHA-256, human-approved preparation actions and bilingual PDF/JSON exports.

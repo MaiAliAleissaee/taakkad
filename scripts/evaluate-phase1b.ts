@@ -8,7 +8,7 @@ import { developmentUrls, heldOutUrls } from "../src/test/fixtures/url-evaluatio
 import { independentUrls, uncertaintyControls } from "../src/test/fixtures/url-phase1b-independent";
 import { z } from "zod";
 
-const frozen = z.object({ frozenAt: z.string(), files: z.record(z.string()) }).passthrough().parse(JSON.parse(readFileSync("docs/evaluation/phase1b-engine-freeze.json","utf8")));
+const frozen = z.object({ frozenAt: z.string(), files: z.record(z.string(), z.string()) }).passthrough().parse(JSON.parse(readFileSync("docs/evaluation/phase1b-engine-freeze.json","utf8")));
 for(const [file, hash] of Object.entries(frozen.files)) if(createHash("sha256").update(readFileSync(file)).digest("hex") !== hash) throw new Error(`Engine changed after freeze: ${file}`);
 const schema = z.object({ rows: z.array(z.object({ id:z.string(),url:z.string(),label:z.enum(["legitimate","suspicious"]),category:z.string(),group:z.string() })) }).passthrough();
 const dataset = schema.parse(JSON.parse(readFileSync("docs/evaluation/phase1b-public.json","utf8")));

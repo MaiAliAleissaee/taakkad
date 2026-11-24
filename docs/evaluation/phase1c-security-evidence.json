@@ -1,0 +1,783 @@
+{
+  "beforeAdvisories": {
+    "@vitest/mocker": [
+      {
+        "id": 1242767,
+        "url": "https://github.com/advisories/GHSA-qxg6-89mg-rqv8",
+        "title": "Vitest: Code injection via unauthenticated manual mock registration",
+        "severity": "moderate",
+        "vulnerable_versions": ">=2.1.0-beta.7 <4.1.12",
+        "cwe": [
+          "CWE-94",
+          "CWE-116",
+          "CWE-306"
+        ],
+        "cvss": {
+          "score": 4.7,
+          "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:C/C:L/I:L/A:N"
+        }
+      },
+      {
+        "id": 1242769,
+        "url": "https://github.com/advisories/GHSA-xp26-3454-mjgp",
+        "title": "Vitest: Windows backslash traversal bypasses the @vitest/mocker redirect allowlist fix",
+        "severity": "moderate",
+        "vulnerable_versions": ">=4.1.11 <4.1.12",
+        "cwe": [
+          "CWE-22"
+        ],
+        "cvss": {
+          "score": 5.9,
+          "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        }
+      }
+    ],
+    "brace-expansion": [
+      {
+        "id": 1130588,
+        "url": "https://github.com/advisories/GHSA-mh99-v99m-4gvg",
+        "title": "brace-expansion: DoS via unbounded expansion length causing an out-of-memory process crash",
+        "severity": "high",
+        "vulnerable_versions": "<1.1.17",
+        "cwe": [
+          "CWE-400",
+          "CWE-770"
+        ],
+        "cvss": {
+          "score": 7.5,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      },
+      {
+        "id": 1130734,
+        "url": "https://github.com/advisories/GHSA-rgw5-rvv9-x895",
+        "title": "brace-expansion: DoS via unbounded intermediate arrays, bypassing the CVE-2026-14257 mitigation",
+        "severity": "high",
+        "vulnerable_versions": ">=4.0.0 <5.0.9",
+        "cwe": [
+          "CWE-400",
+          "CWE-770"
+        ],
+        "cvss": {
+          "score": 7.5,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      },
+      {
+        "id": 1130737,
+        "url": "https://github.com/advisories/GHSA-rgw5-rvv9-x895",
+        "title": "brace-expansion: DoS via unbounded intermediate arrays, bypassing the CVE-2026-14257 mitigation",
+        "severity": "high",
+        "vulnerable_versions": "<1.1.18",
+        "cwe": [
+          "CWE-400",
+          "CWE-770"
+        ],
+        "cvss": {
+          "score": 7.5,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      },
+      {
+        "id": 1240107,
+        "url": "https://github.com/advisories/GHSA-qhr7-859c-m2p7",
+        "title": "brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion",
+        "severity": "high",
+        "vulnerable_versions": ">=4.0.0 <5.0.11",
+        "cwe": [
+          "CWE-400",
+          "CWE-674"
+        ],
+        "cvss": {
+          "score": 7.5,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      },
+      {
+        "id": 1240108,
+        "url": "https://github.com/advisories/GHSA-6j4f-fj2g-mc7p",
+        "title": "brace-expansion: DoS via uncontrolled recursion in parseCommaParts causing stack exhaustion",
+        "severity": "high",
+        "vulnerable_versions": "<1.1.19",
+        "cwe": [
+          "CWE-400",
+          "CWE-674"
+        ],
+        "cvss": {
+          "score": 7.5,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      },
+      {
+        "id": 1240111,
+        "url": "https://github.com/advisories/GHSA-6j4f-fj2g-mc7p",
+        "title": "brace-expansion: DoS via uncontrolled recursion in parseCommaParts causing stack exhaustion",
+        "severity": "high",
+        "vulnerable_versions": ">=4.0.0 <5.0.10",
+        "cwe": [
+          "CWE-400",
+          "CWE-674"
+        ],
+        "cvss": {
+          "score": 7.5,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      },
+      {
+        "id": 1240100,
+        "url": "https://github.com/advisories/GHSA-q2hr-2g5m-vwhr",
+        "title": "brace-expansion: Quadratic-time expansion of the `{a},b}` rewrite causes CPU denial of service",
+        "severity": "moderate",
+        "vulnerable_versions": "<1.1.21",
+        "cwe": [
+          "CWE-400",
+          "CWE-407"
+        ],
+        "cvss": {
+          "score": 5.3,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        }
+      },
+      {
+        "id": 1240103,
+        "url": "https://github.com/advisories/GHSA-q2hr-2g5m-vwhr",
+        "title": "brace-expansion: Quadratic-time expansion of the `{a},b}` rewrite causes CPU denial of service",
+        "severity": "moderate",
+        "vulnerable_versions": ">=4.0.0 <5.0.12",
+        "cwe": [
+          "CWE-400",
+          "CWE-407"
+        ],
+        "cvss": {
+          "score": 5.3,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        }
+      },
+      {
+        "id": 1240104,
+        "url": "https://github.com/advisories/GHSA-qhr7-859c-m2p7",
+        "title": "brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion",
+        "severity": "high",
+        "vulnerable_versions": "<1.1.20",
+        "cwe": [
+          "CWE-400",
+          "CWE-674"
+        ],
+        "cvss": {
+          "score": 7.5,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      }
+    ],
+    "esbuild": [
+      {
+        "id": 1102341,
+        "url": "https://github.com/advisories/GHSA-67mh-4wv8-2f99",
+        "title": "esbuild enables any website to send any requests to the development server and read the response",
+        "severity": "moderate",
+        "vulnerable_versions": "<=0.24.2",
+        "cwe": [
+          "CWE-346"
+        ],
+        "cvss": {
+          "score": 5.3,
+          "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N"
+        }
+      }
+    ],
+    "js-yaml": [
+      {
+        "id": 1138115,
+        "url": "https://github.com/advisories/GHSA-5p4m-2wfm-xmqj",
+        "title": "JS-YAML: Quadratic CPU consumption in !!omap resolution (3.x and 4.x) \u2014 CVE-2026-59870 fix not backported",
+        "severity": "high",
+        "vulnerable_versions": ">=4.0.0 <4.3.1",
+        "cwe": [
+          "CWE-407"
+        ],
+        "cvss": {
+          "score": 7.5,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      },
+      {
+        "id": 1193727,
+        "url": "https://github.com/advisories/GHSA-2883-xcg3-v3hh",
+        "title": "js-yaml: maxTotalMergeKeys does not limit CPU use for empty merge sources",
+        "severity": "high",
+        "vulnerable_versions": ">=4.0.0 <4.3.2",
+        "cwe": [
+          "CWE-400",
+          "CWE-407"
+        ],
+        "cvss": {
+          "score": 7.5,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      }
+    ],
+    "launch-editor": [
+      {
+        "id": 1242627,
+        "url": "https://github.com/advisories/GHSA-698v-4r3x-3vcv",
+        "title": "launch-editor: escapeCmdArgs() omits % escaping on Windows",
+        "severity": "moderate",
+        "vulnerable_versions": "<=2.14.1",
+        "cwe": [
+          "CWE-78"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      },
+      {
+        "id": 1242656,
+        "url": "https://github.com/advisories/GHSA-r825-w8mm-5pxw",
+        "title": "launch-editor: Editor CLI flag misinterpretation causing arbitrary command execution for some editors",
+        "severity": "moderate",
+        "vulnerable_versions": "<=2.14.1",
+        "cwe": [
+          "CWE-88"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      },
+      {
+        "id": 1242663,
+        "url": "https://github.com/advisories/GHSA-587h-7wmj-h5pm",
+        "title": "launch-editor: `fs.existsSync()` existence check can be bypassed on Windows",
+        "severity": "high",
+        "vulnerable_versions": "<=2.14.1",
+        "cwe": [
+          "CWE-77"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      }
+    ],
+    "minimatch": [
+      {
+        "id": 1244623,
+        "url": "https://github.com/advisories/GHSA-g3hv-75wg-m249",
+        "title": "minimatch has potential denial of service via globparts amplification",
+        "severity": "moderate",
+        "vulnerable_versions": ">=7.0.0 <11.0.1",
+        "cwe": [
+          "CWE-405"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      }
+    ],
+    "nanoid": [
+      {
+        "id": 1139427,
+        "url": "https://github.com/advisories/GHSA-2v37-7h3g-55p8",
+        "title": "nanoid: custom generators can loop indefinitely when size is zero",
+        "severity": "high",
+        "vulnerable_versions": "<3.3.18",
+        "cwe": [
+          "CWE-835"
+        ],
+        "cvss": {
+          "score": 5.9,
+          "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      }
+    ],
+    "seroval": [
+      {
+        "id": 1243609,
+        "url": "https://github.com/advisories/GHSA-f86p-h4j2-7qgj",
+        "title": "Seroval: Code injection through a typed array's own constructor property",
+        "severity": "moderate",
+        "vulnerable_versions": ">=1.6.0 <1.6.11",
+        "cwe": [
+          "CWE-79",
+          "CWE-94"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      },
+      {
+        "id": 1243611,
+        "url": "https://github.com/advisories/GHSA-9wx9-5pv9-3349",
+        "title": "Seroval: Script injection through RegExp sources in serialized output",
+        "severity": "moderate",
+        "vulnerable_versions": ">=1.5.5 <1.6.10",
+        "cwe": [
+          "CWE-79",
+          "CWE-116"
+        ],
+        "cvss": {
+          "score": 4.7,
+          "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:C/C:L/I:L/A:N"
+        }
+      }
+    ],
+    "source-map-js": [
+      {
+        "id": 1241209,
+        "url": "https://github.com/advisories/GHSA-68fv-2mgg-jv7q",
+        "title": "source-map-js allows event-loop denial of service through indexed source-map section offsets",
+        "severity": "high",
+        "vulnerable_versions": ">=1.0.0 <1.2.2",
+        "cwe": [
+          "CWE-1284"
+        ],
+        "cvss": {
+          "score": 7.5,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      }
+    ],
+    "vite": [
+      {
+        "id": 1242726,
+        "url": "https://github.com/advisories/GHSA-9jrq-w75r-8gcw",
+        "title": "Vite: Cross origin script execution through Vite custom middleware",
+        "severity": "low",
+        "vulnerable_versions": ">=8.0.0 <=8.1.5",
+        "cwe": [
+          "CWE-80"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      },
+      {
+        "id": 1242732,
+        "url": "https://github.com/advisories/GHSA-rq7h-c2jc-7f22",
+        "title": "Vite: Files outside `server.fs.allow` could be served when project paths match system paths on non-Windows machine",
+        "severity": "moderate",
+        "vulnerable_versions": ">=8.0.0 <=8.1.5",
+        "cwe": [
+          "CWE-22",
+          "CWE-284"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      },
+      {
+        "id": 1242624,
+        "url": "https://github.com/advisories/GHSA-698v-4r3x-3vcv",
+        "title": "launch-editor: escapeCmdArgs() omits % escaping on Windows",
+        "severity": "moderate",
+        "vulnerable_versions": ">=8.0.0 <=8.1.5",
+        "cwe": [
+          "CWE-78"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      },
+      {
+        "id": 1242653,
+        "url": "https://github.com/advisories/GHSA-r825-w8mm-5pxw",
+        "title": "launch-editor: Editor CLI flag misinterpretation causing arbitrary command execution for some editors",
+        "severity": "moderate",
+        "vulnerable_versions": ">=8.0.0 <=8.1.5",
+        "cwe": [
+          "CWE-88"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      },
+      {
+        "id": 1242660,
+        "url": "https://github.com/advisories/GHSA-587h-7wmj-h5pm",
+        "title": "launch-editor: `fs.existsSync()` existence check can be bypassed on Windows",
+        "severity": "high",
+        "vulnerable_versions": ">=8.0.0 <=8.1.5",
+        "cwe": [
+          "CWE-77"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      }
+    ],
+    "zod": [
+      {
+        "id": 1243066,
+        "url": "https://github.com/advisories/GHSA-mrhx-c7xc-m3w5",
+        "title": "Zod can exhaust memory while validating oversized constrained collections",
+        "severity": "high",
+        "vulnerable_versions": "<4.6.6",
+        "cwe": [
+          "CWE-770"
+        ],
+        "cvss": {
+          "score": 7.5,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      }
+    ]
+  },
+  "afterProductionAudit": {},
+  "afterAllDependencyAudit": {
+    "@vitest/mocker": [
+      {
+        "id": 1242767,
+        "url": "https://github.com/advisories/GHSA-qxg6-89mg-rqv8",
+        "title": "Vitest: Code injection via unauthenticated manual mock registration",
+        "severity": "moderate",
+        "vulnerable_versions": ">=2.1.0-beta.7 <4.1.12",
+        "cwe": [
+          "CWE-94",
+          "CWE-116",
+          "CWE-306"
+        ],
+        "cvss": {
+          "score": 4.7,
+          "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:C/C:L/I:L/A:N"
+        }
+      },
+      {
+        "id": 1242769,
+        "url": "https://github.com/advisories/GHSA-xp26-3454-mjgp",
+        "title": "Vitest: Windows backslash traversal bypasses the @vitest/mocker redirect allowlist fix",
+        "severity": "moderate",
+        "vulnerable_versions": ">=4.1.11 <4.1.12",
+        "cwe": [
+          "CWE-22"
+        ],
+        "cvss": {
+          "score": 5.9,
+          "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        }
+      }
+    ],
+    "brace-expansion": [
+      {
+        "id": 1130588,
+        "url": "https://github.com/advisories/GHSA-mh99-v99m-4gvg",
+        "title": "brace-expansion: DoS via unbounded expansion length causing an out-of-memory process crash",
+        "severity": "high",
+        "vulnerable_versions": "<1.1.17",
+        "cwe": [
+          "CWE-400",
+          "CWE-770"
+        ],
+        "cvss": {
+          "score": 7.5,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      },
+      {
+        "id": 1130734,
+        "url": "https://github.com/advisories/GHSA-rgw5-rvv9-x895",
+        "title": "brace-expansion: DoS via unbounded intermediate arrays, bypassing the CVE-2026-14257 mitigation",
+        "severity": "high",
+        "vulnerable_versions": ">=4.0.0 <5.0.9",
+        "cwe": [
+          "CWE-400",
+          "CWE-770"
+        ],
+        "cvss": {
+          "score": 7.5,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      },
+      {
+        "id": 1130737,
+        "url": "https://github.com/advisories/GHSA-rgw5-rvv9-x895",
+        "title": "brace-expansion: DoS via unbounded intermediate arrays, bypassing the CVE-2026-14257 mitigation",
+        "severity": "high",
+        "vulnerable_versions": "<1.1.18",
+        "cwe": [
+          "CWE-400",
+          "CWE-770"
+        ],
+        "cvss": {
+          "score": 7.5,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      },
+      {
+        "id": 1240107,
+        "url": "https://github.com/advisories/GHSA-qhr7-859c-m2p7",
+        "title": "brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion",
+        "severity": "high",
+        "vulnerable_versions": ">=4.0.0 <5.0.11",
+        "cwe": [
+          "CWE-400",
+          "CWE-674"
+        ],
+        "cvss": {
+          "score": 7.5,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      },
+      {
+        "id": 1240108,
+        "url": "https://github.com/advisories/GHSA-6j4f-fj2g-mc7p",
+        "title": "brace-expansion: DoS via uncontrolled recursion in parseCommaParts causing stack exhaustion",
+        "severity": "high",
+        "vulnerable_versions": "<1.1.19",
+        "cwe": [
+          "CWE-400",
+          "CWE-674"
+        ],
+        "cvss": {
+          "score": 7.5,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      },
+      {
+        "id": 1240111,
+        "url": "https://github.com/advisories/GHSA-6j4f-fj2g-mc7p",
+        "title": "brace-expansion: DoS via uncontrolled recursion in parseCommaParts causing stack exhaustion",
+        "severity": "high",
+        "vulnerable_versions": ">=4.0.0 <5.0.10",
+        "cwe": [
+          "CWE-400",
+          "CWE-674"
+        ],
+        "cvss": {
+          "score": 7.5,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      },
+      {
+        "id": 1240100,
+        "url": "https://github.com/advisories/GHSA-q2hr-2g5m-vwhr",
+        "title": "brace-expansion: Quadratic-time expansion of the `{a},b}` rewrite causes CPU denial of service",
+        "severity": "moderate",
+        "vulnerable_versions": "<1.1.21",
+        "cwe": [
+          "CWE-400",
+          "CWE-407"
+        ],
+        "cvss": {
+          "score": 5.3,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        }
+      },
+      {
+        "id": 1240103,
+        "url": "https://github.com/advisories/GHSA-q2hr-2g5m-vwhr",
+        "title": "brace-expansion: Quadratic-time expansion of the `{a},b}` rewrite causes CPU denial of service",
+        "severity": "moderate",
+        "vulnerable_versions": ">=4.0.0 <5.0.12",
+        "cwe": [
+          "CWE-400",
+          "CWE-407"
+        ],
+        "cvss": {
+          "score": 5.3,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        }
+      },
+      {
+        "id": 1240104,
+        "url": "https://github.com/advisories/GHSA-qhr7-859c-m2p7",
+        "title": "brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion",
+        "severity": "high",
+        "vulnerable_versions": "<1.1.20",
+        "cwe": [
+          "CWE-400",
+          "CWE-674"
+        ],
+        "cvss": {
+          "score": 7.5,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        }
+      }
+    ],
+    "esbuild": [
+      {
+        "id": 1102341,
+        "url": "https://github.com/advisories/GHSA-67mh-4wv8-2f99",
+        "title": "esbuild enables any website to send any requests to the development server and read the response",
+        "severity": "moderate",
+        "vulnerable_versions": "<=0.24.2",
+        "cwe": [
+          "CWE-346"
+        ],
+        "cvss": {
+          "score": 5.3,
+          "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N"
+        }
+      }
+    ],
+    "launch-editor": [
+      {
+        "id": 1242627,
+        "url": "https://github.com/advisories/GHSA-698v-4r3x-3vcv",
+        "title": "launch-editor: escapeCmdArgs() omits % escaping on Windows",
+        "severity": "moderate",
+        "vulnerable_versions": "<=2.14.1",
+        "cwe": [
+          "CWE-78"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      },
+      {
+        "id": 1242656,
+        "url": "https://github.com/advisories/GHSA-r825-w8mm-5pxw",
+        "title": "launch-editor: Editor CLI flag misinterpretation causing arbitrary command execution for some editors",
+        "severity": "moderate",
+        "vulnerable_versions": "<=2.14.1",
+        "cwe": [
+          "CWE-88"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      },
+      {
+        "id": 1242663,
+        "url": "https://github.com/advisories/GHSA-587h-7wmj-h5pm",
+        "title": "launch-editor: `fs.existsSync()` existence check can be bypassed on Windows",
+        "severity": "high",
+        "vulnerable_versions": "<=2.14.1",
+        "cwe": [
+          "CWE-77"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      }
+    ],
+    "minimatch": [
+      {
+        "id": 1244623,
+        "url": "https://github.com/advisories/GHSA-g3hv-75wg-m249",
+        "title": "minimatch has potential denial of service via globparts amplification",
+        "severity": "moderate",
+        "vulnerable_versions": ">=7.0.0 <11.0.1",
+        "cwe": [
+          "CWE-405"
+        ],
+        "cvss": {
+          "score": 0,
+          "vectorString": null
+        }
+      }
+    ]
+  },
+  "dependencyPaths": {
+    "source-map-js": "source-map-js@1.2.1\n  \u251c\u2500 @tailwindcss/node@4.3.3 (requires ^1.2.1)\n  \u2502  \u2514\u2500 @tailwindcss/vite@4.3.3 (requires 4.3.3)\n  \u2502     \u251c\u2500 tanstack_start_ts (requires ^4.2.1)\n  \u2502     \u2514\u2500 peer @lovable.dev/vite-tanstack-config@2.27.2 (requires >=4.0.0)\n  \u2502        \u2514\u2500 dev tanstack_start_ts (requires 2.27.2)\n  \u2502     \n  \u2514\u2500 postcss@8.5.24 (requires ^1.2.1)\n     \u2514\u2500 vite@8.1.5 (requires ^8.5.17)\n        \u251c\u2500 dev tanstack_start_ts (requires 8.1.5)\n        \u251c\u2500 vitest@4.1.11 (requires ^6.0.0 || ^7.0.0 || ^8.0.0)\n        \u2502  \u2514\u2500 dev tanstack_start_ts (requires ^4.1.10)\n        \u251c\u2500 peer @tailwindcss/vite@4.3.3 (requires ^5.2.0 || ^6 || ^7 || ^8)\n        \u2502  \u2514\u2500 *deduped\n        \u251c\u2500 peer @tanstack/devtools-vite@0.8.3 (requires ^6.0.0 || ^7.0.0 || ^8.0.0)\n        \u2502  \u2514\u2500 @lovable.dev/vite-tanstack-config@2.27.2 (requires ^0.8.1)\n        \u2502     \u2514\u2500 dev tanstack_start_ts (requires 2.27.2)\n        \u251c\u2500 peer @vitejs/plugin-react@5.2.0 (requires ^4.2.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0)\n        \u2502  \u251c\u2500 dev tanstack_start_ts (requires ^5.2.0)\n        \u2502  \u2514\u2500 peer @lovable.dev/vite-tanstack-config@2.27.2 (requires >=4.0.0)\n        \u2502     \u2514\u2500 dev tanstack_start_ts (requires 2.27.2)\n        \u251c\u2500 optional peer @vitest/mocker@4.1.11 (requires ^6.0.0 || ^7.0.0 || ^8.0.0)\n        \u2502  \u2514\u2500 vitest@4.1.11 (requires 4.1.11)\n        \u2502     \u2514\u2500 dev tanstack_start_ts (requires ^4.1.10)\n        \u251c\u2500 optional peer nitro@3.0.260603-beta (requires ^7 || ^8)\n        \u2502  \u251c\u2500 dev tanstack_start_ts (requires 3.0.260603-beta)\n        \u2502  \u2514\u2500 optional peer @lovable.dev/vite-tanstack-config@2.27.2 (requires >=3.0.260603-beta)\n        \u2502     \u2514\u2500 dev tanstack_start_ts (requires 2.27.2)\n        \u251c\u2500 optional peer vitefu@1.1.3 (requires ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0)\n        \u2502  \u2514\u2500 @tanstack/start-plugin-core@1.171.49 (requires ^1.1.3)\n        \u2502     \u251c\u2500 @tanstack/react-start@1.168.60 (requires 1.171.49)\n        \u2502     \u2502  \u251c\u2500 tanstack_start_ts (requires 1.168.60)\n        \u2502     \u2502  \u2514\u2500 peer @lovable.dev/vite-tanstack-config@2.27.2 (requires >=1.100.0)\n        \u2502     \u2502     \u2514\u2500 dev tanstack_start_ts (requires 2.27.2)\n        \u2502     \u2514\u2500 @tanstack/react-start-rsc@0.1.59 (requires 1.171.49)\n        \u2502        \u2514\u2500 @tanstack/react-start@1.168.60 (requires 0.1.59)\n        \u2502           \u2514\u2500 *deduped\n        \u251c\u2500 peer @lovable.dev/vite-tanstack-config@2.27.2 (requires >=5.0.0 <9.0.0)\n        \u2502  \u2514\u2500 dev tanstack_start_ts (requires 2.27.2)\n        \u251c\u2500 optional peer @tanstack/react-start@1.168.60 (requires >=7.0.0)\n        \u2502  \u2514\u2500 *deduped\n        \u251c\u2500 optional peer @tanstack/router-plugin@1.168.42 (requires >=5.0.0 || >=6.0.0 || >=7.0.0 || >=8.0.0)\n        \u2502  \u251c\u2500 @tanstack/start-plugin-core@1.171.49 (requires 1.168.42)\n        \u2502  \u2502  \u2514\u2500 *deduped\n        \u2502  \u2514\u2500 tanstack_start_ts (requires 1.168.42)\n        \u251c\u2500 optional peer @tanstack/start-plugin-core@1.171.49 (requires >=7.0.0)\n        \u2502  \u2514\u2500 *deduped\n        \u251c\u2500 peer vite-tsconfig-paths@6.1.1 (requires *)\n        \u2502  \u251c\u2500 tanstack_start_ts (requires ^6.0.2)\n        \u2502  \u2514\u2500 peer @lovable.dev/vite-tanstack-config@2.27.2 (requires >=6.0.0)\n        \u2502     \u2514\u2500 dev tanstack_start_ts (requires 2.27.2)\n        \u2514\u2500 optional peer unplugin@3.3.0 (requires *)\n           \u2514\u2500 @tanstack/router-plugin@1.168.42 (requires ^3.3.0)\n              \u2514\u2500 *deduped\n\n",
+    "js-yaml": "js-yaml@4.3.0\n  \u251c\u2500 @eslint/eslintrc@3.3.6 (requires ^4.3.0)\n  \u2502  \u2514\u2500 eslint@9.39.5 (requires ^3.3.6)\n  \u2502     \u251c\u2500 peer @typescript-eslint/eslint-plugin@8.65.0 (requires ^8.57.0 || ^9.0.0 || ^10.0.0)\n  \u2502     \u2502  \u2514\u2500 typescript-eslint@8.65.0 (requires 8.65.0)\n  \u2502     \u2502     \u2514\u2500 dev tanstack_start_ts (requires ^8.56.1)\n  \u2502     \u251c\u2500 peer @typescript-eslint/parser@8.65.0 (requires ^8.57.0 || ^9.0.0 || ^10.0.0)\n  \u2502     \u2502  \u251c\u2500 typescript-eslint@8.65.0 (requires 8.65.0)\n  \u2502     \u2502  \u2502  \u2514\u2500 dev tanstack_start_ts (requires ^8.56.1)\n  \u2502     \u2502  \u2514\u2500 peer @typescript-eslint/eslint-plugin@8.65.0 (requires ^8.65.0)\n  \u2502     \u2502     \u2514\u2500 *deduped\n  \u2502     \u2502  \n  \u2502     \u251c\u2500 peer @typescript-eslint/type-utils@8.65.0 (requires ^8.57.0 || ^9.0.0 || ^10.0.0)\n  \u2502     \u2502  \u2514\u2500 @typescript-eslint/eslint-plugin@8.65.0 (requires 8.65.0)\n  \u2502     \u2502     \u2514\u2500 *deduped\n  \u2502     \u251c\u2500 peer @typescript-eslint/utils@8.65.0 (requires ^8.57.0 || ^9.0.0 || ^10.0.0)\n  \u2502     \u2502  \u251c\u2500 @typescript-eslint/eslint-plugin@8.65.0 (requires 8.65.0)\n  \u2502     \u2502  \u2502  \u2514\u2500 *deduped\n  \u2502     \u2502  \u251c\u2500 @typescript-eslint/type-utils@8.65.0 (requires 8.65.0)\n  \u2502     \u2502  \u2502  \u2514\u2500 *deduped\n  \u2502     \u2502  \u2514\u2500 typescript-eslint@8.65.0 (requires 8.65.0)\n  \u2502     \u2502     \u2514\u2500 dev tanstack_start_ts (requires ^8.56.1)\n  \u2502     \u2502  \n  \u2502     \u251c\u2500 peer eslint-plugin-react-hooks@5.2.0 (requires ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0 || ^9.0.0)\n  \u2502     \u2502  \u2514\u2500 dev tanstack_start_ts (requires ^5.2.0)\n  \u2502     \u251c\u2500 peer typescript-eslint@8.65.0 (requires ^8.57.0 || ^9.0.0 || ^10.0.0)\n  \u2502     \u2502  \u2514\u2500 dev tanstack_start_ts (requires ^8.56.1)\n  \u2502     \u251c\u2500 dev tanstack_start_ts (requires ^9.32.0)\n  \u2502     \u251c\u2500 peer @eslint-community/eslint-utils@4.10.1 (requires ^6.0.0 || ^7.0.0 || >=8.0.0)\n  \u2502     \u2502  \u251c\u2500 @typescript-eslint/utils@8.65.0 (requires ^4.9.1)\n  \u2502     \u2502  \u2502  \u2514\u2500 *deduped\n  \u2502     \u2502  \u2514\u2500 eslint@9.39.5 (requires ^4.8.0)\n  \u2502     \u2502     \u2514\u2500 *circular\n  \u2502     \u2502  \n  \u2502     \u251c\u2500 peer eslint-config-prettier@10.1.8 (requires >=7.0.0)\n  \u2502     \u2502  \u251c\u2500 dev tanstack_start_ts (requires ^10.1.1)\n  \u2502     \u2502  \u2514\u2500 optional peer eslint-plugin-prettier@5.5.6 (requires >= 7.0.0 <10.0.0 || >=10.1.0)\n  \u2502     \u2502     \u2514\u2500 dev tanstack_start_ts (requires ^5.2.6)\n  \u2502     \u2502  \n  \u2502     \u251c\u2500 peer eslint-plugin-prettier@5.5.6 (requires >=8.0.0)\n  \u2502     \u2502  \u2514\u2500 dev tanstack_start_ts (requires ^5.2.6)\n  \u2502     \u2514\u2500 peer eslint-plugin-react-refresh@0.4.26 (requires >=8.40)\n  \u2502        \u2514\u2500 dev tanstack_start_ts (requires ^0.4.20)\n  \u2502     \n  \u2514\u2500 xmlbuilder2@4.0.3 (requires ^4.1.1)\n     \u2514\u2500 @tanstack/start-plugin-core@1.171.49 (requires ^4.0.3)\n        \u251c\u2500 @tanstack/react-start@1.168.60 (requires 1.171.49)\n        \u2502  \u251c\u2500 tanstack_start_ts (requires 1.168.60)\n        \u2502  \u2514\u2500 peer @lovable.dev/vite-tanstack-config@2.27.2 (requires >=1.100.0)\n        \u2502     \u2514\u2500 dev tanstack_start_ts (requires 2.27.2)\n        \u2514\u2500 @tanstack/react-start-rsc@0.1.59 (requires 1.171.49)\n           \u2514\u2500 @tanstack/react-start@1.168.60 (requires 0.1.59)\n              \u2514\u2500 *deduped\n\njs-yaml@4.3.2\n  \u2514\u2500 @redocly/openapi-core@1.34.24 (requires 4.3.2)\n     \u2514\u2500 openapi-typescript@7.10.1 (requires ^1.34.5)\n        \u2514\u2500 @lovable.dev/ai-gateway@0.1.13 (requires 7.10.1)\n           \u2514\u2500 tanstack_start_ts (requires ^0.1.13)\n\n",
+    "seroval": "seroval@1.6.8\n  \u251c\u2500 @tanstack/router-core@1.171.34 (requires ^1.6.7)\n  \u2502  \u251c\u2500 @tanstack/react-router@1.170.41 (requires 1.171.34)\n  \u2502  \u2502  \u251c\u2500 @tanstack/react-start@1.168.60 (requires 1.170.41)\n  \u2502  \u2502  \u2502  \u251c\u2500 tanstack_start_ts (requires 1.168.60)\n  \u2502  \u2502  \u2502  \u2514\u2500 peer @lovable.dev/vite-tanstack-config@2.27.2 (requires >=1.100.0)\n  \u2502  \u2502  \u2502     \u2514\u2500 dev tanstack_start_ts (requires 2.27.2)\n  \u2502  \u2502  \u2502  \n  \u2502  \u2502  \u251c\u2500 @tanstack/react-start-client@1.168.39 (requires 1.170.41)\n  \u2502  \u2502  \u2502  \u2514\u2500 @tanstack/react-start@1.168.60 (requires 1.168.39)\n  \u2502  \u2502  \u2502     \u2514\u2500 *deduped\n  \u2502  \u2502  \u251c\u2500 @tanstack/react-start-rsc@0.1.59 (requires 1.170.41)\n  \u2502  \u2502  \u2502  \u2514\u2500 @tanstack/react-start@1.168.60 (requires 0.1.59)\n  \u2502  \u2502  \u2502     \u2514\u2500 *deduped\n  \u2502  \u2502  \u251c\u2500 @tanstack/react-start-server@1.167.46 (requires 1.170.41)\n  \u2502  \u2502  \u2502  \u2514\u2500 @tanstack/react-start@1.168.60 (requires 1.167.46)\n  \u2502  \u2502  \u2502     \u2514\u2500 *deduped\n  \u2502  \u2502  \u251c\u2500 tanstack_start_ts (requires 1.170.41)\n  \u2502  \u2502  \u2514\u2500 optional peer @tanstack/router-plugin@1.168.42 (requires ^1.170.41)\n  \u2502  \u2502     \u251c\u2500 @tanstack/start-plugin-core@1.171.49 (requires 1.168.42)\n  \u2502  \u2502     \u2502  \u251c\u2500 @tanstack/react-start@1.168.60 (requires 1.171.49)\n  \u2502  \u2502     \u2502  \u2502  \u2514\u2500 *deduped\n  \u2502  \u2502     \u2502  \u2514\u2500 @tanstack/react-start-rsc@0.1.59 (requires 1.171.49)\n  \u2502  \u2502     \u2502     \u2514\u2500 *deduped\n  \u2502  \u2502     \u2514\u2500 tanstack_start_ts (requires 1.168.42)\n  \u2502  \u2502  \n  \u2502  \u251c\u2500 @tanstack/react-start-client@1.168.39 (requires 1.171.34)\n  \u2502  \u2502  \u2514\u2500 *deduped\n  \u2502  \u251c\u2500 @tanstack/react-start-rsc@0.1.59 (requires 1.171.34)\n  \u2502  \u2502  \u2514\u2500 *deduped\n  \u2502  \u251c\u2500 @tanstack/react-start-server@1.167.46 (requires 1.171.34)\n  \u2502  \u2502  \u2514\u2500 *deduped\n  \u2502  \u251c\u2500 @tanstack/router-generator@1.167.40 (requires 1.171.34)\n  \u2502  \u2502  \u251c\u2500 @tanstack/router-plugin@1.168.42 (requires 1.167.40)\n  \u2502  \u2502  \u2502  \u2514\u2500 *deduped\n  \u2502  \u2502  \u2514\u2500 @tanstack/start-plugin-core@1.171.49 (requires 1.167.40)\n  \u2502  \u2502     \u2514\u2500 *deduped\n  \u2502  \u2502  \n  \u2502  \u251c\u2500 @tanstack/router-plugin@1.168.42 (requires 1.171.34)\n  \u2502  \u2502  \u2514\u2500 *deduped\n  \u2502  \u251c\u2500 @tanstack/start-client-core@1.170.34 (requires 1.171.34)\n  \u2502  \u2502  \u251c\u2500 @tanstack/react-start@1.168.60 (requires 1.170.34)\n  \u2502  \u2502  \u2502  \u2514\u2500 *deduped\n  \u2502  \u2502  \u251c\u2500 @tanstack/react-start-client@1.168.39 (requires 1.170.34)\n  \u2502  \u2502  \u2502  \u2514\u2500 *deduped\n  \u2502  \u2502  \u251c\u2500 @tanstack/react-start-rsc@0.1.59 (requires 1.170.34)\n  \u2502  \u2502  \u2502  \u2514\u2500 *deduped\n  \u2502  \u2502  \u2514\u2500 @tanstack/start-server-core@1.169.39 (requires 1.170.34)\n  \u2502  \u2502     \u251c\u2500 @tanstack/react-start@1.168.60 (requires 1.169.39)\n  \u2502  \u2502     \u2502  \u2514\u2500 *deduped\n  \u2502  \u2502     \u251c\u2500 @tanstack/react-start-server@1.167.46 (requires 1.169.39)\n  \u2502  \u2502     \u2502  \u2514\u2500 *deduped\n  \u2502  \u2502     \u2514\u2500 @tanstack/start-plugin-core@1.171.49 (requires 1.169.39)\n  \u2502  \u2502        \u2514\u2500 *deduped\n  \u2502  \u2502  \n  \u2502  \u251c\u2500 @tanstack/start-plugin-core@1.171.49 (requires 1.171.34)\n  \u2502  \u2502  \u2514\u2500 *deduped\n  \u2502  \u251c\u2500 @tanstack/start-server-core@1.169.39 (requires 1.171.34)\n  \u2502  \u2502  \u2514\u2500 *deduped\n  \u2502  \u2514\u2500 @tanstack/start-storage-context@1.167.36 (requires 1.171.34)\n  \u2502     \u251c\u2500 @tanstack/react-start-rsc@0.1.59 (requires 1.167.36)\n  \u2502     \u2502  \u2514\u2500 *deduped\n  \u2502     \u251c\u2500 @tanstack/start-client-core@1.170.34 (requires 1.167.36)\n  \u2502     \u2502  \u2514\u2500 *deduped\n  \u2502     \u2514\u2500 @tanstack/start-server-core@1.169.39 (requires 1.167.36)\n  \u2502        \u2514\u2500 *deduped\n  \u2502  \n  \u251c\u2500 @tanstack/start-client-core@1.170.34 (requires ^1.6.7)\n  \u2502  \u2514\u2500 *deduped\n  \u251c\u2500 @tanstack/start-plugin-core@1.171.49 (requires ^1.6.7)\n  \u2502  \u2514\u2500 *deduped\n  \u251c\u2500 @tanstack/start-server-core@1.169.39 (requires ^1.6.7)\n  \u2502  \u2514\u2500 *deduped\n  \u2514\u2500 peer seroval-plugins@1.6.8 (requires ^1.0)\n     \u2514\u2500 @tanstack/router-core@1.171.34 (requires ^1.6.7)\n        \u2514\u2500 *deduped\n\n",
+    "zod": "zod@3.25.76\n  \u251c\u2500 tanstack_start_ts (requires ^3.25.76)\n  \u2514\u2500 optional peer @hookform/resolvers@5.5.7 (requires ^3.25.0 || ^4.0.0)\n     \u2514\u2500 tanstack_start_ts (requires ^5.2.2)\n\nzod@4.6.7\n  \u251c\u2500 @tanstack/router-generator@1.167.40 (requires ^4.5.4)\n  \u2502  \u251c\u2500 @tanstack/router-plugin@1.168.42 (requires 1.167.40)\n  \u2502  \u2502  \u251c\u2500 @tanstack/start-plugin-core@1.171.49 (requires 1.168.42)\n  \u2502  \u2502  \u2502  \u251c\u2500 @tanstack/react-start@1.168.60 (requires 1.171.49)\n  \u2502  \u2502  \u2502  \u2502  \u251c\u2500 tanstack_start_ts (requires 1.168.60)\n  \u2502  \u2502  \u2502  \u2502  \u2514\u2500 peer @lovable.dev/vite-tanstack-config@2.27.2 (requires >=1.100.0)\n  \u2502  \u2502  \u2502  \u2502     \u2514\u2500 dev tanstack_start_ts (requires 2.27.2)\n  \u2502  \u2502  \u2502  \u2502  \n  \u2502  \u2502  \u2502  \u2514\u2500 @tanstack/react-start-rsc@0.1.59 (requires 1.171.49)\n  \u2502  \u2502  \u2502     \u2514\u2500 @tanstack/react-start@1.168.60 (requires 0.1.59)\n  \u2502  \u2502  \u2502        \u2514\u2500 *deduped\n  \u2502  \u2502  \u2502  \n  \u2502  \u2502  \u2514\u2500 tanstack_start_ts (requires 1.168.42)\n  \u2502  \u2502  \n  \u2502  \u2514\u2500 @tanstack/start-plugin-core@1.171.49 (requires 1.167.40)\n  \u2502     \u2514\u2500 *deduped\n  \u2502  \n  \u251c\u2500 @tanstack/router-plugin@1.168.42 (requires ^4.5.4)\n  \u2502  \u2514\u2500 *deduped\n  \u2514\u2500 @tanstack/start-plugin-core@1.171.49 (requires ^4.5.4)\n     \u2514\u2500 *deduped\n\n",
+    "@vitest/mocker": "@vitest/mocker@4.1.11\n  \u2514\u2500 vitest@4.1.11 (requires 4.1.11)\n     \u2514\u2500 dev tanstack_start_ts (requires ^4.1.10)\n\n",
+    "brace-expansion": "brace-expansion@1.1.16\n  \u2514\u2500 minimatch@3.1.5 (requires ^1.1.7)\n     \u251c\u2500 @eslint/config-array@0.21.2 (requires ^3.1.5)\n     \u2502  \u2514\u2500 eslint@9.39.5 (requires ^0.21.2)\n     \u2502     \u251c\u2500 peer @typescript-eslint/eslint-plugin@8.65.0 (requires ^8.57.0 || ^9.0.0 || ^10.0.0)\n     \u2502     \u2502  \u2514\u2500 typescript-eslint@8.65.0 (requires 8.65.0)\n     \u2502     \u2502     \u2514\u2500 dev tanstack_start_ts (requires ^8.56.1)\n     \u2502     \u251c\u2500 peer @typescript-eslint/parser@8.65.0 (requires ^8.57.0 || ^9.0.0 || ^10.0.0)\n     \u2502     \u2502  \u251c\u2500 typescript-eslint@8.65.0 (requires 8.65.0)\n     \u2502     \u2502  \u2502  \u2514\u2500 dev tanstack_start_ts (requires ^8.56.1)\n     \u2502     \u2502  \u2514\u2500 peer @typescript-eslint/eslint-plugin@8.65.0 (requires ^8.65.0)\n     \u2502     \u2502     \u2514\u2500 *deduped\n     \u2502     \u251c\u2500 peer @typescript-eslint/type-utils@8.65.0 (requires ^8.57.0 || ^9.0.0 || ^10.0.0)\n     \u2502     \u2502  \u2514\u2500 @typescript-eslint/eslint-plugin@8.65.0 (requires 8.65.0)\n     \u2502     \u2502     \u2514\u2500 *deduped\n     \u2502     \u251c\u2500 peer @typescript-eslint/utils@8.65.0 (requires ^8.57.0 || ^9.0.0 || ^10.0.0)\n     \u2502     \u2502  \u251c\u2500 @typescript-eslint/eslint-plugin@8.65.0 (requires 8.65.0)\n     \u2502     \u2502  \u2502  \u2514\u2500 *deduped\n     \u2502     \u2502  \u251c\u2500 @typescript-eslint/type-utils@8.65.0 (requires 8.65.0)\n     \u2502     \u2502  \u2502  \u2514\u2500 *deduped\n     \u2502     \u2502  \u2514\u2500 typescript-eslint@8.65.0 (requires 8.65.0)\n     \u2502     \u2502     \u2514\u2500 dev tanstack_start_ts (requires ^8.56.1)\n     \u2502     \u251c\u2500 peer eslint-plugin-react-hooks@5.2.0 (requires ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0 || ^9.0.0)\n     \u2502     \u2502  \u2514\u2500 dev tanstack_start_ts (requires ^5.2.0)\n     \u2502     \u251c\u2500 peer typescript-eslint@8.65.0 (requires ^8.57.0 || ^9.0.0 || ^10.0.0)\n     \u2502     \u2502  \u2514\u2500 dev tanstack_start_ts (requires ^8.56.1)\n     \u2502     \u251c\u2500 dev tanstack_start_ts (requires ^9.32.0)\n     \u2502     \u251c\u2500 peer @eslint-community/eslint-utils@4.10.1 (requires ^6.0.0 || ^7.0.0 || >=8.0.0)\n     \u2502     \u2502  \u251c\u2500 @typescript-eslint/utils@8.65.0 (requires ^4.9.1)\n     \u2502     \u2502  \u2502  \u2514\u2500 *deduped\n     \u2502     \u2502  \u2514\u2500 eslint@9.39.5 (requires ^4.8.0)\n     \u2502     \u2502     \u2514\u2500 *circular\n     \u2502     \u251c\u2500 peer eslint-config-prettier@10.1.8 (requires >=7.0.0)\n     \u2502     \u2502  \u251c\u2500 dev tanstack_start_ts (requires ^10.1.1)\n     \u2502     \u2502  \u2514\u2500 optional peer eslint-plugin-prettier@5.5.6 (requires >= 7.0.0 <10.0.0 || >=10.1.0)\n     \u2502     \u2502     \u2514\u2500 dev tanstack_start_ts (requires ^5.2.6)\n     \u2502     \u251c\u2500 peer eslint-plugin-prettier@5.5.6 (requires >=8.0.0)\n     \u2502     \u2502  \u2514\u2500 dev tanstack_start_ts (requires ^5.2.6)\n     \u2502     \u2514\u2500 peer eslint-plugin-react-refresh@0.4.26 (requires >=8.40)\n     \u2502        \u2514\u2500 dev tanstack_start_ts (requires ^0.4.20)\n     \u251c\u2500 @eslint/eslintrc@3.3.6 (requires ^3.1.5)\n     \u2502  \u2514\u2500 eslint@9.39.5 (requires ^3.3.6)\n     \u2502     \u2514\u2500 *deduped\n     \u2514\u2500 eslint@9.39.5 (requires ^3.1.5)\n        \u2514\u2500 *deduped\n\nbrace-expansion@2.1.8\n  \u2514\u2500 minimatch@5.1.9 (requires ^2.0.1)\n     \u2514\u2500 @redocly/openapi-core@1.34.24 (requires 5.1.9)\n        \u2514\u2500 openapi-typescript@7.10.1 (requires ^1.34.5)\n           \u2514\u2500 @lovable.dev/ai-gateway@0.1.13 (requires 7.10.1)\n              \u2514\u2500 tanstack_start_ts (requires ^0.1.13)\n\nbrace-expansion@5.0.8\n  \u2514\u2500 minimatch@10.2.6 (requires ^5.0.8)\n     \u2514\u2500 @typescript-eslint/typescript-estree@8.65.0 (requires ^10.2.2)\n        \u251c\u2500 @typescript-eslint/parser@8.65.0 (requires 8.65.0)\n        \u2502  \u251c\u2500 typescript-eslint@8.65.0 (requires 8.65.0)\n        \u2502  \u2502  \u2514\u2500 dev tanstack_start_ts (requires ^8.56.1)\n        \u2502  \u2514\u2500 peer @typescript-eslint/eslint-plugin@8.65.0 (requires ^8.65.0)\n        \u2502     \u2514\u2500 typescript-eslint@8.65.0 (requires 8.65.0)\n        \u2502        \u2514\u2500 dev tanstack_start_ts (requires ^8.56.1)\n        \u251c\u2500 @typescript-eslint/type-utils@8.65.0 (requires 8.65.0)\n        \u2502  \u2514\u2500 @typescript-eslint/eslint-plugin@8.65.0 (requires 8.65.0)\n        \u2502     \u2514\u2500 *deduped\n        \u251c\u2500 @typescript-eslint/utils@8.65.0 (requires 8.65.0)\n        \u2502  \u251c\u2500 @typescript-eslint/eslint-plugin@8.65.0 (requires 8.65.0)\n        \u2502  \u2502  \u2514\u2500 *deduped\n        \u2502  \u251c\u2500 @typescript-eslint/type-utils@8.65.0 (requires 8.65.0)\n        \u2502  \u2502  \u2514\u2500 *deduped\n        \u2502  \u2514\u2500 typescript-eslint@8.65.0 (requires 8.65.0)\n        \u2502     \u2514\u2500 dev tanstack_start_ts (requires ^8.56.1)\n        \u2514\u2500 typescript-eslint@8.65.0 (requires 8.65.0)\n           \u2514\u2500 dev tanstack_start_ts (requires ^8.56.1)\n\n",
+    "esbuild": "esbuild@0.25.12\n  \u251c\u2500 drizzle-kit@0.31.11 (requires ^0.25.4)\n  \u2502  \u2514\u2500 dev tanstack_start_ts (requires 0.x)\n  \u251c\u2500 optional peer vite@8.1.6 (requires ^0.27.0 || ^0.28.0)\n  \u2502  \u251c\u2500 dev tanstack_start_ts (requires 8.1.6)\n  \u2502  \u251c\u2500 vitest@4.1.11 (requires ^6.0.0 || ^7.0.0 || ^8.0.0)\n  \u2502  \u2502  \u2514\u2500 dev tanstack_start_ts (requires ^4.1.10)\n  \u2502  \u251c\u2500 peer @tailwindcss/vite@4.3.3 (requires ^5.2.0 || ^6 || ^7 || ^8)\n  \u2502  \u2502  \u251c\u2500 tanstack_start_ts (requires ^4.2.1)\n  \u2502  \u2502  \u2514\u2500 peer @lovable.dev/vite-tanstack-config@2.27.2 (requires >=4.0.0)\n  \u2502  \u2502     \u2514\u2500 dev tanstack_start_ts (requires 2.27.2)\n  \u2502  \u2502  \n  \u2502  \u251c\u2500 peer @tanstack/devtools-vite@0.8.3 (requires ^6.0.0 || ^7.0.0 || ^8.0.0)\n  \u2502  \u2502  \u2514\u2500 @lovable.dev/vite-tanstack-config@2.27.2 (requires ^0.8.1)\n  \u2502  \u2502     \u2514\u2500 dev tanstack_start_ts (requires 2.27.2)\n  \u2502  \u251c\u2500 peer @vitejs/plugin-react@5.2.0 (requires ^4.2.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0)\n  \u2502  \u2502  \u251c\u2500 dev tanstack_start_ts (requires ^5.2.0)\n  \u2502  \u2502  \u2514\u2500 peer @lovable.dev/vite-tanstack-config@2.27.2 (requires >=4.0.0)\n  \u2502  \u2502     \u2514\u2500 dev tanstack_start_ts (requires 2.27.2)\n  \u2502  \u2502  \n  \u2502  \u251c\u2500 optional peer @vitest/mocker@4.1.11 (requires ^6.0.0 || ^7.0.0 || ^8.0.0)\n  \u2502  \u2502  \u2514\u2500 vitest@4.1.11 (requires 4.1.11)\n  \u2502  \u2502     \u2514\u2500 dev tanstack_start_ts (requires ^4.1.10)\n  \u2502  \u251c\u2500 optional peer nitro@3.0.260603-beta (requires ^7 || ^8)\n  \u2502  \u2502  \u251c\u2500 dev tanstack_start_ts (requires 3.0.260603-beta)\n  \u2502  \u2502  \u2514\u2500 optional peer @lovable.dev/vite-tanstack-config@2.27.2 (requires >=3.0.260603-beta)\n  \u2502  \u2502     \u2514\u2500 dev tanstack_start_ts (requires 2.27.2)\n  \u2502  \u2502  \n  \u2502  \u251c\u2500 optional peer vitefu@1.1.3 (requires ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0)\n  \u2502  \u2502  \u2514\u2500 @tanstack/start-plugin-core@1.171.49 (requires ^1.1.3)\n  \u2502  \u2502     \u251c\u2500 @tanstack/react-start@1.168.60 (requires 1.171.49)\n  \u2502  \u2502     \u2502  \u251c\u2500 tanstack_start_ts (requires 1.168.60)\n  \u2502  \u2502     \u2502  \u2514\u2500 peer @lovable.dev/vite-tanstack-config@2.27.2 (requires >=1.100.0)\n  \u2502  \u2502     \u2502     \u2514\u2500 dev tanstack_start_ts (requires 2.27.2)\n  \u2502  \u2502     \u2502  \n  \u2502  \u2502     \u2514\u2500 @tanstack/react-start-rsc@0.1.59 (requires 1.171.49)\n  \u2502  \u2502        \u2514\u2500 @tanstack/react-start@1.168.60 (requires 0.1.59)\n  \u2502  \u2502           \u2514\u2500 *deduped\n  \u2502  \u2502     \n  \u2502  \u251c\u2500 peer @lovable.dev/vite-tanstack-config@2.27.2 (requires >=5.0.0 <9.0.0)\n  \u2502  \u2502  \u2514\u2500 dev tanstack_start_ts (requires 2.27.2)\n  \u2502  \u251c\u2500 optional peer @tanstack/react-start@1.168.60 (requires >=7.0.0)\n  \u2502  \u2502  \u2514\u2500 *deduped\n  \u2502  \u251c\u2500 optional peer @tanstack/router-plugin@1.168.42 (requires >=5.0.0 || >=6.0.0 || >=7.0.0 || >=8.0.0)\n  \u2502  \u2502  \u251c\u2500 @tanstack/start-plugin-core@1.171.49 (requires 1.168.42)\n  \u2502  \u2502  \u2502  \u2514\u2500 *deduped\n  \u2502  \u2502  \u2514\u2500 tanstack_start_ts (requires 1.168.42)\n  \u2502  \u2502  \n  \u2502  \u251c\u2500 optional peer @tanstack/start-plugin-core@1.171.49 (requires >=7.0.0)\n  \u2502  \u2502  \u2514\u2500 *deduped\n  \u2502  \u251c\u2500 peer vite-tsconfig-paths@6.1.1 (requires *)\n  \u2502  \u2502  \u251c\u2500 tanstack_start_ts (requires ^6.0.2)\n  \u2502  \u2502  \u2514\u2500 peer @lovable.dev/vite-tanstack-config@2.27.2 (requires >=6.0.0)\n  \u2502  \u2502     \u2514\u2500 dev tanstack_start_ts (requires 2.27.2)\n  \u2502  \u2502  \n  \u2502  \u2514\u2500 optional peer unplugin@3.3.0 (requires *)\n  \u2502     \u2514\u2500 @tanstack/router-plugin@1.168.42 (requires ^3.3.0)\n  \u2502        \u2514\u2500 *deduped\n  \u2502  \n  \u2514\u2500 optional peer unplugin@3.3.0 (requires *)\n     \u2514\u2500 *deduped\n\nesbuild@0.18.20\n  \u2514\u2500 @esbuild-kit/core-utils@3.3.2 (requires ~0.18.20)\n     \u2514\u2500 @esbuild-kit/esm-loader@2.6.5 (requires ^3.3.2)\n        \u2514\u2500 drizzle-kit@0.31.11 (requires ^2.5.5)\n           \u2514\u2500 dev tanstack_start_ts (requires 0.x)\n\nesbuild@0.28.2\n  \u2514\u2500 tsx@4.23.15 (requires ~0.28.0)\n     \u251c\u2500 drizzle-kit@0.31.11 (requires ^4.21.0)\n     \u2502  \u2514\u2500 dev tanstack_start_ts (requires 0.x)\n     \u2514\u2500 optional peer vite@8.1.6 (requires ^4.8.1)\n        \u251c\u2500 dev tanstack_start_ts (requires 8.1.6)\n        \u251c\u2500 vitest@4.1.11 (requires ^6.0.0 || ^7.0.0 || ^8.0.0)\n        \u2502  \u2514\u2500 dev tanstack_start_ts (requires ^4.1.10)\n        \u251c\u2500 peer @tailwindcss/vite@4.3.3 (requires ^5.2.0 || ^6 || ^7 || ^8)\n        \u2502  \u251c\u2500 tanstack_start_ts (requires ^4.2.1)\n        \u2502  \u2514\u2500 peer @lovable.dev/vite-tanstack-config@2.27.2 (requires >=4.0.0)\n        \u2502     \u2514\u2500 dev tanstack_start_ts (requires 2.27.2)\n        \u251c\u2500 peer @tanstack/devtools-vite@0.8.3 (requires ^6.0.0 || ^7.0.0 || ^8.0.0)\n        \u2502  \u2514\u2500 @lovable.dev/vite-tanstack-config@2.27.2 (requires ^0.8.1)\n        \u2502     \u2514\u2500 dev tanstack_start_ts (requires 2.27.2)\n        \u251c\u2500 peer @vitejs/plugin-react@5.2.0 (requires ^4.2.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0)\n        \u2502  \u251c\u2500 dev tanstack_start_ts (requires ^5.2.0)\n        \u2502  \u2514\u2500 peer @lovable.dev/vite-tanstack-config@2.27.2 (requires >=4.0.0)\n        \u2502     \u2514\u2500 dev tanstack_start_ts (requires 2.27.2)\n        \u251c\u2500 optional peer @vitest/mocker@4.1.11 (requires ^6.0.0 || ^7.0.0 || ^8.0.0)\n        \u2502  \u2514\u2500 vitest@4.1.11 (requires 4.1.11)\n        \u2502     \u2514\u2500 dev tanstack_start_ts (requires ^4.1.10)\n        \u251c\u2500 optional peer nitro@3.0.260603-beta (requires ^7 || ^8)\n        \u2502  \u251c\u2500 dev tanstack_start_ts (requires 3.0.260603-beta)\n        \u2502  \u2514\u2500 optional peer @lovable.dev/vite-tanstack-config@2.27.2 (requires >=3.0.260603-beta)\n        \u2502     \u2514\u2500 dev tanstack_start_ts (requires 2.27.2)\n        \u251c\u2500 optional peer vitefu@1.1.3 (requires ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0)\n        \u2502  \u2514\u2500 @tanstack/start-plugin-core@1.171.49 (requires ^1.1.3)\n        \u2502     \u251c\u2500 @tanstack/react-start@1.168.60 (requires 1.171.49)\n        \u2502     \u2502  \u251c\u2500 tanstack_start_ts (requires 1.168.60)\n        \u2502     \u2502  \u2514\u2500 peer @lovable.dev/vite-tanstack-config@2.27.2 (requires >=1.100.0)\n        \u2502     \u2502     \u2514\u2500 dev tanstack_start_ts (requires 2.27.2)\n        \u2502     \u2514\u2500 @tanstack/react-start-rsc@0.1.59 (requires 1.171.49)\n        \u2502        \u2514\u2500 @tanstack/react-start@1.168.60 (requires 0.1.59)\n        \u2502           \u2514\u2500 *deduped\n        \u251c\u2500 peer @lovable.dev/vite-tanstack-config@2.27.2 (requires >=5.0.0 <9.0.0)\n        \u2502  \u2514\u2500 dev tanstack_start_ts (requires 2.27.2)\n        \u251c\u2500 optional peer @tanstack/react-start@1.168.60 (requires >=7.0.0)\n        \u2502  \u2514\u2500 *deduped\n        \u251c\u2500 optional peer @tanstack/router-plugin@1.168.42 (requires >=5.0.0 || >=6.0.0 || >=7.0.0 || >=8.0.0)\n        \u2502  \u251c\u2500 @tanstack/start-plugin-core@1.171.49 (requires 1.168.42)\n        \u2502  \u2502  \u2514\u2500 *deduped\n        \u2502  \u2514\u2500 tanstack_start_ts (requires 1.168.42)\n        \u251c\u2500 optional peer @tanstack/start-plugin-core@1.171.49 (requires >=7.0.0)\n        \u2502  \u2514\u2500 *deduped\n        \u251c\u2500 peer vite-tsconfig-paths@6.1.1 (requires *)\n        \u2502  \u251c\u2500 tanstack_start_ts (requires ^6.0.2)\n        \u2502  \u2514\u2500 peer @lovable.dev/vite-tanstack-config@2.27.2 (requires >=6.0.0)\n        \u2502     \u2514\u2500 dev tanstack_start_ts (requires 2.27.2)\n        \u2514\u2500 optional peer unplugin@3.3.0 (requires *)\n           \u2514\u2500 @tanstack/router-plugin@1.168.42 (requires ^3.3.0)\n              \u2514\u2500 *deduped\n\n",
+    "launch-editor": "launch-editor@2.14.1\n  \u2514\u2500 @tanstack/devtools-bundler-core@0.1.1 (requires ^2.11.1)\n     \u2514\u2500 @tanstack/devtools-vite@0.8.3 (requires 0.1.1)\n        \u2514\u2500 @lovable.dev/vite-tanstack-config@2.27.2 (requires ^0.8.1)\n           \u2514\u2500 dev tanstack_start_ts (requires 2.27.2)\n\n",
+    "minimatch": "minimatch@3.1.5\n  \u251c\u2500 @eslint/config-array@0.21.2 (requires ^3.1.5)\n  \u2502  \u2514\u2500 eslint@9.39.5 (requires ^0.21.2)\n  \u2502     \u251c\u2500 peer @typescript-eslint/eslint-plugin@8.65.0 (requires ^8.57.0 || ^9.0.0 || ^10.0.0)\n  \u2502     \u2502  \u2514\u2500 typescript-eslint@8.65.0 (requires 8.65.0)\n  \u2502     \u2502     \u2514\u2500 dev tanstack_start_ts (requires ^8.56.1)\n  \u2502     \u251c\u2500 peer @typescript-eslint/parser@8.65.0 (requires ^8.57.0 || ^9.0.0 || ^10.0.0)\n  \u2502     \u2502  \u251c\u2500 typescript-eslint@8.65.0 (requires 8.65.0)\n  \u2502     \u2502  \u2502  \u2514\u2500 dev tanstack_start_ts (requires ^8.56.1)\n  \u2502     \u2502  \u2514\u2500 peer @typescript-eslint/eslint-plugin@8.65.0 (requires ^8.65.0)\n  \u2502     \u2502     \u2514\u2500 *deduped\n  \u2502     \u2502  \n  \u2502     \u251c\u2500 peer @typescript-eslint/type-utils@8.65.0 (requires ^8.57.0 || ^9.0.0 || ^10.0.0)\n  \u2502     \u2502  \u2514\u2500 @typescript-eslint/eslint-plugin@8.65.0 (requires 8.65.0)\n  \u2502     \u2502     \u2514\u2500 *deduped\n  \u2502     \u251c\u2500 peer @typescript-eslint/utils@8.65.0 (requires ^8.57.0 || ^9.0.0 || ^10.0.0)\n  \u2502     \u2502  \u251c\u2500 @typescript-eslint/eslint-plugin@8.65.0 (requires 8.65.0)\n  \u2502     \u2502  \u2502  \u2514\u2500 *deduped\n  \u2502     \u2502  \u251c\u2500 @typescript-eslint/type-utils@8.65.0 (requires 8.65.0)\n  \u2502     \u2502  \u2502  \u2514\u2500 *deduped\n  \u2502     \u2502  \u2514\u2500 typescript-eslint@8.65.0 (requires 8.65.0)\n  \u2502     \u2502     \u2514\u2500 dev tanstack_start_ts (requires ^8.56.1)\n  \u2502     \u2502  \n  \u2502     \u251c\u2500 peer eslint-plugin-react-hooks@5.2.0 (requires ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0 || ^9.0.0)\n  \u2502     \u2502  \u2514\u2500 dev tanstack_start_ts (requires ^5.2.0)\n  \u2502     \u251c\u2500 peer typescript-eslint@8.65.0 (requires ^8.57.0 || ^9.0.0 || ^10.0.0)\n  \u2502     \u2502  \u2514\u2500 dev tanstack_start_ts (requires ^8.56.1)\n  \u2502     \u251c\u2500 dev tanstack_start_ts (requires ^9.32.0)\n  \u2502     \u251c\u2500 peer @eslint-community/eslint-utils@4.10.1 (requires ^6.0.0 || ^7.0.0 || >=8.0.0)\n  \u2502     \u2502  \u251c\u2500 @typescript-eslint/utils@8.65.0 (requires ^4.9.1)\n  \u2502     \u2502  \u2502  \u2514\u2500 *deduped\n  \u2502     \u2502  \u2514\u2500 eslint@9.39.5 (requires ^4.8.0)\n  \u2502     \u2502     \u2514\u2500 *circular\n  \u2502     \u2502  \n  \u2502     \u251c\u2500 peer eslint-config-prettier@10.1.8 (requires >=7.0.0)\n  \u2502     \u2502  \u251c\u2500 dev tanstack_start_ts (requires ^10.1.1)\n  \u2502     \u2502  \u2514\u2500 optional peer eslint-plugin-prettier@5.5.6 (requires >= 7.0.0 <10.0.0 || >=10.1.0)\n  \u2502     \u2502     \u2514\u2500 dev tanstack_start_ts (requires ^5.2.6)\n  \u2502     \u2502  \n  \u2502     \u251c\u2500 peer eslint-plugin-prettier@5.5.6 (requires >=8.0.0)\n  \u2502     \u2502  \u2514\u2500 dev tanstack_start_ts (requires ^5.2.6)\n  \u2502     \u2514\u2500 peer eslint-plugin-react-refresh@0.4.26 (requires >=8.40)\n  \u2502        \u2514\u2500 dev tanstack_start_ts (requires ^0.4.20)\n  \u2502     \n  \u251c\u2500 @eslint/eslintrc@3.3.6 (requires ^3.1.5)\n  \u2502  \u2514\u2500 eslint@9.39.5 (requires ^3.3.6)\n  \u2502     \u2514\u2500 *deduped\n  \u2514\u2500 eslint@9.39.5 (requires ^3.1.5)\n     \u2514\u2500 *deduped\n\nminimatch@5.1.9\n  \u2514\u2500 @redocly/openapi-core@1.34.24 (requires 5.1.9)\n     \u2514\u2500 openapi-typescript@7.10.1 (requires ^1.34.5)\n        \u2514\u2500 @lovable.dev/ai-gateway@0.1.13 (requires 7.10.1)\n           \u2514\u2500 tanstack_start_ts (requires ^0.1.13)\n\nminimatch@10.2.6\n  \u2514\u2500 @typescript-eslint/typescript-estree@8.65.0 (requires ^10.2.2)\n     \u251c\u2500 @typescript-eslint/parser@8.65.0 (requires 8.65.0)\n     \u2502  \u251c\u2500 typescript-eslint@8.65.0 (requires 8.65.0)\n     \u2502  \u2502  \u2514\u2500 dev tanstack_start_ts (requires ^8.56.1)\n     \u2502  \u2514\u2500 peer @typescript-eslint/eslint-plugin@8.65.0 (requires ^8.65.0)\n     \u2502     \u2514\u2500 typescript-eslint@8.65.0 (requires 8.65.0)\n     \u2502        \u2514\u2500 dev tanstack_start_ts (requires ^8.56.1)\n     \u251c\u2500 @typescript-eslint/type-utils@8.65.0 (requires 8.65.0)\n     \u2502  \u2514\u2500 @typescript-eslint/eslint-plugin@8.65.0 (requires 8.65.0)\n     \u2502     \u2514\u2500 *deduped\n     \u251c\u2500 @typescript-eslint/utils@8.65.0 (requires 8.65.0)\n     \u2502  \u251c\u2500 @typescript-eslint/eslint-plugin@8.65.0 (requires 8.65.0)\n     \u2502  \u2502  \u2514\u2500 *deduped\n     \u2502  \u251c\u2500 @typescript-eslint/type-utils@8.65.0 (requires 8.65.0)\n     \u2502  \u2502  \u2514\u2500 *deduped\n     \u2502  \u2514\u2500 typescript-eslint@8.65.0 (requires 8.65.0)\n     \u2502     \u2514\u2500 dev tanstack_start_ts (requires ^8.56.1)\n     \u2514\u2500 typescript-eslint@8.65.0 (requires 8.65.0)\n        \u2514\u2500 dev tanstack_start_ts (requires ^8.56.1)\n\n"
+  },
+  "lockChanges": [
+    {
+      "path": "@redocly/openapi-core/js-yaml",
+      "before": "js-yaml@4.3.2",
+      "after": "absent"
+    },
+    {
+      "path": "@tanstack/devtools-bundler-core/picomatch",
+      "before": "absent",
+      "after": "picomatch@4.0.5"
+    },
+    {
+      "path": "@tanstack/router-generator/zod",
+      "before": "zod@4.6.7",
+      "after": "absent"
+    },
+    {
+      "path": "@tanstack/router-plugin/zod",
+      "before": "zod@4.6.7",
+      "after": "absent"
+    },
+    {
+      "path": "@tanstack/start-plugin-core/picomatch",
+      "before": "picomatch@4.0.7",
+      "after": "absent"
+    },
+    {
+      "path": "@tanstack/start-plugin-core/zod",
+      "before": "zod@4.6.7",
+      "after": "absent"
+    },
+    {
+      "path": "js-yaml",
+      "before": "js-yaml@4.3.0",
+      "after": "js-yaml@4.3.2"
+    },
+    {
+      "path": "nanoid",
+      "before": "nanoid@3.3.16",
+      "after": "nanoid@3.3.18"
+    },
+    {
+      "path": "picomatch",
+      "before": "picomatch@4.0.5",
+      "after": "picomatch@4.0.7"
+    },
+    {
+      "path": "seroval",
+      "before": "seroval@1.6.8",
+      "after": "seroval@1.6.11"
+    },
+    {
+      "path": "source-map-js",
+      "before": "source-map-js@1.2.1",
+      "after": "source-map-js@1.2.2"
+    },
+    {
+      "path": "tinyglobby/picomatch",
+      "before": "absent",
+      "after": "picomatch@4.0.5"
+    },
+    {
+      "path": "unplugin/picomatch",
+      "before": "absent",
+      "after": "picomatch@4.0.5"
+    },
+    {
+      "path": "vite",
+      "before": "vite@8.1.5",
+      "after": "vite@8.1.6"
+    },
+    {
+      "path": "vitest/picomatch",
+      "before": "picomatch@4.0.7",
+      "after": "absent"
+    },
+    {
+      "path": "zod",
+      "before": "zod@3.25.76",
+      "after": "zod@4.6.7"
+    }
+  ],
+  "regression": {
+    "tests": 282,
+    "files": 25,
+    "wholeSuiteRuns": 1,
+    "status": "passed"
+  },
+  "modelUnchanged": true,
+  "paidInferenceCalls": 0,
+  "publication": "not yet requested"
+}

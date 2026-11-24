@@ -10,7 +10,7 @@ import { independentUrls } from "../src/test/fixtures/url-phase1b-independent";
 import { parse } from "tldts";
 
 const finalRun = process.argv.includes("--final");
-const freeze = z.object({ frozenAt: z.string(), files: z.record(z.string()) }).parse(JSON.parse(readFileSync(`docs/evaluation/phase1b-resume-${finalRun ? "final-freeze" : "freeze"}.json`, "utf8")));
+const freeze = z.object({ frozenAt: z.string(), files: z.record(z.string(), z.string()) }).parse(JSON.parse(readFileSync(`docs/evaluation/phase1b-resume-${finalRun ? "final-freeze" : "freeze"}.json`, "utf8")));
 for (const [file, hash] of Object.entries(freeze.files)) if (createHash("sha256").update(readFileSync(file)).digest("hex") !== hash) throw new Error(`Frozen file changed: ${file}`);
 const row = z.object({ id: z.string(), url: z.string(), label: z.enum(["legitimate", "suspicious"]), category: z.string() });
 const publicData = z.object({ rows: z.array(row.extend({ group: z.string() })) }).parse(JSON.parse(readFileSync(`docs/evaluation/phase1b-resume-${finalRun ? "final-public" : "public"}.json`, "utf8")));

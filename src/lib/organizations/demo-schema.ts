@@ -27,6 +27,10 @@ export function matchesDemoRegistry(org: { name: { ar: string; en: string }; cha
   const term = query.trim().toLowerCase();
   return !term || [org.name.ar, org.name.en, ...org.channels.map(c => c.value)].some(value => value.toLowerCase().includes(term));
 }
+/** Display filters only: prototype approval never becomes a trusted Organization. */
+export function matchesPrototypeRegistry(org: Parameters<typeof matchesDemoRegistry>[0], query: string, type: string, status: string) {
+  return (type === "all" || type === "business") && (status === "all" || status === "verified") && matchesDemoRegistry(org, query);
+}
 export function demoPayload(input: DemoRegistration): Organization {
   const data = demoRegistrationSchema.parse(input);
   const at = new Date().toISOString();

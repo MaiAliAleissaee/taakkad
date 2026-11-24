@@ -1,5 +1,9 @@
 # Final hackathon polish roadmap
 
+## Targeted staff-approved prototype registry restoration
+- [x] Restore four existing officer-approved simulated projections with green, explicitly prototype badges; preserve shared search/type/status filters and genuine registry isolation. Original yellow seed organizations remain hidden; supersedes only the simulated-list removal below.
+- [x] 43 focused tests pass; Arabic/English live search, filters, reload and 15-second automatic refresh pass at 855px/390px without overflow or page errors. Anonymous projection reads work; all four approvals have officer audit, direct public/staff writes and public approval RPC execution denied. Quick scan: only unchanged informational registry finding. No records/alerts/demo-kit/paid inference changed. Ready, not published; new authenticated approval-to-public readback not exercised to avoid record changes.
+
 ## Final presentation cleanup
 - [ ] Remove public sample cards and simulated organization lists; keep empty independent verification forms and existing workflows. Simulated awareness alerts retained separately by the subsequent targeted request.
 - [ ] Separate genuine public channel projections from preserved synthetic records with data-level safeguards.

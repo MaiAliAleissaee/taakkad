@@ -1,5 +1,9 @@
 # Phase 1C — credit-efficient supervised URL detection
 
+## Post-security-fix publication status — 24 November 2026
+
+The earlier publication blocker below is resolved by scoped security dependency updates in commit `b93dce2`; no model/dataset/code retraining or repeated accuracy evaluation. **282 regression tests passed**, both production dependency audits clear, automated build signal OK. Managed publication completed sufficiently to serve actual English/Arabic positive ML warning/65 and benign control/20 on https://taakkad.lovable.app/trust, with privacy, reload clearing and signed-out staff denials verified. A standalone managed production-build log is unavailable; production serving/execution was checked instead. Original metrics and limitation evidence below remain unchanged. Development-only tooling advisories remain outside this publication fix, explicitly documented rather than ignored. [Exact patches, advisory IDs, paths and publication evidence](PHASE_1C_SECURITY_REPORT.md).
+
 Date: 24 November 2026. Scope: lightweight URL-only ML, not Phase 2. Existing authentication, staff credentials, permissions, database, integrations, stored records and visual design remain unchanged.
 
 ## Diagnosis and bounded model selection

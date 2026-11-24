@@ -1,5 +1,13 @@
 # Final polish test report
 
+## Phase 1C publication blocker resolved — 24 November 2026
+
+Six scoped security package updates (source-map-js 1.2.2, js-yaml 4.3.2, Seroval 1.6.11, Zod 4.6.7, Nanoid 3.3.18, Vite 8.1.6); two offline `z.record` API signatures updated, no evaluation executed. **One final regression: 282 tests / 25 files passed**; targeted compatibility 56 + 38 tests passed. New tests cover the actual constrained-collection, YAML-merge, source-map and serializer security fixes. Both production audits passed (`bun audit --production`: `{}`, scanner: no vulnerabilities in 59 production packages). Quick backend scan retained one informational public-projection finding; no critical/warnings and no finding suppression. Unrelated development-only advisories remain documented.
+
+Managed publication was requested after checks and **actual deployed inference verified** at https://taakkad.lovable.app/trust in English desktop and Arabic mobile: learned positive warning/65, benign control/20 with no ML warning, unchanged Unverified Channel, AI/metadata off, no target fetch or input persistence, reload clearing, no page exceptions/overflow and signed-out `/security` and `/officer` redirected to `/auth`. Screenshots inspected. Production serving/execution is verified; a standalone managed production-build log is unavailable, so no manual build result is claimed. The initial verification script had a quote syntax error before navigating; correcting the script yielded the successful live check, with no repeat paid call or benchmark.
+
+The trained artifact is byte-identical to `7aa31e0`; no retraining, new accuracy measurements, credential/role/record changes or paid inference. Fix commit `b93dce2`; final documentation commit supplied in delivery. Earlier publication-withheld notes below are historical and superseded. Complete dependency paths/advisory IDs/remaining development tooling mitigations: `docs/PHASE_1C_SECURITY_REPORT.md` and `docs/evaluation/phase1c-security-live.json`. Phase 2 has not started.
+
 ## Phase 1C measured results — 24 November 2026
 
 Fresh corrected final set: **4000 domains**, balanced historical PhiUSIIL labels, disjoint from 16000 training and 4000 validation domains and all previous experiments (including rejected Phase 1C). Final URLs are unaugmented; synthetic formatting variants exist only in training/validation. Selection: three local models, augmented-validation FPR <=5% then best F1, no final-set tuning. Frozen hashes and every prediction/error are in `docs/evaluation/phase1c-*`.

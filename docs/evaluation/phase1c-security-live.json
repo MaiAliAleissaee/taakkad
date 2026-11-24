@@ -1,0 +1,73 @@
+{
+  "en": {
+    "modelWarningVisible": true,
+    "ordinalScore": 65,
+    "benignControlScore": 20,
+    "benignMlWarningAbsent": true,
+    "testedUrl": "https://taakkad.lovable.app/trust",
+    "registryState": "unverified",
+    "aiAndMetadataOff": true,
+    "noTargetRequest": true,
+    "reloadClearsResult": true,
+    "noInputPersistence": true,
+    "noHorizontalOverflow": true,
+    "signedOutDenials": [
+      "security",
+      "officer"
+    ],
+    "runtimeErrors": []
+  },
+  "ar": {
+    "modelWarningVisible": true,
+    "ordinalScore": 65,
+    "benignControlScore": 20,
+    "benignMlWarningAbsent": true,
+    "testedUrl": "https://taakkad.lovable.app/trust",
+    "registryState": "unverified",
+    "aiAndMetadataOff": true,
+    "noTargetRequest": true,
+    "reloadClearsResult": true,
+    "noInputPersistence": true,
+    "noHorizontalOverflow": true,
+    "signedOutDenials": [
+      "security",
+      "officer"
+    ],
+    "runtimeErrors": []
+  },
+  "publication": {
+    "requested": true,
+    "verified": true,
+    "url": "https://taakkad.lovable.app/trust",
+    "fixCommit": "b93dce2",
+    "productionBuildEvidence": "Managed production deployment serves the actual updated ML flow; standalone production-build log unavailable"
+  },
+  "checks": {
+    "regressionTests": 282,
+    "testFiles": 25,
+    "wholeSuiteRuns": 1,
+    "productionAudit": {},
+    "productionScanner": "No known vulnerabilities in 59 production dependencies",
+    "quickDatabaseFinding": "One pre-existing informational public projection finding, untouched",
+    "developmentOnlyAdvisories": "Remain documented in PHASE_1C_SECURITY_REPORT.md and initial security JSON evidence",
+    "paidInferenceCalls": 0,
+    "retrained": false,
+    "phase2Started": false
+  },
+  "changedFiles": [
+    "README.md",
+    "TEST_REPORT.md",
+    "bun.lock",
+    "docs/PHASE_1C_REPORT.md",
+    "docs/PHASE_1C_SECURITY_REPORT.md",
+    "docs/evaluation/phase1c-security-evidence.json",
+    "docs/evaluation/phase1c-security-live.json",
+    "package.json",
+    "roadmap.md",
+    "scripts/evaluate-phase1b-resume.ts",
+    "scripts/evaluate-phase1b.ts",
+    "src/test/dependency-security.test.ts"
+  ],
+  "modelSha256": "089276cac26e8648a4a294e07195f25f25a9e2469790eff971339e993fdf143c",
+  "modelByteIdentical": true
+}

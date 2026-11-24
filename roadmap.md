@@ -6,7 +6,7 @@
 - [x] Compare three compact models; reject formatting-biased v1, make one invariant correction, freeze fresh v2 and integrate local inference without changing registry facts.
 - [x] Measure v2 ML/combined on 4000 unseen domains; 277 tests in one final suite, build OK, bilingual desktop/mobile/private-result/staff-denial checks passed without paid inference.
 - [x] Update documentation with actual metrics, rejected evidence, limitations and exact file inventory; save commit, no Phase 2.
-- [ ] Publish Phase 1C after cleared production dependency checks; verify actual English/Arabic production ML, privacy and signed-out staff boundaries. Non-production development-only advisories remain separately documented, no unrelated upgrades.
+- [x] Publish Phase 1C after cleared production dependency checks; actual English/Arabic positive/benign production ML, privacy, reload and signed-out staff boundaries verified. Non-production development-only advisories remain separately documented, no unrelated upgrades or repeated benchmarks.
 
 ## Phase 1B detection accuracy
 - [x] Resumed audit: general error fixes, expanded DNS and separate operator-authorized IP-pinned scanner; preserve prior evidence.

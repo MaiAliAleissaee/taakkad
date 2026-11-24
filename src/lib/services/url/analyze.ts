@@ -10,7 +10,7 @@ export interface UrlAnalysis {
   officialDomain: string | null; signals: UrlSignal[]; riskScore: number;
   classification: "low" | "caution" | "suspicious"; networkEligible: boolean;
 }
-const sensitive = /(?:login|signin|verify|verification|password|credential|payment|pay|account|otp|fine|fines|auth|kyc|card|تسجيل|دفع|تحقق)/i;
+const sensitive = /(?:login|signin|verify|verification|password|credential|payment|pay|account|otp|fine|fines|auth|kyc|card|refund|reward|reimbursement|تسجيل|دفع|تحقق|استرداد|مكافأة)/i;
 const shorteners = new Set(["bit.ly", "t.co", "tinyurl.com", "is.gd", "cutt.ly", "rb.gy", "shorturl.at", "s.id", "rebrand.ly", "ow.ly"]);
 const glyphs: Record<string, string> = { "а":"a", "е":"e", "о":"o", "р":"p", "с":"c", "х":"x", "у":"y", "і":"i", "ј":"j", "ѕ":"s", "ӏ":"l", "ԁ":"d", "α":"a", "ο":"o", "ρ":"p", "ν":"v", "ι":"i", "0":"o", "1":"l" };
 const skeleton = (text: string) => [...text.toLowerCase().normalize("NFKC")].map(c => glyphs[c] ?? c).join("");
@@ -46,7 +46,14 @@ export function analyzeUrl(raw: string, depth = 0): UrlAnalysis {
   const host = url.hostname.toLowerCase().replace(/\.$/, "");
   const parts = parse(host, { allowPrivateDomains: true });
   const official = officialReferences.find(ref => isDomainBoundary(host, ref.domain));
-  const unicode = toUnicode(host);
+  let unicode = host;
+  try {
+    unicode = toUnicode(host);
+    if (host.split(".").some(label => label.startsWith("xn--") && !/[^\x00-\x7f]/.test(toUnicode(label)))) throw new Error("Invalid IDN");
+  } catch {
+    add("invalid_idn", 40, "The internationalized hostname cannot be decoded reliably; its identity is unverified.", "لا يمكن فك ترميز اسم المضيف الدولي بشكل موثوق؛ هويته غير متحقق منها.");
+    return { valid: false, host, domain: parts.domain, suffix: parts.publicSuffix, officialDomain: null, signals, riskScore: 40, classification: "caution", networkEligible: false };
+  }
   const normalized = skeleton(unicode);
   const core = skeleton(toUnicode(parts.domainWithoutSuffix ?? ""));
   const isIp = ipaddr.isValid(host.replace(/^\[|\]$/g, ""));
@@ -70,14 +77,15 @@ export function analyzeUrl(raw: string, depth = 0): UrlAnalysis {
   if (!official && hasSensitive) add("sensitive_path", 20, "The URL contains login, payment or account-related patterns on an unconfirmed domain; these words alone do not prove fraud.", "يتضمن الرابط أنماط تسجيل أو دفع أو حساب على نطاق غير مؤكد؛ هذه الكلمات وحدها لا تثبت الاحتيال.");
   if (!official) {
     for (const ref of officialReferences) {
-      const fullReference = normalized.includes(ref.domain);
+      // A complete sequence of DNS labels, never a substring such as u.ae inside du.ae.
+      const fullReference = normalized === ref.domain || normalized.startsWith(`${ref.domain}.`) || normalized.endsWith(`.${ref.domain}`) || normalized.includes(`.${ref.domain}.`);
       const aliases = ref.aliases;
       const impersonates = aliases.some(alias => {
         const labelTokens = normalized.split(/[.-]/);
         const compact = core.replace(/-/g, "");
         const exact = labelTokens.includes(alias) || core === alias;
         const position = compact.indexOf(alias);
-        const compound = position >= 0 && (sensitive.test(compact.replace(alias, "")) || identityContext.test(compact.replace(alias, "")));
+        const compound = alias.length >= 4 && position >= 0 && (sensitive.test(compact.replace(alias, "")) || identityContext.test(compact.replace(alias, "")));
         const typo = alias.length >= 5 && core.length >= 5 && levenshtein(core.replace(/-/g, ""), alias) <= 1;
         return compound || typo || (exact && (hasSensitive || identityContext.test(core)));
       });

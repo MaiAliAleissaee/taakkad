@@ -1,11 +1,14 @@
 # Final hackathon polish roadmap
 
 ## Phase 1B detection accuracy
+- [ ] Resumed audit: implement general error fixes, expanded DNS and isolated operator scanning; preserve prior evidence.
+- [ ] Freeze revised engine and evaluate a new disjoint 500+ labeled sample, including separate controlled scenarios.
+- [ ] Run complete regressions, verify preview/published state, and update all Phase 1B technical reports.
 - [x] Diagnose previously seen errors; strengthen general URL handling while preserving original evaluation artifacts.
 - [x] Investigate scanning; add real fixed-origin DNS/RIPE and explicitly offline page/redirect fixtures only.
 - [x] Freeze engine; evaluate 1,000 external labeled + 39 new controlled cases, baseline/fallback/category matrices and all errors; targets unmet.
 - [x] Verify preview bilingual/mobile/privacy, published-engine absence and read-only staff mappings; 251 regressions pass, build OK, required documentation updated.
-- [ ] Publish Phase 1B and verify published new engine — owner publishing action not authorized in this request; current live site uses older engine.
+- [ ] Publish Phase 1B after final tests and verify published new engine — owner approved publication on 24 November 2026.
 - [ ] Actual safe redirect/shortener and live cloaking scan — needs authorized isolated scanner/transport with pinned public-IP egress and privacy controls.
 - [ ] Large full-AI hybrid evaluation — requires approved multi-day plan/credits within existing quotas; 4 real functional checks only.
 

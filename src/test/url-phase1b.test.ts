@@ -15,12 +15,12 @@ describe("DNS fixed-origin and privacy boundaries", () => {
   it("gets actual requested subdomain records and public ASN metadata only", async () => {
     const request = vi.fn<typeof fetch>().mockImplementation(async input => String(input).includes("stat.ripe.net") ? response({status:"ok",data:{asns:["15169"],prefix:"8.8.8.0/24"}}) : response({Status:0,AD:true,Answer:[{name:"login.adcb.com.",type:1,data:"8.8.8.8"}]}));
     expect(await lookupDns("login.adcb.com",request)).toMatchObject({status:"available",domain:"login.adcb.com",addresses:["8.8.8.8"],network:{asns:[15169]}});
-    expect(request).toHaveBeenCalledTimes(3);
+    expect(request).toHaveBeenCalledTimes(6);
     for(const [url,options] of request.mock.calls) { expect(["dns.google","stat.ripe.net"]).toContain(new URL(String(url)).hostname); expect(options).toMatchObject({redirect:"manual",credentials:"omit",referrerPolicy:"no-referrer"}); }
   });
   it.each(["localhost","site.example","127.0.0.1","adcb.com/private?secret=value","adcb.com@127.0.0.1"]) ("blocks inappropriate DNS input %s", async domain => { const request=vi.fn<typeof fetch>();expect(await lookupDns(domain,request)).toMatchObject({status:"unavailable",reason:"blocked"});expect(request).not.toHaveBeenCalled(); });
-  it("never enriches a private DNS answer or connects to it", async () => { const request=vi.fn<typeof fetch>().mockImplementation(async()=>response({Status:0,Answer:[{name:"adcb.com.",type:1,data:"10.0.0.1"}]}));expect(await lookupDns("adcb.com",request)).toMatchObject({status:"available",nonPublicAnswers:true,network:null});expect(request).toHaveBeenCalledTimes(2); });
-  it("rejects DNS provider redirects", async () => {const request=vi.fn<typeof fetch>().mockResolvedValue(new Response(null,{status:302,headers:{Location:"http://169.254.169.254"}}));expect(await lookupDns("adcb.com",request)).toMatchObject({status:"unavailable"});expect(request).toHaveBeenCalledTimes(2);});
+  it("never enriches a private DNS answer or connects to it", async () => { const request=vi.fn<typeof fetch>().mockImplementation(async()=>response({Status:0,Answer:[{name:"adcb.com.",type:1,data:"10.0.0.1"}]}));expect(await lookupDns("adcb.com",request)).toMatchObject({status:"available",nonPublicAnswers:true,network:null});expect(request).toHaveBeenCalledTimes(5); });
+  it("rejects DNS provider redirects", async () => {const request=vi.fn<typeof fetch>().mockResolvedValue(new Response(null,{status:302,headers:{Location:"http://169.254.169.254"}}));expect(await lookupDns("adcb.com",request)).toMatchObject({status:"unavailable"});expect(request).toHaveBeenCalledTimes(5);});
   it("does not invent NXDOMAIN or oversized records", async()=>{ expect(await lookupDns("adcb.com",vi.fn<typeof fetch>().mockImplementation(async()=>response({Status:3})))).toMatchObject({reason:"no_records"});expect(await lookupDns("adcb.com",vi.fn<typeof fetch>().mockImplementation(async()=>response({padding:"x".repeat(70000)})))).toMatchObject({status:"unavailable"}); });
 });
 describe("Controlled non-executing page and redirect fixtures", () => {

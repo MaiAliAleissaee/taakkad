@@ -21,5 +21,6 @@ export const officialReferences = [
   { domain: "rakbank.ae", name: "RAKBANK", ar: "راك بنك", aliases: ["rakbank"], source: "https://www.rakbank.ae/en/contact-us" },
   { domain: "cbd.ae", name: "Commercial Bank of Dubai", ar: "بنك دبي التجاري", aliases: ["cbd"], source: "https://www.cbd.ae/personal/help-and-support" },
   { domain: "emiratesislamic.ae", name: "Emirates Islamic", ar: "الإمارات الإسلامي", aliases: ["emiratesislamic"], source: "https://www.emiratesislamic.ae/en/help-and-support" },
+  { domain: "du.ae", name: "du", ar: "دو", aliases: ["du"], source: "https://www.du.ae/" },
 ] as const;
 export const isDomainBoundary = (host: string, domain: string) => host === domain || host.endsWith(`.${domain}`);

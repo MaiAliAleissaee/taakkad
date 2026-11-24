@@ -17,16 +17,27 @@ export function inspectPageFixture(url: string, html: string) {
   walk(tree);
   const attribute = (node: DefaultTreeAdapterTypes.Element, name: string) => node.attrs.find(a => a.name === name)?.value ?? "";
   function text(node: DefaultTreeAdapterTypes.Node): string {
+    if ("tagName" in node && ["script", "style", "template"].includes(node.tagName)) return "";
     if ("value" in node && node.nodeName === "#text") return node.value;
     return "childNodes" in node ? node.childNodes.map(text).join(" ") : "";
   }
-  const title = elements.filter(e => e.tagName === "title").map(text).join(" ").toLowerCase().replace(/[\s-]+/g, "");
-  const titleMismatch = officialReferences.some(ref => ref.aliases.some(alias => title.includes(alias)) && !isDomainBoundary(page.host, ref.domain));
+  const titleText = elements.filter(e => e.tagName === "title").map(text).join(" ").toLowerCase();
+  const title = titleText.replace(/[\s-]+/g, "");
+  const titleMismatch = officialReferences.some(ref => ref.aliases.some(alias => alias.length <= 3 ? titleText.split(/[^a-z\d]+/).includes(alias) : title.includes(alias)) && !isDomainBoundary(page.host, ref.domain));
+  let base = url;
+  const baseElement = elements.find(e => e.tagName === "base");
+  try { base = new URL((baseElement ? attribute(baseElement, "href") : "") || url, url).href; } catch { /* Invalid base cannot create a verified identity. */ }
   const credentialForms = elements.filter(e => e.tagName === "form" && e.childNodes.some(function hasPassword(node): boolean {
     return ("tagName" in node && node.tagName === "input" && (attribute(node, "type").toLowerCase() === "password" || /^(?:otp|password|cardnumber)$/i.test(attribute(node, "name")))) || ("childNodes" in node && node.childNodes.some(hasPassword));
   }));
   const externalCredentialForm = credentialForms.some(form => {
-    try { const action = new URL(attribute(form, "action") || url, url); const target = analyzeUrl(action.href); return !target.valid || target.domain !== page.domain || action.protocol !== "https:"; } catch { return true; }
+    const actions = [attribute(form, "action") || url];
+    function overrides(node: DefaultTreeAdapterTypes.Node) {
+      if ("tagName" in node && attribute(node, "formaction")) actions.push(attribute(node, "formaction"));
+      if ("childNodes" in node) node.childNodes.forEach(overrides);
+    }
+    overrides(form);
+    return actions.some(value => { try { const action = new URL(value, base); const target = analyzeUrl(action.href); return !target.valid || target.domain !== page.domain || action.protocol !== "https:"; } catch { return true; } });
   });
   return { scope: "controlled_fixture_only" as const, titleMismatch, externalCredentialForm, credentialFormCount: credentialForms.length, suspicious: externalCredentialForm || (titleMismatch && credentialForms.length > 0) };
 }

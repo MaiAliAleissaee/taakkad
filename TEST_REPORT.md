@@ -1,5 +1,19 @@
 # Final polish test report
 
+## Resumed Phase 1B verification — 24 November 2026
+
+Current evidence supersedes earlier current-state claims; historical artifacts below remain unchanged. Final new external holdout: 1,000 distinct registrable-domain groups, 500 source-positive/500 source-negative, disjoint from original/reviewer/previous two external samples. Source PhiUSIIL UCI 967, Prasad & Chandra (2024), CC BY 4.0; only URL/label used, no sites visited. Final TP/TN/FP/FN **0/500/0/500**, accuracy **50%**, precision **undefined**, recall/F1 **0%**, FPR **0%**; baseline `21eb114` identical on the same sample. Targets fail. Every case/error is retained.
+
+Independent first-pass reviewer cases: 60 URL examples **19/29/1/11**, 80% accuracy / 95% precision / 63.33% recall / 76% F1 / 3.33% FPR; 12 offline HTML examples **3/6/0/3**, 75% accuracy / 100% precision / 50% recall / 66.67% F1 / 0% FPR; eight supplied redirect chains **3/4/0/1**, 87.5% accuracy / 100% precision / 75% recall / 85.71% F1 / 0% FPR. No pooling with external evidence. Preserved-demo testing then found the new `du` substring alias misclassified fictional DunePay. The general short-alias compound rule was corrected, without changing the preserved test or data. Reviewer cases became **seen**; final replay URL counts **18/29/1/12**, 78.33% accuracy. First-pass datasets/results/freeze retained; second fresh external sample frozen before final predictions. No improvement inferred from reusing heldouts.
+
+Scanner checks: actual `https://httpbin.org/redirect/2` → relative redirect → `/get`, three fresh validated/pinned TLSv1.3 connections; `example.org` successful TLSv1.3 and non-executing HTML analysis. `www.du.ae` HTTPS downgrade correctly blocked, not fabricated as resolved. Seven Python safety tests cover private/mapped/multicast IPs, fresh second-hop denial, authorized resolution, hop/loop limits, sensitive/unauthorized URL rejection, size/status/downgrade denial and literal-IP TLS/SNI pinning. App regression coverage includes form base/override exfiltration, malformed IDN, financial-return contexts, short-name boundary controls, MX/NS/CAA and evaluation leakage.
+
+Actual preview: refund lure → High/74; `du.ae` → Low/20, actual MX/NS and ASN 15802/prefix `94.206.160.0/19`. English/Arabic screenshots inspected, 390×844 no horizontal overflow, reload clears private results, signed-out `/security` and `/officer` → `/auth`, no runtime exceptions. Two genuine AI calls: English credential threat Critical/90, Arabic information Low/20. No report, user, password, role, schema or existing record change. Metadata reservations and two AI reservations are ordinary existing usage.
+
+Published application genuinely checked: `https://taakkad.lovable.app/trust` still returns Low/20 for the new refund lure and has no `chk-rdap`; **FAIL — current Phase 1B not deployed**. Owner publication approval requested; no publishing/settings change made. Read-only staff audit: HAM123 Officer+Public Visitor, HAM1234 Analyst+Public Visitor, both confirmed/password-configured with prior 23 November sign-ins. No owner password login or positive authenticated dashboard check in this turn; mappings and unit tests are not password evidence.
+
+Full counts, categories/errors, reproduction, technical blockers and final automated totals appear in `docs/PHASE_1B_REPORT.md`. Full 500-case AI hybrid evaluation, arbitrary public scanner/shortener deployment, live JS/cloaking and `.ae` registration metadata remain incomplete. Phase 2 has not started.
+
 ## Phase 1B — 24 November 2026 (current evidence)
 
 ### Frozen-engine measurements

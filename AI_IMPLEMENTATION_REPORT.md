@@ -1,5 +1,15 @@
 # TRUST ZERO AI — hybrid AI implementation and validation
 
+## Resumed Phase 1B — 24 November 2026
+
+Preserved model/provider: server-only OpenAI **`openai/gpt-6.1-sol`**, Lovable Gateway Responses, original 2,400-token cap, prompts/schema/redaction/grounding, 5/visitor/10 minutes and 200/day global reservation. No model/key/quota/role change. Expanded URL rules feed the existing hybrid maximum; real DNS and operator page evidence do **not** become registry facts or model-authenticated website identity. Remote static HTML is never injected into AI prompts or executed.
+
+Two fresh opt-in preview UI inferences actually completed: English ADCB password/one-time-code suspension lure → **Critical / combined 90**; Arabic official-government informational control → **Low / combined 20**. Both language outputs, grounded indicators and safety actions were inspected; no report or private case was created. These two functional checks (TP/TN/FP/FN 1/1/0/0) are not a full accuracy benchmark. Earlier four-inference evidence is retained separately, not pooled to inflate a new sample.
+
+Separate deterministic and AI-unavailable hybrid fallback measurements on the fresh final 1,000-case external holdout both returned **0/500/0/500**, 50% accuracy, 0% recall/F1, undefined precision and 0% FPR. All misses are retained. On the independent first-pass 60 controlled URL set, both returned **19/29/1/11**; post-regression-fix replay is **18/29/1/12**, now seen evidence. Static-page and supplied-chain fixture scores are separate, not full hybrid metrics. No 500-case real AI evaluation was performed: it requires an authorized multi-day evaluation within unchanged cost/request limits, not quota bypass or fabricated responses.
+
+Real IP-pinned operator redirect/TLS/static HTML work is separate from the public app; arbitrary submitted URLs remain unopened. Live browser-rendered/cloaking detection, visitor shortener expansion and published Phase 1B are still incomplete. Full audit/results/safety boundaries are in `docs/PHASE_1B_REPORT.md`.
+
 ## Phase 1B — measured hybrid boundaries (24 November 2026)
 
 The current brand is Taakkad / تأكّد; the historical report below remains unchanged. Existing server-only **OpenAI `openai/gpt-6.1-sol`**, Responses surface, 2,400-output-token cap, double redaction, strict bilingual JSON schema, prompt-injection instructions, supplied-text grounding and atomic quotas remain unchanged. No alternate model, external key or new browsing tool was introduced.

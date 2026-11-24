@@ -1,5 +1,83 @@
 # Taakkad — Phase 1B completion report
 
+## Resumed Phase 1B final audit — 24 November 2026
+
+**Overall PARTIAL. Detection-accuracy targets FAIL. Published updated engine FAIL/pending owner approval. Phase 2 NOT started.** This section supersedes current-state claims in the retained earlier report below. The Punycode named import and matching Vite entry remain preserved.
+
+### Requirement audit and implemented changes
+
+| Original requirement | Already implemented | Resumed outcome |
+|---|---|---|
+| Preserve workflows/security/data | Bilingual three portals, private checks, staff roles, original design | Preserved; no credentials/users/roles/schema/private records changed |
+| Investigate errors/general URL rules | Compound/nested/base64/IP/context rules | Whole-DNS-label references, short-alias boundary guard, refund/reward context, invalid IDN fail-safe; no test URL allowlist |
+| Safe redirects / shorteners | Detection + offline policy only | Real **operator-only IP-pinned CLI** with per-hop authorization; public visitor scanner still unavailable |
+| Page impersonation / cloaking | Non-executing offline title/form fixtures | Base/button credential action checks and actual static-capture analysis; differential partial indicators only, no confirmed/live browser cloaking |
+| `.ae`/DNS/hosting/TLS | Actual DoH A/AAAA/CNAME and RIPE; limited RDAP | Actual MX/NS/CAA added; operator TLS certificates verified; `.ae` registration unavailable, no hosting ownership claims |
+| Official references | Sourced bank/government identity references | First-party `du.ae` source fetched and added; complete label/token boundaries, no generic `.gov.ae` allowlist |
+| Hybrid | Real optional grounded/redacted AI + fallback | Preserved model/settings/quotas; separate fallback evaluation + two fresh real bilingual checks |
+| Independent 500+ evaluation | Prior 1,000 historical + 39 controlled | Two new 1,000-row external samples plus 80 independent reviewer scenarios; final external set domain-disjoint from every prior set |
+| Full regression/deployment | Earlier 251 tests and published old-engine failure | Full suite rerun; published old engine independently reconfirmed; publication approval pending |
+| Documentation/report | Phase 1/1B artifacts | README, architecture, AI/test reports and this complete audit updated; original master note preserved |
+
+### Exact measurements (positive = ordinal score ≥50, not fraud probability)
+
+| Dataset / engine | N | TP | TN | FP | FN | Accuracy | Precision | Recall | F1 | FPR |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Original Phase 1 baseline, now seen | 48 | 21 | 23 | 1 | 3 | 91.67% | 95.45% | 87.50% | 91.30% | 4.17% |
+| Original final replay, now seen | 48 | 24 | 24 | 0 | 0 | 100% | 100% | 100% | 100% | 0% |
+| Prior 39 controlled, earlier Phase 1B | 39 | 16 | 17 | 2 | 4 | 84.62% | 88.89% | 80% | 84.21% | 10.53% |
+| Prior 39 final replay, now seen | 39 | 17 | 18 | 1 | 3 | 89.74% | 94.44% | 85% | 89.47% | 5.26% |
+| New independent controlled URLs, baseline `21eb114` | 60 | 18 | 29 | 1 | 12 | 78.33% | 94.74% | 60% | 73.47% | 3.33% |
+| New independent controlled URLs, first pass | 60 | 19 | 29 | 1 | 11 | 80% | 95% | 63.33% | 76% | 3.33% |
+| Same controlled URLs, final replay **seen** | 60 | 18 | 29 | 1 | 12 | 78.33% | 94.74% | 60% | 73.47% | 3.33% |
+| Independent offline HTML, first pass/final replay | 12 | 3 | 6 | 0 | 3 | 75% | 100% | 50% | 66.67% | 0% |
+| Independent supplied chains, first pass/final replay | 8 | 3 | 4 | 0 | 1 | 87.50% | 100% | 75% | 85.71% | 0% |
+| New external first pass, baseline/current | 1000 | 3 | 500 | 0 | 497 | 50.30% | 100% | 0.60% | 1.19% | 0% |
+| **Fresh final external**, baseline/current | **1000** | **0** | **500** | **0** | **500** | **50%** | **Undefined** | **0%** | **0%** | **0%** |
+
+Confusion ordering is TP/TN/FP/FN. Undefined precision means **zero predicted positives**, not perfect precision. Zero FPR combined with 500 misses is not success. Deterministic and explicitly AI-unavailable hybrid fallback were separately run and returned identical URL-only counts. Offline HTML/chain samples are separate controlled capabilities, never pooled into external or full-AI accuracy. Two fresh full-AI functional checks yielded **1/1/0/0**, N=2; not a benchmark or guarantee. Targets 98% accuracy/recall/F1, 99% precision and <1% FPR are **NOT achieved**.
+
+### Dataset provenance, independence and retained failures
+
+- Source: [PhiUSIIL UCI 967](https://archive.ics.uci.edu/dataset/967/phiusiil+phishing+url+dataset), Prasad & Chandra (2024), [DOI](https://doi.org/10.1016/j.cose.2023.103545), CC BY 4.0. Source SHA-256 `a236549cd369cd80bd478ff8e1779cbf44c58d5c3f79f7a51a1adbed7d06d1c6`, 235,795 rows. Only URL/source label supplied; derived features/title/content unavailable to engine. All listed URLs defanged, none visited.
+- First sample: 1,000 new balanced source-labeled rows, one seeded lowest-hash row per domain, excluding all original/prior-reviewer/prior-public domains before selection. The final sample uses a different fixed seed and also excludes every first-sample domain; 1,000 additional distinct groups, 500 positive/500 negative. Historical source labels are not independently revalidated current website verdicts. This is a fresh split of the **same external corpus**, not a new research source or representative UAE deployment study.
+- Independent reviewer `sub_pt91cv47` did not inspect detection code, predictions or old errors; supplied 60 URLs (30/30), 12 HTML (6/6), eight redirect chains (4/4). Diverse categories: UAE official banks/government/login/payment, Unicode, compound names, typos, nested/encoded URLs, userinfo/path/query lures, ordinary commerce/forum and editorial negatives. Labels describe intended controlled semantics. The reviewer calls `salik.gov.ae` official without independent certification; its proposed label remains unchanged and its false positive disclosed, not promoted into official references.
+- First engine/data freeze preceded predictions. Subsequent full regression detected **new short-alias `du` compound matching misclassified existing fictional DunePay**. The preserved test and data were not altered. General fix requires sufficiently long compound aliases; small aliases use whole-token/context evidence. Because code changed, first artifacts remain and controlled cases are explicitly now **seen**. A second fresh domain-disjoint external sample was frozen before final predictions; no tuning followed its results.
+- Final external 500 misses expose the generalization gap: unknown/compromised URL strings lack configured brand or syntax clues; unavailable webpage/context evidence cannot be invented. Controlled final failures include missing long human brand aliases, compound typos separated by extra tokens, incomplete redirect-key vocabulary and brand claims only in query/body; page misses include long bank/police/Unicode title aliases and incomplete card-field vocabulary. These are not tuned using final labels. Category matrices and **all failures** remain in `phase1b-resume-results.json` and `phase1b-resume-final-results.json`.
+
+### Real integrations and safety status
+
+**Redirect-chain / final destination: PASS for separately authorized operator CLI; NOT AVAILABLE in public app.** `scripts/scan-url.py` actually resolves DNS on every hop, rejects any non-public/mixed answer and pins the connection to a validated literal IP; checks actual peer equality, verifies TLS/SNI against the original hostname. HTTP(S)/standard ports only; explicit host allowlist every hop; sensitive userinfo/query/fragment URLs rejected; no proxies/cookies/referrer/credentials; five-second socket timeout, six responses, 128 KiB identity-only body cap, redirect loop/downgrade checks; POSIX 20-second process alarm includes DNS/TLS/slow reads. No scripts/forms executed. Scanner is an operator tool, not an app endpoint, isolated hosted integration, scheduled task or installed container.
+
+**Actual live evidence:** `https://httpbin.org/redirect/2` → `/relative-redirect/1` → `/get`, statuses 302/302/200, three freshly validated/pinned connections, TLSv1.3; certificate dates `2026-11-05` → `2027-02-03`. `https://example.org/` returned 200, TLSv1.3, certificate dates `2026-09-26` → `2026-12-25`; non-executing static analysis found no title/form suspicion. `www.du.ae` returned HTTPS→HTTP and was correctly blocked. Only authorized benign/official sites were visited, never fraud dataset sites. Certificate metadata verifies a connection, not organization authenticity.
+
+**Shorteners: PARTIAL.** The operator transport follows genuine HTTP redirect chains and can handle a shortener only when all hosts are explicitly authorized and no query/secret disclosure is involved. No live `bit.ly`/`tinyurl` destination was resolved or claimed. The public portal detects shorteners but still reports destination unverified. Privacy blocks forwarding raw visitor links without explicit permission; a deployed scanner must have independently enforced egress isolation, all-hop pinning and safe limits. Existing Worker `fetch` has no general third-party DNS-pinned connection control (`resolveOverride` zone restriction), so ordinary DoH then hostname fetch is not substituted.
+
+**Page impersonation/cloaking: PARTIAL.** Non-executing parse5 checks credential forms, title/domain mismatch, HTML base and submit override actions; actual benign captured HTML analyzed. Two same-final-URL static captures may be compared for partial content/form differences, never confirmed cloaking. No remote JS, credential submission, browser fingerprint simulation, login bypass or live malicious-page scanning. No authorized isolated browser service/connector exists; current connection list empty. Alternatives: provision an owner-approved isolated browser/container scanner with explicit retention/URL-consent controls, or authorized private urlscan/Browser Run after credentials/bindings/egress requirements are approved. A static CLI is not a substitute for JS-rendered cloaking detection.
+
+**`.ae` intelligence: actual DNS PASS; registration unavailable.** Fresh IANA RDAP bootstrap publication `2026-11-20T23:00:03Z` still has no `.ae` service; registration dates/registrars absent, not guessed from DNS/TLS. Actual `du.ae` Google DNS: A `94.206.168.161`, MX `2 du-ae.mail.protection.outlook.com.`, NS `dxbns1/2/3.duhosting.ae.`; no CAA answer invented. RIPE ASN **15802**, prefix **94.206.160.0/19**. DNSSEC not confirmed. App shows these real fields bilingually; sends only canonical hostname/domain under existing limiter. Sources: fixed Google DoH and RIPE; `.com/.net/.org` fixed-provider RDAP preserved. These are resolver/routing snapshots, not authoritative hosting ownership or safety. Future registry-approved WHOIS API or authenticated registrar access could supply `.ae` dates; no unauthenticated WHOIS scraping/credential was added.
+
+**Hybrid/model:** OpenAI `openai/gpt-6.1-sol` through existing server-only Lovable Gateway Responses, 2,400-output-token cap unchanged. Prompt-injection/redaction/strict schema/grounding/atomic 5-per-10-minutes + 200/day untouched. Two actual preview inferences: English ADCB credential/OTP threat **Critical/90**, Arabic informational official government URL **Low/20**. No reports saved. Large full-hybrid evaluation is **NOT VERIFIED**; 500+ real calls require an approved multi-day credit/request plan, never budget bypass or inferred AI results.
+
+### Regression, privacy, staff and published verification
+
+- Final automated test totals and clean build are recorded in the delivery evidence section below. Existing private-check, registry, staff auth/role, organization/audit, graph, alert, AI grounding/fallback and date tests included. Seven Python scanner safety tests passed. New integrity tests retain all samples, enforce domain-disjoint final selection and preserve malformed inputs rather than dropping them.
+- Live preview English refund lure High/74; real `du.ae` DNS/NS/MX/ASN Low/20, Arabic labels inspected; 390×844 mobile no horizontal overflow; reload clears visit-private results; signed-out staff URLs redirect to `/auth`; no browser runtime exceptions. Initial language test used an incorrect exact accessible name; corrected selector rerun passed, with no code/label changes or AI replay.
+- Staff audit **read-only**: HAM123 Officer+Public Visitor; HAM1234 Analyst+Public Visitor, both confirmed/password-configured; prior sign-ins 23 November. No owner-password sign-in or positive authenticated staff walkthrough performed. Credential/permission changes forbidden; test mappings are not password success. Existing owner credential, legacy inbox/OTP and independent Supervisor workflow verification remain unresolved.
+- Published `https://taakkad.lovable.app/trust` actually loaded and submitted the refund lure: **Low/20**, no new metadata consent control. **FAIL: published app is older**. No publish/deployment/configuration change performed; explicit owner approval requested. Test is evidence of version absence, not proof new engine works published. Separate owner publication action is required before rerunning the same check.
+- No new users/roles/credentials/private records/deletions, database/schema/permissions/deployment settings, paid subscription or external key. Only normal existing metadata and two AI usage reservations. Original design/brand/navigation/workflows/master README note and Punycode fix preserved.
+
+### Reproduce / changed files / delivery
+
+1. Full app: `bunx vitest run`; operator scanner: `python3 scripts/test_scan_url.py`.
+2. Actual benign operator redirects: `python3 scripts/scan-url.py https://httpbin.org/redirect/2 --allow-host httpbin.org > /tmp/capture.json`. Each cross-host target requires another exact `--allow-host`; do not use this outside an authorized isolated environment. Analyze: `bun scripts/analyze-scan.ts /tmp/capture.json` (optional second same-final capture for partial differential indicators).
+3. Final frozen evaluation: `bun scripts/evaluate-phase1b-resume.ts --final`. First-pass replay deliberately fails if its frozen engine no longer matches; use its historical checkpoint/artifacts, not regenerated hashes. Final dataset reproduction: `python3 scripts/sample-phase1b-resume.py /path/to/data.csv --final` with the retained first sample present. Labels/features never modified based on predictions.
+4. New reviewer scenarios serializer: `python3 scripts/save-phase1b-reviewer.py`. Public artifacts remain defanged and docs-only. All original Phase 1/1B artifacts untouched.
+
+Local branch: **main**. Exact source/docs/test/evaluation file list is in `docs/evaluation/phase1b-resume-delivery.json`; commit ID is supplied in the final delivery (a file cannot contain its own resulting commit hash). GitHub **master synchronization NOT VERIFIED**; no push/branch settings/history rewrite. Open blockers: owner publication approval; isolated deployed visitor scanner/privacy authorization; live browser cloaking; `.ae` registration service; full multi-day AI accuracy benchmark; owner-password and preserved legacy/Supervisor flows. **Phase 2 not started.**
+
+---
+
 **24 November 2026. Overall: PARTIAL; engineering targets NOT achieved. Phase 2 not started.**
 
 ## Before and after (positive = score ≥50; caution is negative)

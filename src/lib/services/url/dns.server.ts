@@ -13,12 +13,14 @@ export async function lookupDns(domain: string, request: typeof fetch = fetch, n
   const controller = new AbortController(); const timer = setTimeout(() => controller.abort(), 5000);
   const options: RequestInit = { redirect: "manual", credentials: "omit", referrerPolicy: "no-referrer", headers: { Accept: "application/json" }, signal: controller.signal };
   try {
-    const records = await Promise.all(["A", "AAAA"].map(async type => answerSchema.parse(await boundedJson(await request(`https://dns.google/resolve?name=${encodeURIComponent(domain)}&type=${type}&edns_client_subnet=0.0.0.0%2F0`, options)))));
+    // Five resolver requests leave one invocation slot for concurrent RDAP.
+    const records = await Promise.all(["A", "AAAA", "MX", "NS", "CAA"].map(async type => answerSchema.parse(await boundedJson(await request(`https://dns.google/resolve?name=${encodeURIComponent(domain)}&type=${type}&edns_client_subnet=0.0.0.0%2F0`, options)))));
     if (records.some(r => ![0, 3].includes(r.Status))) return { status: "unavailable", reason: "service" };
     const answers = records.flatMap(r => r.Answer ?? []);
     const addresses = [...new Set(answers.filter(a => [1, 28].includes(a.type) && ipaddr.isValid(a.data)).map(a => a.data))];
     const aliases = [...new Set(answers.filter(a => a.type === 5 && /^[a-z\d.-]+\.?$/i.test(a.data)).map(a => a.data.replace(/\.$/, "")))];
-    if (!addresses.length && !aliases.length) return { status: "unavailable", reason: "no_records" };
+    const observedRecords = answers.filter(a => [1, 2, 5, 15, 28, 257].includes(a.type)).filter((a, i, all) => all.findIndex(b => b.name === a.name && b.type === a.type && b.data === a.data) === i);
+    if (!observedRecords.length) return { status: "unavailable", reason: "no_records" };
     const nonPublicAnswers = addresses.some(isBlockedHost);
     const publicAddress = addresses.find(a => !isBlockedHost(a));
     let network: { asns: number[]; prefix: string; source: string } | null = null;
@@ -33,7 +35,7 @@ export async function lookupDns(domain: string, request: typeof fetch = fetch, n
         }
       } catch { /* Routing metadata may be unavailable independently of DNS. */ }
     }
-    return { status: "available", domain, source: `https://dns.google/resolve?name=${encodeURIComponent(domain)}&type=A`, checkedAt: new Date(now).toISOString(), dnssecValidated: records.every(r => r.AD === true), addresses, aliases, nonPublicAnswers, network };
+    return { status: "available", domain, source: `https://dns.google/resolve?name=${encodeURIComponent(domain)}&type=A`, checkedAt: new Date(now).toISOString(), dnssecValidated: records.every(r => r.AD === true), addresses, aliases, records: observedRecords, nonPublicAnswers, network };
   } catch { return { status: "unavailable", reason: "service" }; }
   finally { clearTimeout(timer); }
 }

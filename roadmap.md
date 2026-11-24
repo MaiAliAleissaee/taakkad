@@ -1,5 +1,12 @@
 # Final hackathon polish roadmap
 
+## Phase 5 feasibility, scalability and submission readiness
+- [x] Publish security-cleared screenshot implementation without changing features/data; actual hosted `5e10491` OCR/QR execution confirms deployment.
+- [x] Run full regression once: 424 tests / 37 files passed on 24 November 2026; quick security check retains only the untouched informational registry finding.
+- [x] Validate actual published screenshot/manual/combined flows, Arabic/English OCR and QR, URL controls and desktop/mobile public pages; disclose official sensitive-path ML false warning and hosting telemetry, preserve authenticated limitations.
+- [x] Update submission documents, architecture/cost/scalability boundaries, controlled police pilot proposal and five-criterion summary in docs/PHASE_5_REPORT.md; no new implementation/benchmark/paid inference.
+- [x] Documentation handoff prepared; screenshot deployment confirmed, final commit supplied in delivery. Owner-only authenticated checks and historical blockers remain explicit in report/checklist. No additional features.
+
 ## Focused public screenshot analysis (not Phase 5)
 - [x] Add local Arabic/English OCR, raster/dimension validation, paired QR decoding, editable/conflicting input handling and screenshot-only/combined inputs; preserve manual checks. Self-host assets and explicit browser-only boundary.
 - [x] Reuse rules, URL ML, registry and reporting without altering policy; no automatic image upload or persistence. Explicit consent enables an exact original local download for the existing authorized evidence upload, not anonymous attachment. Existing 512 KiB PNG/JPEG evidence limits remain; actual staff persistence is unverified.

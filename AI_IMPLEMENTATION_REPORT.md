@@ -1,4 +1,14 @@
-# TRUST ZERO AI — hybrid AI implementation and validation
+# Taakkad — hybrid AI implementation and validation
+
+## Final Phase 5 status — 24 November 2026
+
+Published screenshot implementation `5e10491` adds **local OCR/QR extraction, not a multimodal fraud/authenticity model**. Tesseract.js 7.0.0 reads Arabic/English in a browser worker using pinned same-origin runtime/languages; jsQR 1.4.0 extracts inert QR content. Reviewed text/URLs reuse rules and the existing 36-feature, 40-tree local learned URL classifier. No retraining, provider/prompt/dependency change or paid inference occurred in Phase 5. Hosted English JPEG, Arabic PNG, mixed WebP, paired QR and conflicting/manual flows executed; physical camera and Safari/iOS remain unverified.
+
+Semantic inference remains server-only OpenAI `openai/gpt-6.1-sol` via managed Gateway, with double redaction, strict bilingual schema, supplied-text grounding, no browsing/tools and 2400 output tokens. Active authenticated sessions reserve five/user/rolling ten minutes and 200 globally/UTC day. Earlier anonymous visitor-budget observations below are historical. Paid inference consumes credits; local OCR/ML has no per-inference service charge but uses device resources. No current paid AI success or currency expense was measured during Phase 5.
+
+Historical ML holdout remains **77.40% accuracy, 59.10% recall, 4.30% FPR** on 4000 same-source historical domains, not UAE production accuracy. Actual current manual controls: official ADCB homepage 20/no ML warning; legitimate `/login/payment` path 65/ML warning; outside-domain lookalike 74/Suspicious Indicators. This small functional observation exposes a false warning, not a new benchmark. Low risk/registry/reference/QR/OCR confidence never certifies safety or image authenticity. No logo comparison, deepfake/tamper model, hidden-link detector or operational enforcement exists.
+
+**424 regression tests / 37 files pass.** [Final capability/scalability/cost/pilot boundaries](docs/PHASE_5_REPORT.md) and [OCR extraction errors and limitations](docs/SCREENSHOT_ANALYSIS_REPORT.md). Genuine staff evidence persistence and current owner-authenticated AI/correlation remain unverified. Historical publication-withheld notes below are superseded by current actual hosted deployment.
 
 ## Current access correction — 24 November 2026
 

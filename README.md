@@ -9,6 +9,14 @@ Hackathon prototype / نموذج أولي للهاكاثون — not an official
 The deployed website is a demonstration, not proof of production readiness or external verification. All seeded examples are fictional.
 الموقع المنشور لأغراض العرض التجريبي، ولا يُعد إثباتاً للجاهزية التشغيلية أو التحقق المستقل من الجهات. جميع الأمثلة المُعدّة للعرض خيالية.
 
+## Final submission status — Phase 5 / حالة التسليم النهائي
+
+**24 November 2026:** Screenshot implementation `5e10491` is published and actual hosted Arabic/English OCR, paired QR, screenshot-only, manual-only and combined checks were exercised. One final regression passed **424 tests / 37 files**. Phase 5 changes documentation only; credentials, roles, records, registry and model are preserved. [Final report, controlled police pilot proposal, five-criterion summary and owner acceptance checklist](docs/PHASE_5_REPORT.md) · [Screenshot analysis](docs/SCREENSHOT_ANALYSIS_REPORT.md).
+
+**24 نوفمبر 2026:** نُشرت ميزة لقطة الشاشة واختُبرت قراءة العربية والإنجليزية وQR والفحص اليدوي والمدمج فعلياً؛ نجح 424 اختباراً في 37 ملفاً. المرحلة الخامسة توثيقية دون ميزات إضافية. دخول الموظفين الفعلي وحفظ الأدلة الخاصة واسترجاعها لا يزال يتطلب اختبار المالك؛ لا ندّعي جاهزية تشغيلية أو شراكة شرطية.
+
+Current safety limits are **five paid semantic requests/authenticated user/ten minutes and 200 globally/UTC day**; basic local rules/ML, registry and explicit reporting stay anonymous. Screenshot pixels remain local; reviewed indicators are matched only on explicit checking. Private evidence upload is a separate authorized staff workflow with PNG/JPEG/512 KiB restrictions. An official ADCB homepage control scored 20; a legitimate sensitive path scored 65 from local ML, a disclosed false-warning limitation. No new accuracy or throughput claims were measured. The informational public-registry finding remains untouched. Historical phase/deployment/visitor-limit notes below describe earlier versions; this section and the Phase 5 report are authoritative for current status.
+
 Phase 2 / المرحلة الثانية: Analyst-only proactive intelligence adds sourced candidate generation, explicit free DNS/RDAP observations, attributed manual/batch imports, shared-indicator review and private early warnings. DNS is not registration or fraud proof; no suspicious websites are visited or accusations published. [Capabilities, actual tests and limitations](docs/PHASE_2_REPORT.md). The trained ML model and existing staff roles/passwords are unchanged. Genuine signed-in analyst save/readback remains unverified; temporary sessions cannot bypass existing revocation checks.
 
 Phase 3 / المرحلة الثالثة: Private staff evidence tools add bilingual explanations, UTC/UAE timelines, server-hashed bounded attachments, JSON evidence packages and printable bilingual PDF reports. Human approval records preparation only; nothing is sent externally. / تضيف أدوات الأدلة الخاصة تفسيراً ثنائي اللغة وتسلسلاً زمنياً UTC/الإمارات ومرفقات محدودة ببصمات خادم وحزم JSON وتقارير PDF قابلة للطباعة؛ يعتمد الإنسان الإعداد فقط ولا يُرسل شيء خارجياً. [Actual results and limitations](docs/PHASE_3_REPORT.md).
@@ -43,7 +51,7 @@ AI safeguards	Browser- and server-side redaction, validated structured output, d
 
 English: Sensitive information is redacted in the browser and again server-side before inference. Structured output is validated, indicators must be grounded in supplied text, and risk interpretation is combined with deterministic checks without altering registry facts. Categories are interpretations, not calibrated probabilities. AI failures use an explicitly labeled rule-based fallback.
 
-Usage limits / حدود الاستخدام: five requests per visitor per rolling ten minutes; 200 daily globally. Resettable visitor cookies do not replace the global ceiling.
+Usage limits / حدود الاستخدام: five paid semantic requests per authenticated user per rolling ten minutes; 200 globally per UTC day. Resetting browser cookies does not reset the authenticated budget. / خمسة طلبات تحليل دلالي للمستخدم المسجل خلال عشر دقائق و200 طلب يومياً إجمالاً.
 4. مبررات الاختيارات والمفاضلات | Technical choices and trade-offs
 These are design rationales, not claims that every alternative was benchmarked or experimentally evaluated.
 هذه مبررات تصميمية، وليست ادعاءً بإجراء اختبارات مقارنة فعلية لجميع البدائل.
@@ -62,7 +70,7 @@ Fictional registry and demo approvals	Demonstrate workflow without claiming real
 - لا توجد مراقبة حية أو إزالة محتوى أو خدمة تحديد جغرافي لعناوين IP. No live monitoring, takedown, or IP geolocation service is connected.
 - بيانات السجل المنشورة خيالية. Existing published samples are fictional; reserved .example domains are not opened.
 - النشر يتطلب موافقة مشرف أمني مستقل. Publication requires independent Security Supervisor approval; neither demo staff account is a Supervisor.
-- تتبع الطلبات يتطلب بريداً قابلاً للوصول ورمزاً مستلماً. End-to-end email delivery and OTP retrieval were not verified in the documented test pass. Decision notes are available through tracking, but decisions do not send email notifications.
+- المتابعة التجريبية تتطلب الرقم وسر الإيصال وتُظهر الحالة والتاريخ فقط. Demo tracking requires the reference and private receipt secret, and returns status/date only. The separate legacy email-code flow requires a confirmed matching authenticated recipient; positive inbox delivery/retrieval remains unverified. Decisions do not send automatic email notifications.
 - دخول الموظفين يحتاج تأكيد المالك. HAM123/`HAM1234` password login must be personally confirmed by the account owner; isolated tester login does not establish their credentials work.
 - الفحص العام لا يحفظ محتوى الرسائل تلقائياً. Public checks remain component-local; only explicit reports share content and extracted indicators with authorized staff. Full private AI explanations are not retained in reports.
 - التخزين المحلي محدود. Browser storage holds public preferences and legacy organization samples only; legacy private snapshots are archived before migration.

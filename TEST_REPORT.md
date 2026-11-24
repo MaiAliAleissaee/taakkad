@@ -1,5 +1,19 @@
 # Final polish test report
 
+## Final Phase 5 validation — 24 November 2026
+
+**One full regression: 424 tests / 37 files PASS** (`bunx vitest run`, 12:35 UTC, 27.27 seconds wall duration). No failed/skipped Vitest tests; separate SQL/Python/operator contracts were not rerun or counted. No accuracy benchmark, paid AI call, retraining or manual production build repeated. Phase 5 changes documentation only.
+
+**Actual published checks PASS:** screenshot-only English JPEG/Arabic PNG/mixed WebP/paired QR extraction and local assessment; Arabic combined-input conflict; English manual checks; six public/login/setup pages HTTP 200 without horizontal overflow at 1280×1800 and 390×844; English mobile mixed screenshot/result; reload clears private result; signed-out `/officer` and `/security` -> `/auth`; successful completed flows had no page exceptions or extracted-target visits. Screenshots inspected. Deployment of screenshot `5e10491` is confirmed by actual new controls/runtime execution, not publication scheduling alone.
+
+**Detection limitation observed:** `www.adcb.com/` scored 20, `adcb.com.attacker.example/login` scored 74/Suspicious Indicators, but legitimate `www.adcb.com/login/payment` triggered ML score 65 despite correct reference recognition. The initial expected-Low assertion failed; the real result is disclosed and the unchanged model preserved. This is not measured overall accuracy. OCR digit/order/blur limits remain in its report.
+
+**Privacy, qualified:** same-origin OCR/runtime/language GETs and no image/text upload observed; hosting also emitted a background `/__l5e/trackevents` POST without tested fixture content. Initial zero-total-POST assertions failed and were corrected by classifying this traffic, not modifying code. Do not claim the entire published page sends zero POSTs.
+
+**Release security:** implementation deep scan completed 12:32 UTC with no critical/warnings; fresh quick scan 12:35 UTC one unchanged informational registry finding. Metadata marks older scans stale after documentation-only commits; no new deep scan of Phase 5 code is claimed because no code/security behavior changed. Latest preview compilation checked separately; public deployment execution verified.
+
+**NOT VERIFIED:** genuine HAM123/HAM1234 password login and authenticated own/cross-owner flows; staff import/metadata/save/readback, private attachment/hash/export, human action persistence, officer receipt recovery, legacy positive OTP and independent Supervisor publication. Current negative redirects/unit mocks are not positive authentication proof. Camera hardware, Safari/iOS and physical-device throughput remain unverified. See [Phase 5 matrix/pilot/owner checklist](docs/PHASE_5_REPORT.md); historical phase status below remains historical.
+
 ## Approved security completion — 24 November 2026
 
 **30 scoped tests passed:** 12 demo organization tests, five authenticated usage-budget tests, 11 session/recovery/targeting tests and two actual hook logout/account-switch tests. The initial hook run exposed a mount-time stale-state race; it was corrected and only those two failing tests were rerun, both passed. Prior completed regression/Phase 3 export tests were not repeated. Managed preview compilation is `build OK`.

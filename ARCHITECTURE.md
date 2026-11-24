@@ -1,12 +1,24 @@
 # Taakkad architecture
 
+## Final deployed architecture — Phase 5, 24 November 2026
+
+Screenshot implementation `5e10491` is published and executes on the hosted Trust Portal. Phase 5 is documentation-only. This current overview supersedes historical publication/visitor-budget notes below. [Complete deployment, scalability, pilot and production prerequisites](docs/PHASE_5_REPORT.md).
+
+Browser React 19/TanStack Start/Tailwind v4 -> selected validated PNG/JPEG/WebP -> lazy client-only Tesseract.js worker with self-hosted Arabic/English languages + jsQR -> editable reviewed text/indicators -> existing local URL rules/36-feature, 40-tree ML -> explicit narrow Cloud matching -> visit-local result. OCR/QR values never execute or navigate. No screenshot image is automatically uploaded. Optional paid semantic text follows active authentication, double redaction and an atomic per-user/global budget before server-only Gateway inference. Explicit reports are restricted and write-only to the public.
+
+Worker-compatible TanStack server functions run on managed hosting, not a Node/Python production service. Lovable Cloud supplies Auth, database and private records; app publication snapshots code/assets while backend migrations apply separately. Static OCR assets/licenses/digests remain in `public/ocr/`; cold-start/offline/mobile performance is not benchmarked. Local OCR reduces server work but consumes visitor CPU/memory and repeated language transfers when cache is disabled. The exported ML JSON is ~23 KiB and incurs no inference network call.
+
+Staff active-session/role/ownership authorization and matching RLS guard private workspaces, bounded attachments and server SHA-256; authorized snapshots export JSON/escaped bilingual print-to-PDF. Neither hashes nor approved channels prove screenshot/message authenticity. Five paid requests/user/ten minutes, 200/UTC day and 2400 output tokens/call cap usage; shared database ceilings, revision conflicts and atomic locks are potential bottlenecks, not measured capacity. Current public/staff quotas and storage bounds are listed in the Phase 5 report. Institutional MFA, queues, load/SLA tests, residency certification, malware scanning and authoritative feeds are proposed production work, not installed capabilities.
+
+Current hosted public flows, desktop/mobile pages and signed-out staff gates passed; positive staff persistence, owner password login/recovery and exports remain unverified. Roles/passwords/data are untouched. Real public ADCB sensitive-path ML false warning is documented, not hidden by reference matching.
+
 ## Current security completion — 24 November 2026
 
 Only the paid semantic function uses authenticated middleware plus the active-session database predicate. Usage is hashed per authenticated user, retaining five requests/ten minutes and the global 200/day ceiling; resetting a browser cookie cannot reset the user's budget. Local ML/rules, public registry searches and write-only reports remain anonymous. Public database check/report paths use the existing durable limiter with shared 6000 check and 500 report/hour ceilings, and reject any non-null private workspace unless the caller owns it and has an active analyst session.
 
 Demo receipts contain the unchanged five-digit reference and a server-issued cryptographically random 256-bit secret; Cloud stores SHA-256 only. Atomic registration assigns the fingerprint. Status lookup uses POST/no-store and returns only status/date after validating both values; number-only reads and internal matching are not executable by anonymous/authenticated clients. Existing null-fingerprint records are retained but cannot be tracked until an active officer independently verifies identity and issues a replacement receipt. Recovery rotates only the receipt fingerprint and appends a separate private security audit; application decisions/data remain unchanged. Officers deliver receipts privately; no self-service identity proof is inferred from a reference or six unverified fields.
 
-Browser workspace identifiers are hints, not capabilities. The shared hook returns a private target only for the current ready analyst and discards stale hints after logout/account switching; database checks remain authoritative. Phase 3 evidence and exports retain their prior implementation. Publication awaits deep-scan clearance; genuine staff persistence/recovery remains unverified.
+Browser workspace identifiers are hints, not capabilities. The shared hook returns a private target only for the current ready analyst and discards stale hints after logout/account switching; database checks remain authoritative. Phase 3 evidence/exports and screenshot implementation are published; genuine staff persistence/recovery remains unverified.
 
 ## Phase 1C local supervised inference — 24 November 2026
 
@@ -114,4 +126,4 @@ Private year counters and a permanent ledger map stable report IDs to monotonica
 Both retain public-service access. Roles are separate from profiles and not client-editable. Neither has Supervisor or administrator grants. Publishing new warnings remains unavailable to these two roles by design.
 
 ## Demo versus production
-The application has real password authentication, private storage, role enforcement, approval state machines and real model invocation. Seeded investigations, registrar evidence, identity checks and enforcement actions remain fictional. No live external monitoring, geolocation, official affiliation or operational deployment is claimed. AI redaction is defensive, not complete anonymization; unnecessary personal data should be removed manually. Visitor IDs are resettable, so the global daily ceiling is the hard budget backstop.
+The application has real password authentication, private storage, role enforcement, approval state machines and real model invocation. Seeded investigations, registrar evidence, identity checks and enforcement actions remain fictional. No live external monitoring, geolocation, official affiliation or operational deployment is claimed. AI redaction is defensive, not complete anonymization; unnecessary personal data should be removed manually. Paid AI reservations now use authenticated-user hashes plus the global daily ceiling, not resettable visitor IDs.

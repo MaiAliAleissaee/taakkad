@@ -1,4 +1,10 @@
-# Focused public screenshot analysis — not Phase 5
+# Focused public screenshot analysis
+
+## Published confirmation — Phase 5, 24 November 2026
+
+Implementation **`5e10491` is now published** at https://taakkad.lovable.app/trust. Actual hosted English JPEG, Arabic PNG, mixed WebP and paired QR extractions, screenshot-only results, Arabic combined-input conflict and English manual checks passed. English mobile mixed OCR/result and six-page 1280×1800/390×844 public sweep had no overflow or page exceptions; signed-out staff gates passed. Full regression once: **424 tests / 37 files PASS**. No new features, model training or paid calls. Prior not-published/not-Phase-5 statements below describe the earlier release-readiness stage, not current status.
+
+Hosted OCR assets/runtime/languages came from same origin; no extracted destination/image/text upload was observed. Hosting independently emitted `/__l5e/trackevents` POST without tested fixture payload: zero total POST traffic is not claimed. Actual official ADCB sensitive path returned 65 from local ML, a disclosed false warning; correct reference identity did not automatically override statistical risk. Real staff evidence persistence, camera hardware and Safari/iOS remain unverified. [Final Phase 5 results and pilot/owner checklist](PHASE_5_REPORT.md).
 
 ## Implementation
 

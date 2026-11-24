@@ -25,6 +25,7 @@ import { RegisterOrgDialog, downloadApplicationDocument } from "./register-org-d
 import { orgTypeLabel } from "@/lib/i18n/labels";
 import { reviewDemoOrganization } from "@/lib/organizations/demo.functions";
 import { demoDecisionReady, canReviewDemo } from "@/lib/organizations/demo-schema";
+import { ConflictReview } from "./conflict-review";
 
 const statusLabels: Record<ApplicationStatus, Bi> = {
   pending: { en: "New — awaiting review", ar: "جديد — بانتظار المراجعة" }, approved: { en: "Approved", ar: "معتمد" }, rejected: { en: "Rejected", ar: "مرفوض" }, needs_information: { en: "Additional Information Required", ar: "مطلوب معلومات إضافية" }, suspended: { en: "Suspended", ar: "موقوف" }, removed: { en: "Removed from registry", ar: "مزال من السجل" },
@@ -45,6 +46,7 @@ export function OfficerDashboard() {
   const [decision, setDecision] = useState<Decision | null>(null);
   const [note, setNote] = useState(""); const [confirmed, setConfirmed] = useState<string[]>([]);
   const [confirming, setConfirming] = useState(false);
+  const [conflictReady, setConflictReady] = useState(false);
   const [busy, setBusy] = useState(false); const [error, setError] = useState(""); const [notice, setNotice] = useState("");
   const apps = query.data?.applications ?? [];
   const stats = queueStats(apps);
@@ -52,7 +54,7 @@ export function OfficerDashboard() {
   const selected = apps.find(a => a.id === selectedId);
 
   async function open(id: string) {
-    setSelectedId(id); setDecision(null); setNote(""); setConfirmed([]); setError(""); setNotice(""); window.scrollTo({ top: 0 });
+    setSelectedId(id); setDecision(null); setNote(""); setConfirmed([]); setConflictReady(false); setError(""); setNotice(""); window.scrollTo({ top: 0 });
     const row = apps.find(a => a.id === id);
     if (row?.demo_registration && row.status === "pending" && !row.demo_under_review) {
       setBusy(true);
@@ -90,7 +92,7 @@ export function OfficerDashboard() {
     const channelAudit = audit.flatMap(event => Array.isArray(event['details']) ? event['details'] as ChannelAuditEvent[] : []);
     const owned = selected.owner_id === session.user?.id;
     const decidable = !owned && (selected.demo_registration ? canReviewDemo(selected.status, "approved") : selected.status === "pending" || selected.status === "needs_information");
-    const ready = !!decision && (selected.demo_registration ? demoDecisionReady(note) : canSubmitDecision(decision, note, selected.payload.domains, confirmed));
+    const ready = !!decision && (decision !== "approved" || conflictReady) && (selected.demo_registration ? demoDecisionReady(note) : canSubmitDecision(decision, note, selected.payload.domains, confirmed));
     return <div dir={dir} className="space-y-6">
       {nav}
       <Button variant="ghost" size="sm" onClick={() => { setSelectedId(""); setNotice(""); }}><ArrowLeft className="rtl:rotate-180" />{tr("Return to applications list", "العودة إلى قائمة الطلبات")}</Button>
@@ -116,12 +118,13 @@ export function OfficerDashboard() {
           {selected.correction_note && <div className="mt-4"><p className="text-xs text-muted-foreground">{tr("Latest review note", "آخر ملاحظة مراجعة")}</p><p dir="auto" className="border-s-4 border-emerald bg-accent p-3 text-sm">{selected.correction_note}</p></div>}
         </section>
       </div>}
+      <ConflictReview key={`conflicts:${selected.id}`} id={selected.id} revision={selected.revision} userId={query.data.userId} independent={!owned} changed={changed} onApprovalReady={setConflictReady} />
       <EvidenceTools key={`evidence:${selected.id}`} subject={{ kind: "application", id: selected.id }} />
       {selected.demo_registration && <TrackingRecovery key={`receipt:${selected.id}`} id={selected.id} />}
       {decidable ? <section className="space-y-4 rounded-xl border bg-card p-5">
         <h3 className="font-semibold">{tr("Officer review actions", "إجراءات مراجعة الموظف")}</h3>
         <div className="flex flex-wrap gap-2">
-          <Button disabled={busy} variant={decision === "approved" ? "emerald" : "outline"} onClick={() => setDecision("approved")}><CheckCircle2 />{tr("Approve Application", "اعتماد الطلب")}</Button>
+          <Button disabled={busy || !conflictReady} variant={decision === "approved" ? "emerald" : "outline"} onClick={() => setDecision("approved")}><CheckCircle2 />{tr("Approve Application", "اعتماد الطلب")}</Button>
           {selected.status !== "approved" && <><Button disabled={busy} variant={decision === "rejected" ? "destructive" : "outline"} onClick={() => setDecision("rejected")}><XCircle />{tr("Reject Application", "رفض الطلب")}</Button>
           <Button disabled={busy} variant={decision === "needs_information" ? "default" : "outline"} onClick={() => setDecision("needs_information")}><FileQuestion />{tr("Request Additional Information", "طلب معلومات إضافية")}</Button></>}
         </div>
@@ -135,7 +138,7 @@ export function OfficerDashboard() {
       </section> : <p className="text-sm text-muted-foreground">{owned ? tr("You cannot review an application you own.", "لا يمكنك مراجعة طلب تملكه.") : selected.demo_registration ? tr("This demo application has a final decision.", "صدر قرار نهائي لهذا الطلب التجريبي.") : tr("This application already has a final decision. Channels can still be managed below.", "صدر قرار نهائي لهذا الطلب. يمكن إدارة القنوات أدناه.")}</p>}
       {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
       {!selected.demo_registration && <ChannelManager key={`${selected.id}:${selected.revision}:channels`} org={selected.payload} actor={!owned ? { role: "verifier" } : { role: "viewer" }} auditEvents={channelAudit} onCommand={async command => { await changeChannel({ data: { id: selected.id, revision: selected.revision, command } }); await changed(); }} />}
-      <section className="rounded-xl border bg-card p-5"><h3 className="mb-3 font-semibold">{tr("Review notes & decision history", "ملاحظات المراجعة وسجل القرارات")}</h3><ol className="space-y-3">{audit.map((event, index) => <li key={index} className="border-s ps-3 text-xs"><p className="text-muted-foreground">{typeof event['at'] === "string" ? date(event['at'], true) : tr("Original fictional record", "سجل خيالي أصلي")}</p><p className="font-medium">{(event['operation'] === "create" || event['operation'] === "demo_create") ? tr("Application submitted", "تم إرسال الطلب") : event['operation'] === "edit" ? tr("Applicant corrected application", "صحّح مقدم الطلب الطلب") : event['operation'] === "demo_review" ? event['decision'] === "under_review" ? tr("Review started — Simulated", "بدأت المراجعة — تجريبي") : tr("Officer decision — Simulated", "قرار الموظف — تجريبي") : event['operation'] === "review" ? tr("Officer decision", "قرار الموظف") : tr("Channel event", "حدث قناة")}</p>{typeof event['note'] === "string" && event['note'] && <p dir="auto" className="mt-1">{event['operation'] === "legacy_fictional_record" ? tr("Preserved fictional sample", "عينة خيالية محفوظة") : event['note']}</p>}</li>)}</ol></section>
+      <section className="rounded-xl border bg-card p-5"><h3 className="mb-3 font-semibold">{tr("Review notes & decision history", "ملاحظات المراجعة وسجل القرارات")}</h3><ol className="space-y-3">{audit.map((event, index) => <li key={index} className="border-s ps-3 text-xs"><p className="text-muted-foreground">{typeof event['at'] === "string" ? date(event['at'], true) : tr("Original fictional record", "سجل خيالي أصلي")}</p><p className="font-medium">{event['operation'] === "identity_conflict_resolution" ? tr("Documented identity conflict decision", "قرار تعارض هوية موثّق") : event['operation'] === "identity_technical_snapshot" ? tr("Technical metadata snapshot", "لقطة بيانات تقنية") : (event['operation'] === "create" || event['operation'] === "demo_create") ? tr("Application submitted", "تم إرسال الطلب") : event['operation'] === "edit" ? tr("Applicant corrected application", "صحّح مقدم الطلب الطلب") : event['operation'] === "demo_review" ? event['decision'] === "under_review" ? tr("Review started — Simulated", "بدأت المراجعة — تجريبي") : tr("Officer decision — Simulated", "قرار الموظف — تجريبي") : event['operation'] === "review" ? tr("Officer decision", "قرار الموظف") : tr("Channel event", "حدث قناة")}</p>{typeof event['note'] === "string" && event['note'] && <p dir="auto" className="mt-1">{event['operation'] === "legacy_fictional_record" ? tr("Preserved fictional sample", "عينة خيالية محفوظة") : event['note']}</p>}</li>)}</ol></section>
       <AlertDialog open={confirming} onOpenChange={setConfirming}><AlertDialogContent dir={dir}><AlertDialogHeader><AlertDialogTitle>{decision === "approved" ? tr("Approve this application?", "اعتماد هذا الطلب؟") : tr("Reject this application?", "رفض هذا الطلب؟")}</AlertDialogTitle><AlertDialogDescription>{selected.demo_registration ? decision === "approved" ? tr("Publish the six submitted details as a simulated organization and channels in the DEMO registry only? This does not verify ownership or make channels trusted.", "نشر البيانات الست المقدّمة كجهة وقنوات تجريبية في السجل التجريبي فقط؟ لا يتحقق هذا من الملكية ولا يجعل القنوات موثوقة.") : tr("Only the rejected status will be visible through public tracking. Notes stay private.", "ستظهر حالة الرفض فقط عبر المتابعة العامة. تبقى الملاحظات خاصة.") : tr("Only individually approved active channels appear in the existing registry. Documents and notes stay private.", "تظهر القنوات المعتمدة النشطة فقط في السجل الحالي. تبقى المستندات والملاحظات خاصة.")}</AlertDialogDescription></AlertDialogHeader><AlertDialogFooter><AlertDialogCancel disabled={busy}>{tr("Cancel", "إلغاء")}</AlertDialogCancel><AlertDialogAction disabled={busy} onClick={e => { e.preventDefault(); void submit(); }}>{tr("Confirm", "تأكيد")}</AlertDialogAction></AlertDialogFooter></AlertDialogContent></AlertDialog>
     </div>;
   }

@@ -67,6 +67,11 @@ export const reviewDemoOrganization = createServerFn({ method: "POST" }).middlew
     const { applicationIdentity } = await import("./applications.server");
     const identity = await applicationIdentity(context.supabase);
     if (!identity.officer) throw new Error("Officer required");
+    if (data.decision === "approved") {
+      const { readIdentityConflicts } = await import("./conflicts.server");
+      const conflicts = await readIdentityConflicts(context.supabase, data.id);
+      if (conflicts.conflicts.some(c => c.severity === "high") && (!conflicts.resolved || conflicts.review.actor !== identity.userId)) throw new Error("Documented conflict review required");
+    }
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const result = await supabaseAdmin.rpc("review_demo_organization", { actor_id: identity.userId, application_uuid: data.id, expected_revision: data.revision, decision: data.decision, decision_note: data.note });
     if (result.error) {

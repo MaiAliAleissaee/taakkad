@@ -1,5 +1,6 @@
 import type { Channel, ChannelType, Organization, OrgType } from "@/lib/domain/types";
 import { detectLookalike, hostFromUrl, isSameOrSubdomain, normalizeHost } from "./lookalike";
+import type { Relationship } from "@/lib/organizations/relationship";
 
 export interface RegistrationInput {
   nameEn: string;
@@ -8,6 +9,7 @@ export interface RegistrationInput {
   domains: string[];
   contactEmail: string;
   channels: Array<{ type: ChannelType; value: string }>;
+  relationship?: Relationship | undefined;
 }
 
 export type RegistrationError =

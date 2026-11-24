@@ -68,7 +68,7 @@ export const readTrackedApplication = createServerFn({ method: "POST" }).inputVa
     const row = await trackedApplication(data.id, data.token);
     const { organizationPayload } = await import("./applications.server");
     // No internal audit history, staff identities or applicant credentials leave this applicant endpoint.
-    return { id: row.id, revision: row.revision, status: row.status, payload: organizationPayload(row.payload), documents: row.documents, correctionNote: row.correction_note, submittedAt: row.submitted_at, now: new Date().toISOString(), reference: `TZ-ORG-${row.id.toUpperCase()}` };
+    return { id: row.id, revision: row.revision, status: row.status, payload: organizationPayload(row.payload), relationship: row.relationship_declaration, documents: row.documents, correctionNote: row.correction_note, submittedAt: row.submitted_at, now: new Date().toISOString(), reference: `TZ-ORG-${row.id.toUpperCase()}` };
   });
 
 export const editTrackedApplication = createServerFn({ method: "POST" })

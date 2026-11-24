@@ -1,5 +1,12 @@
 # Final hackathon polish roadmap
 
+## Final organization identity conflicts and relationships
+- [x] Add bilingual protected relationship declarations and private normalized conflict detection using existing applications and available technical snapshots; reuse maintained lookalike and bounded DNS/RDAP helpers.
+- [x] Add officer-only conflict/evidence review and atomic documented approval safeguards; preserve projections, audit, records and public tracking.
+- [x] 78 distinct focused tests passed, plus rollback-only conflict/approval/stale-review/infrastructure contracts. Public registration, bilingual mobile forms, anonymous operation denial and safe four-field reference tracking observed. Four original public cards preserved; quick scan only unchanged informational finding; preview build OK. Details in docs/ORGANIZATION_IDENTITY_CONFLICT_REPORT.md.
+- [ ] Genuine active-session HAM123 conflict read/resolution and browser approval readback — owner offered to sign in, but that session is not yet available to the sandbox; no bypass. Keep the new private TEMP validation application for this check, then clean up only that test record. Temporary tester role removed; original accounts unchanged.
+- [ ] Saved-enhancement deep security clearance and publication — pending scan completion and genuine staff check; do not publish before release gates pass.
+
 ## Targeted public registry presentation
 - [x] Use one bilingual registry heading, compact green Approved badges and one prototype disclaimer; hide the empty genuine section without combining data categories. Preserve officer presentation, records, filters, tracking and global disclaimer.
 - [x] 23 focused registry isolation and tracking tests passed; all four cards, concise badges, search and pending filters verified in Arabic/English at 855px/390px with no overflow or page errors. Preview build OK; records, trust policy and staff views unchanged. Ready, not published; no paid calls.

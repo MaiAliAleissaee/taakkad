@@ -2,9 +2,9 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { getRequestHeader } from "@tanstack/react-start/server";
 import type { Database, Json } from "@/integrations/supabase/types";
 import type { Organization } from "@/lib/domain/types";
-import { createSeedState } from "@/lib/data/seed";
 import { validateRegistration, toChannels, type RegistrationInput } from "@/lib/services/registration";
 import { canEditApplication, isVerificationOfficer, type ApplicationDocument, type ApplicationStatus } from "./schema";
+import type { Relationship } from "./relationship";
 
 export async function applicationIdentity(client: SupabaseClient<Database>) {
   const token = getRequestHeader("authorization")?.replace(/^Bearer /, "");
@@ -21,18 +21,13 @@ export async function getApplication(client: SupabaseClient<Database>, id: strin
   return result.data;
 }
 export function organizationPayload(payload: Json): Organization { return payload as unknown as Organization; }
-export async function validateApplication(input: RegistrationInput, excludedId?: string) {
-  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  const result = await supabaseAdmin.from("organization_applications").select("organization_id,payload");
-  if (result.error) throw new Error("Registration check unavailable");
-  const stored = result.data.map(r => organizationPayload(r.payload));
-  const ids = new Set(stored.map(o => o.id));
-  const existing = [...stored, ...createSeedState().organizations.filter(o => !ids.has(o.id))].filter(o => o.id !== excludedId);
-  if (validateRegistration(input, existing).length) throw new Error("Registration requires valid, non-conflicting details");
+export async function validateApplication(input: RegistrationInput, _excludedId?: string) {
+  // Keep syntax/channel-domain validation; identity similarities now go to private human review.
+  if (validateRegistration(input, []).length) throw new Error("Registration requires valid details");
 }
-export function pendingOrganization(input: RegistrationInput, original?: Organization): Organization {
+export function pendingOrganization(input: RegistrationInput, original?: Organization): Organization & { relationshipDeclaration?: Relationship } {
   const at = original?.registeredAt ?? new Date().toISOString();
-  return { id: original?.id ?? "new", name: { en: input.nameEn, ar: input.nameAr }, type: input.type, domains: input.domains, contactEmail: input.contactEmail, status: "pending", registeredAt: at, keyFingerprint: original?.keyFingerprint ?? `DEMO:${crypto.randomUUID()}`, channels: toChannels(input.channels, () => crypto.randomUUID()).map((c, i) => ({ ...c, id: original?.channels[i]?.id ?? c.id, addedAt: original?.channels[i]?.addedAt ?? at, submittedAt: new Date().toISOString() })) };
+  return { id: original?.id ?? "new", name: { en: input.nameEn, ar: input.nameAr }, type: input.type, domains: input.domains, contactEmail: input.contactEmail, status: "pending", registeredAt: at, keyFingerprint: original?.keyFingerprint ?? `DEMO:${crypto.randomUUID()}`, ...(input.relationship ? { relationshipDeclaration: input.relationship } : {}), channels: toChannels(input.channels, () => crypto.randomUUID()).map((c, i) => ({ ...c, id: original?.channels[i]?.id ?? c.id, addedAt: original?.channels[i]?.addedAt ?? at, submittedAt: new Date().toISOString() })) };
 }
 export function assertOwnerEdit(row: Awaited<ReturnType<typeof getApplication>>, userId: string) {
   if (!canEditApplication(row.owner_id, userId, row.submitted_at, row.status as ApplicationStatus, Date.now())) throw new Error("Owner access or editing deadline denied");

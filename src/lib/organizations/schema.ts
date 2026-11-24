@@ -1,7 +1,8 @@
 import { z } from "zod";
+import { relationshipSchema } from "./relationship";
 
 export const channelInputSchema = z.object({ type: z.enum(["email", "sms", "phone", "website", "social", "other"]), value: z.string().trim().min(1).max(200) });
-export const registrationSchema = z.object({ nameEn: z.string().trim().min(3).max(160), nameAr: z.string().trim().min(2).max(160), type: z.enum(["government", "bank", "business"]), domains: z.array(z.string().max(200)).min(1).max(20), contactEmail: z.string().trim().email().max(200), channels: z.array(channelInputSchema).min(1).max(30) });
+export const registrationSchema = z.object({ nameEn: z.string().trim().min(3).max(160), nameAr: z.string().trim().min(2).max(160), type: z.enum(["government", "bank", "business"]), domains: z.array(z.string().max(200)).min(1).max(20), contactEmail: z.string().trim().email().max(200), channels: z.array(channelInputSchema).min(1).max(30), relationship: relationshipSchema.optional() });
 export const documentSchema = z.object({ id: z.string().uuid(), name: z.string().min(1).max(160), type: z.enum(["application/pdf", "text/plain", "image/png", "image/jpeg"]), content: z.string().max(350000).regex(/^[A-Za-z0-9+/]*={0,2}$/) });
 export const documentsSchema = z.array(documentSchema).max(3);
 export type ApplicationDocument = z.infer<typeof documentSchema>;

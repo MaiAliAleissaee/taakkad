@@ -82,14 +82,17 @@ export type Database = {
       organization_applications: {
         Row: {
           audit: Json
+          conflict_review: Json
           correction_note: string
           demo_registration: boolean
           demo_under_review: boolean
           documents: Json
           id: string
+          identity_technical: Json
           organization_id: string
           owner_id: string
           payload: Json
+          relationship_declaration: Json
           revision: number
           status: string
           status_updated_at: string
@@ -97,14 +100,17 @@ export type Database = {
         }
         Insert: {
           audit?: Json
+          conflict_review?: Json
           correction_note?: string
           demo_registration?: boolean
           demo_under_review?: boolean
           documents?: Json
           id?: string
+          identity_technical?: Json
           organization_id: string
           owner_id: string
           payload: Json
+          relationship_declaration?: Json
           revision?: number
           status?: string
           status_updated_at?: string
@@ -112,14 +118,17 @@ export type Database = {
         }
         Update: {
           audit?: Json
+          conflict_review?: Json
           correction_note?: string
           demo_registration?: boolean
           demo_under_review?: boolean
           documents?: Json
           id?: string
+          identity_technical?: Json
           organization_id?: string
           owner_id?: string
           payload?: Json
+          relationship_declaration?: Json
           revision?: number
           status?: string
           status_updated_at?: string
@@ -710,6 +719,10 @@ export type Database = {
         Returns: boolean
       }
       has_security_access: { Args: never; Returns: boolean }
+      identity_edit_distance: {
+        Args: { left_value: string; right_value: string }
+        Returns: number
+      }
       import_security_snapshot: {
         Args: { migration_id: string; saved_payload: Json }
         Returns: undefined
@@ -725,9 +738,28 @@ export type Database = {
         }
         Returns: string
       }
+      normalize_identity_indicator: {
+        Args: { kind: string; raw: string }
+        Returns: string
+      }
       officer_is_application_contact: {
         Args: { application_uuid: string }
         Returns: boolean
+      }
+      organization_conflict_fingerprint: {
+        Args: { subject_id: string; subject_payload?: Json }
+        Returns: string
+      }
+      organization_identity_conflicts: {
+        Args: { subject_id: string; subject_payload?: Json }
+        Returns: Json
+      }
+      organization_identity_indicators: {
+        Args: { p: Json; t?: Json }
+        Returns: {
+          kind: string
+          value: string
+        }[]
       }
       organization_rate_limit: {
         Args: {
@@ -744,6 +776,10 @@ export type Database = {
       }
       read_demo_organization_tracking: {
         Args: { tracking_code: string }
+        Returns: Json
+      }
+      read_organization_identity_conflicts: {
+        Args: { application_uuid: string }
         Returns: Json
       }
       read_secure_demo_tracking: {
@@ -769,6 +805,16 @@ export type Database = {
         Args: { visitor_hash: string }
         Returns: boolean
       }
+      resolve_organization_identity_conflicts: {
+        Args: {
+          application_uuid: string
+          evidence_reviewed: boolean
+          expected_revision: number
+          explanation_reviewed: boolean
+          review_note: string
+        }
+        Returns: undefined
+      }
       review_demo_organization: {
         Args: {
           actor_id: string
@@ -782,6 +828,15 @@ export type Database = {
       save_analyst_intelligence: {
         Args: { expected_revision: number; next_payload: Json }
         Returns: Json
+      }
+      save_organization_identity_technical: {
+        Args: {
+          actor_id: string
+          application_uuid: string
+          expected_revision: number
+          snapshots: Json
+        }
+        Returns: undefined
       }
       submit_ai_security_report: {
         Args: { report_input: Json; workspace_user?: string }

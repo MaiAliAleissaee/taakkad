@@ -16,28 +16,38 @@ The deployed website is a demonstration, not proof of production readiness or ex
 
 ---
 
-## Judges' Demo Access | بيانات دخول لجنة التحكيم
+## Judges' Demo Access | بيانات الدخول التجريبية للجنة التحكيم
 
-**Organization approval officer / موظف اعتماد الجهات: `HAM123`**
-**Security analyst / محلل أمني: `HAM1234`**
+These are **temporary hackathon demonstration accounts** for judging only; they will be disabled or have their passwords changed after the evaluation.
+هذان **حسابان تجريبيان مؤقتان لأغراض الهاكاثون** مخصّصان للتحكيم فقط، وسيتم تعطيلهما أو تغيير كلمتي المرور بعد انتهاء التقييم.
 
-Passwords are **not published here**. They are supplied separately in the private judges' presentation or submission notes.
-كلمات المرور غير منشورة هنا؛ تُزوَّد بشكل منفصل في العرض الخاص بلجنة التحكيم أو ملاحظات التسليم.
+Live website / الموقع المنشور: https://taakkad.lovable.app
 
-| Role / الدور | Username / اسم الدخول | Sign-in page / صفحة الدخول | Lands on / يوصل إلى |
-|---|---|---|---|
-| Organization approval officer / موظف اعتماد الجهات | `HAM123` | https://taakkad.lovable.app/organizations (staff sign-in / دخول الموظفين) | https://taakkad.lovable.app/officer |
-| Security analyst / محلل أمني | `HAM1234` | https://taakkad.lovable.app/auth | https://taakkad.lovable.app/security |
+### Organization Approval Officer | موظف اعتماد الجهات
+
+- Username / اسم المستخدم: `HAM123`
+- Password / كلمة المرور: `tryham123456789`
+- Sign-in page / صفحة الدخول: https://taakkad.lovable.app/organizations (staff sign-in section / قسم دخول الموظفين)
+- Lands on / يوصل إلى: https://taakkad.lovable.app/officer
+- What to test / ما يمكن اختباره: review submitted organization applications, view declared corporate relationships and advisory similarity warnings, then Approve, Reject or Request Additional Information; approved organizations appear automatically in the public registry with a green "Approved / معتمد" badge; review channel management and audit history.
+  مراجعة طلبات الجهات، والاطلاع على العلاقات المؤسسية المُصرّح بها وتحذيرات التشابه الاستشارية، ثم الاعتماد أو الرفض أو طلب معلومات إضافية؛ تظهر الجهات المعتمدة تلقائياً في السجل العام بشارة "معتمد" خضراء؛ ومراجعة إدارة القنوات وسجل التدقيق.
+
+### Security Analyst | المحلل الأمني
+
+- Username / اسم المستخدم: `ham1234`
+- Password / كلمة المرور: `tryham2123456789`
+- Sign-in page / صفحة الدخول: https://taakkad.lovable.app/auth
+- Lands on / يوصل إلى: https://taakkad.lovable.app/security
+- What to test / ما يمكن اختباره: the Security Dashboard — private cases and reports, correlation graph of shared indicators, proactive lookalike-domain intelligence and imports, evidence timelines with SHA-256 attachments, PDF/JSON evidence exports, and human-approved recommended actions.
+  لوحة الأمن — القضايا والبلاغات الخاصة، ومخطط كشف الارتباط للمؤشرات المشتركة، والرصد الاستباقي للنطاقات المشابهة والاستيراد، والخطوط الزمنية للأدلة مع بصمات SHA-256، وتصدير الأدلة PDF/JSON، والإجراءات الموصى بها بموافقة بشرية.
 
 Login instructions / تعليمات الدخول:
-1. Open the sign-in page for the required role and enter the username exactly as shown (case-sensitive / مع حساسية الأحرف الكبيرة والصغيرة).
-2. Enter the password supplied privately to the judges / أدخل كلمة المرور المسلَّمة للجنة التحكيم بشكل خاص.
-3. After sign-in the application routes automatically by role: officers to `/officer`, analysts to `/security` / يُوجَّه المستخدم آلياً حسب الدور.
-4. Each account holds exactly one role. An officer who opens `/security`, or an analyst who opens `/officer`, sees a bilingual access-denied dialog and stays on their own workspace / كل حساب يملك دوراً واحداً فقط، ومحاولة فتح مساحة الدور الآخر تُظهر رسالة رفض ثنائية اللغة.
-5. Use **Sign out / تسجيل الخروج** after the demonstration / سجّل الخروج بعد العرض.
+1. Open the sign-in page for the required role and enter the username and password above / افتح صفحة الدخول الخاصة بالدور وأدخل اسم المستخدم وكلمة المرور أعلاه.
+2. After sign-in the application routes automatically by role: officers to `/officer`, analysts to `/security` / يُوجَّه المستخدم آلياً حسب الدور.
+3. Each account holds exactly one role. An officer who opens `/security`, or an analyst who opens `/officer`, sees a bilingual access-denied dialog / كل حساب يملك دوراً واحداً فقط، ومحاولة فتح مساحة الدور الآخر تُظهر رسالة رفض ثنائية اللغة.
+4. Use **Sign out / تسجيل الخروج** after the demonstration / سجّل الخروج بعد العرض.
 
-Credential handling / التعامل مع بيانات الدخول: the two accounts above are the only demonstration staff accounts. No passwords, API keys or environment secrets are committed to this repository.
-الحسابان أعلاه هما حسابا الموظفين التجريبيين الوحيدين. لا تُنشر كلمات المرور أو مفاتيح API أو أسرار البيئة في هذا المستودع.
+No API keys or environment secrets are committed to this repository / لا تُنشر مفاتيح API أو أسرار البيئة في هذا المستودع.
 
 ---
 

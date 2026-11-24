@@ -1,0 +1,1 @@
+- Keep simulated awareness reads in a separate query from genuine published alerts; only public projection content may be restored, never private bulletins, detection inputs or threat-count sources.

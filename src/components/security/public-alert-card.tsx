@@ -6,6 +6,7 @@ import type { PublicAlert } from "@/lib/alerts/schema";
 export function PublicAlertCard({ alert }: { alert: PublicAlert }) {
   const { tr, pick, date } = useI18n();
   return <article className="rounded-xl border bg-card p-4 text-card-foreground shadow-card">
+    {alert.simulated && <p className="mb-2 text-xs font-semibold text-muted-foreground">{tr("Simulated Awareness Alert", "تنبيه توعوي تجريبي")}</p>}
     <div className="flex flex-wrap items-center justify-between gap-2"><span className="text-xs text-muted-foreground">{pick(alertCategory[alert.content.category])}</span><Badge variant={alert.content.severity}>{pick(severityLabel[alert.content.severity])}</Badge></div>
     <h3 className="mt-2 text-sm font-semibold">{pick(alert.content.title)}</h3>
     <p className="mt-1 text-sm">{pick(alert.content.explanation)}</p>

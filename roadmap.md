@@ -1,5 +1,11 @@
 # Final hackathon polish roadmap
 
+## Phase 3 explainability and private evidence
+- [x] Audit: existing typed links/graph, synthetic/source labels, DNS/RDAP snapshots, private officer documents and confirmed officer decisions are reused.
+- [x] Add shared staff evidence workspace: risk explanations, UTC/UAE timeline, validated private attachments with server SHA-256, human-approved preparation actions and bilingual PDF/JSON exports.
+- [x] 22 targeted tests and one final 321-test regression pass; rollback database contracts, isolated actual JSON/PNG/PDF exports and desktop/mobile print screenshots pass. Production dependency audit clear; quick security scan retains one existing informational finding.
+- [ ] Deep code security scan completion and publication after checks pass; protected real staff upload/readback remains NOT VERIFIED because usable owner session is unavailable. No Phase 4.
+
 ## Phase 2 manual import correction
 - [x] Reproduced DEMO-001 rejection at `[0, domain]`; permit valid reserved .example storage only for explicitly synthetic records, with bilingual field-level validation.
 - [x] 22 targeted intelligence/authorization tests pass; preview compilation is clean. No full regression, metadata requests or AI calls.

@@ -46,7 +46,7 @@ export const changeSecurityWorkspace = createServerFn({ method: "POST" }).middle
     } else {
       snapshot.alerts = snapshot.alerts.map(alert => {
         if (alert.id !== data.id) return alert;
-        if (data.action === "status") return { ...alert, status: data.status };
+        if (data.action === "status") return { ...alert, status: data.status, notes: data.confirmed ? [...alert.notes, { id: crypto.randomUUID(), at: new Date().toISOString(), author: "Authenticated staff reviewer", text: `Human confirmed review status: ${data.status}. No external request was sent.` }] : alert.notes };
         if (data.action === "assign") return { ...alert, assignee: data.assignee };
         return { ...alert, notes: [...alert.notes, { id: crypto.randomUUID(), at: new Date().toISOString(), author: user.user_metadata['display_name'] || user.email || "Authorized analyst", text: data.text }] };
       });

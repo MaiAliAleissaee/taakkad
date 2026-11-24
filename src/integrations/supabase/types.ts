@@ -250,6 +250,39 @@ export type Database = {
           },
         ]
       }
+      private_evidence_items: {
+        Row: {
+          content_base64: string
+          created_at: string
+          event_kind: string
+          id: string
+          metadata: Json
+          subject_id: string
+          subject_kind: string
+          user_id: string
+        }
+        Insert: {
+          content_base64?: string
+          created_at?: string
+          event_kind: string
+          id?: string
+          metadata: Json
+          subject_id: string
+          subject_kind: string
+          user_id: string
+        }
+        Update: {
+          content_base64?: string
+          created_at?: string
+          event_kind?: string
+          id?: string
+          metadata?: Json
+          subject_id?: string
+          subject_kind?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -555,6 +588,17 @@ export type Database = {
         Args: { application_uuid: string }
         Returns: string
       }
+      append_private_evidence: {
+        Args: {
+          actor_id: string
+          event: string
+          file_content: string
+          kind: string
+          meta: Json
+          subject: string
+        }
+        Returns: string
+      }
       attempt_application_code: {
         Args: { application_uuid: string }
         Returns: boolean
@@ -604,6 +648,10 @@ export type Database = {
         Returns: string[]
       }
       has_organization_officer_access: { Args: never; Returns: boolean }
+      has_private_evidence_access: {
+        Args: { subject_kind: string }
+        Returns: boolean
+      }
       has_security_access: { Args: never; Returns: boolean }
       import_security_snapshot: {
         Args: { migration_id: string; saved_payload: Json }

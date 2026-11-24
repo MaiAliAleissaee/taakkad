@@ -1,3 +1,4 @@
+import { EvidenceTools } from "@/components/evidence/evidence-tools";
 import { useState } from "react";
 import { useSuspenseQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -84,5 +85,6 @@ function IntelligenceItem({ record, records, reports, selected, disabled, onSele
       <div><h4 className="font-semibold">{tr("Exact shared indicators — review leads, not attribution", "مؤشرات مشتركة مطابقة — دلائل مراجعة لا نسب اتهام")}</h4>{!links.reports.length && !links.records.length && <p className="mt-1 text-muted-foreground">{tr("No linked records", "لا توجد سجلات مرتبطة")}</p>}{links.reports.map(link => <div key={link.id} className="mt-2"><Button variant="link" size="sm" onClick={() => onOpenReport(link.id)}>{link.label}</Button>{link.synthetic && <span className="text-xs">{tr("Synthetic report", "بلاغ خيالي")}</span>}<p dir="ltr" className="break-all text-xs">{link.shared.join(" · ")}</p></div>)}{links.records.map(link => <p key={link.id} dir="auto" className="mt-2 break-all">{link.label}{link.synthetic ? ` · ${tr("Synthetic", "خيالي")}` : ""} — {link.shared.join(" · ")}</p>)}</div>
       <p className="border-s-4 border-emerald ps-3">{p.earlyWarning ? tr("Preserve DNS/RDAP evidence; independently verify the entity and source, assess impersonation and refer for authorized review. Do not accuse or request takedown solely from similarity.", "احفظ أدلة DNS وRDAP؛ تحقّق بشكل مستقل من الجهة والمصدر وقيّم الانتحال وأحل للمراجعة المصرّح بها. لا تتهم أو تطلب إزالة بسبب التشابه وحده.") : tr("Preserve source attribution and validate independently. Generated candidates and manual reports are unverified leads.", "احفظ نسب المصدر وتحقّق بشكل مستقل. النطاقات المولّدة والبلاغات اليدوية مؤشرات غير متحقق منها.")}</p>
     </div></details>
+    <EvidenceTools key={record.id} subject={{ kind: "intelligence", id: record.id }} />
   </article>;
 }

@@ -11,6 +11,8 @@ The deployed website is a demonstration, not proof of production readiness or ex
 
 Phase 2 / المرحلة الثانية: Analyst-only proactive intelligence adds sourced candidate generation, explicit free DNS/RDAP observations, attributed manual/batch imports, shared-indicator review and private early warnings. DNS is not registration or fraud proof; no suspicious websites are visited or accusations published. [Capabilities, actual tests and limitations](docs/PHASE_2_REPORT.md). The trained ML model and existing staff roles/passwords are unchanged. Genuine signed-in analyst save/readback remains unverified; temporary sessions cannot bypass existing revocation checks.
 
+Phase 3 / المرحلة الثالثة: Private staff evidence tools add bilingual explanations, UTC/UAE timelines, server-hashed bounded attachments, JSON evidence packages and printable bilingual PDF reports. Human approval records preparation only; nothing is sent externally. / تضيف أدوات الأدلة الخاصة تفسيراً ثنائي اللغة وتسلسلاً زمنياً UTC/الإمارات ومرفقات محدودة ببصمات خادم وحزم JSON وتقارير PDF قابلة للطباعة؛ يعتمد الإنسان الإعداد فقط ولا يُرسل شيء خارجياً. [Actual results and limitations](docs/PHASE_3_REPORT.md).
+
 1. المشكلة والحل | Problem and proposed solution
 العربية: قد يتلقى الأفراد رسائل أو اتصالات تنتحل صفة جهة معروفة، ولا تتوافر لهم دائماً طريقة واضحة للتحقق من القناة الرسمية أو الإبلاغ عن مؤشرات الاشتباه. يقترح «تأكّد» بوابة عامة لفحص قنوات التواصل والرسائل، وسجلاً للقنوات المعتمدة في بيئة تجريبية، ومساراً منظماً لتسجيل الجهات ومراجعتها، ولوحة أمنية لمراجعة البلاغات والروابط بين المؤشرات. نتائج الذكاء الاصطناعي مؤشرات مساعدة وليست حكماً قاطعاً بوجود احتيال.
 

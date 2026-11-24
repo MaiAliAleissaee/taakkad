@@ -1,5 +1,11 @@
 # Final polish test report
 
+## Phase 3 evidence and actionability — 24 November 2026
+
+**22 targeted tests passed** (13 evidence rules, four server authorization/readback tests, five existing intelligence authorization tests). **One final regression: 321 tests / 29 files passed.** Rollback-only database contract test executed successfully: private grants/RLS, existing active Analyst fixture and Officer cross-denial, revoked-session rejection, six-file limit and mandatory approval; no rows/counters persisted. The server/readback unit tests are mocked, not signed-in end-to-end proof.
+
+Actual isolated browser export checks passed using explicitly fictional, non-persisted fixtures: JSON 6,315 bytes with an attachment/hash manifest, downloaded PNG 68 bytes with valid signature, bilingual print report with SHA-256 and a 71,033-byte PDF. Desktop/mobile screenshots inspected; no mobile overflow or page errors. This verifies export helpers, not a genuine staff upload/readback or Safari/iOS save dialog. Original staff verification remains unavailable; no roles/passwords were changed or session checks bypassed. Production dependency audit `{}`; fresh quick security scan has only the existing informational public-registry finding. Deep code scan and publication status are reported separately. No ML retraining, AI calls, metadata calls or benchmark reruns.
+
 ## Phase 2 proactive intelligence — 24 November 2026
 
 **20 targeted tests and one final regression of 302 tests / 27 files passed.** Rollback-only database checks passed for private grants, active-session/Analyst access, Officer/non-active-session denial and 30th allowed / 31st denied metadata commands. Free live helpers observed UAE PASS DNS/ASN without a fabricated `.ae` registration date; `example.com` RDAP supplied its reliable 1995 registration; a generated UAE PASS candidate had no observed DNS/RDAP record. Production dependency audit returned `{}`; backend scan had no critical/warnings and retained the existing informational public projection finding. The managed preview compiled successfully; ML artifact unchanged.

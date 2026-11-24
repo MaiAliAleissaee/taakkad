@@ -62,3 +62,5 @@ use the editor.
 - Allocate report display numbers through a private permanent year ledger in database triggers; preserve internal IDs and return saved payloads so deletion, reordering and concurrent writes never recycle numbers.
 - Analyze URLs locally; follow src/lib/services/url/AGENTS.md for safe metadata and evaluation.
 - Validate fictional intelligence .example domains only for explicitly synthetic storage records; retain strict public-domain validation for metadata requests so demo imports never enable network scanning.
+- Keep staff evidence in bounded append-only owner-private Cloud records; authorize the subject and active institution-specific session before every operation, compute SHA-256 server-side and recheck before exports so attachments never become publicly accessible or verified-source claims.
+- Build evidence packages from authorized server snapshots, separate model outputs from observed facts, and print escaped bilingual text with the browser PDF dialog; exports and human preparation approvals never transmit external requests.

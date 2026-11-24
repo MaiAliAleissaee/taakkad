@@ -1,3 +1,4 @@
+import { EvidenceTools } from "@/components/evidence/evidence-tools";
 import { useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -114,6 +115,7 @@ export function OfficerDashboard() {
           {selected.correction_note && <div className="mt-4"><p className="text-xs text-muted-foreground">{tr("Latest review note", "آخر ملاحظة مراجعة")}</p><p dir="auto" className="border-s-4 border-emerald bg-accent p-3 text-sm">{selected.correction_note}</p></div>}
         </section>
       </div>}
+      <EvidenceTools key={`evidence:${selected.id}`} subject={{ kind: "application", id: selected.id }} />
       {decidable ? <section className="space-y-4 rounded-xl border bg-card p-5">
         <h3 className="font-semibold">{tr("Officer review actions", "إجراءات مراجعة الموظف")}</h3>
         <div className="flex flex-wrap gap-2">

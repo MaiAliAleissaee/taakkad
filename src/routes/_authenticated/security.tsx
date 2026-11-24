@@ -35,6 +35,7 @@ import {
 } from "@/lib/i18n/labels";
 import { simulatedDomainMonitor } from "@/lib/services/domain-monitoring";
 import { cn } from "@/lib/utils";
+import { EvidenceTools } from "@/components/evidence/evidence-tools";
 import { IntelligencePanel } from "@/components/intelligence/intelligence-panel";
 
 export const Route = createFileRoute("/_authenticated/security")({
@@ -225,7 +226,7 @@ function SecurityPage({ snapshot, change, busy }: { snapshot: SecuritySnapshot; 
                   <div className="grid gap-3 sm:grid-cols-2">
                     <label className="space-y-1 text-sm">
                       <span className="text-xs text-muted-foreground">{tr("Case review status", "حالة مراجعة القضية")}</span>
-                      <NativeSelect value={selected.status} disabled={busy} aria-label={tr("Case review status", "حالة مراجعة القضية")} onChange={async (e) => { try { await change({ action: "status", id: selected.id, status: e.target.value as AlertStatus }); toast.success(tr("Status updated", "تم تحديث الحالة")); } catch { /* mutation shows error */ } }}>
+                      <NativeSelect value={selected.status} disabled={busy} aria-label={tr("Case review status", "حالة مراجعة القضية")} onChange={async (e) => { const nextStatus = e.target.value as AlertStatus; const needsApproval = nextStatus === "escalated" || nextStatus === "confirmed"; if (needsApproval && !window.confirm(tr("Confirm human review? This updates existing public indicator warnings; no police or takedown request is sent.", "تأكيد المراجعة البشرية؟ يحدّث هذا التحذيرات العامة القائمة للمؤشرات؛ لا يُرسل طلب للشرطة أو الإزالة."))) return; try { await change({ action: "status", id: selected.id, status: nextStatus, confirmed: needsApproval }); toast.success(tr("Status updated", "تم تحديث الحالة")); } catch { /* mutation shows error */ } }}>
                         {STATUSES.map((s) => <option key={s} value={s}>{pick(alertStatusLabel[s])}</option>)}
                       </NativeSelect>
                     </label>
@@ -272,6 +273,7 @@ function SecurityPage({ snapshot, change, busy }: { snapshot: SecuritySnapshot; 
                     </ul>
                   </details>
 
+                  <EvidenceTools key={`evidence:${selected.id}`} subject={{ kind: "case", id: selected.id }} />
                   <div>
                     <h3 className="text-sm font-semibold">{tr("Analyst notes", "ملاحظات المحلل")}</h3>
                     <ul className="mt-2 space-y-2">
@@ -294,7 +296,7 @@ function SecurityPage({ snapshot, change, busy }: { snapshot: SecuritySnapshot; 
           </TabsContent>
 
           <TabsContent value="connections" className="mt-5">
-            <FraudConnections alerts={alerts} lookalikes={lookalikes} organizations={organizations} scanOrg={scanOrg} setScanOrg={setScanOrg} busy={busy} scanning={scanning} onScan={() => { void runScan(); }} onOpenReport={id => { select(id); setTab("alerts"); }} onStatus={(id, nextStatus) => { void change({ action: "lookalike_status", id, status: nextStatus }).catch(() => {}); }} />
+            <FraudConnections alerts={alerts} lookalikes={lookalikes} organizations={organizations} scanOrg={scanOrg} setScanOrg={setScanOrg} busy={busy} scanning={scanning} onScan={() => { void runScan(); }} onOpenReport={id => { select(id); setTab("alerts"); }} onStatus={(id, nextStatus) => { const needsApproval = nextStatus === "takedown_requested"; if (needsApproval && !window.confirm(tr("Record a human-reviewed preparation status only? No takedown request will be sent.", "تسجيل حالة إعداد راجعها إنسان فقط؟ لن يُرسل طلب إزالة."))) return; void change({ action: "lookalike_status", id, status: nextStatus, confirmed: needsApproval }).catch(() => {}); }} />
           </TabsContent>
           <TabsContent value="analytics" className="mt-5 space-y-5">
             <p className="text-xs text-muted-foreground">{tr("Workspace summary. Seeded investigation statistics are fictional; visitor reports are unverified submissions. Risk indices are not probabilities.", "ملخص مساحة العمل. إحصاءات التحقيق المعدّة خيالية؛ بلاغات الزوار غير متحقق منها. مؤشرات الخطر ليست احتمالات.")}</p>

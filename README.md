@@ -13,6 +13,8 @@ Phase 2 / المرحلة الثانية: Analyst-only proactive intelligence add
 
 Phase 3 / المرحلة الثالثة: Private staff evidence tools add bilingual explanations, UTC/UAE timelines, server-hashed bounded attachments, JSON evidence packages and printable bilingual PDF reports. Human approval records preparation only; nothing is sent externally. / تضيف أدوات الأدلة الخاصة تفسيراً ثنائي اللغة وتسلسلاً زمنياً UTC/الإمارات ومرفقات محدودة ببصمات خادم وحزم JSON وتقارير PDF قابلة للطباعة؛ يعتمد الإنسان الإعداد فقط ولا يُرسل شيء خارجياً. [Actual results and limitations](docs/PHASE_3_REPORT.md).
 
+Security completion / استكمال الأمان: Paid semantic AI requires an active signed-in session; basic checks, local URL ML, registry searches and write-only reporting remain public. Demo tracking now requires the unchanged five-digit reference plus a private receipt secret; older/lost receipts require independently verified officer recovery. / يتطلب التحليل الدلالي المدفوع جلسة دخول نشطة؛ تبقى الفحوص الأساسية والتعلم الآلي المحلي والبحث في السجل والإبلاغ متاحة للعامة. تتطلب المتابعة التجريبية الرقم السابق من خمسة أرقام وسر الإيصال الخاص؛ تُستعاد الإيصالات السابقة أو المفقودة عبر موظف بعد تحقق مستقل من الهوية.
+
 1. المشكلة والحل | Problem and proposed solution
 العربية: قد يتلقى الأفراد رسائل أو اتصالات تنتحل صفة جهة معروفة، ولا تتوافر لهم دائماً طريقة واضحة للتحقق من القناة الرسمية أو الإبلاغ عن مؤشرات الاشتباه. يقترح «تأكّد» بوابة عامة لفحص قنوات التواصل والرسائل، وسجلاً للقنوات المعتمدة في بيئة تجريبية، ومساراً منظماً لتسجيل الجهات ومراجعتها، ولوحة أمنية لمراجعة البلاغات والروابط بين المؤشرات. نتائج الذكاء الاصطناعي مؤشرات مساعدة وليست حكماً قاطعاً بوجود احتيال.
 

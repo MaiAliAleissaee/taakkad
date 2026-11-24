@@ -5,6 +5,7 @@ import { Search, CheckCircle2, Clock3, XCircle, FileQuestion } from "lucide-reac
 import { useI18n } from "@/lib/i18n/i18n";
 import { trackDemoOrganization } from "@/lib/organizations/demo.functions";
 import { demoTrackingSchema, type DemoReceipt, type DemoStatus } from "@/lib/organizations/demo-schema";
+import { TrackingReceipt } from "./tracking-receipt";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,12 +15,13 @@ export function ApplicationTracker({ receipt }: { receipt: DemoReceipt | null })
   const track = useServerFn(trackDemoOrganization);
   const queryClient = useQueryClient();
   const [code, setCode] = useState("");
+  const [secret, setSecret] = useState("");
   const [status, setStatus] = useState<DemoStatus | null>(null);
   const [resultCode, setResultCode] = useState("");
   const [updatedAt, setUpdatedAt] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  useEffect(() => { if (receipt) { setCode(receipt.code); setResultCode(receipt.code); setStatus(receipt.status); setUpdatedAt(receipt.updatedAt); setError(""); } }, [receipt]);
+  useEffect(() => { if (receipt) { setCode(receipt.code); setSecret(receipt.secret); setResultCode(receipt.code); setStatus(receipt.status); setUpdatedAt(receipt.updatedAt); setError(""); } }, [receipt]);
   const labels: Record<DemoStatus, string> = {
     pending: tr("Pending Review", "بانتظار المراجعة"), under_review: tr("Under Review", "قيد المراجعة"),
     needs_information: tr("Corrections Required", "مطلوب تصحيحات"), approved: tr("Approved — Simulated", "معتمد — تجريبي"), rejected: tr("Rejected", "مرفوض"),
@@ -35,21 +37,21 @@ export function ApplicationTracker({ receipt }: { receipt: DemoReceipt | null })
   const tone = status === "approved" ? "text-verified" : status === "rejected" ? "text-suspicious" : "text-unverified";
   async function retrieve(event: FormEvent) {
     event.preventDefault(); setStatus(null); setError("");
-    const parsed = demoTrackingSchema.safeParse({ code });
-    if (!parsed.success) { setError(tr("Enter your five-digit tracking number.", "أدخل رقم المتابعة المكوّن من خمسة أرقام.")); return; }
+    const parsed = demoTrackingSchema.safeParse({ code, secret });
+    if (!parsed.success) { setError(tr("Enter your five-digit reference and the private secret from your receipt.", "أدخل الرقم المكوّن من خمسة أرقام والسر الخاص من إيصالك.")); return; }
     setBusy(true);
     try {
       const result = await track({ data: parsed.data });
       setResultCode(result.code); setStatus(result.status); setUpdatedAt(result.updatedAt);
-      if (!result.status) setError(tr("No status found for this number.", "لم تُعثر على حالة لهذا الرقم."));
+      if (!result.status) setError(tr("The reference or private secret is invalid. Lost or older receipts require officer-assisted recovery.", "الرقم أو السر الخاص غير صحيح. تتطلب الإيصالات المفقودة أو السابقة استعادة بمساعدة الموظف."));
       if (result.status === "approved") await queryClient.invalidateQueries({ queryKey: ["organization-demo-registry"] });
     }
     catch { setError(tr("Tracking is temporarily unavailable or the request limit was reached. Try later.", "المتابعة غير متاحة مؤقتاً أو تم بلوغ حد الطلبات. حاول لاحقاً.")); }
     finally { setBusy(false); }
   }
   return <div id="application-tracking" className="mb-8 scroll-mt-24 border-b pb-8"><h2 className="mb-4 flex items-center gap-2 text-xl font-semibold"><Search className="size-5 text-emerald" />{tr("Track Application", "متابعة الطلب")}</h2>
-    {receipt && <p className="mb-4 text-sm">{tr("Save your tracking number:", "احفظ رقم المتابعة:")} <strong dir="ltr" className="font-mono text-lg">{receipt.code}</strong></p>}
-    <form onSubmit={retrieve} className="max-w-xl space-y-4"><div className="space-y-2"><Label htmlFor="tracking-reference">{tr("Five-digit tracking number", "رقم المتابعة من خمسة أرقام")}</Label><Input id="tracking-reference" dir="ltr" inputMode="numeric" autoComplete="off" maxLength={5} pattern="[1-9][0-9]{4}" required value={code} onChange={e => { setCode(e.target.value); setStatus(null); setError(""); }} /></div><Button type="submit" disabled={busy}><Search />{tr("View status", "عرض الحالة")}</Button></form>
+    {receipt && <TrackingReceipt code={receipt.code} secret={receipt.secret} />}
+    <form onSubmit={retrieve} className="max-w-xl space-y-4"><div className="space-y-2"><Label htmlFor="tracking-reference">{tr("Five-digit tracking number", "رقم المتابعة من خمسة أرقام")}</Label><Input id="tracking-reference" dir="ltr" inputMode="numeric" autoComplete="off" maxLength={5} pattern="[1-9][0-9]{4}" required value={code} onChange={e => { setCode(e.target.value); setStatus(null); setError(""); }} /></div><div className="space-y-2"><Label htmlFor="tracking-secret">{tr("Private tracking secret", "سر المتابعة الخاص")}</Label><Input id="tracking-secret" type="password" dir="ltr" autoComplete="off" maxLength={64} required value={secret} onChange={e => { setSecret(e.target.value); setStatus(null); setError(""); }} /></div><p className="text-xs text-muted-foreground">{tr("Older or lost receipts: ask the verification officer for private recovery after an independent identity check.", "الإيصالات السابقة أو المفقودة: اطلب استعادة خاصة من موظف التحقق بعد التحقق المستقل من الهوية.")}</p><Button type="submit" disabled={busy}><Search />{tr("View status", "عرض الحالة")}</Button></form>
     {status && <div role="status" className="mt-4 max-w-2xl space-y-3 rounded-lg border bg-card p-5 shadow-card">
       <div className="flex items-start gap-3"><StatusIcon aria-hidden="true" className={`mt-1 size-6 shrink-0 ${tone}`} /><div className="min-w-0"><p className="text-sm text-muted-foreground">{tr("Tracking number", "رقم المتابعة")}</p><p dir="ltr" className="mt-1 text-start font-mono text-2xl font-bold">{resultCode}</p><h3 className="mt-2 font-semibold">{labels[status]}</h3></div></div>
       <p className="text-sm leading-relaxed">{messages[status]}</p>

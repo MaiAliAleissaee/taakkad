@@ -1,5 +1,9 @@
 # TRUST ZERO AI — hybrid AI implementation and validation
 
+## Current access correction — 24 November 2026
+
+Paid semantic analysis now requires authenticated middleware and an active Cloud session. The unchanged Gateway model/prompt, redaction, grounding and 2400-token cap remain server-only; reservations use the authenticated user's hash with five/ten-minute and global 200/day ceilings. Public local URL ML, basic rules, registry matching and reporting remain accessible without sign-in. Anonymous paid calls were explicitly denied before inference; **zero paid calls** were made during this correction. Earlier anonymous-semantic observations below are historical. Actual authorized paid inference was not repeated because no usable owner session was available.
+
 ## Phase 1C supervised URL ML — 24 November 2026
 
 Status: actual preview learned inference and 277 regression tests passed; publishing withheld after high dependency advisories were detected. No fresh published Phase 1C inference or paid semantic-AI call is claimed.

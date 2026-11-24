@@ -31,8 +31,8 @@ Missing functionality implemented as a shared evidence panel in Security report 
 | Actual isolated exports | PASS: JSON 6,315 bytes, PNG 68 bytes, bilingual PDF 71,033 bytes; real downloads and print output checked. Explicit fictional fixture only, no persistence. |
 | Print layout | PASS: inspected desktop/mobile screenshots; Arabic text and SHA-256 visible, no mobile overflow or page errors. |
 | Production dependency audit | PASS: `{}`; no dependency upgrades. |
-| Quick security scan | PASS with one existing informational public organization-registry finding left unchanged; no critical/warning findings. |
-| Deep code scan | Pending completion; publication deferred until the requested security checks finish. |
+| Quick security scan | Fresh PASS at 10:51 UTC after fixes: one existing informational public organization-registry finding left unchanged; no critical/warning findings. |
+| Deep code scan | Initial scan found eight selected findings (including duplicates). All eight fixed and marked resolved. A fresh deep scan of the saved changes is still required before publication. |
 | Genuine staff upload, persistence, download/export readback | NOT VERIFIED: owner's genuine session cannot be restored to automation; separate test sessions fail existing workspace/session checks. No bypass or credential change. |
 | Published Phase 3 execution | NOT VERIFIED until deployment and authorized live checks occur. |
 
@@ -46,6 +46,17 @@ Missing functionality implemented as a shared evidence panel in Security report 
 6. Legacy application documents keep their existing handling; new Phase 3 files use stricter validation/hashes. Old files/evidence/settled decisions are not rewritten or retroactively certified. Existing source-free legacy evidence uses its stored origin as attribution; no missing URL invented.
 7. Human-approved preparation does not change roles, transmit abuse/takedown forms, contact police, generate legal signatures or assert guilt. Existing organization approval/independence controls remain intact.
 
+## Approved security completion
+
+- Fixed the four public indicator/report functions: non-null workspace arguments require ownership and active analyst authorization. Six duplicate/related scan findings resolved in `f388aef`; seven live anonymous/public-reference tests and 26 targeted regressions had passed. Signed-in positive/cross-owner rollback tests remained unavailable because the test connection cannot access Auth sessions.
+- Paid semantic analysis now requires an active authenticated session before usage reservation or Gateway inference. Local ML/rules, official/demo registry searches and public reporting remain anonymous. Budget buckets are anchored to authenticated users; the existing five/ten-minute and global 200/day ceilings remain. Public check/report functions add shared durable ceilings (6000 checks/hour, 500 reports/hour) using the already-approved custom limiter.
+- New anonymous demo registration atomically issues the existing five-digit reference plus a cryptographically random 256-bit private receipt secret. Only SHA-256 is stored; secrets are kept in component memory and can be saved in a user-requested private receipt, never URLs/query caches/browser persistence. POST/no-store tracking returns general status/date only. Old number-only and internal status functions cannot be called directly by visitors.
+- Existing applications/references/decisions remain unchanged. Legacy receipts with no fingerprint cannot be used by reference alone. Active officers can recover/rotate a receipt only after explicit independent identity-check confirmation and a private note; the change appends a separate security audit and invalidates the old secret. This is assisted recovery, not a claim that unverified email/name fields prove identity. Secure delivery is a human responsibility; there is no new email/SMS integration.
+- Corrected shared stale workspace targeting across public checks and reporting: logout/account switches immediately fall back to public mode and remove the stale hint without deleting records.
+- **30 targeted tests passed**, including the corrected hook mount race; only the two initially failing hook tests were rerun. Prior final 321-test regression and isolated Phase 3 JSON/PDF/hash results above were retained, not repeated. Preview compilation passed. Actual bilingual public browser checks verified local ML/checking, anonymous reporting, secret-receipt registration, owner status readback, wrong-secret denial, no browser-secret persistence and mobile layout. Three direct anonymous database bypass attempts were rejected. One explicitly fictional application and one fictional report were retained. Zero paid inference, metadata calls, benchmark repeats or new accounts.
+- Genuine staff upload/readback, receipt recovery/rotation and authenticated owner/cross-owner execution remain **NOT VERIFIED**. Existing-account restoration failed with no matching requester identity; no test user, permission bypass, role or credential change was introduced. Mocked session/recovery boundary tests are not password-login or persistence proof.
+- All eight selected findings have been marked fixed. The unrelated informational public organization-registry finding remains untouched. Publication is withheld until the fresh deep scan clears the saved changes; no Phase 4 work.
+
 ## Changed files
 
 - `src/lib/evidence/schema.ts`, `model.ts`, `evidence.server.ts`, `evidence.functions.ts`, `download.ts`: validation, provenance/UTC-UAE explanations, authorized subject snapshots, append-only files/actions, hash-checked package readback and local exports.
@@ -55,5 +66,6 @@ Missing functionality implemented as a shared evidence panel in Security report 
 - `src/test/evidence.test.ts`, `evidence-authorization.test.ts`, `evidence-access.test.sql`: concrete validation, provenance, hash, action and authorization contracts.
 - Tool-generated `drizzle/migrations/0027_private_staff_evidence.sql`, `meta/0027_snapshot.json`, `meta/_journal.json`, regenerated `src/integrations/supabase/types.ts`: additive private evidence schema and grants.
 - `AGENTS.md`, `roadmap.md`, `README.md`, `TEST_REPORT.md`, this report: boundaries and actual results.
+- Security completion: `src/lib/security/workspace-target.ts`, `src/lib/data/hooks.ts`; `src/lib/services/authenticated-ai.server.ts`, `ai-analysis.functions.ts`, `ai-usage.server.ts`; `src/lib/organizations/demo-schema.ts`, `demo.functions.ts`, `demo-receipt.server.ts`; `src/components/orgs/application-tracker.tsx`, `tracking-receipt.tsx`, `tracking-recovery.tsx`, `officer-dashboard.tsx`; `src/components/trust/message-checker.tsx`; `src/test/security-completion.test.ts`, `workspace-target-hook.test.tsx`, updated `demo-organization.test.ts` and `ai-usage.test.ts`; tool-generated migrations 0028–0030, journal/snapshots and Cloud types; README, test report, architecture, AI implementation report and roadmap.
 
 Commit ID supplied in delivery after saving; local branch `main`. GitHub `master` synchronization not verified. No history rewrite or visibility/settings changes.

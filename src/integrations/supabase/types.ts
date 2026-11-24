@@ -163,14 +163,20 @@ export type Database = {
         Row: {
           application_id: string | null
           code: string
+          recovery_audit: Json
+          secret_hash: string | null
         }
         Insert: {
           application_id?: string | null
           code: string
+          recovery_audit?: Json
+          secret_hash?: string | null
         }
         Update: {
           application_id?: string | null
           code?: string
+          recovery_audit?: Json
+          secret_hash?: string | null
         }
         Relationships: [
           {
@@ -651,6 +657,7 @@ export type Database = {
         Args: { candidate_values: string[]; workspace_user?: string }
         Returns: string[]
       }
+      has_active_app_session: { Args: never; Returns: boolean }
       has_organization_officer_access: { Args: never; Returns: boolean }
       has_private_evidence_access: {
         Args: { subject_kind: string }
@@ -693,7 +700,25 @@ export type Database = {
         Args: { tracking_code: string }
         Returns: Json
       }
+      read_secure_demo_tracking: {
+        Args: { receipt_hash: string; tracking_code: string }
+        Returns: Json
+      }
+      recover_demo_tracking_receipt: {
+        Args: {
+          actor_id: string
+          application_uuid: string
+          identity_confirmed: boolean
+          receipt_hash: string
+          review_note: string
+        }
+        Returns: string
+      }
       reserve_analyst_intelligence_check: { Args: never; Returns: boolean }
+      reserve_public_security_action: {
+        Args: { action_kind: string }
+        Returns: undefined
+      }
       reserve_trust_ai_usage: {
         Args: { visitor_hash: string }
         Returns: boolean
@@ -718,6 +743,10 @@ export type Database = {
       }
       submit_demo_organization: {
         Args: { application_payload: Json }
+        Returns: string
+      }
+      submit_secure_demo_organization: {
+        Args: { application_payload: Json; receipt_hash: string }
         Returns: string
       }
       submit_security_report: {

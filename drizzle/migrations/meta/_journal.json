@@ -204,6 +204,20 @@
       "when": 1795516815465,
       "tag": "0028_guard_public_security_workspace_arguments",
       "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "7",
+      "when": 1795517180050,
+      "tag": "0029_private_demo_tracking_receipts",
+      "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1795517203683,
+      "tag": "0030_active_authenticated_ai_sessions",
+      "breakpoints": true
     }
   ]
 }

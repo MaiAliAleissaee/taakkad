@@ -1,5 +1,13 @@
 # Taakkad architecture
 
+## Current security completion — 24 November 2026
+
+Only the paid semantic function uses authenticated middleware plus the active-session database predicate. Usage is hashed per authenticated user, retaining five requests/ten minutes and the global 200/day ceiling; resetting a browser cookie cannot reset the user's budget. Local ML/rules, public registry searches and write-only reports remain anonymous. Public database check/report paths use the existing durable limiter with shared 6000 check and 500 report/hour ceilings, and reject any non-null private workspace unless the caller owns it and has an active analyst session.
+
+Demo receipts contain the unchanged five-digit reference and a server-issued cryptographically random 256-bit secret; Cloud stores SHA-256 only. Atomic registration assigns the fingerprint. Status lookup uses POST/no-store and returns only status/date after validating both values; number-only reads and internal matching are not executable by anonymous/authenticated clients. Existing null-fingerprint records are retained but cannot be tracked until an active officer independently verifies identity and issues a replacement receipt. Recovery rotates only the receipt fingerprint and appends a separate private security audit; application decisions/data remain unchanged. Officers deliver receipts privately; no self-service identity proof is inferred from a reference or six unverified fields.
+
+Browser workspace identifiers are hints, not capabilities. The shared hook returns a private target only for the current ready analyst and discards stale hints after logout/account switching; database checks remain authoritative. Phase 3 evidence and exports retain their prior implementation. Publication awaits deep-scan clearance; genuine staff persistence/recovery remains unverified.
+
 ## Phase 1C local supervised inference — 24 November 2026
 
 Status: preview/browser and 277-test regression verified; **not published** because existing dependency advisories failed the publication security condition. Dependency compatibility remediation is a separate blocker; runtime dependencies and hosting settings remain unchanged.

@@ -2,15 +2,17 @@
 
 ## Selected deep-scan security fixes
 - [x] Guard all four caller-selected workspace checks/reports with caller ownership and active analyst authorization. Live anonymous denials and public fictional matching passed; 26 targeted regressions passed. Signed-in positive/cross-owner rollback contract remains unverified: the test connection cannot read auth.sessions.
-- [ ] Public metered AI access — changing visitor access requires owner confirmation; do not ignore the selected finding.
-- [ ] Five-digit demo status enumeration — stronger access proof requires owner confirmation; preserve existing references and records meanwhile.
+- [x] Authenticate paid semantic AI only; retain anonymous local ML, checks, registry/reporting and durable limits. Anonymous paid inference denial verified; no paid calls.
+- [x] Add atomic hashed private receipt alongside unchanged references; active-officer confirmed/audited recovery. Public owner status readback and wrong-secret/direct-call denial verified; actual officer recovery remains unverified without a usable owner session.
+- [x] Fix stale targets across checks/reporting; 30 scoped tests and bilingual public/mobile browser flows pass. Eight selected findings resolved; fresh quick scan retains only the unrelated informational registry finding.
+- [ ] Fresh deep scan clearance of saved changes, then Phase 3 publication/live verification; do not start Phase 4.
 - [x] Mark the six selected ownership findings fixed after live endpoint verification; leave two visitor-facing findings active pending approval and the public organization registry finding unchanged.
 
 ## Phase 3 explainability and private evidence
 - [x] Audit: existing typed links/graph, synthetic/source labels, DNS/RDAP snapshots, private officer documents and confirmed officer decisions are reused.
 - [x] Add shared staff evidence workspace: risk explanations, UTC/UAE timeline, validated private attachments with server SHA-256, human-approved preparation actions and bilingual PDF/JSON exports.
 - [x] 22 targeted tests and one final 321-test regression pass; rollback database contracts, isolated actual JSON/PNG/PDF exports and desktop/mobile print screenshots pass. Production dependency audit clear; quick security scan retains one existing informational finding.
-- [ ] Deep code security scan completion and publication after checks pass; protected real staff upload/readback remains NOT VERIFIED because usable owner session is unavailable. No Phase 4.
+- [ ] Fresh deep code security scan after approved corrections, then publication after checks pass; protected real staff upload/readback and officer receipt recovery remain NOT VERIFIED because usable owner session is unavailable. No Phase 4.
 
 ## Phase 2 manual import correction
 - [x] Reproduced DEMO-001 rejection at `[0, domain]`; permit valid reserved .example storage only for explicitly synthetic records, with bilingual field-level validation.

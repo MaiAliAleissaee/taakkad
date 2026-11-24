@@ -1,5 +1,13 @@
 # Final polish test report
 
+## Approved security completion — 24 November 2026
+
+**30 scoped tests passed:** 12 demo organization tests, five authenticated usage-budget tests, 11 session/recovery/targeting tests and two actual hook logout/account-switch tests. The initial hook run exposed a mount-time stale-state race; it was corrected and only those two failing tests were rerun, both passed. Prior completed regression/Phase 3 export tests were not repeated. Managed preview compilation is `build OK`.
+
+Actual public browser checks passed in English/Arabic, including 835×754 and 390×844 views: anonymous local check/ML result, stale-reference removal, disabled anonymous semantic AI, explicit unauthorized paid-function denial before inference, anonymous reporting, six-field registration with an atomic secret receipt, receipt-owner status readback, incorrect secret rejection and no secret browser persistence. One clearly fictional application and one fictional report were retained; no existing record was removed. Three direct public database attempts (old number-only tracking, secure internal tracking and recovery) were rejected. Service-only grants and added hash/audit fields were read back.
+
+The eight selected findings have been marked fixed; the unrelated informational public-registry finding was not changed. Fresh quick scan at 10:51 UTC has one informational finding, no critical/warning findings. Deep scan/publication remain pending in the Phase 3 report. Real signed-in staff upload/readback, recovery/rotation and owner/cross-owner session execution remain **NOT VERIFIED**: the attempt to restore the requester's existing account found no matching account. No account was created, role changed or password requested. Recovery authorization/session-denial tests used mocked clients. No paid AI calls, metadata calls, retraining or accuracy benchmarks were run.
+
 ## Phase 3 evidence and actionability — 24 November 2026
 
 **22 targeted tests passed** (13 evidence rules, four server authorization/readback tests, five existing intelligence authorization tests). **One final regression: 321 tests / 29 files passed.** Rollback-only database contract test executed successfully: private grants/RLS, existing active Analyst fixture and Officer cross-denial, revoked-session rejection, six-file limit and mandatory approval; no rows/counters persisted. The server/readback unit tests are mocked, not signed-in end-to-end proof.

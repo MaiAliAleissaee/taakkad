@@ -1,4 +1,5 @@
 import { EvidenceTools } from "@/components/evidence/evidence-tools";
+import { TrackingRecovery } from "./tracking-recovery";
 import { useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -116,6 +117,7 @@ export function OfficerDashboard() {
         </section>
       </div>}
       <EvidenceTools key={`evidence:${selected.id}`} subject={{ kind: "application", id: selected.id }} />
+      {selected.demo_registration && <TrackingRecovery key={`receipt:${selected.id}`} id={selected.id} />}
       {decidable ? <section className="space-y-4 rounded-xl border bg-card p-5">
         <h3 className="font-semibold">{tr("Officer review actions", "إجراءات مراجعة الموظف")}</h3>
         <div className="flex flex-wrap gap-2">

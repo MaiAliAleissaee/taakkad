@@ -1,4 +1,5 @@
 import { ScanSearch, X } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { NativeSelect } from "@/components/common/native-select";
 import { RiskMeter } from "@/components/common/bits";
@@ -52,6 +53,7 @@ export function MessageChecker() {
   const request = useRef(0);
   useEffect(() => () => { request.current += 1; }, []);
   useEffect(() => { request.current += 1; setChecked(null); setBusy(false); }, [staff.user?.id]);
+  useEffect(() => { if (!staff.user) setUseAi(false); }, [staff.user?.id]);
 
   const run = async () => {
     const value = preparePrivateCheck(input);
@@ -79,7 +81,7 @@ export function MessageChecker() {
       let flaggedValues: string[] = [];
       let flagsAvailable = true;
       let leads: ReturnType<typeof correlateIndicators> = [];
-      if (useAi) {
+      if (useAi && staff.user) {
         try { ai = await analyze({ data: minimizeAiInput(value) }); }
         catch { ai = { status: "unavailable", reason: "service" }; }
         if (id !== request.current) return;
@@ -138,7 +140,8 @@ export function MessageChecker() {
           <Textarea id="chk-body" dir="auto" maxLength={10000} rows={3} value={input.body} onChange={(e) => setInput({ ...input, body: e.target.value })} />
         </div>
         <div className="space-y-2">
-          <div className="flex items-start gap-2"><Checkbox id="chk-ai" checked={useAi} disabled={busy} onCheckedChange={value => setUseAi(value === true)} /><Label htmlFor="chk-ai" className="leading-relaxed">{tr("Include real AI analysis of redacted content", "تضمين تحليل فعلي بالذكاء الاصطناعي للمحتوى المنقّح")}</Label></div>
+          <div className="flex items-start gap-2"><Checkbox id="chk-ai" checked={useAi} disabled={busy || !staff.user} onCheckedChange={value => setUseAi(value === true)} /><Label htmlFor="chk-ai" className="leading-relaxed">{tr("Include real AI analysis of redacted content", "تضمين تحليل فعلي بالذكاء الاصطناعي للمحتوى المنقّح")}</Label></div>
+          {!staff.user && <Button asChild variant="link" size="sm"><Link to="/auth">{tr("Sign in for paid AI analysis", "سجّل الدخول للتحليل المدفوع بالذكاء الاصطناعي")}</Link></Button>}
           <div className="flex items-start gap-2"><Checkbox id="chk-rdap" checked={useRdap} disabled={busy} onCheckedChange={value => setUseRdap(value === true)} /><Label htmlFor="chk-rdap" className="leading-relaxed">{tr("Look up registration and DNS/network metadata (domain/host only sent to RDAP, Google DNS and RIPE; RDAP: .com, .net, .org)", "استعلام التسجيل وDNS وبيانات الشبكة (يُرسل النطاق والمضيف فقط إلى RDAP وGoogle DNS وRIPE؛ التسجيل: .com و.net و.org)")}</Label></div>
           <p className="text-xs text-muted-foreground">{tr("Remove passwords, OTPs, identity numbers and unnecessary personal details before submitting. Automatic redaction is a safeguard, not a guarantee.", "أزل كلمات المرور ورموز التحقق وأرقام الهوية والبيانات الشخصية غير الضرورية قبل الإرسال. التنقيح الآلي إجراء وقائي وليس ضماناً.")}</p>
         </div>

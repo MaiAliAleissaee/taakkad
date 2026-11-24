@@ -35,6 +35,24 @@ export type Database = {
         }
         Relationships: []
       }
+      analyst_intelligence_workspaces: {
+        Row: {
+          payload: Json
+          revision: number
+          user_id: string
+        }
+        Insert: {
+          payload?: Json
+          revision?: number
+          user_id: string
+        }
+        Update: {
+          payload?: Json
+          revision?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       organization_application_grants: {
         Row: {
           application_id: string
@@ -545,6 +563,14 @@ export type Database = {
         Args: { application_uuid: string }
         Returns: boolean
       }
+      commit_analyst_intelligence: {
+        Args: {
+          actor_id: string
+          expected_revision: number
+          next_payload: Json
+        }
+        Returns: Json
+      }
       commit_organization_application: {
         Args: {
           actor_id: string
@@ -606,6 +632,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      read_analyst_intelligence: { Args: never; Returns: Json }
       read_demo_organization_status: {
         Args: { tracking_code: string }
         Returns: string
@@ -614,6 +641,7 @@ export type Database = {
         Args: { tracking_code: string }
         Returns: Json
       }
+      reserve_analyst_intelligence_check: { Args: never; Returns: boolean }
       reserve_trust_ai_usage: {
         Args: { visitor_hash: string }
         Returns: boolean
@@ -627,6 +655,10 @@ export type Database = {
           expected_revision: number
         }
         Returns: undefined
+      }
+      save_analyst_intelligence: {
+        Args: { expected_revision: number; next_payload: Json }
+        Returns: Json
       }
       submit_ai_security_report: {
         Args: { report_input: Json; workspace_user?: string }

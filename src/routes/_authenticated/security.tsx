@@ -2,7 +2,7 @@ import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { useStaffSession } from "@/lib/security/session";
 import { isVerificationOfficer } from "@/lib/organizations/schema";
 import { Search, Send } from "lucide-react";
-import { useEffect, useState, type FormEvent } from "react";
+import { Suspense, useEffect, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { EmptyState, Mono, PageHeader, RiskMeter, StatTile } from "@/components/common/bits";
 import { NativeSelect } from "@/components/common/native-select";
@@ -35,6 +35,7 @@ import {
 } from "@/lib/i18n/labels";
 import { simulatedDomainMonitor } from "@/lib/services/domain-monitoring";
 import { cn } from "@/lib/utils";
+import { IntelligencePanel } from "@/components/intelligence/intelligence-panel";
 
 export const Route = createFileRoute("/_authenticated/security")({
   beforeLoad: async ({ context }) => {
@@ -165,6 +166,7 @@ function SecurityPage({ snapshot, change, busy }: { snapshot: SecuritySnapshot; 
             <TabsTrigger value="connections">{tr("Fraud Connections", "كشف الارتباط")}</TabsTrigger>
             <TabsTrigger value="publishing">{tr("Public Security Alerts", "التحذيرات الأمنية")}</TabsTrigger>
             <TabsTrigger value="analytics">{tr("Analytics and Reports", "الإحصائيات والتقارير")}</TabsTrigger>
+            <AnalystIntelligenceTab />
           </TabsList>
 
           <TabsContent value="alerts" className="mt-5">
@@ -300,6 +302,7 @@ function SecurityPage({ snapshot, change, busy }: { snapshot: SecuritySnapshot; 
             <details className="border-t pt-4"><summary className="cursor-pointer text-sm font-semibold">{tr("Detailed breakdown", "تفصيل الإحصاءات")}</summary><div className="mt-4 grid gap-3 sm:grid-cols-3"><StatTile label={tr("Average open risk index", "متوسط مؤشر خطر البلاغات المفتوحة")} value={num(avgRisk)} tone="warning" />{STATUSES.map(s => <StatTile key={s} label={pick(alertStatusLabel[s])} value={num(alerts.filter(a => a.status === s).length)} />)}</div></details>
           </TabsContent>
           <TabsContent value="publishing" className="mt-5"><AlertManager /></TabsContent>
+          <TabsContent value="intelligence" className="mt-5"><AnalystIntelligenceContent reports={alerts} onOpenReport={id => { select(id); setTab("alerts"); }} /></TabsContent>
         </Tabs>
       </section>
     </>
@@ -310,4 +313,14 @@ function OfficerReviewLink() {
   const { tr } = useI18n(); const session = useStaffSession();
   if (!isVerificationOfficer(session.roles)) return null;
   return <Button asChild variant="outline" size="sm"><Link to="/officer">{tr("Officer Dashboard", "لوحة موظف التحقق")}</Link></Button>;
+}
+
+function AnalystIntelligenceTab() {
+  const session = useStaffSession(); const { tr } = useI18n();
+  return session.roles.includes("security_analyst") ? <TabsTrigger value="intelligence">{tr("Proactive Intelligence", "الرصد الاستباقي")}</TabsTrigger> : null;
+}
+function AnalystIntelligenceContent(props: React.ComponentProps<typeof IntelligencePanel>) {
+  const session = useStaffSession(); const { tr } = useI18n();
+  if (!session.roles.includes("security_analyst")) return null;
+  return <Suspense fallback={<p role="status">{tr("Loading intelligence…", "جارٍ تحميل الرصد…")}</p>}><IntelligencePanel {...props} /></Suspense>;
 }

@@ -16,6 +16,13 @@ export const demoRegistrationSchema = z.object({
 export type DemoRegistration = z.infer<typeof demoRegistrationSchema>;
 export const demoTrackingSecretSchema = z.string().trim().regex(/^[a-f0-9]{64}$/);
 export const demoTrackingSchema = z.object({ code: z.string().trim().regex(/^[1-9]\d{4}$/), secret: demoTrackingSecretSchema }).strict();
+export const publicReferenceSchema = demoTrackingSchema.pick({ code: true }).strict();
+export const publicTrackingResultSchema = z.object({
+  code: publicReferenceSchema.shape.code,
+  submittedAt: z.string().datetime({ offset: true }).nullable(),
+  status: z.enum(["pending", "under_review", "needs_information", "approved", "rejected"]).nullable(),
+  message: z.object({ en: z.string(), ar: z.string() }).strict(),
+}).strict();
 export const demoRecoverySchema = z.object({ id: z.string().uuid(), note: z.string().trim().min(10).max(1000), confirmed: z.literal(true) }).strict();
 export type DemoReceipt = { code: string; secret: string; status: "pending"; updatedAt: string };
 export type DemoStatus = "pending" | "under_review" | "needs_information" | "approved" | "rejected";

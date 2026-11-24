@@ -1,5 +1,9 @@
 # Final hackathon polish roadmap
 
+## Targeted reference-only public application tracking
+- [x] Separate public status lookup from private receipt access; return only reference, submission date, general status and bilingual generic message. Preserve records and recovery.
+- [x] 38 focused tests passed; existing approved reference readback and missing-reference response verified in Arabic/English at 489px/1280px, no overflow/page errors, reload clears input. Actual response contains only four allowed fields; original submission date confirmed. Private receipt/recovery protections retained and covered by tests; genuine officer recovery not re-exercised. Preview build OK; quick security check retains only unchanged informational registry finding. Ready, not published; no record/credential/role changes or paid calls. Existing custom limits: 20 lookups/caller/hour and 1000 globally/hour, misses included; five-digit status existence cannot be concealed while returning real status.
+
 ## Targeted staff-approved prototype registry restoration
 - [x] Restore four existing officer-approved simulated projections with green, explicitly prototype badges; preserve shared search/type/status filters and genuine registry isolation. Original yellow seed organizations remain hidden; supersedes only the simulated-list removal below.
 - [x] 43 focused tests pass; Arabic/English live search, filters, reload and 15-second automatic refresh pass at 855px/390px without overflow or page errors. Anonymous projection reads work; all four approvals have officer audit, direct public/staff writes and public approval RPC execution denied. Quick scan: only unchanged informational registry finding. No records/alerts/demo-kit/paid inference changed. Ready, not published; new authenticated approval-to-public readback not exercised to avoid record changes.

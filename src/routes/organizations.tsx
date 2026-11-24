@@ -21,9 +21,9 @@ export const Route = createFileRoute("/organizations")({
   head: () => ({
     meta: [
       { title: "Organization Portal — Taakkad" },
-      { name: "description", content: "Submit an organization application, privately track its status and search independently approved organization channels in Taakkad." },
+      { name: "description", content: "Submit an organization application, track its general status by five-digit reference and search independently approved organization channels in Taakkad." },
       { property: "og:title", content: "Organization Portal — Taakkad" },
-      { property: "og:description", content: "Organization applications, private status-only tracking and channel registry in the Taakkad hackathon prototype." },
+      { property: "og:description", content: "Organization applications, reference-only general status tracking and channel registry in the Taakkad hackathon prototype." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
